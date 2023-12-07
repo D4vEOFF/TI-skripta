@@ -1,0 +1,108 @@
+\newcommand{\chapwithtoc}[1]{           %% Unumbered chapter included in TOC
+  \chapter*{#1}
+  \addcontentsline{toc}{chapter}{#1}
+}
+
+\newenvironment{solution}{
+  \par\medskip\noindent
+  \textit{Řešení}.
+}{}
+
+\MakeOuterQuote{"}
+
+\newcommand{\topindent}{3mm}
+
+\theoremstyle{definition}
+\newtheorem{theorem}[subsection]{Věta}
+\newtheorem{lemma}[subsection]{Lemma}
+\newtheorem{proposition}[subsection]{Tvrzení}
+\newtheorem{corollary}[subsection]{Důsledek}
+
+\newtheorem{definition}[subsection]{Definice}
+\newtheorem*{definition*}{Definice}
+\newtheorem{remark}[subsection]{Poznámka}
+\newtheorem*{remark*}{Poznámka}
+\newtheorem*{symboldef}{Značení}
+\newtheorem{example}[subsection]{Příklad}
+\newtheorem*{example*}{Příklad}
+
+% Enumerate
+\setlist[enumerate]{topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex,label=\arabic*.}
+
+% Itemize
+\setlist[itemize]{topsep=0pt,itemsep=0ex,partopsep=1ex,parsep=1ex}
+
+% Algoritmy
+\numberwithin{algocf}{section}
+\renewcommand{\algorithmcfname}{Algoritmus}
+\SetKwInput{KwIn}{Vstup}
+\SetKwInput{KwOut}{Výstup}
+\SetKwProg{Function}{Funkce}{}{end}
+
+% Math
+\newcommand{\powset}[1]{\mathcal{P}(#1)}
+\newcommand{\solutions}[1]{\left[K=\left\{#1\right\}\right]}
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\sizeof}[1]{\left| #1 \right|}
+\newcommand{\admid}{\;\middle\vert\;}
+
+% Paths
+\newcommand{\chapterspath}[1]{ch#1/content.tex}
+\newcommand{\sectionspath}[1]{ch#1/sections}
+
+% Info boxes
+\newcommand{\infobox}[1]{\awesomebox[gray]{2pt}{\faInfoCircle}{gray}{\textcolor{gray}{#1}}}
+
+% Complexity classes
+\def\P{\textsf{P}}
+\def\NP{\textsf{NP}}
+
+\setlength{\fboxsep}{3mm}
+\newcommand{\problem}[3]{
+  \fbox{
+    \begin{minipage}{0.65\textwidth}
+      \textsc{#1}\\[3mm]
+        \indent\textbf{Vstup problému:} #2\\[3mm]
+        \indent\textbf{Výstup problému:} #3
+    \end{minipage}
+  }
+}
+
+% Time complexities
+\newcommand{\bigO}[1]{\mathcal{O}(#1)}
+\newcommand{\bigOmega}[1]{\Omega\left(#1\right)}
+
+%hyperref
+\hypersetup{
+    colorlinks=true,
+    urlcolor=black,
+    bookmarksopen=true
+}
+
+% Parindent
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+% Logical operators
+% \renewcommand{\implies}{\Rightarrow}
+% \renewcommand{\iff}{\Leftrightarrow}
+
+\newcommand{\abs}[1]{\left|\,#1\,\right|}
+
+%%% Prostor reálných čísel, přirozených čísel, ...
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+% Goniometric functions
+\DeclareMathOperator{\tg}{tg}
+\DeclareMathOperator{\cotg}{cotg}
+
+% Others
+\newcommand{\rightnote}[1]{\hspace*{\fill} $\triangleleft$ \textit{#1}}
+\newcommand{\degre}{\ensuremath{^\circ}}
+
+% Images
+\newcommand{\graphimgsize}{.75}
