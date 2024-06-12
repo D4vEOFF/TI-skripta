@@ -60,7 +60,7 @@ Z příkladu \ref{ex:cnf_formule} se tak nabízí otázka, zda je možné \emph{
 Toto tvrzení lze, pochopitelně, dokázat, ale zde se tím zabývat nebudeme a zkrátka jej přijmeme jako fakt. Podstatná věc, která z toho plyne, je, že pokud je nějaká formule $\psi$ splnitelná, pak je splnitelná i jí ekvivalentní formule $\psi^\prime$ v CNF a naopak pokud $\psi$ není splnitelná, není splnitelná ani $\psi^\prime$. Symbolicky
 \[\psi\,\text{je splnitelná}\iff\psi^\prime\,\text{je splnitelná}.\]
 
-\subsection{Převod do CNF pomocí tabulky}
+\subsection{Převod do CNF pomocí tabulky}\label{subsec:cnf_prevod_tabulka}
 
 Podívejme se na způsob, jak lze převést libovolnou logickou formuli do CNF.
 
@@ -133,3 +133,70 @@ Nabízí se otázka: \emph{"proč tento postup funguje?"} Pokud nějaká formule
     \importantbox{\textbf{Problém:} Generování tabulky (resp. procházení všech možných ohodnocení) nás přivádí zpět k původnímu problému, a to sice \emph{exponenciální časové složitosti}.}
     V tomto případě však nejsme schopni postup učinit více efektivní, neboť ve skutečnosti se může stát, že pro obecnou logickou formuli se může jí ekvivalentní formule v CNF až exponenciálně prodloužit.\footnote{Stačí např. vzít formuli, která je \emph{nesplnitelná}, tj. pro všechna možná ohodnocení platí $\psi(\dots)=0$. Celkově by tak ekvivalentní formule měla až $2^n$ klauzulí.}
 \end{example}
+
+\subsection{Tseitinova transformace}\label{subsec:cnf_tseitin}
+
+Značně rychlejší způsob převodu formule do CNF předvedl ruský informatik \emph{Grigori~Tseitin}. Problém s předchozím postupem v podsekci \ref{subsec:cnf_prevod_tabulka} je ten, že se v nové formuli $\psi$ snažíme \emph{pouze} proměnné v původní formuli $\varphi$, což způsobí, že formule se může až exponenciálně prodloužit. Postup, který si nyní ukážeme, zavádí do výsledné formule některé proměnné navíc.
+
+Postup Tseitinovy transformace formule $\varphi$ lze rozdělit do celkem $4$ kroků.
+\begin{enumerate}
+    \item Rozdělíme formuli $\varphi$ na jednotlivé podformule.
+    \item Pro každou dílčí podformuli $\varphi_i$ si zavedeme novou proměnnou $y_i$. Speciálně $y_1$ je logicky ekvivalentní s celou původní formulí $\varphi$, tj. $y_1\iff\varphi$.
+    \item Vytvoříme novou formuli $\psi$ následovně:
+    \[\psi=y_1\land(y_1\iff\varphi_1)\land(y_2\iff\varphi_2)\land\dots\land(y_n\iff\varphi_n).\]
+\end{enumerate}
+Hned se nabízí námitka, že nová formule $\psi$ není v CNF, avšak stačí si uvedomit, že logickou ekvivalenci lze přepsat pomocí $\land$ a $\lor$ následovně:
+\begin{equation}\label{eq:equiv_identita}
+    a\iff b=(a\implies b)\land(b\implies a)=(\neg a\lor b)\land(\neg b\lor a).
+\end{equation}
+
+Nové proměnné $y_1,y_2,\dots,y_n$ v podstatě indikují, jaké hodnoty nabývá daný logický výraz v původní formuli pro nějaké konkrétní ohodnocení původních proměnných. Chceme-li tedy zjistit, jaké logické hodnoty nabývá daná formule $\varphi$ pro určité logické hodnoty jejích proměnných, stačí novým proměnným přiřadit logickou hodnotu podle toho, jaké hodnoty nabývá výraz $\varphi_i$, který reprezentují. Přesně proto jsme ostatně konstruovali podformule $y_i\iff\varphi_i$.
+
+Pojďme se podívat na konkrétní příklad.
+\begin{example}
+    Máme formuli $\alpha(p,q,r)=((p\lor q)\land r)\implies \neg p$. Chceme pro ni sestrojit Tseitinovou transformací novou formuli $\beta$.
+    
+    Formule $\alpha$ obsahuje tyto dílčí podformule:
+    \begin{itemize}
+        \item $\neg p$,
+        \item $p\lor q$,
+        \item $(p\lor q)\land r$,
+        \item a $((p\lor q)\land r)\implies \neg p$ (původní formule $\alpha$).
+    \end{itemize}
+    Pro ně si zřídíme nové proměmnné $y_1,y_2,y_3$ a $y_4$. Tzn. do nové formule $\beta$ přidáme výrazy
+    \begin{itemize}
+        \item $y_1\iff((p\lor q)\land r)\implies \neg p$,
+        \item $y_2\iff(p\lor q)\land r$,
+        \item $y_3\iff p\lor q$
+        \item a $y_4\iff\neg p$.
+    \end{itemize}
+    Výsledná formule bude tedy vypadat následovně:
+    \begin{align*}
+        \beta(p,q,r,y_1,y_2,y_3,y_4)&=y_1\land(y_1\iff((p\lor q)\land r)\implies \neg p)\\
+        &\land(y_2\iff((p\lor q)\land r))\\
+        &\land(y_3\iff (p\lor q))\\
+        &\land(y_4\iff\neg p).
+    \end{align*}
+    Ekvivalence ve formuli bychom mohli přepsat pomocí vztahu \eqref{eq:equiv_identita}, který jsme si ukazovali výše.
+
+    Zkusme nyní formuli vyhodnotit např. pro ohodnocení proměnných $p=1,q=0$ a $r=0$. Původní formule je rovna:
+    \[\alpha(1,0,0)=((1\lor 0)\land 0)\implies\neg 1=(1\land 0)\implies\neg 1=0\implies 1=1.\]
+    Hodnoty nových proměnných nastavíme tedy následovně:
+    \begin{itemize}
+        \item $y_4=0$, protože $\neg p=0$,
+        \item $y_3=1$, protože $p\lor q=1$,
+        \item $y_2=0$, protože $(p\lor q)\land r=0$,
+        \item a $y_1=1$, protože $((p\lor q)\land r)\implies \neg p=1$.
+    \end{itemize}
+    Nyní můžeme vyhodnotit novou formuli $\beta$:
+    \begin{align*}
+        \beta(1,0,0,1,0,1,0)&=1\land(1\iff((1\lor 0)\land 0)\implies\neg 1)\land(0\iff((1\lor 0)\land 0))\\
+        &\land(1\iff(1\lor 0))\land(0\iff\neg 1)\\
+        &=1\land 1\land 1\land 1\land 1=1.
+    \end{align*}
+    Lze se tedy přesvědčit, že formule $\beta$ má stejnou logickou hodnotu jako původní formule $\alpha$.
+\end{example}
+
+Obecně vždy bude platit, že nově vzniklá formule je splnitelná, právě tehdy když je splnitelná i původní formule. Ovšem podstatnou výhodou oproti postupu s tabulkou je ta, že nová formule je podstatně kratší a lze ji tedy sestrojit mnohem rychleji.
+\tipbox{Pro každý z podvýrazů $\varphi_i$ sestrojíme klauzuli $y_i\iff\varphi_i$, tzn. celkově jich bude lineárně mnoho v počtu podvýrazů.}
+Při hlubší analýze tohoto postupu (resp. algoritmu) se lze přesvědčit, že velikost výsledné formule $\psi$ je \textbf{lineární} ve velikosti původní formule $\varphi$.

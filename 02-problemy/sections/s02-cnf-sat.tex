@@ -1,13 +1,5 @@
 \section{Problém CNF-SAT}\label{sec:cnf_sat}
 
-Již jsme v podsekci \ref{subsec:cnf} nahlédli, že převod do obecné formule do CNF je problematický (viz znázornění \ref{fig:sat_to_cnfsat}), neboť se nová formule může až exponenciálně prodloužit. Zkusme si tedy problém zjednodušit. Předpokládejme nyní, že formule, které máme na vstupu, jsou již v CNF.
-
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics{02-problemy/images/ch02_sat_to_cnfsat.pdf}
-%     \caption{Schématické znázornění převodu obecné formule do CNF.}
-%     \label{fig:sat_to_cnfsat}
-% \end{figure}
-
+Již jsme v podsekci \ref{subsec:cnf} nahlédli, že převod do obecné formule do CNF ``hrubou silou'' je problematický, neboť se nová formule může až exponenciálně prodloužit. V podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci, která původní postup zefektivnila přidáním nových proměnných do výsledné formule. To znamená, že každou formuli jsme schopni efektivně převést do CNF. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní, že formule, které máme na vstupu, jsou již v CNF.
 
 \problem{Splnitelnost logické formule v CNF (CNF-SAT)}{Logická formule $\varphi$ v CNF.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
