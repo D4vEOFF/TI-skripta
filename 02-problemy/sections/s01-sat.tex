@@ -136,7 +136,7 @@ Nabízí se otázka: \emph{"proč tento postup funguje?"} Pokud nějaká formule
 
 \subsection{Tseitinova transformace}\label{subsec:cnf_tseitin}
 
-Značně rychlejší způsob převodu formule do CNF předvedl ruský informatik \emph{Grigori~Tseitin}. Problém s předchozím postupem v podsekci \ref{subsec:cnf_prevod_tabulka} je ten, že se v nové formuli $\psi$ snažíme \emph{pouze} proměnné v původní formuli $\varphi$, což způsobí, že formule se může až exponenciálně prodloužit. Postup, který si nyní ukážeme, zavádí do výsledné formule některé proměnné navíc.
+Značně rychlejší způsob převodu formule do CNF předvedl ruský informatik \emph{Grigori~Tseitin}. Problém s předchozím postupem v podsekci \ref{subsec:cnf_prevod_tabulka} je ten, že se v nové formuli $\psi$ snažíme ponechat \emph{pouze} proměnné v původní formuli $\varphi$, což způsobí, že formule se může až exponenciálně prodloužit. Postup, který si nyní ukážeme, zavádí do výsledné formule některé proměnné navíc, avšak za cenu rychlejšího algoritmu.
 
 Postup Tseitinovy transformace formule $\varphi$ lze rozdělit do celkem $4$ kroků.
 \begin{enumerate}
