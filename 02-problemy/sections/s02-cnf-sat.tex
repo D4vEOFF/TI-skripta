@@ -91,7 +91,7 @@ Poslední otázka, která se nabízí, je (jako obvykle) časová složitost alg
 \begin{proof}
     Nyní je třeba se zamyslet, jaká nejhorší situaci může při zpracovávání formule $\varphi$ nastat. Pokud ve formuli neexistuje žádná jednotková klauzule, ani žádný z literálů není pouze v jedné polaritě (tedy procedury Unit propagation a Pure literal elimination nemůžeme vůbec aplikovat), pak musíme náhodně vybrat nějaký z literálů $\ell$ a rekurzivně zkusit obě možnosti ohodnocení. Pokud toto nastane v každém volání DPLL, vždy eliminujeme pouze jeden literál. Uvažujme, že jedno volání funkce DPLL obecně zabere $c$ kroků, přičemž následně voláme funkci \emph{dvakrát} na formuli o $n-1$ literálech (jeden jsme eliminovali). Pokud si označíme počet kroků nad formulí o $n$ literálech $T(n)$, pak můžeme dojít k následujícímu vztahu:
     \[T(n)=\underbrace{c}_{\text{zpracování $\varphi$}}+2\cdot \overbrace{T(n-1)}^{\text{rekurze}}.\]
-    Tomuto typu rovnice se v matematice říká tzv. \emph{rekurentní} či \emph{rekurzivní} rovnice, neboť hodnota\footnote{Jedná se vlastně o posloupnost zadanou rekurentně.} $T(n)$ přímo závisí na předešlé hodnotě $T(n-1)$. Určitě víme, že prázdnou formuli umíme zpracovat okamžitě, tj. $T(0)=\bigO{1}$.
+    Tomuto typu rovnice se v matematice říká tzv. \emph{rekurentní} či \emph{rekurzivní} rovnice\footnote{Jedná se vlastně o posloupnost zadanou rekurentně.}, neboť hodnota $T(n)$ přímo závisí na předešlé hodnotě $T(n-1)$. Určitě víme, že prázdnou formuli umíme zpracovat okamžitě, tj. $T(0)=\bigO{1}$.
 
     Lze ukázat, že platí $T(n)=\bigO{2^n}$.
 \end{proof}
