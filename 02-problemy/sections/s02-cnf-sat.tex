@@ -3,3 +3,19 @@
 Již jsme v podsekci \ref{subsec:cnf} nahlédli, že převod do obecné formule do CNF ``hrubou silou'' je problematický, neboť se nová formule může až exponenciálně prodloužit. V podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci, která původní postup zefektivnila přidáním nových proměnných do výsledné formule. To znamená, že každou formuli jsme schopni efektivně převést do CNF. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní, že formule, které máme na vstupu, jsou již v CNF.
 
 \problem{Splnitelnost logické formule v CNF (CNF-SAT)}{Logická formule $\varphi$ v CNF.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
+
+Nyní se již skutečně zaměříme na samotnou splnitelnost dané formule na vstupu. Pro tento účel se obecně využivají tzv. \emph{SAT~solvery}, tedy algoritmy obecně na vstupu dostanou \emph{formuli $\varphi$ v~CNF}, o níž rozhodnou, zda je či není splnitelná. Přitom využívají formy, v níž je formule zapsaná. Pro tento účel si ukážeme tzn. \emph{algoritmus DPLL} pojmenovaný po svých autorech\footnote{\emph{Martin (D)avid, Davis (P)utnam, George (L)ogemann} a \emph{Donald W. (L)oveland.}}, kteří s ním přišli roku 1961.
+
+\subsection{Algoritmus DPLL}\label{subsec:dpll}
+
+Tento algoritmus je založený na rekurzivním postupu. Na vstupu algoritmu je libovolná formule $\varphi$ v~CNF, kterou algoritmus postupně vyhodnocuje. Využívá dvojici procedur -- \textbf{Unit propagation} a \textbf{Pure literal elimination}.
+
+\subsubsection*{Unit propagation}
+
+Tato procedura přijímá hledá v dané formuli $\varphi$ tzn. \emph{jednotkovou klauzuli}. To je klauzule, která obsahuje \textbf{pouze jeden literál}. Např. formule $\omega$ níže obsahuje jednotkovou klauzuli.
+\[\omega(x,y)=(x\lor\neg y)\land \underbrace{\neg y}_{\text{jednotková kl.}}\land (\neg x\lor y).\]
+Pokud se taková klauzule nachází ve formuli, lze toho využít, neboť pro danou proměnnou existuje vždy jen jediné ohodnocení, takové, aby celá formule byla splňena (každá klauzule musí být splněna). Obecně pokud formule $\varphi$ obsahuje jednotkovou klauzuli s proměnnou $x$, pak mohou nastat dva případy. Označme $varphi^\prime$ zbytek klauzulí ve formuli $\varphi$.
+\begin{enumerate}
+    \item Pokud má formule tvar $\varphi=x\land\varphi^\prime$, pak nutně $x=1$.
+    \item Jinak pokud má formule tvar $\varphi=\neg x\land\varphi^\prime$, pak musí být $x=0$.
+\end{enumerate}
