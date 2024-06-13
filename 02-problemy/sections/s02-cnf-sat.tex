@@ -82,16 +82,68 @@ S těmito informacemi můžeme dát dohromady pseudokód algoritmu.
     \KwOut{$1$, je-li formule $\varphi$ splnitelná, jinak $0$.}
 \end{algorithm}
 
-%% TODO: příklad výpočtu DPLL
+Zkusme si algoritmus odsimulovat na příkladu.
+\begin{example}
+    Máme formuli
+    \[\gamma(x_1,x_2,x_3,x_4)=(x_1\lor x_3)\land\neg x_4\land(\neg x_2\lor\neg x_3)\land x_1\land(\neg x_2\lor x_3)\land(\neg x_1\lor\neg x_3\lor x_3).\]
+    Chceme pomocí algoritmu DPLL rozhodnout, zda je splnitelná.
+
+    Když se podíváme na pseudokód \ref{alg:dpll} výše, tak první máme aplikovat proceduru \emph{Unit propagation}. Hledáme tedy jednotkové klauzule ve formuli $\gamma$, dokud nějaké existují.
+    \begin{itemize}
+        \item První jednotková klauzule, které si můžeme všimnout, je $\neg x_4$. Hodnota proměnné $x_4$ tedy nutně musí být $0$. Klauzuli tedy odstraníme. Proměnná se nachází ve formuli pouze jednou, tedy daný literál v opačné polaritě nikde odstraňovat nemusíme. Máme nyní formuli
+        \[\gamma^\prime(x_1,x_2,x_3,x_4)=(x_1\lor x_3)\land(\neg x_2\lor\neg x_3)\land x_1\land(\neg x_2\lor x_3)\land(\neg x_1\lor\neg x_3\lor x_3).\]
+        \item Další jednotková klauzule je $x_1$. Proměnná $x_1$ musí být nutně $1$ a klauzuli můžeme odstranit. Dále si však můžeme všimnout, že tím pádem splněna i klauzule $(x_1\lor x_3)$. Tu můžeme též odstranit. Literál $x_1$ se dále nachází v opačné polaritě v klauzuli $(\neg x_1\lor\neg x_3\lor x_3)$. Literál $\neg x_1$ můžeme také odstranit z formule. Tím se nám formule $\gamma^\prime$ zjednoduší na
+        \[\gamma^{\prime\prime}(x_1,x_2,x_3,x_4)=(\neg x_2\lor\neg x_3)\land (\neg x_2\lor x_3)\land(\neg x_3\lor x_3).\]
+    \end{itemize}
+    Nově vzniklá formule $\gamma^{\prime\prime}$ již žádné další jednotkové klauzule neobsahuje. Dále tedy můžeme aplikovat proceduru \emph{Pure literal elimination}.
+    \begin{itemize}
+        \item Formule $\gamma^{\prime\prime}$ obsahuje pouze jeden literál v jediné polaritě, a to $\neg x_2$. Tím pádem hodnotu $x_2$ můžeme nastavit na $0$, čímž splníme dvojici klazulí $(\neg x_2\lor\neg x_3)$ a $(\neg x_2\lor x_3)$. Ty můžeme odstranit, čímž dostaneme formuli
+        \[\gamma^{\prime\prime\prime}(x_1,x_2,x_3,x_4)=\neg x_3\lor x_3.\]
+    \end{itemize}
+    Protože formule $\gamma^{\prime\prime\prime}$ není ani prázdná, ani neobsahuje prázdnou klauzuli, vybereme náhodně jeden literál a prozkoumáme jeho obě možná ohodnocení. V tomto případě nám zbývají pouze literály $x_3$ a $\neg x_3$. Vyberme např. literál $\neg x_3$. Nyní máme sestrojit dvojici nových formulí $(\neg x_3\lor x_3)\land\neg x_3$ a $(\neg x_3\lor x_3)\land x_3$, na které rekurzivně zavoláme DPLL.
+    \begin{itemize}
+        \item \textbf{Formule $(\neg x_3\lor x_3)\land\neg x_3$.} Opět začneme aplikací Unit propagation. K původní formuli $\gamma^{\prime\prime\prime}$ jsme uměle přidali jednotkovou klauzuli $\neg x_3$. Z jí je zjevné, že $x_3$ musí být $0$. Tím zároveň splníme i klauzuli $(\neg x_3\lor x_3)$, kterou můžeme odstanit, čímž dostáváme prázdnou formuli. Pure literal elimination aplikovat nemůžeme. Protože je nově zvniklá formule prázdná, vrátíme na výstup $1$.
+        \item \textbf{Formule $(\neg x_3\lor x_3)\land x_3$.} I zde začneme eliminací jednotkových klauzulí. Tu zde představuje literál $x_3$, jehož ohodnocení tedy musí být $1$. Tím opět splníme i klauzuli $(\neg x_3\lor x_3)$, jejímž odstraněním dostaneme zase prázdnou formuli. Tedy opět vrátíme $1$.
+    \end{itemize}
+    Obě ohodnocení pro $x_3$ jsou tedy splňující a tedy i původní formule $\gamma$ \emph{je splnitelná}.
+\end{example}
+
+Ukažme si ještě jeden jednodušší příklad.
+\begin{example}
+    Mějme formuli $\tau(x,y,z)=x\land (\neg x\lor y\lor z)\land \neg x$. Chceme opět pomocí DPLL určit splnitelnost.
+
+    Jako první jednotkovou klauzuli můžeme vzít $x$. Tedy můžeme ji odstranit společně se všemi výskyty daného literálu v opačné polaritě, tj. $\neg x$. Tzn. dostanem formuli
+    \[\tau^\prime(x,y,z)=(y\lor z)\land().\]
+    Všimněte si, že odstraněním literálu $\neg x$ jsme dostali ve formuli prázdnou klauzuli\footnote{Z dané jednotkové klazulu jsme odebrali daný literál v rámci procedury Unit propagation, neprovedli jsme smazání klauzule jako takové.} $()$. Aplikací Pure literal elimination se zbavíme i literálů $y$ a $z$.
+    \[\tau^{\prime\prime}(x,y,z)=()\]
+    Formule $\tau^{\prime\prime}$ obsahuje pouze prázdnou klauzuli. V tuto chvíli algoritmus prohlásí formuli $\tau$ za \emph{nesplnitelnou}.
+\end{example}
 
 Poslední otázka, která se nabízí, je (jako obvykle) časová složitost algoritmu. Vezmeme-li v potaz nejhorší případ, časová složitost bohužel nevychází úplně příznivě.
 \begin{theorem}[Složitost DPLL]
     Algoritmus DPLL nad formulí $\varphi$ o $n$ literálech doběhne v čase $\bigO{2^n}$.
 \end{theorem}
 \begin{proof}
-    Nyní je třeba se zamyslet, jaká nejhorší situaci může při zpracovávání formule $\varphi$ nastat. Pokud ve formuli neexistuje žádná jednotková klauzule, ani žádný z literálů není pouze v jedné polaritě (tedy procedury Unit propagation a Pure literal elimination nemůžeme vůbec aplikovat), pak musíme náhodně vybrat nějaký z literálů $\ell$ a rekurzivně zkusit obě možnosti ohodnocení. Pokud toto nastane v každém volání DPLL, vždy eliminujeme pouze jeden literál. Uvažujme, že jedno volání funkce DPLL obecně zabere $c$ kroků, přičemž následně voláme funkci \emph{dvakrát} na formuli o $n-1$ literálech (jeden jsme eliminovali). Pokud si označíme počet kroků nad formulí o $n$ literálech $T(n)$, pak můžeme dojít k následujícímu vztahu:
+    Nyní je třeba se zamyslet, jaká nejhorší situace může při zpracovávání formule $\varphi$ nastat. Pokud ve formuli neexistuje žádná jednotková klauzule, ani žádný z literálů není pouze v jedné polaritě (tedy procedury Unit propagation a Pure literal elimination nemůžeme vůbec aplikovat), pak musíme náhodně vybrat nějaký z literálů $\ell$ a rekurzivně zkusit obě možnosti ohodnocení. Pokud toto nastane v každém volání DPLL, vždy eliminujeme pouze jeden literál. Uvažujme, že jedno volání funkce DPLL obecně zabere $c$ kroků, přičemž následně voláme funkci \emph{dvakrát} na formuli o $n-1$ literálech (jeden jsme eliminovali). Pokud si označíme počet kroků nad formulí o $n$ literálech $T(n)$, pak můžeme dojít k následujícímu vztahu:
     \[T(n)=\underbrace{c}_{\text{zpracování $\varphi$}}+2\cdot \overbrace{T(n-1)}^{\text{rekurze}}.\]
     Tomuto typu rovnice se v matematice říká tzv. \emph{rekurentní} či \emph{rekurzivní} rovnice\footnote{Jedná se vlastně o posloupnost zadanou rekurentně.}, neboť hodnota $T(n)$ přímo závisí na předešlé hodnotě $T(n-1)$. Určitě víme, že prázdnou formuli umíme zpracovat okamžitě, tj. $T(0)=\bigO{1}$.
 
-    Lze ukázat, že platí $T(n)=\bigO{2^n}$.
+    Lze ukázat\footnote{
+        \emph{Pro zájemce:} U rekurentní rovnice se snažíme najít předpis pro $T(n)$, takový, aby jeho hodnota nezávisela na jiných hodnotách $T$. Řešení obsahuje práci s geometrickými řadami. Víme, že platí $T(n)=c+2\cdot T(n-1)$. Zkusme podle tohoto předpisu rozepsat $T(n-1)$.
+        \[T(n)=c+2\cdot T(n-1)=c+2\cdot(c+2\cdot T(n-2))=3c+4\cdot T(n-2)\]
+        Zkusme rozepsat opět i $T(n-2)$.
+        \[T(n)=3c+4\cdot T(n-2)=3c+4\cdot(c+2\cdot T(n-3))=7c+8\cdot T(n-3)\]
+        Obecně lze pororovat, že $k$ rozepsáních dostaneme pro $T(n)$ následující vzorec:
+        \[T(n)=c\cdot\sum_{i=0}^{k-1}2^i+2^k\cdot T(n-k).\]
+        Je důležité si nyní uvědomit, že jedinou hodnotu, kterou známe, je $T(0)=\bigO{1}$. Pokud vzorec rozepíšemem $n$-krát, tj. $k=n$, můžeme se tak zbavit rekurence v rovnici.
+        \[T(n)=c\cdot\sum_{i=0}^{n-1}2^i+2^n\cdot T(0)=c\cdot\sum_{i=0}^{n-1}2^i+2^n\cdot \bigO{1}=c\cdot\sum_{i=0}^{n-1}2^i+2^n\]
+        Řada $\sum_{i=0}^{n-1}2^i$ je geometrická s kvocientem $q=2$ a prvním členem rovnému $2^0=1$, přičemž celkový počet členů je $n$. Můžeme na ni aplikovat známý vzorec pro součet.
+        \[T(n)=c\cdot\dfrac{2^n-1}{2-1}+2^n=c\cdot(2^n-1)+2^n=(c+1)2^n-c.\]
+        Protože nás však zajímá asymptotické chování algoritmu, konstanty $c+1$ a $c$ můžeme zanedbat. Z toho již můžeme vidět, že složitost je exponenciální.
+        \[T(n)=\bigO{(c+1)2^n-c}=\bigO{2^n}\]
+    }, že platí $T(n)=\bigO{2^n}$.
 \end{proof}
+
+S exponenciální časovou složitostí se sotva spokojíme, avšak v tomto případě je dobré si říci, že zkoumáme složitost v nejhorším případě a v praxi bývají zkoumané logické formule poměrně rychle řešitelné pomocí DPLL. Problém je však dodnes ten, že na rozhodnutí splnitelnosti logické formule (i těch v CNF) není známý žádný algoritmus, který by běžel v polynomiálním čase, tj. $\bigO{n^k}$, pro nějaké $k$. K tomuto tématu se ještě vrátíme v sekci \dots.
+
+%% TODO: doplnit odkaz na sekci
