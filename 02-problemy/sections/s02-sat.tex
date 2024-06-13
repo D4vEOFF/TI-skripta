@@ -60,8 +60,9 @@ Poté, co jsme si vysvětlili základní dvojici procedur, se nyní nabízí tro
 \end{itemize}
 
 S těmito informacemi můžeme dát dohromady pseudokód algoritmu.
-\begin{algorithm}\label{alg:dpll}
+\begin{algorithm}
     \caption{DPLL}
+    \label{alg:dpll}
     \KwIn{Formule $\varphi$ v CNF}
     \While{\textup{existuje jednotková klauzule $(\ell)$ ve formuli $\varphi$}}{
         $\varphi\gets\text{UnitPropagation}(\ell, \varphi)$
