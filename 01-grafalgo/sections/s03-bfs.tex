@@ -9,8 +9,9 @@ Pro každý vrchol si budeme uchovávat jeho \emph{stav}.
     \item \emph{Uzavřený} -- vrchol jsme prozkoumali společně se všemi jeho sousedy a dál se jím již netřeba zabývat.
 \end{itemize}
 Na počátku začneme s jedním otevřeným vrcholem a to $v_0$ (zde začínáme). Po prozkoumání všech sousedních vrcholů se jejich stav změní na otevřený a počáteční vrchol $v_0$ se uzavře. Obdobně pokračujeme pro nově otevřené vrcholy. Pokud by náhodou mezi dvojicí otevřených vrcholů existovala hrana, pak si sousedního vrcholu všímat nebudeme, neboť byl již otevřen. Pro každý vrchol se ještě dodatečně můžeme uchovávat informaci, jak daleko se nachází od $v_0$, co do počtu hran ležících na cestě.
-\begin{algorithm}\label{alg:bfs}
+\begin{algorithm}
     \caption{BFS (prohledávání do šířky)}
+    \label{alg:bfs}
     \KwIn{Graf $G=(V,E)$ a počáteční vrchol $v_0\in V$}
     \tcp{Inicializace}
     \ForEach{\textup{vrchol $v\in V$}}{

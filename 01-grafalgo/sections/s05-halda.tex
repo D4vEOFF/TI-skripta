@@ -1,7 +1,8 @@
 \section{Binární halda}\label{sec:halda}
 Uveďme motivační příklad na úvod. Mějme seznam čísel, z něhož chceme (pokud možno co nejrychleji) vybrat minimální/maximální hodnotu. Pro maximum bychom sestavit následující jednoduchý algoritmus.
-\begin{algorithm}\label{alg:max}
+\begin{algorithm}
     \caption{Vyhledání maximální hodnoty v seznamu (\textsc{Max})}
+    \label{alg:max}
     \KwIn{Seznam čísel $x_1,x_2,\dots,x_n$}
     $m\gets x_1$\\
     \For{$i=1,2,\dots,x_n$}{
@@ -9,7 +10,7 @@ Uveďme motivační příklad na úvod. Mějme seznam čísel, z něhož chceme 
             $m\gets x_i$
         }
     }
-    \Return{m}
+    \Return{m}\\
     \KwOut{Maximální hodnota seznamu \textit{m}}
 \end{algorithm}
 

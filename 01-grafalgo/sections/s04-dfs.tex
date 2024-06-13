@@ -1,7 +1,8 @@
 \section{Prohledávání do hloubky}\label{sec:dfs}
 Na podobném přístupu, jako BFS, je založeno tzv. \emph{prohledávání do hloubky} (anglicky \emph{depth-first search}, zkráceně DFS). Vrcholy však tentokrát budeme zpracovávat rekurzivně. Pokaždé, když budeme otevírat nový vrchol, se rekurzivně zavoláme všechny jeho sousední vrcholy, u nichž opakujeme stejnou proceduru. Po prozkoumání všech sousedů daný vrchol uzavřeme. Stejně jako BFS si tak budeme uchovávat pole \emph{stavů} pro jednotlivé vrcholy.
-\begin{algorithm}\label{alg:dfs}
+\begin{algorithm}
     \caption{DFS (prohledávání do hloubky)}
+    \label{alg:dfs}
     \KwIn{Graf $G=(V,E)$ a počáteční vrchol $v_0\in V$}
     \tcp{Inicializace}
     \ForEach{\textup{vrchol $v\in v$}}{
