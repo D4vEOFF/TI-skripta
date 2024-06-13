@@ -121,7 +121,7 @@ Ukažme si ještě jeden jednodušší příklad.
 
 Poslední otázka, která se nabízí, je (jako obvykle) časová složitost algoritmu. Vezmeme-li v potaz nejhorší případ, časová složitost bohužel nevychází úplně příznivě.
 \begin{theorem}[Složitost DPLL]
-    Algoritmus DPLL nad formulí $\varphi$ o $n$ literálech doběhne v čase $\bigO{2^n}$.
+    Algoritmus DPLL nad formulí $\varphi$ o $n$ literálech doběhne v čase $\bigO{2^n}$ a spotřebuje paměť $\bigO{n}$.
 \end{theorem}
 \begin{proof}
     Nyní je třeba se zamyslet, jaká nejhorší situace může při zpracovávání formule $\varphi$ nastat. Pokud ve formuli neexistuje žádná jednotková klauzule, ani žádný z literálů není pouze v jedné polaritě (tedy procedury Unit propagation a Pure literal elimination nemůžeme vůbec aplikovat), pak musíme náhodně vybrat nějaký z literálů $\ell$ a rekurzivně zkusit obě možnosti ohodnocení. Pokud toto nastane v každém volání DPLL, vždy eliminujeme pouze jeden literál. Uvažujme, že jedno volání funkce DPLL obecně zabere $c$ kroků, přičemž následně voláme funkci \emph{dvakrát} na formuli o $n-1$ literálech (jeden jsme eliminovali). Pokud si označíme počet kroků nad formulí o $n$ literálech $T(n)$, pak můžeme dojít k následujícímu vztahu:
@@ -142,6 +142,8 @@ Poslední otázka, která se nabízí, je (jako obvykle) časová složitost alg
         Protože nás však zajímá asymptotické chování algoritmu, konstanty $c+1$ a $c$ můžeme zanedbat. Z toho již můžeme vidět, že složitost je exponenciální.
         \[T(n)=\bigO{(c+1)2^n-c}=\bigO{2^n}\]
     }, že platí $T(n)=\bigO{2^n}$.
+
+    Na formuli o $n$ literálech spotřebuje algoritmus lineární paměť.
 \end{proof}
 
 S exponenciální časovou složitostí se sotva spokojíme, avšak v tomto případě je dobré si říci, že zkoumáme složitost v nejhorším případě a v praxi bývají zkoumané logické formule poměrně rychle řešitelné pomocí DPLL.
