@@ -1,10 +1,10 @@
-\section{Problém CNF-SAT}\label{sec:cnf_sat}
+\section{Problém SAT}\label{sec:sat}
 
-Již jsme v podsekci \ref{subsec:cnf} nahlédli, že převod do obecné formule do CNF ``hrubou silou'' je problematický, neboť se nová formule může až exponenciálně prodloužit. V podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci, která původní postup zefektivnila přidáním nových proměnných do výsledné formule. To znamená, že každou formuli jsme schopni efektivně převést do CNF. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní, že formule, které máme na vstupu, jsou již v CNF.
+Již jsme v podsekci \ref{subsec:cnf} nahlédli, že převod do obecné formule do CNF ``hrubou silou'' je problematický, neboť se nová formule může až exponenciálně prodloužit. V podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci, která původní postup zefektivnila přidáním nových proměnných do výsledné formule. To znamená, že každou formuli jsme schopni efektivně převést do CNF. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní, že formule, které máme na vstupu, jsou již v CNF. Tento problém je v informatice velmi význačný a označuje se zkratkou SAT (z angl. \emph{satisfiability}, neboli splnitelnost).
 
-\problem{Splnitelnost logické formule v CNF (CNF-SAT)}{Logická formule $\varphi$ v CNF.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
+\problem{Splnitelnost logické formule v CNF (SAT)}{Logická formule $\varphi$ v CNF.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
 
-Nyní se již skutečně zaměříme na samotnou splnitelnost dané formule na vstupu. Pro tento účel se obecně využivají tzv. \emph{SAT~solvery}, tedy algoritmy obecně na vstupu dostanou \emph{formuli $\varphi$ v~CNF}, o níž rozhodnou, zda je či není splnitelná. Přitom využívají formy, v níž je formule zapsaná. Pro tento účel si ukážeme tzn. \emph{algoritmus DPLL} pojmenovaný po svých autorech\footnote{\emph{Martin (D)avid, Davis (P)utnam, George (L)ogemann} a \emph{Donald W. (L)oveland.}}, kteří s ním přišli roku 1961.
+Nyní se již skutečně zaměříme na samotnou splnitelnost dané formule na vstupu. Pro tento účel se obecně využivají tzv. \emph{SAT~solvery}, tedy algoritmy, které na vstupu dostanou \emph{formuli $\varphi$ v~CNF}, o níž rozhodnou, zda je či není splnitelná. Přitom využívají formy, v níž je formule zapsaná. Pro tento účel si ukážeme tzn. \emph{algoritmus DPLL} pojmenovaný po svých autorech\footnote{\emph{Martin (D)avid, Davis (P)utnam, George (L)ogemann} a \emph{Donald W. (L)oveland.}}, kteří s ním přišli roku 1961.
 
 \subsection{Algoritmus DPLL}\label{subsec:dpll}
 
@@ -144,6 +144,7 @@ Poslední otázka, která se nabízí, je (jako obvykle) časová složitost alg
     }, že platí $T(n)=\bigO{2^n}$.
 \end{proof}
 
-S exponenciální časovou složitostí se sotva spokojíme, avšak v tomto případě je dobré si říci, že zkoumáme složitost v nejhorším případě a v praxi bývají zkoumané logické formule poměrně rychle řešitelné pomocí DPLL. Problém je však dodnes ten, že na rozhodnutí splnitelnosti logické formule (i těch v CNF) není známý žádný algoritmus, který by běžel v polynomiálním čase, tj. $\bigO{n^k}$, pro nějaké $k$. K tomuto tématu se ještě vrátíme v sekci \dots.
+S exponenciální časovou složitostí se sotva spokojíme, avšak v tomto případě je dobré si říci, že zkoumáme složitost v nejhorším případě a v praxi bývají zkoumané logické formule poměrně rychle řešitelné pomocí DPLL.
+\importantbox{Problém je však dodnes ten, že na rozhodnutí splnitelnosti logické formule (i těch v CNF) není známý žádný algoritmus, který by běžel v polynomiálním čase, tj. $\bigO{n^k}$, pro nějaké $k$. K tomuto tématu se ještě vrátíme v sekci \dots.}
 
 %% TODO: doplnit odkaz na sekci

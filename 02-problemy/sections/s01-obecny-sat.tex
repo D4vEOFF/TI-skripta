@@ -1,8 +1,8 @@
-\section{Problém SAT}\label{sec:sat}
+\section{Problém splnitelnosti}\label{sec:general_sat}
 
-Jako první začneme zdánlivě možná jednoduchým problémem, který však na poli informatiky hraje dosti důležitou roli. Předpokládejme, že máme zadanou nějakou logickou formuli $\varphi$ o libovolném počtu logických proměnných, označme např. $x_1,x_2,\dots,x_n$. Naší otázkou je, jestli je možné hodnoty proměnných $x_1,x_2,\dots,x_n$ nastavit tak (tj. dosadit hodnoty 0 a 1), aby byla formule splněna\footnote{Může se na první pohled zdát, že se jedná o dosti teoretickou záležitost, nicméně později uvidíme, že mnoho jiných problémů má se SAT silnou spojitost.}, tj. $\varphi(\dots)=1$. Takovému ohodnocení budeme říkat \emph{splňující}. Z toho vychází i název samotného problému SAT (z angl. \emph{satisfiability}, neboli splnitelnost).
+Jako první začneme zdánlivě možná jednoduchým problémem, který však na poli informatiky hraje dosti důležitou roli. Předpokládejme, že máme zadanou nějakou logickou formuli $\varphi$ o libovolném počtu logických proměnných, označme např. $x_1,x_2,\dots,x_n$. Naší otázkou je, jestli je možné hodnoty proměnných $x_1,x_2,\dots,x_n$ nastavit tak (tj. dosadit hodnoty 0 a 1), aby byla formule splněna\footnote{Může se na první pohled zdát, že se jedná o dosti teoretickou záležitost, nicméně později uvidíme, že mnoho jiných problémů má se SAT silnou spojitost.}, tj. $\varphi(\dots)=1$. Takovému ohodnocení budeme říkat \emph{splňující}.
 
-\problem{Splnitelnost logické formule (SAT)}{Logická formule $\varphi$.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
+\problem{Splnitelnost obecné logické formule}{Logická formule $\varphi$.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
 
 Nejdříve si zopakujeme logické operace a spojky. Mezi ně řadíme $\neg, \land, \lor, \implies, \iff$.
 \begin{itemize}
