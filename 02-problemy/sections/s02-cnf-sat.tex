@@ -49,7 +49,7 @@ Ve vstupní formuli $\varphi$ může nastat situace, kdy se zde určitá proměn
 Podobně pro negaci, tj.
 \[\dots\land\overbrace{(\dots\lor \neg\underbrace{x}_{0}\lor\dots)}^{1}\land\dots\land\overbrace{(\dots\lor \neg\underbrace{x}_{0}\lor\dots)}^{1}\land\dots\]
 
-Poté, co jsme si nyní vysvětlili základní dvojici procedur, se nyní nabízí trojice případů, které je ještě třeba prozkoumat.
+Poté, co jsme si vysvětlili základní dvojici procedur, se nyní nabízí trojice případů, které je ještě třeba prozkoumat.
 \begin{itemize}
     \item \emph{Co když postupným odstraňováním proměnných mi ve formuli vznikne prázdná klauzule?} Taková situace může nastat v případě procedury Unit propagation, kdy odstraňujeme proměnné v opačné polaritě. Pokud nastane situace, že je nějaká klauzule prázdná, pak to znamená, že daná klauzule pod zvoleným ohodnocením \textbf{není splnitelná} a tudíž ani celá formule. V takovou chvíli můžeme prohlásit formuli za \textbf{nesplnitelnou pod daným ohodnocením}\footnote{Je potřeba si uvědomit, že ohodnocení proměnných si během výpočtu volíme, tedy v takovém případě to ještě nutně neznamená, že je formule celkově nesplnitelná. Pouze víme, že dané ohodnocení určitě není splňující}.
     \item \emph{Co když odstraníme postupně všechny klauzule?} K takové situaci může dojít, pokud jsou všechny klauzule splněny. V takovou určitě chvíli víme, že je původní formule \textbf{splnitelná}.
