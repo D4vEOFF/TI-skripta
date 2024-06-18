@@ -1,6 +1,6 @@
 \section{Grafy a jejich reprezentace}\label{sec:grafy}
 
-Grafy jsou základním stavebním kamenem pro mnoho úloh informatice.
+Grafy jsou základním stavebním kamenem pro mnoho úloh informatice. Lze jimi obecně reprezentovat mnoho situací, v nichž jsou klíčové určité prvky a jejich vzájemné vztahy. Např. propojení zařízení (router, switch, hub či koncový uživatel) v počítačové síti, schéma zapojení elektrického obvodu, mapa města nebo např. v chemii vazby mezi atomy. Jejich matematická podstata je však velice jednoduchá -- \emph{vrcholy} propojené \emph{hranami}.
 
 \begin{definition}[Graf]
     Grafem $G$ nazveme uspořádanou dvojici $(V, E)$, kde $V$ je množina \emph{vrcholů} (nebo také \emph{uzlů}) a $E$ množina \emph{hran}, přičemž pokud
@@ -9,3 +9,84 @@ Grafy jsou základním stavebním kamenem pro mnoho úloh informatice.
         \item $E\subseteq\set{(u,v)\,|\,u,v\in V}$, pak $G$ nazýváme \emph{orientovaným} grafem (tj. po hranách se lze pohybovat pouze v jednom směru).
     \end{itemize}
 \end{definition}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{6.5cm}
+        \centering
+        \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_priklad1.pdf}
+        \caption{Příklad orientovaného grafu.}
+        \label{fig:graf_priklad1}
+    \end{subfigure}
+    \qquad
+    \begin{subfigure}{6.5cm}
+        \centering
+        \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_priklad2.pdf}
+        \caption{Příklad neorientovaného grafu.}
+        \label{fig:graf_priklad2}
+    \end{subfigure}
+\end{figure}
+
+Podstatnou otázkou u grafů jsou způsoby jejich reprezentace, neboť při programování různé způsoby různě efektivní a je dobré si mezi nimi umět vybrat. Pracujme tedy s obecným grafem $G=(V,E)$, přičemž vrcholy grafu si pro jednoduchost označíme přirozenými čísly $1,2,\dots,n$, tzn. $V=\set{1,2,\dots,n}$.
+\begin{itemize}
+    \item \textbf{Matice sousednosti.} První způsob, jak graf reprezentovat, je pomocí matice. V tomto případě graf $G$ popisuje matice $n\times n$, kde na pozici $ij$ je $1$, pokud z vrcholu $i$ do vrcholu $j$ vede hrana, jinak $0$.
+    \begin{example}[Prásátkový graf]
+        Orientovaný graf $G$ (viz obrázek \ref{fig:graf_prasatko}) a jeho matice sousednosti $A$.
+        \begin{figure}[h]
+            \centering
+            \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_prasatko.pdf}
+            \caption{Prasátkový graf.}
+            \label{fig:graf_prasatko}
+        \end{figure}
+        \[A=\left(\begin{matrix}
+            0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1\\
+            0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
+            1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+            0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0
+        \end{matrix}\right)\]
+    \end{example}
+    \item \textbf{Matice incidence.} Řádky jsou indexovány vrcholy a sloupce jednotlivými hranami. Na místě $ij$ je $1$, pokud hrana vede \emph{do} vrcholu $i$, nebo $-1$, pokud z něj vychází, jinak $0$. Pro neorientované grafy píšeme vždy $1$, pokud daná hrana vede \emph{do/z} vrcholu.
+    \begin{example}[Úplný graf $K_4$]
+        Graf $G$ má $4$ vrcholy a celkem $6$ hran (viz obrázek \ref{fig:graf_k4}) a její matice incidence $I$. Řádky představují (shora dolů) čísla vrcholů $0,1,2,3$ a sloupce (zleva doprava) jednotlivé hrany $e_1,\dots,e_6$.
+        \begin{figure}[h]
+            \centering
+            \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_k4.pdf}
+            \caption{Úplný graf $K_4$.}
+            \label{fig:graf_k4}
+        \end{figure}
+        \[I=\left(\begin{matrix}
+            1 & 0 & 0 & 1 & 1 & 0\\
+            1 & 1 & 0 & 0 & 0 & 1\\
+            0 & 1 & 1 & 0 & 1 & 0\\
+            0 & 0 & 1 & 1 & 0 & 1
+        \end{matrix}\right)\]
+    \end{example}
+    \item \textbf{Seznam sousedů.} Jedná se pravděpodobně o nejpoužívanejší variantu reprezentace grafů. Pro každý vrchol $v\in V$ si jednoduše pamatujeme seznam\footnote{Formálně vzato se spíše jedná množinu.} $S[v]$ všech vrcholů, do kterých přímo vede hrana z vrcholu $v$.
+    \begin{example}
+        Graf $G$ s vrcholy $1,\dots,4$ a jejich seznamy sousedů $S$ (viz obrázek \ref{fig:graf_seznam_sousedu}).
+        \begin{figure}[h]
+            \centering
+            \begin{subfigure}{6cm}
+                \centering
+                \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_seznam_sousedu.pdf}
+            \end{subfigure}
+            \qquad
+            \begin{subfigure}{6cm}
+                \centering
+                \begin{align*}
+                    S[1]=\set{2,3}&\qquad S[3]=\set{4}\\
+                    S[2]=\set{3,4}&\qquad S[4]=\emptyset
+                \end{align*}
+                \vfill
+            \end{subfigure}
+            \caption{Graf $G$ a seznamy sousedů pro jeho každý vrchol.}
+            \label{fig:graf_seznam_sousedu}
+        \end{figure}
+    \end{example}
+\end{itemize}
