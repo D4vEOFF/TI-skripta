@@ -2,4 +2,34 @@
 
 Zkusme nyní původní problém ještě zjednodušit. Přidáme podmínku, že každá klauzule může obsahovat nejvýše 3 literály. Tím dostáváme variantu problému SAT známý jako \emph{3-SAT}. O formuli, která splňuje zmíněnou formu, budeme říkat, že je v 3-CNF.
 
-\problem{Splnitelnost logické formule v $3$-CNF (3-SAT)}{Formule $\varphi$ v 3-CNF}{1, je-li $\varphi$ splnitelná, jinak $0$.}
+\problem{Splnitelnost logické formule v 3-CNF (3-SAT)}{Formule $\varphi$ v 3-CNF}{1, je-li $\varphi$ splnitelná, jinak $0$.}
+
+Nabízí se otázka, jestli jsme si skutečně nějak pomohli. Zdánlivě ano, neboť máme kratší klauzule, avšak 3-SAT převdstavuje, překvapivě, stejně těžkou úlohu jako původní problém SAT. Proč? Lze totiž ukázat, že pokud bychom uměli rychle řešit 3-SAT, uměli bychom rychle řešit i původní SAT a naopak. To ukážeme tak, že jeden problém v jistém smyslu ``převést'' na ten druhý. Pro určitou instanci (tedy formuli) problému SAT můžeme sestrojit odpovídající instanci problému 3-SAT, jejímž vyřešením získáme odpověď i na původní problém. Podívejme se na tuto situaci blíže v podsekci
+
+\subsection{Převod 3-SAT na SAT}\label{subsec:prevod_sat_3sat}
+
+Popíšeme si nyní obecný způsob, jak převést libovolnou formuli v CNF (instance problému SAT) na formuli v 3-CNF (instance problému 3-SAT). Předpokládejme, že máme zadanou nějakou formuli $\varphi$ v CNF a chceme pro ni sestrojit formuli $\psi$ v 3-CNF, takovou, aby byla splnitelná právě tehdy, když je splnitelná i původní formule $\varphi$. Pro formuli $\varphi$ mohou nastat 2 případy:
+\begin{enumerate}
+    \item formule obsahuje klauzule délky $3$ a kratší,
+    \item nebo ve formuli existuje klauzule délky $k>3$.
+\end{enumerate}
+V prvním případě není co řešit, neboť $\varphi$ již je v 3-CNF, tedy stačí položit $\psi=\varphi$ a jsme hotovi. V druhém případě musíme dlouhou klauzuli o $k$ literálech rozložit na kratší. Tuto klauzuli\footnote{Pokud $\varphi$ obsahuje více dlouhých klauzulí, postup opakujeme pro každou z nich zvlášť.} rozložíme na dvojici nových klauzulí pomocí nové proměnné $x$. Označme si literály dané dlouhé klauzule $\ell_1,\ell_2,\dots\ell_k$. První dvojici $\ell_1$ a $\ell_2$ si označíme $\alpha$ a zbytek $\beta$.
+\[\underbrace{\ell_1\lor\ell_2}_{\alpha}\lor\overbrace{\ell_3\lor\dots\lor\ell_k}^{\beta}=\alpha\lor\beta\]
+Nyní přidáme novou proměnnou $x$ a klauzuli $\alpha\lor\beta$ rozdělíme na dvojici klauzulí následovně:
+\[(\alpha\lor x)\land(\beta\lor\neg x).\]
+Podívejme se nyní na délky nových klauzulí $\alpha\lor x$ a $\beta\lor\neg x$.
+\begin{itemize}
+    \item Klauzule $\alpha\lor x=\ell_1\lor\ell_2\lor x$ obsahuje $3$ literály, takže s ní dále nic provádět nemusíme.
+    \item Klauzule $\beta\lor\neg x=\ell_3\lor\dots\lor\ell_k\lor\neg x$ obsahuje $k-1$ literálů. To znamená, že jsme zkrátili původní klazuli o jeden literál. Pokud $k-1>3$, můžeme postup pro tuto klauzuli opakovat.
+\end{itemize}
+Nyní zbývá dořešit, jak to bude s hodnotou proměnné $x$. Podobně jako u Tseitinovy transformace (viz podsekce \ref{subsec:cnf_tseitin}), i zde bude její hodnota záviset na hodnotách ostatních proměnných, konkrétně výrazu $\alpha$.
+\begin{itemize}
+    \item Pokud $\alpha=1$, pak nastavíme $x=0$. Původní klauzule $\ell_1\lor\dots\lor\ell_k=\alpha\lor\beta$ je splněna díky $\alpha$. Nová dvojice klauzulí je pak splněna pomocí $\alpha$ a $x$:
+    \[(\alpha\lor x)\land(\beta\lor\neg x)=(1\lor 0)\land(\beta\lor 1)=1\land 1=1.\]
+    \item Pokud $\alpha=0$, pak nastavíme $x=1$. Klauzule $\alpha\lor\beta$ musí být splněna díky $\beta$. Potom platí:
+    \[(\alpha\lor x)\land(\beta\lor\neg x)=(0\lor 1)\land(1\lor 0)=1\land 1=1.\]
+    Pokud by však $\beta=0$, pak by původní klauzule $\alpha\lor\beta$ nebyla splněna a potom
+    \[(\alpha\lor x)\land(\beta\lor\neg x)=(0\lor 1)\land(0\lor 0)=1\land 0=0,\]
+    tzn. ani nová dvojice klauzulí by nebyla splněna, což chceme.
+\end{itemize}
+Tím jsme dostali obecný postup pro převod formule z CNF do 3-CNF.
