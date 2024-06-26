@@ -1,1 +1,30 @@
 \section{Problém nezávislé množiny v grafu}\label{sec:nzmna}
+%% TODO: Doplnit číslo podsekce
+Od problému SAT, resp. 3-SAT se na chvíli přesuneme ke zdánlivě odlišnému problému z teorie grafů. Později si ukážeme i jeho praktický důsledek v podsekci \dots. Nejdříve však bude dobré začít definicí.
+\begin{definition}[Nezávislá množina]\label{def:nzmna}
+    Mějme libovolný graf $G=(V,E)$. Množina $N\subseteq V$ je \emph{nezávislá}, pokud žádné dva vrcholy nejsou spojeny hranu.
+\end{definition}
+Definice \ref{def:nzmna} jednoduše říká, že jakákoliv vybraná množina vrcholů z daného grafu je nezávisá, pokud mezi vybranými vrcholy nevede hrana. Podívejme se na konkrétní příklad.
+\begin{example}
+    Nezávislé množiny $M_1$ a $M_2$ v grafech $G_1$ a $G_2$ (viz obrázky \ref{subfig:nzmna_priklad1} a \ref{subfig:nzmna_priklad2}).
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}{7cm}
+            \centering
+            \includegraphics[scale=.7]{02-problemy/images/ch02_nzmna_priklad1.pdf}
+            \caption{Nezávislá množina vrcholů $M_1=\set{v_1,v_2}$ v $G_1$}
+            \label{subfig:nzmna_priklad1}
+        \end{subfigure}
+        \qquad
+        \begin{subfigure}{7cm}
+            \centering
+            \includegraphics[scale=.7]{02-problemy/images/ch02_nzmna_priklad2.pdf}
+            \caption{Nezávislá množina vrcholů $M_2=\set{3,5,8}$ v $G_2$}
+            \label{subfig:nzmna_priklad2}
+        \end{subfigure}
+    \end{figure}
+\end{example}
+
+Zde poznamenejme, že na existenci nezávislé množiny nemá smysl se ptát, neboť v libovolném neprázdném grafu (tedy má alespoň jeden vrchol) existuje nezávislá množina, např. libovolná jednovrcholová množina je určitě z definice nezávislá. Zajímavější otázkou je spíše, zda v zadaném grafu existuje nezávislá množina, která má alespoň určitou velikost (tzn. počet vrcholů).
+
+\problem{Nezávislá množina v grafu (NzMna)}{Graf $G=(V,E)$ a číslo $k\in\N$.}{$1$, pokud v grafu $G$ existuje nezávislá množina velikosti alespoň $k$, jinak $0$.}
