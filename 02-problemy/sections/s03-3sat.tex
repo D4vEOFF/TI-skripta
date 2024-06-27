@@ -34,5 +34,21 @@ Nyní zbývá dořešit, jak to bude s hodnotou proměnné $x$. Podobně jako u 
 \end{itemize}
 Tím jsme dostali obecný postup pro převod formule z CNF do 3-CNF.
 \begin{example}
-    Máme formuli $\varphi(a,b,c,d)=a\lor b\lor \neg c\lor \neg b\lor d\lor \neg d$ o jedné klauzuli.
+    Máme formuli $\varphi(a,b,c,d)=a\lor b\lor \neg c\lor \neg b\lor d\lor \neg d$ o jedné klauzuli, kterou chceme převést do 3-CNF. K tomu si pořídíme novou proměnnou $x$. Podle postupu popsaného výše si sestavíme dvojici nových klazulí $\alpha\lor x$ a $\beta\lor\neg x$.
+    \[\underbrace{a\lor b}_{\alpha}\lor \overbrace{\neg c\lor \neg b\lor d\lor \neg d}^{\beta}\]
+    Tím dostáváme novou formuli
+    \[\varphi^\prime(a,b,c,d,x)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor d\lor \neg d\lor\neg x).\]
+    První klauzule $a\lor b\lor x$ obsahuje 3 literály, avšak klauzule $\neg c\lor \neg b\lor d\lor \neg d\lor\neg x$ je však stále dlouhá (všimněte si ale, že obsahuje o jeden literál méně než původní klauzule). Postup tedy opakujeme.
+
+    Vytvoříme si opět novou proměnnou, označme ji $y$. Podobně jako výše i zde rozložíme danou klauzuli na dvě kratší.
+    \[(\underbrace{\neg c\lor \neg b}_{\alpha^\prime}\lor y)\land(\overbrace{d\lor \neg d\lor\neg x}^{\beta^\prime}\lor\neg y)\]
+    Tedy dostáváme opět novou formuli
+    \[\varphi^\prime(a,b,c,d,x,y)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor y)\land(d\lor \neg d\lor\neg x\lor\neg y).\]
+
+    Třetí klauzule je stále ještě dlouhá, tedy postup zopakujeme ještě jednou s novou proměnnou $z$.
+    \[(\underbrace{d\lor \neg d}_{\alpha^{\prime\prime}}\lor z)\land(\overbrace{\neg x\lor\neg y}^{\beta^{\prime\prime}}\lor\neg z)\]
+    Celkově dotáváme formuli, která je již v 3-CNF:
+    \[\psi(a,b,c,d,x,y,z)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor y)\land(d\lor \neg d\lor z)\land(\neg x\lor\neg y\lor\neg z).\]
+
+    %% TODO: Přidat výpočet pro konkrétní hodnoty proměnných
 \end{example}
