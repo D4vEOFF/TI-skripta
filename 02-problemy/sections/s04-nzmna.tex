@@ -1,10 +1,10 @@
 \section{Problém nezávislé množiny v grafu}\label{sec:nzmna}
-%% TODO: Doplnit číslo podsekce
-Od problému SAT, resp. 3-SAT se na chvíli přesuneme ke zdánlivě odlišnému problému z teorie grafů. Později si ukážeme i jeho praktický důsledek v podsekci \dots. Nejdříve však bude dobré začít definicí.
+
+Od problému SAT, resp. 3-SAT se na chvíli přesuneme ke zdánlivě odlišnému problému z teorie grafů. Později si ukážeme i jeho praktický důsledek v podsekci \ref{subsec:int_graf}. Nejdříve však bude dobré začít definicí.
 \begin{definition}[Nezávislá množina]\label{def:nzmna}
     Mějme libovolný graf $G=(V,E)$. Množina $N\subseteq V$ je \emph{nezávislá}, pokud žádné dva vrcholy nejsou spojeny hranu.
 \end{definition}
-Definice \ref{def:nzmna} jednoduše říká, že jakákoliv vybraná množina vrcholů z daného grafu je nezávisá, pokud mezi vybranými vrcholy nevede hrana. Podívejme se na konkrétní příklad.
+Definice \ref{def:nzmna} jednoduše říká, že jakákoliv vybraná množina vrcholů z daného grafu je nezávisá, pokud mezi všemi vybranými vrcholy nevede hrana. Podívejme se na konkrétní příklad.
 \begin{example}
     Nezávislé množiny $M_1$ a $M_2$ v grafech $G_1$ a $G_2$ (viz obrázky \ref{subfig:nzmna_priklad1} a \ref{subfig:nzmna_priklad2}).
     \begin{figure}[h]
@@ -28,3 +28,19 @@ Definice \ref{def:nzmna} jednoduše říká, že jakákoliv vybraná množina vr
 Zde poznamenejme, že na existenci nezávislé množiny nemá smysl se ptát, neboť v libovolném neprázdném grafu (tedy má alespoň jeden vrchol) existuje nezávislá množina, např. libovolná jednovrcholová množina je určitě z definice nezávislá. Zajímavější otázkou je spíše, zda v zadaném grafu existuje nezávislá množina, která má alespoň určitou velikost (tzn. počet vrcholů).
 
 \problem{Nezávislá množina v grafu (NzMna)}{Graf $G=(V,E)$ a číslo $k\in\N$.}{$1$, pokud v grafu $G$ existuje nezávislá množina velikosti alespoň $k$, jinak $0$.}
+
+Jak později uvidíme, otázka existence nezávislé má i své aplikace při řešení praktických problémů (opět viz podsekce \ref{subsec:int_graf}), avšak ještě než tak učiníme, zkusme se podívat na souvislosti s problémy, které již známe.
+
+\subsection{Převod 3-SAT na NzMna}\label{subsec:prevod_3sat_nzmna}
+%% TODO: Doplnit odkaz na knihu, odkazy na obrázky
+Mezi dvojicí problémů NzMna a $3$-SAT existuje přímá souvislost oběma směry. Problém $3$-SAT lze tedy převést na problém nezávislé množiny a naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem, ten druhý je již podstatně složitější\footnote{Pro zájemnce viz kniha \dots}.
+
+Začínáme s formulí $\varphi$, která je ve formě $3$-CNF. Uvažujme, že obsahuje obecně $k$ klauzulí, kde každá obsahuje maximálně $3$ literály. Chceme pro tuto formuli sestrojit graf $G$ a číslo $n$ takové, že v něm existuje nezávislá množina velikosti alespoň $n$.
+\[\varphi=\underbrace{(\dots)}_{\text{max. 3 literály}}\land(\dots)\land\dots\land(\dots)\]
+Aby byla formule $\varphi$ splněná, musí být splněny všechny její klauzule. K tomu je potřeba, aby v každé klauzuli existoval alespoň jeden literál, který ji bude splňovat (může jich být i více). Z každé klauzule tedy vybereme jeden literál, který ji bude splňovat. Je však nutné upozornit, že nesmíme vybírat konfliktně, tedy např. nelze v jedné klauzulu vybrat jako splňující literál $x$ a v jiné klauzuli $\neg x$.
+\[(\dots)\land(\dots\lor \underbrace{x}_{\text{vybereme}} \lor \dots)\land\dots\land(\dots\lor\overbrace{\neg x}^{\text{nesmíme vybrat}}\lor \dots)\land\dots\]
+Pro každou klauzuli vytvoříme v novém grafu $G$ \emph{trojúhelník}, kde jeho vrcholy představují literály dané klauzule. A jako poslední spojíme hranou \emph{každý literál s jeho negací}. Např. pro formuli
+\[\varphi(x,y,z)=(x\lor y\lor \neg z)\land(\neg x\lor y)\land(\neg z\lor\neg y\lor x)\]
+je příslušný graf znázorněný na obrázku \dots.
+
+\subsection{Aplikace NzMna -- barvení intervalového grafu}\label{subsec:int_graf}
