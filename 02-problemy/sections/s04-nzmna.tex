@@ -60,4 +60,12 @@ Např. pro již zmíněnou formuli $\varphi$, která je splnitelná např. pomoc
 
 Jako poslední musíme ještě určit číslo $n$. To je ale velice jednoduché, protože v každé klauzuli vybíráme právě jeden literál a celkově těchto klauzulí je obecně $k$. Tedy v takto sestrojeném grafu se nachází právě $k$ trojúhelníků, v každém z nichž vybíráme právě jeden vrchol, tedy $n=k$.
 
+K převodu NzMna na $3$-SAT přidáme jen krátký komentář. Idea převodu je využití klasického SATu. Zadaný graf $G$ a číslo $k$ se převede na formuli v CNF a ta se následně převede do $3$-CNF. Problém SAT tak využijeme v jistém smyslu jako ``prostředníka'' (viz obrázek \ref{fig:prevod_nzmna_3sat}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_prevod_nzmna_3sat.pdf}
+    \caption{Idea převodu NzMna $\rightarrow$ $3$-SAT.}
+    \label{fig:prevod_nzmna_3sat}
+\end{figure}
+
 \subsection{Aplikace NzMna -- barvení intervalového grafu}\label{subsec:int_graf}
