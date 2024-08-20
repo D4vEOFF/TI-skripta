@@ -33,7 +33,7 @@ Jak později uvidíme, otázka existence nezávislé má i své aplikace při ř
 
 \subsection{Převod 3-SAT na NzMna}\label{subsec:prevod_3sat_nzmna}
 %% TODO: Doplnit odkaz na knihu, odkazy na obrázky
-Mezi dvojicí problémů NzMna a $3$-SAT existuje přímá souvislost oběma směry. Problém $3$-SAT lze tedy převést na problém nezávislé množiny a naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem, ten druhý je již podstatně složitější\footnote{Pro zájemnce viz kniha \dots}.
+Mezi dvojicí problémů NzMna a $3$-SAT existuje přímá souvislost oběma směry. Problém $3$-SAT lze tedy převést na problém nezávislé množiny a naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem, ten druhý je již podstatně složitější\footnote{Pro zájemnce viz kniha \emph{Průvodce labyrintem algoritmů (2. vydání), str. 471}}.
 
 Začínáme s formulí $\varphi$, která je ve formě $3$-CNF. Uvažujme, že obsahuje obecně $k$ klauzulí, kde každá obsahuje maximálně $3$ literály. Chceme pro tuto formuli sestrojit graf $G$ a číslo $n$ takové, že v něm existuje nezávislá množina velikosti alespoň $n$.
 \[\varphi=\underbrace{(\dots)}_{\text{max. 3 literály}}\land(\dots)\land\dots\land(\dots)\]
@@ -41,6 +41,24 @@ Aby byla formule $\varphi$ splněná, musí být splněny všechny její klauzul
 \[(\dots)\land(\dots\lor \underbrace{x}_{\text{vybereme}} \lor \dots)\land\dots\land(\dots\lor\overbrace{\neg x}^{\text{nesmíme vybrat}}\lor \dots)\land\dots\]
 Pro každou klauzuli vytvoříme v novém grafu $G$ \emph{trojúhelník}, kde jeho vrcholy představují literály dané klauzule. A jako poslední spojíme hranou \emph{každý literál s jeho negací}. Např. pro formuli
 \[\varphi(x,y,z)=(x\lor y\lor \neg z)\land(\neg x\lor y)\land(\neg z\lor\neg y\lor x)\]
-je příslušný graf znázorněný na obrázku \dots.
+je příslušný graf znázorněný na obrázku \ref{fig:prevod_3sat_nzmna}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_prevod_3sat_nzmna.pdf}
+    \caption{Ukázka sestrojeného grafu pro formuli $\varphi$.}
+    \label{fig:prevod_3sat_nzmna}
+\end{figure}
+
+Pojďme se nyní promyslet danou konstrukci grafu $G$. Pokud v nějaké klauzuli vybereme jeden literál, který ji bude splňovat, tak v daném grafu $G$ budou vrcholy příslušné daným literálům tvořit nezávislou množinu. Zároveň však nemůže dojít k situaci, kdy bychom vybrali jednou vybrali literál a v jiné klauzuli jeho negaci, protože příslušné dvojice jsou v grafu $G$ spojeny hranou.
+
+Např. pro již zmíněnou formuli $\varphi$, která je splnitelná např. pomocí ohodnocení $x=1,y=1$ a $z=0$ je příslušná nezávislá množina znázorněna na obrázku \ref{fig:prevod_3sat_nzmna_2}, kde jsou splňující literály jednotlivých klauzulí $x,y$ a $\neg z$.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_prevod_3sat_nzmna_2.pdf}
+    \caption{Ukázka nezávislé množiny příslušné splňujícím literálům pro formuli $\varphi$.}
+    \label{fig:prevod_3sat_nzmna_2}
+\end{figure}
+
+Jako poslední musíme ještě určit číslo $n$. To je ale velice jednoduché, protože v každé klauzuli vybíráme právě jeden literál a celkově těchto klauzulí je obecně $k$. Tedy v takto sestrojeném grafu se nachází právě $k$ trojúhelníků, v každém z nichž vybíráme právě jeden vrchol, tedy $n=k$.
 
 \subsection{Aplikace NzMna -- barvení intervalového grafu}\label{subsec:int_graf}
