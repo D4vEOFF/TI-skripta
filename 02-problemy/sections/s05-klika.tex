@@ -1,1 +1,59 @@
 \section{Problém kliky v grafu}\label{sec:klika}
+
+Jako poslední si ještě ukážeme ještě jeden typ problému, který (jak uvidíme) přímo souvisí s problémem nezávislé množiny. Nejdříve si však ještě připomeňme některé důležité termíny z teorie grafů. Jako první si definujeme tzv. \emph{kliku}.
+\begin{definition}[Klika]
+    Nechť je dán graf $G=(V,E)$. Klikou nazveme libovolný podgraf $G^\prime=(V^\prime,E^\prime)$, kde $V^\prime\subseteq V$ a $E^\prime\subseteq E$, který tvoří \emph{úplný graf} libovolné velikosti.
+\end{definition}
+\begin{example}
+    Příklady klik v grafech $G_1$ a $G_2$, viz obrázky \ref{subfig:priklad_klika1} a \ref{subfig:priklad_klika2}.
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}{7cm}
+            \centering
+            \includegraphics[scale=.7]{02-problemy/images/ch02_klika1.pdf}
+            \caption{Klika v grafu $G_1$.}
+            \label{subfig:priklad_klika1}
+        \end{subfigure}
+        \qquad
+        \begin{subfigure}{7cm}
+            \centering
+            \includegraphics[scale=.7]{02-problemy/images/ch02_klika2.pdf}
+            \caption{Klika v grafu $G_2$.}
+            \label{subfig:priklad_klika2}
+        \end{subfigure}
+    \end{figure}
+\end{example}
+Podobně jako u nezávislé množiny, i zde platí, že každý graf jistě obsahuje kliku (např. samostatný vrchol je z definice klika). Bude nás tedy opět zajímat, zda existuje v zadaném grafu klika určitě velikosti.
+
+\problem{Problém kliky v grafu (Klika)}{Graf $G=(V,E)$ a číslo $k\in\N$.}{$1$, pokud v $G$ existuje klika velikosti alespoň $k$, jinak $0$.}
+
+Nyní si ukážeme, že ve skutečnosti problém kliky je ekvivalentní s problémem nezávislé množiny. K tomu si však definujeme ještě jeden termín.
+\begin{definition}[Doplněk grafu]
+    Je-li $G=(V,E)$ graf, pak doplňkem grafu $G$ je graf $\overline{G}=(V,E^\prime)$, kde platí:
+    \[(u,v)\in E\iff (u,v)\notin E^\prime,\]
+    pro každou dvojici vrcholů $u,v$ grafu $G$.
+\end{definition}
+Co tato definice vlastně říká? Jednoduše to, že doplněk grafu $G$ obsahuje právě ty hrany, které v původním grafu chybí. Podívejme se na příklady.
+\begin{example}
+    Příklady doplňků grafů, viz obrázky \ref{fig:doplnek_grafu1} a \ref{fig:doplnek_grafu2}.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale=.7]{02-problemy/images/ch02_doplnek_grafu1.pdf}
+        \caption{Doplněk grafu na čtyřech vrcholech.}
+        \label{fig:doplnek_grafu1}
+    \end{figure}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale=.7]{02-problemy/images/ch02_doplnek_grafu2.pdf}
+        \caption{Doplněk prasátkového grafu.}
+        \label{fig:doplnek_grafu2}
+    \end{figure}
+\end{example}
+
+\subsection{Převod Klika na NzMna}\label{subsec:prevod_klika_nzmna}
+
+Jako poslední se nyní zamyslíme, jaká je tedy souvislost mezi problémem nezávislé množiny a kliky v grafu. Předpokládejme, že máme tedy zadaný graf $G$ a číslo $k\in\N$. Chceme sestrojit graf $G^\prime$ a číslo $k^\prime$ takové, že v $G$ existuje klika velikosti alespoň $k$ právě, když novém grafu $G\prime$ existuje nezávislá množina velikosti alespoň $k^\prime$. Toto zařídíme však velice jednoduše.
+
+Pro daný graf $G$ sestrojíme jeho doplněk $\overline{G}$. Nyní se zamysleme. Pokud v $G$ existuje nějaká klika (pro tuto chvíli nezáleží na jeji velikosti), pak její vrcholy tvoří v $\overline{G}$ nezávislou množinu. Toto je jasné, neboť všechny vrcholy, které byly spojeny hranou $G$ nyní v $\overline{G}$ spojeny hranou nejsou. Tedy všechny dvojice vrcholů dané kliky nyní nejsou spojeny hranu.
+
+Tedy celkově stačí položit $G^\prime=\overline{G}$ a $k^\prime=k$ a jsme hotovi. Opačný převod provedeme naprosto stejně.
