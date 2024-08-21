@@ -1,1 +1,38 @@
 \section{Třídy problémů \P{} a \NP}\label{sec:p_np}
+
+V této sekci se nyní ohledneme trochu zpět a podíváme se na celou problematiku z více abstraktního hlediska. Naším cílem je představit si dvojici základních tříd problémů a vysvětlit si jejich podstatu v současném světě informatiky. Jako první se trochu blíže podíváme na problémy, které jsme si již představili.
+
+\subsection{Rozbor předchozích problému}\label{subsec:rozbor_predchozich_problemu}
+
+V předchozích sekcích jsme si představili některé základní problémy. Všimněte si, že vždy jsme se ptali na to, zda nějaký objekt splňuje určitou vlastnost. Např. u logické formule jsme se ptali, zdali je či není splnitelná. U grafů jsme se ptali, zda v existuje nezávislá množina či klika určité velikosti. Výstupem problému tedy byly vždy pouze hodnoty $1$ (pravda) nebo $0$ (nepravda). Takovým problémům se říká tzv. \textbf{rozhodovací problémy}.
+
+Mimo tento typ se však v praxi spíše setkáme s tzv. \textbf{optimalizačními problémy}. V praxi nás nejspíše nebude zajímat, zda v grafu existuje klika určité velikosti. Spíše nás bude zajímat, jaká největší klika v zadaném grafu existuje. Ve skutečnosti optimalizační varianty problémů však umíme vždy řešit pomocí těch rozhodovacích. Kdybychom uměli rychle rozhodnout, zda existuje v grafu klika určité velikosti, pak bychom pomocí přislušného algoritmu uměli vyřešit i optimalizační verzi. Graf $G=(V,E)$ ponecháme stejný, akorát budeme měnit parametr $k$, tj. velikost množiny. Nejednodušší variantou je iterovat daný parametr $k$, dokud nám algoritmus nevydá jako odpověď \emph{pravdu}, tj. $1$.
+
+Uvažujme, že podprogram \texttt{ExistsClique($G$, $k$)} určuje pro vstupní graf $G$ a číslo $k$, zda v něm existuje klika velikosti alespoň $k$. Pomocí něj pak umíme vyšřešit i optimalizační verzi, viz \ref{alg:maximalni_klika}.
+\begin{algorithm}
+    \caption{Určení maximální kliky v grafu}
+    \label{alg:maximalni_klika}
+    \KwIn{Graf $G=(V,E)$}
+    $n\gets\abs{V}$\\
+    \For{$k=n,n-1,n-2,\dots,1,0$}{
+        \lIf{$\textup{ExistsClique}(G,k)=1$}{\Return{$k$}}
+    }
+    \KwOut{Velikost maximální kliky v grafu $G$}
+\end{algorithm}
+Podobně tak lze řešit i ostatní problémy. Pro nás je však postatné si uvědomit, že naše omezení na rozhodovací problémy má tedy hned dva důvody. Celkově nám to zjednodušuje pohled na danou problematiku a navíc od rozhodovacího problému k optimalizačnímu umíme přejít velice snadno.
+
+Vraťme se tedy zpět k rozhodovacím variantám, které jsme již probírali. Zkusme si rozebrat rychlosti jednotlivých převodů.
+\begin{itemize}
+    \item \textit{SAT $\rightarrow$ 3-SAT.} Klauzuli s $k>3$ literály rozložíme v čase $\bigO{k}$. Převod tedy potrvá maxiálně lineárně dlouho v délce formule, tedy počtu jejích literálů $n$.
+    \item \textit{3-SAT $\rightarrow$ SAT.} Formule v $3$-CNF jsou již v CNF, tedy převodem nestrávíme žádný čas.
+    \item \textit{3-SAT $\rightarrow$ NzMna.} Sestrojený graf má vrcholy v počtu literálů formule, to potrvá $\bigO{n}$. Hran v grafu bude maximálně kvaraticky mnoho (tj. úplný graf), tedy $\bigO{n^2}$. Celkově $\bigO{n+n^2}=\bigO{n^2}$.
+    \item \textit{Klika $\rightarrow$ NzMna.} Doplněk grafu má vrcholy původního grafu. Hran sestrojíme maximálně kvadraticky mnoho, tj. celkově $\bigO{n^2}$.
+    \item \textit{NzMna $\rightarrow$ Klika.} Stejné jako u předchozího převodu.
+\end{itemize}
+Můžeme si všimnout, že všechny převody jsou polynomiální, tedy jak jsme uváděli v úvodu kapitoly, můžeme je považovat za ``rychlé'', viz obrázek \ref{fig:problemy_souvislost}. Co však dodnes neumíme je kterýkoliv z nich v polynomiálním čase řešit. Dané převody je nám však dávají hezky do souvislosti. Pokud bychom uměli řešit kterýkoliv z nich rychle, pak bychom uměli řešit rychle všechny z nich. Stačilo by nám libovolný jiný z nich převést na ten, který rychle řešit umíme.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_problemy_souvislost.pdf}
+    \caption{Jednotlivé převody mezi problémy.}
+    \label{fig:problemy_souvislost}
+\end{figure}
