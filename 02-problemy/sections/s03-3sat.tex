@@ -50,7 +50,18 @@ Tím jsme dostali obecný postup pro převod formule z CNF do 3-CNF.
     Celkově dotáváme formuli, která je již v 3-CNF:
     \[\psi(a,b,c,d,x,y,z)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor y)\land(d\lor \neg d\lor z)\land(\neg x\lor\neg y\lor\neg z).\]
 
-    %% TODO: Přidat výpočet pro konkrétní hodnoty proměnných
+    Nyní si zkusíme určit hodnoty pomocných proměnných $x,y,z$ na základě zadaného ohodnocení proměnných v původní formuli $\varphi$. Zkusme např. $a=0,b=0,c=0,d=1$. Lze jednoduše vypočítat, že $\varphi(0,0,0,1)=1$.
+    \begin{itemize}
+        \item Protože ve $\varphi^\prime$ platí, že $a\lor b=0\lor 0=0$, tak položíme $x=1$.
+        \item Dále ve $\varphi^{\prime\prime}$ máme $\neg c\lor\neg b=1\lor 1=1$, tedy $y=0$
+        \item a jako poslední pro $\psi$ platí $d\lor\neg d=1\lor 0=1$, tj. opět $z=0$.
+    \end{itemize}
+    Pomocné proměnné tedy nastavíme následovně: $x=1,y=0,z=0$. Můžeme se přesvědčit, že nová formule $\psi$ je v tomto ohodnocení také splněna:
+    \begin{align*}
+        \psi(0,0,0,1,1,0,0)&=(0\lor 0\lor 1)\land(1\lor 1\lor 0)\land(1\lor 0\lor 0)\land(0\lor 1\lor 1)\\
+        &=1\land 1\land 1\land 1\\
+        &=1.
+    \end{align*}
 \end{example}
 
 Tímto způsobem jsme ukázali, že problém SAT lze ``převést'' na $3$-SAT. Opačný směr je triviální, protože každá formule v $3$-CNF už je i v CNF, takže nic převádět nemusíme.
@@ -61,6 +72,15 @@ Z tohoto vlastně vyplývá, že tyto problémy v jistém smyslu ``stejně těž
 
 Toto byla ukázka tzv. \textbf{polynomiálního převodu} mezi problémy. Pojďme si toto trochu rigorózněji definovat.
 \begin{definition}[Polynomiální převoditelnost]\label{def:pol_prev}
-    Řekneme, že libovolný problém $A$ je polynomiálně převoditelný na problém $B$, píšeme $A\rightarrow B$, pokud každý vstup $x$ problému $A$ lze převést na vstup $x^\prime$ problému $B$, přičemž $A(x)=B(x^\prime)$.
+    Řekneme, že libovolný problém $A$ je polynomiálně převoditelný na problém $B$, píšeme $A\rightarrow B$, pokud každý vstup $x$ problému $A$ lze převést v polynomiálním čase na vstup $x^\prime$ problému $B$, přičemž $A(x)=B(x^\prime)$.
 \end{definition}
 Co tato definice říká? Pokud platí $A\rightarrow B$, pak odpověď na vstup $x^\prime$ je zároveň i odpovědí na původní vstup $x$. V našem případě je formule v CNF $\varphi$ splnitelná (to je naše $x$), právě když je nová formule v 3-CNF $\psi$ (to je $x^\prime$) splnitelná.
+
+Zároveň $A\rightarrow B$ znamená, že problém $B$ je alespoň tak těžký jako problém $A$.\footnote{Mnemotechnická pomůcka: "Obtížnost teče ve směru šipky."}
+\warningbox{Pokud pro problém $A$ neexistuje polynomiální algoritmus, pak ani pro $B$ nemůže existovat. Naopak pokud $B$ lze řešit polynomiálně, pak i $A$ lze řešit polynomiálně. Pokud obecně budeme mít pro problém $A$ vstup velikosti $n$, přičemž převod potrvá $\bigO{n^\ell}$ pro nějaké $\ell$, pak délka nového vstupu bude též $\bigO{n^\ell}$. Pokud problém $B$ umíme řešit v čase $\bigO{b^k}$ pro nějaké $k$, kde $b$ je velikost vstupu, pak pro nový vstup potrvá výpočet $\bigO{n^{k\ell}}$. Celkově tedy strávíme čas $\bigO{n^\ell}$ převodem a pak čas $\bigO{n^{k\ell}}$ samotným řešením problému $B$. To celkově potrvá $\bigO{n^\ell+n^{k\ell}}$, což je zase polynom. Viz obrázek \ref{fig:pol_prevod}.}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_pol_prevod.pdf}
+    \caption{Schéma polynomiálního převodu.}
+    \label{fig:pol_prevod}
+\end{figure}
