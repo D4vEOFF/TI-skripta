@@ -33,6 +33,61 @@ Můžeme si všimnout, že všechny převody jsou polynomiální, tedy jak jsme 
 \begin{figure}[h]
     \centering
     \includegraphics[scale=.7]{02-problemy/images/ch02_problemy_souvislost.pdf}
-    \caption{Jednotlivé převody mezi problémy.}
+    \caption{Shrnutí převodů mezi jednotlivými problémy.}
     \label{fig:problemy_souvislost}
 \end{figure}
+Např. pokud bychom byli schopni řešit problém kliky v polynomiálním čase, tj. $\bigO{n^\ell}$ pro nějaké $\ell$, potom např. problém $3$-SAT bychom mohli řešit tak, že jej v čase $\bigO{n^2}$ převedeme na problém nezávislé množiny, čímž dostaneme instanci velikosti $m$ a tu následně převedeme opět v čase $\bigO{m^2}$. Celkově jsme instanci problému $3$-SAT převedli v čase $\bigO{n^2+m^2}$ na instanci problému kliky, kterou nyní vyřešíme v $\bigO{(n^2+m^2)^\ell}$. To je ovšem po roznásobení zase polynom.
+
+\subsection{Ověřování problémů}\label{subsec:overovani_problemu}
+
+Už jsme si zmínili, že žádné ze zmíněných problémů (ani mnohé jiné) neumíme řešit v polynomiálním čase, ač instance mnohých z nich dnes umíme řešit v uspokojivých časech. U hodně z nich však umíme rychle ověřit, zda je nějaké řešení správné. Uvažujme situaci, kdy máme zadanou logickou formuli $\varphi$ a nějaké ohodnocení jejích proměnných. Zajímá nás, zda je dané ohodnocení splňující. To není ale vůbec těžké. Zkrátka danou formuli vyhodnotíme. To však již umíme provést rychle!
+\begin{itemize}
+    \item Pokud je zadané ohodnocení splňující, pak je $\varphi$ splnitelná.
+    \item Pokud ohodnocení není splňující, pak to ještě nutně \emph{neznamená, že je nesplnitelná}.
+\end{itemize}
+Všimněme si tedy, že nyní se naše otázka změnila.
+\begin{itemize}
+    \item Původní otázka: \textit{Je zadaná formule $\varphi$ splnitelná?}
+    \item Současná otázka: \textit{Je zadané ohodnocení proměnných zadané formule $\varphi$ splňující?}
+\end{itemize}
+Pojďme se podívat touto optikou ještě na jiný problém. U problému NzMna nás zajímalo, zda zadaný graf $G$ obsahuje nezávislou množinu velikosti alespoň $k$. Nyní nás bude zajímat následující otázka: \textit{Je zadaná množina $N$ v grafu $G$ nezávislá velikosti alespoň $k$?} Opět jsme přeformulovali otázku do podoby, kdy ověřujeme, kdy původně hledaný\footnote{Formálně nelze přímo říci, že takový objekt vyloženě ``hledáme''. Pouze nás zajímá, zda existuje.} objekt již máme zadaný a pouze ověřujeme, zda splňuje danou vlastnost. Zde je řešení opět velice jednoduché, zkerátka zkontrolujeme, zda je množina dostatečně velká a zda mezi žádnou dvojicí vrcholů nevede hrana. Viz algoritmus \ref{alg:overeni_nzmna}.
+
+\begin{algorithm}
+    \caption{Ověření nezávislé množiny}
+    \label{alg:overeni_nzmna}
+    \KwIn{Graf $G=(V,E)$, číslo $k\in\N$ a množina $N\subseteq V$}
+    \tcp{Množina $N$ není dostatečně velká}
+    \lIf{$\abs{V}<k$}{\Return{$0$}}
+
+    \tcp{Dvojice vrcholů je spojena hranou}
+    \ForEach{$u\in V$}{
+        \ForEach{$v\in V;\,v\neq u$}{
+            \lIf{$\set{u,v}\in E$}{\Return{$0$}}
+        }
+    }
+
+    \tcp{Množina $N$ je nezávislá}
+    \Return{$1$}
+\end{algorithm}
+
+Časová složitost je zjevně polynomiální. Označíme $\abs{N}=m$, přičemž jistě platí $m\leqslant\abs{V}$. Vnější cyklus se provede $m$-krát a vnitřní cyklus $(m-1)$-krát (vrchol $u$ jako jediný znovu nevybíráme). Tedy celkově
+\[\bigO{m(m-1)}=\bigO{m^2-m}=\bigO{m^2},\]
+což je polynom. Tedy umíme rychle ověřit, zda je množina nezávislá.
+
+Podobně si můžete rozmyslet, jak budou vypadat takové ``ověřovací'' algoritmy pro ostatní problémy. Co je ovšem podstatou tohoto výkladu? Obecně existují problémy, které jsme schopni řešit s určitou ``nápovědou''. Např. v případě nezávislé množiny si můžeme nechat napovědět nějakou podmnožinu vrcholů $N\subseteq V$ a nám jen stačí ověřit, zda je skutečně nezávislá a dostatečně velká. Podobně u problému SAT si necháme napovědět ohodnocení proměnných a nám pouze stačí ověřit, zda danou formuli splňuje.
+\begin{remark}
+    Zde poznamenejme, že ne u každého problému jsme schopni rychle ověřit správnost řešení. Např. u Hanojských věží nejen že nejsme schopni rychle nalézt řešení, ale dokonce nejsme ani schopni jej rychle ověřit. Vždy budeme potřebovat vzhledem k počtu disků exponenciálně mnoho kroků, tedy i odsimulování poskytnutého řešení potrvá dlouho.
+\end{remark}
+
+\subsection{Definice tříd složitosti}\label{subsec:tridy_slozitosti}
+
+Předchozí úvahy nám dávají rozdělení problémů do dvou základních kategorií.
+\begin{itemize}
+    \item Ty, které \emph{umíme řešit v polynomiálním čase}
+    \item a ty, u nichž \emph{dokážeme v polynomiálním čase ověřit správnost řešení}.
+\end{itemize}
+Tím dostáváme tzv. \emph{třídy složitosti} \P{} a \NP{} (též se jim nazývá \emph{třídy problémů}). Pojďme se na ně podívat.
+\begin{definition}[Třída složitosti \P]
+    \P{} je třída rozhodovacích problémů řešitelných v polynomiálním čase.
+\end{definition}
+Třída \P{} tedy zachycuje všechny problémy, které jsou pro v jistém smyslu rychle řešitelné\footnote{Asi by čtenáře mohlo napadnout, že např. algoritmus s časovou složitostí $\bigO{n^{1000}}$ je asi jen stěží použitelný. Nebo podobně z druhé strany }.
