@@ -50,7 +50,7 @@ Všimněme si tedy, že nyní se naše otázka změnila.
     \item Původní otázka: \textit{Je zadaná formule $\varphi$ splnitelná?}
     \item Současná otázka: \textit{Je zadané ohodnocení proměnných zadané formule $\varphi$ splňující?}
 \end{itemize}
-Pojďme se podívat touto optikou ještě na jiný problém. U problému NzMna nás zajímalo, zda zadaný graf $G$ obsahuje nezávislou množinu velikosti alespoň $k$. Nyní nás bude zajímat následující otázka: \textit{Je zadaná množina $N$ v grafu $G$ nezávislá velikosti alespoň $k$?} Opět jsme přeformulovali otázku do podoby, kdy ověřujeme, kdy původně hledaný\footnote{Formálně nelze přímo říci, že takový objekt vyloženě ``hledáme''. Pouze nás zajímá, zda existuje.} objekt již máme zadaný a pouze ověřujeme, zda splňuje danou vlastnost. Zde je řešení opět velice jednoduché, zkerátka zkontrolujeme, zda je množina dostatečně velká a zda mezi žádnou dvojicí vrcholů nevede hrana. Viz algoritmus \ref{alg:overeni_nzmna}.
+Pojďme se podívat touto optikou ještě na jiný problém. U problému NzMna nás zajímalo, zda zadaný graf $G$ obsahuje nezávislou množinu velikosti alespoň $k$. Nyní nás bude zajímat následující otázka: \textit{Je zadaná množina $N$ v grafu $G$ nezávislá velikosti alespoň $k$?} Opět jsme přeformulovali otázku do podoby, kdy původně hledaný\footnote{Formálně nelze přímo říci, že takový objekt vyloženě ``hledáme''. Pouze nás zajímá, zda existuje.} objekt již máme zadaný a pouze ověřujeme, zda splňuje danou vlastnost. Zde je řešení opět velice jednoduché, zkerátka zkontrolujeme, zda je množina dostatečně velká a zda mezi žádnou dvojicí vrcholů nevede hrana. Viz algoritmus \ref{alg:overeni_nzmna}.
 
 \begin{algorithm}
     \caption{Ověření nezávislé množiny}
@@ -87,7 +87,66 @@ Předchozí úvahy nám dávají rozdělení problémů do dvou základních kat
     \item a ty, u nichž \emph{dokážeme v polynomiálním čase ověřit správnost řešení}.
 \end{itemize}
 Tím dostáváme tzv. \emph{třídy složitosti} \P{} a \NP{} (též se jim nazývá \emph{třídy problémů}). Pojďme se na ně podívat.
-\begin{definition}[Třída složitosti \P]
-    \P{} je třída rozhodovacích problémů řešitelných v polynomiálním čase.
+\begin{center}
+    \textbf{\textit{\P{} je třída rozhodovacích problémů řešitelných v polynomiálním čase.}}
+\end{center}
+Třída \P{} tedy zachycuje všechny problémy, které jsou pro v jistém smyslu rychle řešitelné\footnote{Asi by čtenáře mohlo napadnout, že např. algoritmus s časovou složitostí $\bigO{n^{1000}}$ je asi jen stěží použitelný. Nebo podobně z druhé strany algoritmus s časovou složitostí $\bigO{1{,}001^n}$ je jistě prakticky použitelný pro určité velikosti dat, byť je exponenciální. Takové případy jsou však velice řídké a často platí, že u polynomiálního algoritmu s vysokou mocninou jsme často schopni ji snížit, neboť existuje efektivnější řešení. Proto se v tomto ohledu nekladou žádná další omezení, neboť to i při další práci podstatně zjednodušuje celou situaci.}.
+\begin{example}
+    Příklady některých (rozhodovacích) problémů, které jsou řešitelné v polynomiálním čase.
+    \begin{enumerate}[label=(\roman*)]
+        \item \textit{Existence cesty mezi dvěma vrcholy.} Lze řešit např. pomocí BFS, DFS\footnote{O DFS již víme, že nenalezne nutně nejkratší cestu, ale zde řešíme pouze její existenci.}, Dijkstrova algoritmu nebo A$^*$, o nichž víme, že jsou všechny polynomiální (vyjma A$^*$, u nejž jsme si toto neukazovali).
+        \item \textit{Existence podřetězce v textu.} Máme zadaný textový řetězec délky $n$ a máme zadané slovo (tj. posloupnost znaků) délky $k$. Zajímá nás, zda se dané slovo v textu nachází, či nikoliv. To můžeme zjistit např. testem všech řetězců délky $k$. Těch bude $\bigO{n-k}$.
+        \item \textit{Existence prvku v poli}. Lze řešit např. sekvenčním vyhledáváním, které běží v čase $\bigO{n}$.
+    \end{enumerate}
+    Všechny zmíněné případy problémů jsou řešitelné v čase $\bigO{n^k}$.
+\end{example}
+\begin{center}
+    \textbf{\textit{\NP{} je třída rozhodovacích problémů, u nichž lze v polynomiálním čase ověřit jejich řešení.}}
+\end{center}
+\importantbox{Třídy \P{} a \NP{} zcela úmyslně neuvádíme jako definice a je potřeba je chápat s jistou rezervou. Nejedná se totiž o správný a přesný výklad dané problematiky, avšak pro naše potřeby si s těmito ``definicemi'' vystačíme.\footnote{Pro zájemce, formální definice tříd \P{} a \NP{} jsou vyloženy např. v knize \emph{Průvodce labyrintem algoritmů, str. 476}}}
+Problémy třídy \NP{} jsou již trochu zajímavější, neboť již nutně nepožadujeme, aby byl problém rychle řešitelný. Podmínkou je pouze, že musíme být schopni rychle ověřit, zda zadaný objekt splňuje požadovanou vlastnost. Alternativně též můžeme na třídu \NP{} nahlížet tak, že daný problém jsme schopni řešit rychle s určitou nápovědou.
+\begin{example}
+    Příklady problémů ležích ve třídě \NP{} jse si již ukazovali v sekci \ref{subsec:rozbor_predchozich_problemu}, ale ještě jednou si je zde shrneme.
+    \begin{enumerate}[label=(\roman*)]
+        \item \textit{SAT, 3-SAT}. Jako nápověda zde slouží ohodnocení proměnných. Stačí ověřit, zda je splňující vyhodnocením zadané formule.
+        \item \textit{Nezávislá množina.} Na vstupu dostaneme kromě grafu $G$ a čísla $k$ ještě nějakou množinu vrcholů $N$. Nám posléze stačí rozhodnout, zda $N$ je nezávislá a platí $\abs{N}\geqslant k$. Viz algoritmus \ref{alg:overeni_nzmna}.
+        \item \textit{Klika.} Opět dostaneme množinu vrcholů $N$. Postup podobný jako u NzMna.
+    \end{enumerate}
+\end{example}
+Může se na první pohled zdát, že třídy \P{} a \NP{} představují dva oddělené světy. Ve skutečnosti tomu tak není. Lze si totiž všimnout zajímavého vztahu, který má kupodivu jednoduché zdůvodnění.
+\begin{theorem}\label{thm:vztah_p_np}
+    Platí $\P\subseteq\NP$.
+\end{theorem}
+Věta \ref{thm:vztah_p_np} říká, že třída \P{} leží uvnitř třídy \NP{}, viz obrázek \ref{fig:vztah_p_np}. Pokud totiž dokážeme nějaký problém $A\in\P$ řešit v polynomiálním čase (tedy bez nápovědy), tím spíš jej dokážeme řešit rychle s nápovědou (nnapř. algoritmus může nápovědu ignorovat a určit řešení přímo z původního vstupu).
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_vztah_p_np.pdf}
+    \caption{Ilustrace vztahu \P{} a \NP.}
+    \label{fig:vztah_p_np}
+\end{figure}
+Tento fakt ovšem zahrnuje i potenciální variantu, že $\P=\NP$. To ovšem dodnes není známo a otázka, zda jsou třídy \P{} a \NP{} skutečně různé zůstává stále nezodpovězena\footnote{Problém \emph{\P{} vs. \NP{}} patří mezi tzv. \emph{Problémy tisíciletí}, které vyhlásil Clayův matematický institut v roce 2000. Na vyřešení každého z nich vypsal institut jeden milión amerických dolarů.}. Obecně ale spíše přijímána hypotéza, že jsou tyto třídy různé.
+
+U všech zmíněných problémů v této kapitole s jistotou víme, že leží ve třídě \NP{}, avšak nevíme, zda leží i ve třídě \P{}, neboť pro žádný z nich neznáme polynomiální algoritmus. Avšak lze o nich ukázat, že jsou tyto problémy (a mnohé jiné) v jistém smyslu ``ty nejtěžší'' ve třídě \NP{}.
+\begin{definition}[\NP{}-úplný problém]\label{def:np_uplny_problem}
+    Problém $A$ nazveme \NP-úplným, pokud $A\in\NP$ a zároveň je na něj polynomiálně převoditelný každý jazyk z \NP{}. Tzn.
+    \[\forall L\in\NP: L\rightarrow A.\]
 \end{definition}
-Třída \P{} tedy zachycuje všechny problémy, které jsou pro v jistém smyslu rychle řešitelné\footnote{Asi by čtenáře mohlo napadnout, že např. algoritmus s časovou složitostí $\bigO{n^{1000}}$ je asi jen stěží použitelný. Nebo podobně z druhé strany }.
+Druhá podmínka v definici \ref{def:np_uplny_problem} se možná zdá hodně silná. Existuje vůbec takový problém? Ač se to může zdát nepravděpodobné, tak v roce 1971 dokázal americký informatik Stephen Cook překvapivou větu.
+\begin{theorem}\label{thm:cook}
+    Problém SAT je \NP-úplný.
+\end{theorem}
+Důkaz toho tvrzení si zde ukazovat nebudeme, neboť je zcela nadrámec tohoto výkladu. Tento výsledek má v této teorii velice silný důsledek. Pokud by se ukázalo, že nějaký \NP-úplný problém $A$ leží ve třídě \P{}, tak by z toho již plynulo, že $\P=\NP$. Každý problém z \NP{} bychom mohli jednoduše polynomiálně převést na $A$ a ten pak vyřešit opět polynomiálně. Toto je přesně důvod, proč problém SAT hraje v současné informatice takovou důležitou roli, neboť se historicky ukázalo, že pomocí něj lze řešit kterýkoliv jiný problém v \NP.
+
+\NP-plných problémů existuje více. Třída takových problémů se označuje jako \NPC{} a též platí $\NPC\subseteq\NP$, viz obrázek \ref{fig:vztah_p_np_npc}. Pokud jsme schopni nějaký \NP-úplný problém $A$ převést na jiný problém $B$, pak i problém $B$ je nutně \NP-úplný. Z toho plyne, že i problémy \emph{SAT, 3-SAT, NzMna a Klika} jsou též \NP-úplné. 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.7]{02-problemy/images/ch02_vztah_p_np_npc.pdf}
+    \caption{Ilustrace vztahu \P{}, \NP{} a \NPC.}
+    \label{fig:vztah_p_np_npc}
+\end{figure}
+
+Jak už jsme si ale uvedli, to zda platí $\P=\NP$, stále nevíme. Jaké by to ale mělo důsledky v praxi? Pojďme se alespoň na chvilku zamyslet nad oběma variantami.
+\begin{itemize}
+    \item $\P=\NP$. V tomto případě by každý vyhledávací problém byl rychle řešitelný, tedy nejpíše i prakticky a efektivně. Např. uvedený problém s rozvrhováním (viz podsekce \ref{subsec:int_graf}) by byl rychle řešitelný. Zároveň bychom tím ale přišli i o veškeré efektivní šifrování, které je z velké části přímo založené na hypotéze, neboť ke každé šifrovací funkci bychom mohli rychle spočítat i její inverzi.
+    \item $\P\neq\NP$. V tomto světě jsou třídy problémů \P{} a \NP-úplných problémů disjunktní. SAT, NzMna, Klika a mnohé jiné problémy nejsme schopni řešit rychle bez nápovědy. Naopak by byly ``posíleny'' mnohé kryptografické algoritmy.
+\end{itemize}
