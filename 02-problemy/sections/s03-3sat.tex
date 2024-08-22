@@ -4,9 +4,9 @@ Zkusme nyní původní problém ještě zjednodušit. Přidáme podmínku, že k
 
 \problem{Splnitelnost logické formule v 3-CNF (3-SAT)}{Formule $\varphi$ v 3-CNF}{1, je-li $\varphi$ splnitelná, jinak $0$.}
 
-Nabízí se otázka, jestli jsme si skutečně nějak pomohli. Zdánlivě ano, neboť máme kratší klauzule, avšak 3-SAT převdstavuje, překvapivě, stejně těžkou úlohu jako původní problém SAT. Proč? Lze totiž ukázat, že pokud bychom uměli rychle řešit 3-SAT, uměli bychom rychle řešit i původní SAT a naopak. To ukážeme tak, že jeden problém v jistém smyslu ``převést'' na ten druhý. Pro určitou instanci (tedy formuli) problému SAT můžeme sestrojit odpovídající instanci problému 3-SAT, jejímž vyřešením získáme odpověď i na původní problém. Podívejme se na tuto situaci blíže v podsekci
+Nabízí se otázka, jestli jsme si skutečně nějak pomohli. Zdánlivě ano, neboť máme kratší klauzule, avšak 3-SAT převdstavuje, překvapivě, stejně těžkou úlohu jako původní problém SAT. Proč? Lze totiž ukázat, že pokud bychom uměli rychle řešit 3-SAT, uměli bychom rychle řešit i původní SAT a naopak. To ukážeme tak, že jeden problém v jistém smyslu ``převést'' na ten druhý. Pro určitou instanci (tedy formuli) problému SAT můžeme sestrojit odpovídající instanci problému 3-SAT, jejímž vyřešením získáme odpověď i na původní problém. Podívejme se na tuto situaci blíže v podsekci \ref{subsec:prevod_sat_3sat}.
 
-\subsection{Převod 3-SAT na SAT}\label{subsec:prevod_sat_3sat}
+\subsection{Převod SAT na 3-SAT}\label{subsec:prevod_sat_3sat}
 
 Popíšeme si nyní obecný způsob, jak převést libovolnou formuli v CNF (instance problému SAT) na formuli v 3-CNF (instance problému 3-SAT). Předpokládejme, že máme zadanou nějakou formuli $\varphi$ v CNF a chceme pro ni sestrojit formuli $\psi$ v 3-CNF, takovou, aby byla splnitelná právě tehdy, když je splnitelná i původní formule $\varphi$. Pro formuli $\varphi$ mohou nastat 2 případy:
 \begin{enumerate}
@@ -52,3 +52,15 @@ Tím jsme dostali obecný postup pro převod formule z CNF do 3-CNF.
 
     %% TODO: Přidat výpočet pro konkrétní hodnoty proměnných
 \end{example}
+
+Tímto způsobem jsme ukázali, že problém SAT lze ``převést'' na $3$-SAT. Opačný směr je triviální, protože každá formule v $3$-CNF už je i v CNF, takže nic převádět nemusíme.
+
+Zkusme se zamyslet nad rychlostí onoho převodu formule. Obecně formuli o $k>3$ literálech rozložíme na $k-2$ nových formulí. Celkově tedy strávíme převodem lineární čas, tj. $\bigO{n}$, kde $n$ je počet literálů formule.
+
+Z tohoto vlastně vyplývá, že tyto problémy v jistém smyslu ``stejně těžké''. Kdybychom uměli vyřešit polynomiálně $3$-SAT, pak i SAT bychom uměli vyřešit s nějakým zpomalením. Obecně uvažujme, že nějaká formule $\varphi$ v CNF obsahuje $n$ literálů. Tu převedeme na novou formuli $\psi$, která bude obsahovat nejvýše $n-2$ nových proměnných, tedy její délka bude $n+n-2=2n-2$, tedy má stále lineární délku. Určení splnitelnosti výsledné formule $\psi$ by tedy zabralo lineární čas $\bigO{2n-2}=\bigO{n}$.
+
+Toto byla ukázka tzv. \textbf{polynomiálního převodu} mezi problémy. Pojďme si toto trochu rigorózněji definovat.
+\begin{definition}[Polynomiální převoditelnost]\label{def:pol_prev}
+    Řekneme, že libovolný problém $A$ je polynomiálně převoditelný na problém $B$, píšeme $A\rightarrow B$, pokud každý vstup $x$ problému $A$ lze převést na vstup $x^\prime$ problému $B$, přičemž $A(x)=B(x^\prime)$.
+\end{definition}
+Co tato definice říká? Pokud platí $A\rightarrow B$, pak odpověď na vstup $x^\prime$ je zároveň i odpovědí na původní vstup $x$. V našem případě je formule v CNF $\varphi$ splnitelná (to je naše $x$), právě když je nová formule v 3-CNF $\psi$ (to je $x^\prime$) splnitelná.
