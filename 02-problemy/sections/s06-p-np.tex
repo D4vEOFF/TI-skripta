@@ -79,7 +79,7 @@ Podobně si můžete rozmyslet, jak budou vypadat takové ``ověřovací'' algor
     Zde poznamenejme, že ne u každého problému jsme schopni rychle ověřit správnost řešení. Např. u Hanojských věží nejen že nejsme schopni rychle nalézt řešení, ale dokonce nejsme ani schopni jej rychle ověřit. Vždy budeme potřebovat vzhledem k počtu disků exponenciálně mnoho kroků, tedy i odsimulování poskytnutého řešení potrvá dlouho.
 \end{remark}
 
-\subsection{Definice tříd složitosti}\label{subsec:tridy_slozitosti}
+\subsection{Zavedení tříd složitosti}\label{subsec:tridy_slozitosti}
 
 Předchozí úvahy nám dávají rozdělení problémů do dvou základních kategorií.
 \begin{itemize}
@@ -135,7 +135,7 @@ Druhá podmínka v definici \ref{def:np_uplny_problem} se možná zdá hodně si
 \begin{theorem}\label{thm:cook}
     Problém SAT je \NP-úplný.
 \end{theorem}
-Důkaz toho tvrzení si zde ukazovat nebudeme, neboť je zcela nadrámec tohoto výkladu. Tento výsledek má v této teorii velice silný důsledek. Pokud by se ukázalo, že nějaký \NP-úplný problém $A$ leží ve třídě \P{}, tak by z toho již plynulo, že $\P=\NP$. Každý problém z \NP{} bychom mohli jednoduše polynomiálně převést na $A$ a ten pak vyřešit opět polynomiálně. Toto je přesně důvod, proč problém SAT hraje v současné informatice takovou důležitou roli, neboť se historicky ukázalo, že pomocí něj lze řešit kterýkoliv jiný problém v \NP.
+Důkaz toho tvrzení si zde ukazovat nebudeme, neboť je zcela nadrámec tohoto výkladu. Tento výsledek má v této teorii velice silný důsledek. Pokud by se ukázalo, že nějaký \NP-úplný problém $A$ leží ve třídě \P{}, tak by z toho již plynulo, že $\P=\NP$. Každý problém z \NP{} bychom mohli jednoduše polynomiálně převést na $A$ a ten pak vyřešit opět polynomiálně. Toto je přesně důvod, proč problém SAT hraje v současné informatice takovou důležitou roli, neboť se historicky ukázalo, že pomocí něj lze řešit kterýkoliv jiný problém\footnote{Proto se někdy též říká, že \NP-úplné problémy tvoří v jistém smyslu ty ``nejtěžší'' v \NP, neboť pokud umíme řešit njěaký z nich, pak umíme vyřešit všechny.} v \NP.
 
 \NP-plných problémů existuje více. Třída takových problémů se označuje jako \NPC{} (z anglického \emph{\NP-Complete}) a též platí $\NPC\subseteq\NP$, viz obrázek \ref{fig:vztah_p_np_npc}. Pokud jsme schopni nějaký \NP-úplný problém $A$ převést na jiný problém $B$, pak i problém $B$ je nutně \NP-úplný. Z toho plyne, že i problémy \emph{SAT, 3-SAT, NzMna a Klika} jsou též \NP-úplné. 
 \begin{figure}[h]
@@ -150,3 +150,10 @@ Jak už jsme si ale uvedli, to zda platí $\P=\NP$, stále nevíme. Jaké by to 
     \item $\P=\NP$. V tomto případě by každý vyhledávací problém byl rychle řešitelný, tedy nejpíše i prakticky a efektivně. Např. uvedený problém s rozvrhováním (viz podsekce \ref{subsec:int_graf}) by byl rychle řešitelný. Zároveň bychom tím ale přišli i o veškeré efektivní šifrování, které je z velké části přímo založené na hypotéze, neboť ke každé šifrovací funkci bychom mohli rychle spočítat i její inverzi.
     \item $\P\neq\NP$. V tomto světě jsou třídy problémů \P{} a \NP-úplných problémů disjunktní. SAT, NzMna, Klika a mnohé jiné problémy nejsme schopni řešit rychle bez nápovědy. Naopak by byly ``posíleny'' mnohé kryptografické algoritmy.
 \end{itemize}
+
+\subsection{Další \NP-úplné problémy}\label{subsec:dalsi_npc}
+
+K závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné problémy a k nim i nějaké příklady jejich aplikací (resp. výskytů). \NP-úplnost si zde však již dokazovat pro žádný z nich nebudeme.
+\begin{enumerate}[label=(\roman*)]
+    \item \textit{Hamiltonovská kružnice.} Máme zadaný graf $G=(V,E)$. Zajímá nás, zda existuje v grafu $G$ cyklus, který prochází všemi vrcholy.
+\end{enumerate}
