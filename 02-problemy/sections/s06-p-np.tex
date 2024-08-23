@@ -1,61 +1,61 @@
-\section{Třídy problémů \P{} a \NP}\label{sec:p_np}
+\section{Třídy problémů \P{} a~\NP}\label{sec:p_np}
 
-V této sekci se nyní ohledneme trochu zpět a podíváme se na celou problematiku z více abstraktního hlediska. Naším cílem je představit si dvojici základních tříd problémů a vysvětlit si jejich podstatu v současném světě informatiky. Jako první se trochu blíže podíváme na problémy, které jsme si již představili.
+V~této sekci se nyní ohledneme trochu zpět a~podíváme se na celou problematiku z~více abstraktního hlediska. Naším cílem je představit si dvojici základních tříd problémů a~vysvětlit si jejich podstatu v~současném světě informatiky. Jako první se trochu blíže podíváme na problémy,~které jsme si již představili.
 
 \subsection{Rozbor předchozích problémů}\label{subsec:rozbor_predchozich_problemu}
 
-V předchozích sekcích jsme si představili některé základní problémy. Všimněte si, že vždy jsme se ptali na to, zda nějaký objekt splňuje určitou vlastnost. Např. u logické formule jsme se ptali, zdali je či není splnitelná. U grafů jsme se ptali, zda v existuje nezávislá množina či klika určité velikosti. Výstupem problému tedy byly vždy pouze hodnoty $1$ (pravda) nebo $0$ (nepravda). Takovým problémům se říká tzv. \textbf{rozhodovací problémy}.
+V~předchozích sekcích jsme si představili některé základní problémy. Všimněte si,~že vždy jsme se ptali na to,~zda nějaký objekt splňuje určitou vlastnost. Např. u~logické formule jsme se ptali,~zdali je či není splnitelná. U~grafů jsme se ptali,~zda v~existuje nezávislá množina či klika určité velikosti. Výstupem problému tedy byly vždy pouze hodnoty $1$ (pravda) nebo $0$ (nepravda). Takovým problémům se říká tzv. \textbf{rozhodovací problémy}.
 
-Mimo tento typ se však v praxi spíše setkáme s tzv. \textbf{optimalizačními problémy}. V praxi nás nejspíše nebude zajímat, zda v grafu existuje klika určité velikosti. Spíše nás bude zajímat, jaká největší klika v zadaném grafu existuje. Ve skutečnosti optimalizační varianty problémů však umíme vždy řešit pomocí těch rozhodovacích. Kdybychom uměli rychle rozhodnout, zda existuje v grafu klika určité velikosti, pak bychom pomocí přislušného algoritmu uměli vyřešit i optimalizační verzi. Graf $G=(V,E)$ ponecháme stejný, akorát budeme měnit parametr $k$, tj. velikost množiny. Nejednodušší variantou je iterovat daný parametr $k$, dokud nám algoritmus nevydá jako odpověď \emph{pravdu}, tj. $1$.
+Mimo tento typ se však v~praxi spíše setkáme s~tzv. \textbf{optimalizačními problémy}. V~praxi nás nejspíše nebude zajímat,~zda v~grafu existuje klika určité velikosti. Spíše nás bude zajímat,~jaká největší klika v~zadaném grafu existuje. Ve skutečnosti optimalizační varianty problémů však umíme vždy řešit pomocí těch rozhodovacích. Kdybychom uměli rychle rozhodnout,~zda existuje v~grafu klika určité velikosti,~pak bychom pomocí přislušného algoritmu uměli vyřešit i~optimalizační verzi. Graf $G=(V,E)$ ponecháme stejný,~akorát budeme měnit parametr $k$,~tj. velikost množiny. Nejednodušší variantou je iterovat daný parametr $k$,~dokud nám algoritmus nevydá jako odpověď \emph{pravdu},~tj. $1$.
 
-Uvažujme, že podprogram \texttt{ExistsClique($G$, $k$)} určuje pro vstupní graf $G$ a číslo $k$, zda v něm existuje klika velikosti alespoň $k$. Pomocí něj pak umíme vyšřešit i optimalizační verzi, viz \ref{alg:maximalni_klika}.
+Uvažujme,~že podprogram \texttt{ExistsClique($G$,~$k$)} určuje pro vstupní graf $G$ a~číslo $k$,~zda v~něm existuje klika velikosti alespoň $k$. Pomocí něj pak umíme vyšřešit i~optimalizační verzi,~viz \ref{alg:maximalni_klika}.
 \begin{algorithm}
-    \caption{Určení maximální kliky v grafu}
+    \caption{Určení maximální kliky v~grafu}
     \label{alg:maximalni_klika}
     \KwIn{Graf $G=(V,E)$}
     $n\gets\abs{V}$\\
     \For{$k=n,n-1,n-2,\dots,1,0$}{
         \lIf{$\textup{ExistsClique}(G,k)=1$}{\Return{$k$}}
     }
-    \KwOut{Velikost maximální kliky v grafu $G$}
+    \KwOut{Velikost maximální kliky v~grafu $G$}
 \end{algorithm}
-Podobně tak lze řešit i ostatní problémy. Pro nás je však postatné si uvědomit, že naše omezení na rozhodovací problémy má tedy hned dva důvody. Celkově nám to zjednodušuje pohled na danou problematiku a navíc od rozhodovacího problému k optimalizačnímu umíme přejít velice snadno.
+Podobně tak lze řešit i~ostatní problémy. Pro nás je však postatné si uvědomit,~že naše omezení na rozhodovací problémy má tedy hned dva důvody. Celkově nám to zjednodušuje pohled na danou problematiku a~navíc od rozhodovacího problému k~optimalizačnímu umíme přejít velice snadno.
 
-Vraťme se tedy zpět k rozhodovacím variantám, které jsme již probírali. Zkusme si rozebrat rychlosti jednotlivých převodů.
+Vraťme se tedy zpět k~rozhodovacím variantám,~které jsme již probírali. Zkusme si rozebrat rychlosti jednotlivých převodů.
 \begin{itemize}
-    \item \textit{SAT $\rightarrow$ 3-SAT.} Klauzuli s $k>3$ literály rozložíme v čase $\bigO{k}$. Převod tedy potrvá maxiálně lineárně dlouho v délce formule, tedy počtu jejích literálů $n$.
-    \item \textit{3-SAT $\rightarrow$ SAT.} Formule v $3$-CNF jsou již v CNF, tedy převodem nestrávíme žádný čas.
-    \item \textit{3-SAT $\rightarrow$ NzMna.} Sestrojený graf má vrcholy v počtu literálů formule, to potrvá $\bigO{n}$. Hran v grafu bude maximálně kvaraticky mnoho (tj. úplný graf), tedy $\bigO{n^2}$. Celkově $\bigO{n+n^2}=\bigO{n^2}$.
-    \item \textit{Klika $\rightarrow$ NzMna.} Doplněk grafu má vrcholy původního grafu. Hran sestrojíme maximálně kvadraticky mnoho, tj. celkově $\bigO{n^2}$.
-    \item \textit{NzMna $\rightarrow$ Klika.} Stejné jako u předchozího převodu.
+    \item \textit{SAT $\rightarrow$ 3-SAT.} Klauzuli s~$k>3$ literály rozložíme v~čase $\bigO{k}$. Převod tedy potrvá maxiálně lineárně dlouho v~délce formule,~tedy počtu jejích literálů $n$.
+    \item \textit{3-SAT $\rightarrow$ SAT.} Formule v~$3$-CNF jsou již v~CNF,~tedy převodem nestrávíme žádný čas.
+    \item \textit{3-SAT $\rightarrow$ NzMna.} Sestrojený graf má vrcholy v~počtu literálů formule,~to potrvá $\bigO{n}$. Hran v~grafu bude maximálně kvaraticky mnoho (tj. úplný graf),~tedy $\bigO{n^2}$. Celkově $\bigO{n+n^2}=\bigO{n^2}$.
+    \item \textit{Klika $\rightarrow$ NzMna.} Doplněk grafu má vrcholy původního grafu. Hran sestrojíme maximálně kvadraticky mnoho,~tj. celkově $\bigO{n^2}$.
+    \item \textit{NzMna $\rightarrow$ Klika.} Stejné jako u~předchozího převodu.
 \end{itemize}
-Můžeme si všimnout, že všechny převody jsou polynomiální, tedy jak jsme uváděli v úvodu kapitoly, můžeme je považovat za ``rychlé'', viz obrázek \ref{fig:problemy_souvislost}. Co však dodnes neumíme je kterýkoliv z nich v polynomiálním čase řešit. Dané převody je nám však dávají hezky do souvislosti. Pokud bychom uměli řešit kterýkoliv z nich rychle, pak bychom uměli řešit rychle všechny z nich. Stačilo by nám libovolný jiný z nich převést na ten, který rychle řešit umíme.
+Můžeme si všimnout,~že všechny převody jsou polynomiální,~tedy jak jsme uváděli v~úvodu kapitoly,~můžeme je považovat za ``rychlé'',~viz obrázek \ref{fig:problemy_souvislost}. Co však dodnes neumíme je kterýkoliv z~nich v~polynomiálním čase řešit. Dané převody je nám však dávají hezky do souvislosti. Pokud bychom uměli řešit kterýkoliv z~nich rychle,~pak bychom uměli řešit rychle všechny z~nich. Stačilo by nám libovolný jiný z~nich převést na ten,~který rychle řešit umíme.
 \begin{figure}[h]
     \centering
     \includegraphics[scale=.7]{02-problemy/images/ch02_problemy_souvislost.pdf}
     \caption{Shrnutí převodů mezi jednotlivými problémy.}
     \label{fig:problemy_souvislost}
 \end{figure}
-Např. pokud bychom byli schopni řešit problém kliky v polynomiálním čase, tj. $\bigO{n^\ell}$ pro nějaké $\ell$, potom např. problém $3$-SAT bychom mohli řešit tak, že jej v čase $\bigO{n^2}$ převedeme na problém nezávislé množiny, čímž dostaneme instanci velikosti $m$ a tu následně převedeme opět v čase $\bigO{m^2}$. Celkově jsme instanci problému $3$-SAT převedli v čase $\bigO{n^2+m^2}$ na instanci problému kliky, kterou nyní vyřešíme v $\bigO{(n^2+m^2)^\ell}$. To je ovšem po roznásobení zase polynom.
+Např. pokud bychom byli schopni řešit problém kliky v~polynomiálním čase,~tj. $\bigO{n^\ell}$ pro nějaké $\ell$,~potom např. problém $3$-SAT bychom mohli řešit tak,~že jej v~čase $\bigO{n^2}$ převedeme na problém nezávislé množiny,~čímž dostaneme instanci velikosti $m$ a~tu následně převedeme opět v~čase $\bigO{m^2}$. Celkově jsme instanci problému $3$-SAT převedli v~čase $\bigO{n^2+m^2}$ na instanci problému kliky,~kterou nyní vyřešíme v~$\bigO{(n^2+m^2)^\ell}$. To je ovšem po roznásobení zase polynom.
 
 \subsection{Ověřování problémů}\label{subsec:overovani_problemu}
 
-Už jsme si zmínili, že žádné ze zmíněných problémů (ani mnohé jiné) neumíme řešit v polynomiálním čase, ač instance mnohých z nich dnes umíme řešit v uspokojivých časech. U hodně z nich však umíme rychle ověřit, zda je nějaké řešení správné. Uvažujme situaci, kdy máme zadanou logickou formuli $\varphi$ a nějaké ohodnocení jejích proměnných. Zajímá nás, zda je dané ohodnocení splňující. To není ale vůbec těžké. Zkrátka danou formuli vyhodnotíme. To však již umíme provést rychle!
+Už jsme si zmínili,~že žádné ze zmíněných problémů (ani mnohé jiné) neumíme řešit v~polynomiálním čase,~ač instance mnohých z~nich dnes umíme řešit v~uspokojivých časech. U~hodně z~nich však umíme rychle ověřit,~zda je nějaké řešení správné. Uvažujme situaci,~kdy máme zadanou logickou formuli $\varphi$ a~nějaké ohodnocení jejích proměnných. Zajímá nás,~zda je dané ohodnocení splňující. To není ale vůbec těžké. Zkrátka danou formuli vyhodnotíme. To však již umíme provést rychle!
 \begin{itemize}
-    \item Pokud je zadané ohodnocení splňující, pak je $\varphi$ splnitelná.
-    \item Pokud ohodnocení není splňující, pak to ještě nutně \emph{neznamená, že je nesplnitelná}.
+    \item Pokud je zadané ohodnocení splňující,~pak je $\varphi$ splnitelná.
+    \item Pokud ohodnocení není splňující,~pak to ještě nutně \emph{neznamená,~že je nesplnitelná}.
 \end{itemize}
-Všimněme si tedy, že nyní se naše otázka změnila.
+Všimněme si tedy,~že nyní se naše otázka změnila.
 \begin{itemize}
     \item Původní otázka: \textit{Je zadaná formule $\varphi$ splnitelná?}
     \item Současná otázka: \textit{Je zadané ohodnocení proměnných zadané formule $\varphi$ splňující?}
 \end{itemize}
-Pojďme se podívat touto optikou ještě na jiný problém. U problému NzMna nás zajímalo, zda zadaný graf $G$ obsahuje nezávislou množinu velikosti alespoň $k$. Nyní nás bude zajímat následující otázka: \textit{Je zadaná množina $N$ v grafu $G$ nezávislá velikosti alespoň $k$?} Opět jsme přeformulovali otázku do podoby, kdy původně hledaný\footnote{Formálně nelze přímo říci, že takový objekt vyloženě ``hledáme''. Pouze nás zajímá, zda existuje.} objekt již máme zadaný a pouze ověřujeme, zda splňuje danou vlastnost. Zde je řešení opět velice jednoduché, zkerátka zkontrolujeme, zda je množina dostatečně velká a zda mezi žádnou dvojicí vrcholů nevede hrana. Viz algoritmus \ref{alg:overeni_nzmna}.
+Pojďme se podívat touto optikou ještě na jiný problém. U~problému NzMna nás zajímalo,~zda zadaný graf $G$ obsahuje nezávislou množinu velikosti alespoň $k$. Nyní nás bude zajímat následující otázka: \textit{Je zadaná množina $N$ v~grafu $G$ nezávislá velikosti alespoň $k$?} Opět jsme přeformulovali otázku do podoby,~kdy původně hledaný\footnote{Formálně nelze přímo říci,~že takový objekt vyloženě ``hledáme''. Pouze nás zajímá,~zda existuje.} objekt již máme zadaný a~pouze ověřujeme,~zda splňuje danou vlastnost. Zde je řešení opět velice jednoduché,~zkerátka zkontrolujeme,~zda je množina dostatečně velká a~zda mezi žádnou dvojicí vrcholů nevede hrana. Viz algoritmus \ref{alg:overeni_nzmna}.
 
 \begin{algorithm}
     \caption{Ověření nezávislé množiny}
     \label{alg:overeni_nzmna}
-    \KwIn{Graf $G=(V,E)$, číslo $k\in\N$ a množina $N\subseteq V$}
+    \KwIn{Graf $G=(V,E)$,~číslo $k\in\N$ a~množina $N\subseteq V$}
     \tcp{Množina $N$ není dostatečně velká}
     \lIf{$\abs{V}<k$}{\Return{$0$}}
 
@@ -70,111 +70,111 @@ Pojďme se podívat touto optikou ještě na jiný problém. U problému NzMna n
     \Return{$1$}
 \end{algorithm}
 
-Časová složitost je zjevně polynomiální. Označíme $\abs{N}=m$, přičemž jistě platí $m\leqslant\abs{V}$. Vnější cyklus se provede $m$-krát a vnitřní cyklus $(m-1)$-krát (vrchol $u$ jako jediný znovu nevybíráme). Tedy celkově
+Časová složitost je zjevně polynomiální. Označíme $\abs{N}=m$,~přičemž jistě platí $m\leqslant\abs{V}$. Vnější cyklus se provede $m$-krát a~vnitřní cyklus $(m-1)$-krát (vrchol $u$ jako jediný znovu nevybíráme). Tedy celkově
 \[\bigO{m(m-1)}=\bigO{m^2-m}=\bigO{m^2},\]
-což je polynom. Tedy umíme rychle ověřit, zda je množina nezávislá.
+což je polynom. Tedy umíme rychle ověřit,~zda je množina nezávislá.
 
-Podobně si můžete rozmyslet, jak budou vypadat takové ``ověřovací'' algoritmy pro ostatní problémy. Co je ovšem podstatou tohoto výkladu? Obecně existují problémy, které jsme schopni řešit s určitou ``nápovědou''. Např. v případě nezávislé množiny si můžeme nechat napovědět nějakou podmnožinu vrcholů $N\subseteq V$ a nám jen stačí ověřit, zda je skutečně nezávislá a dostatečně velká. Podobně u problému SAT si necháme napovědět ohodnocení proměnných a nám pouze stačí ověřit, zda danou formuli splňuje.
+Podobně si můžete rozmyslet,~jak budou vypadat takové ``ověřovací'' algoritmy pro ostatní problémy. Co je ovšem podstatou tohoto výkladu? Obecně existují problémy,~které jsme schopni řešit s~určitou ``nápovědou''. Např. v~případě nezávislé množiny si můžeme nechat napovědět nějakou podmnožinu vrcholů $N\subseteq V$ a~nám jen stačí ověřit,~zda je skutečně nezávislá a~dostatečně velká. Podobně u~problému SAT si necháme napovědět ohodnocení proměnných a~nám pouze stačí ověřit,~zda danou formuli splňuje.
 \begin{remark}
-    Zde poznamenejme, že ne u každého problému jsme schopni rychle ověřit správnost řešení. Např. u Hanojských věží nejen že nejsme schopni rychle nalézt řešení, ale dokonce nejsme ani schopni jej rychle ověřit. Vždy budeme potřebovat vzhledem k počtu disků exponenciálně mnoho kroků, tedy i odsimulování poskytnutého řešení potrvá dlouho.
+    Zde poznamenejme,~že ne u~každého problému jsme schopni rychle ověřit správnost řešení. Např. u~Hanojských věží nejen že nejsme schopni rychle nalézt řešení,~ale dokonce nejsme ani schopni jej rychle ověřit. Vždy budeme potřebovat vzhledem k~počtu disků exponenciálně mnoho kroků,~tedy i~odsimulování poskytnutého řešení potrvá dlouho.
 \end{remark}
 
 \subsection{Zavedení tříd složitosti}\label{subsec:tridy_slozitosti}
 
 Předchozí úvahy nám dávají rozdělení problémů do dvou základních kategorií.
 \begin{itemize}
-    \item Ty, které \emph{umíme řešit v polynomiálním čase}
-    \item a ty, u nichž \emph{dokážeme v polynomiálním čase ověřit správnost řešení}.
+    \item Ty,~které \emph{umíme řešit v~polynomiálním čase}
+    \item a~ty,~u~nichž \emph{dokážeme v~polynomiálním čase ověřit správnost řešení}.
 \end{itemize}
-Tím dostáváme tzv. \emph{třídy složitosti} \P{} a \NP{} (též se jim nazývá \emph{třídy problémů}). Pojďme se na ně podívat.
+Tím dostáváme tzv. \emph{třídy složitosti} \P{} a~\NP{} (též se jim nazývá \emph{třídy problémů}). Pojďme se na ně podívat.
 \begin{center}
-    \textbf{\textit{\P{} je třída rozhodovacích problémů řešitelných v polynomiálním čase.}}
+    \textbf{\textit{\P{} je třída rozhodovacích problémů řešitelných v~polynomiálním čase.}}
 \end{center}
-Třída \P{} tedy zachycuje všechny problémy, které jsou pro v jistém smyslu rychle řešitelné\footnote{Asi by čtenáře mohlo napadnout, že např. algoritmus s časovou složitostí $\bigO{n^{1000}}$ je asi jen stěží použitelný. Nebo podobně z druhé strany algoritmus s časovou složitostí $\bigO{1{,}001^n}$ je jistě prakticky použitelný pro určité velikosti dat, byť je exponenciální. Takové případy jsou však velice řídké a často platí, že u polynomiálního algoritmu s vysokou mocninou jsme často schopni ji snížit, neboť existuje efektivnější řešení. Proto se v tomto ohledu nekladou žádná další omezení, neboť to i při další práci podstatně zjednodušuje celou situaci.}.
+Třída \P{} tedy zachycuje všechny problémy,~které jsou pro v~jistém smyslu rychle řešitelné\footnote{Asi by čtenáře mohlo napadnout,~že např. algoritmus s~časovou složitostí $\bigO{n^{1000}}$ je asi jen stěží použitelný. Nebo podobně z~druhé strany algoritmus s~časovou složitostí $\bigO{1{,}001^n}$ je jistě prakticky použitelný pro určité velikosti dat,~byť je exponenciální. Takové případy jsou však velice řídké a~často platí,~že u~polynomiálního algoritmu s~vysokou mocninou jsme často schopni ji snížit,~neboť existuje efektivnější řešení. Proto se v~tomto ohledu nekladou žádná další omezení,~neboť to i~při další práci podstatně zjednodušuje celou situaci.}.
 \begin{example}
-    Příklady některých (rozhodovacích) problémů, které jsou řešitelné v polynomiálním čase.
+    Příklady některých (rozhodovacích) problémů,~které jsou řešitelné v~polynomiálním čase.
     \begin{enumerate}[label=(\roman*)]
-        \item \textit{Existence cesty mezi dvěma vrcholy.} Lze řešit např. pomocí BFS, DFS\footnote{O DFS již víme, že nenalezne nutně nejkratší cestu, ale zde řešíme pouze její existenci.}, Dijkstrova algoritmu nebo A$^*$, o nichž víme, že jsou všechny polynomiální (vyjma A$^*$, u nejž jsme si toto neukazovali).
-        \item \textit{Existence podřetězce v textu.} Máme zadaný textový řetězec délky $n$ a máme zadané slovo (tj. posloupnost znaků) délky $k$. Zajímá nás, zda se dané slovo v textu nachází, či nikoliv. To můžeme zjistit např. testem všech řetězců délky $k$. Těch bude $\bigO{n-k}$.
-        \item \textit{Existence prvku v poli}. Lze řešit např. sekvenčním vyhledáváním, které běží v čase $\bigO{n}$.
+        \item \textit{Existence cesty mezi dvěma vrcholy.} Lze řešit např. pomocí BFS,~DFS\footnote{O~DFS již víme,~že nenalezne nutně nejkratší cestu,~ale zde řešíme pouze její existenci.},~Dijkstrova algoritmu nebo A$^*$,~o~nichž víme,~že jsou všechny polynomiální (vyjma A$^*$,~u~nejž jsme si toto neukazovali).
+        \item \textit{Existence podřetězce v~textu.} Máme zadaný textový řetězec délky $n$ a~máme zadané slovo (tj. posloupnost znaků) délky $k$. Zajímá nás,~zda se dané slovo v~textu nachází,~či nikoliv. To můžeme zjistit např. testem všech řetězců délky $k$. Těch bude $\bigO{n-k}$.
+        \item \textit{Existence prvku v~poli}. Lze řešit např. sekvenčním vyhledáváním,~které běží v~čase $\bigO{n}$.
     \end{enumerate}
-    Všechny zmíněné případy problémů jsou řešitelné v čase $\bigO{n^k}$.
+    Všechny zmíněné případy problémů jsou řešitelné v~čase $\bigO{n^k}$.
 \end{example}
 \begin{center}
-    \textbf{\textit{\NP{} je třída rozhodovacích problémů, u nichž lze v polynomiálním čase ověřit jejich řešení.}}
+    \textbf{\textit{\NP{} je třída rozhodovacích problémů,~u~nichž lze v~polynomiálním čase ověřit jejich řešení.}}
 \end{center}
-\importantbox{Třídy \P{} a \NP{} zcela úmyslně neuvádíme jako definice a je potřeba je chápat s jistou rezervou. Nejedná se totiž o správný a přesný výklad dané problematiky, avšak pro naše potřeby si s těmito ``definicemi'' vystačíme.\footnote{Pro zájemce, formální definice tříd \P{} a \NP{} jsou vyloženy např. v knize \emph{Průvodce labyrintem algoritmů, str. 476}}}
-Problémy třídy \NP{} jsou již trochu zajímavější, neboť již nutně nepožadujeme, aby byl problém rychle řešitelný. Podmínkou je pouze, že musíme být schopni rychle ověřit, zda zadaný objekt splňuje požadovanou vlastnost. Alternativně též můžeme na třídu \NP{} nahlížet tak, že daný problém jsme schopni řešit rychle s určitou nápovědou.
+\importantbox{Třídy \P{} a~\NP{} zcela úmyslně neuvádíme jako definice a~je potřeba je chápat s~jistou rezervou. Nejedná se totiž o~správný a~přesný výklad dané problematiky,~avšak pro naše potřeby si s~těmito ``definicemi'' vystačíme.\footnote{Pro zájemce,~formální definice tříd \P{} a~\NP{} jsou vyloženy např. v~knize \emph{Průvodce labyrintem algoritmů,~str. 476}}}
+Problémy třídy \NP{} jsou již trochu zajímavější,~neboť již nutně nepožadujeme,~aby byl problém rychle řešitelný. Podmínkou je pouze,~že musíme být schopni rychle ověřit,~zda zadaný objekt splňuje požadovanou vlastnost. Alternativně též můžeme na třídu \NP{} nahlížet tak,~že daný problém jsme schopni řešit rychle s~určitou nápovědou.
 \begin{example}
-    Příklady problémů ležích ve třídě \NP{} jse si již ukazovali v sekci \ref{subsec:rozbor_predchozich_problemu}, ale ještě jednou si je zde shrneme.
+    Příklady problémů ležích ve třídě \NP{} jse si již ukazovali v~sekci \ref{subsec:rozbor_predchozich_problemu},~ale ještě jednou si je zde shrneme.
     \begin{enumerate}[label=(\roman*)]
-        \item \textit{SAT, 3-SAT}. Jako nápověda zde slouží ohodnocení proměnných. Stačí ověřit, zda je splňující vyhodnocením zadané formule.
-        \item \textit{Nezávislá množina.} Na vstupu dostaneme kromě grafu $G$ a čísla $k$ ještě nějakou množinu vrcholů $N$. Nám posléze stačí rozhodnout, zda $N$ je nezávislá a platí $\abs{N}\geqslant k$. Viz algoritmus \ref{alg:overeni_nzmna}.
-        \item \textit{Klika.} Opět dostaneme množinu vrcholů $N$. Postup podobný jako u NzMna.
+        \item \textit{SAT,~3-SAT}. Jako nápověda zde slouží ohodnocení proměnných. Stačí ověřit,~zda je splňující vyhodnocením zadané formule.
+        \item \textit{Nezávislá množina.} Na vstupu dostaneme kromě grafu $G$ a~čísla $k$ ještě nějakou množinu vrcholů $N$. Nám posléze stačí rozhodnout,~zda $N$ je nezávislá a~platí $\abs{N}\geqslant k$. Viz algoritmus \ref{alg:overeni_nzmna}.
+        \item \textit{Klika.} Opět dostaneme množinu vrcholů $N$. Postup podobný jako u~NzMna.
     \end{enumerate}
 \end{example}
-Může se na první pohled zdát, že třídy \P{} a \NP{} představují dva oddělené světy. Ve skutečnosti tomu tak není. Lze si totiž všimnout zajímavého vztahu, který má kupodivu jednoduché zdůvodnění.
+Může se na první pohled zdát,~že třídy \P{} a~\NP{} představují dva oddělené světy. Ve skutečnosti tomu tak není. Lze si totiž všimnout zajímavého vztahu,~který má kupodivu jednoduché zdůvodnění.
 \begin{theorem}\label{thm:vztah_p_np}
     Platí $\P\subseteq\NP$.
 \end{theorem}
-Věta \ref{thm:vztah_p_np} říká, že třída \P{} leží uvnitř třídy \NP{}, viz obrázek \ref{fig:vztah_p_np}. Pokud totiž dokážeme nějaký problém $A\in\P$ řešit v polynomiálním čase (tedy bez nápovědy), tím spíš jej dokážeme řešit rychle s nápovědou (např. algoritmus může nápovědu ignorovat a určit řešení přímo z původního vstupu).
+Věta \ref{thm:vztah_p_np} říká,~že třída \P{} leží uvnitř třídy \NP{},~viz obrázek \ref{fig:vztah_p_np}. Pokud totiž dokážeme nějaký problém $A\in\P$ řešit v~polynomiálním čase (tedy bez nápovědy),~tím spíš jej dokážeme řešit rychle s~nápovědou (např. algoritmus může nápovědu ignorovat a~určit řešení přímo z~původního vstupu).
 \begin{figure}[h]
     \centering
     \includegraphics[scale=.7]{02-problemy/images/ch02_vztah_p_np.pdf}
-    \caption{Ilustrace vztahu \P{} a \NP.}
+    \caption{Ilustrace vztahu \P{} a~\NP.}
     \label{fig:vztah_p_np}
 \end{figure}
-Tento fakt ovšem zahrnuje i potenciální variantu, že $\P=\NP$. To ovšem dodnes není známo a otázka, zda jsou třídy \P{} a \NP{} skutečně různé zůstává stále nezodpovězena\footnote{Problém \emph{\P{} vs. \NP{}} patří mezi tzv. \emph{Problémy tisíciletí}, které vyhlásil Clayův matematický institut v roce 2000. Na vyřešení každého z nich vypsal institut jeden milión amerických dolarů.}. Obecně ale spíše přijímána hypotéza, že jsou tyto třídy různé.
+Tento fakt ovšem zahrnuje i~potenciální variantu,~že $\P=\NP$. To ovšem dodnes není známo a~otázka,~zda jsou třídy \P{} a~\NP{} skutečně různé zůstává stále nezodpovězena\footnote{Problém \emph{\P{} vs. \NP{}} patří mezi tzv. \emph{Problémy tisíciletí},~které vyhlásil Clayův matematický institut v~roce 2000. Na vyřešení každého z~nich vypsal institut jeden milión amerických dolarů.}. Obecně ale spíše přijímána hypotéza,~že jsou tyto třídy různé.
 
-U všech zmíněných problémů v této kapitole s jistotou víme, že leží ve třídě \NP{}, avšak nevíme, zda leží i ve třídě \P{}, neboť pro žádný z nich neznáme polynomiální algoritmus. Avšak lze o nich ukázat, že jsou tyto problémy (a mnohé jiné) v jistém smyslu ``ty nejtěžší'' ve třídě \NP{}.
+U~všech zmíněných problémů v~této kapitole s~jistotou víme,~že leží ve třídě \NP{},~avšak nevíme,~zda leží i~ve třídě \P{},~neboť pro žádný z~nich neznáme polynomiální algoritmus. Avšak lze o~nich ukázat,~že jsou tyto problémy (a~mnohé jiné) v~jistém smyslu ``ty nejtěžší'' ve třídě \NP{}.
 \begin{definition}[\NP{}-úplný problém]\label{def:np_uplny_problem}
-    Problém $A$ nazveme \NP-úplným, pokud $A\in\NP$ a zároveň je na něj polynomiálně převoditelný každý jazyk z \NP{}. Tzn.
+    Problém $A$ nazveme \NP-úplným,~pokud $A\in\NP$ a~zároveň je na něj polynomiálně převoditelný každý jazyk z~\NP{}. Tzn.
     \[\forall L\in\NP: L\rightarrow A.\]
 \end{definition}
-Druhá podmínka v definici \ref{def:np_uplny_problem} se možná zdá hodně silná. Existuje vůbec takový problém? Ač se to může zdát nepravděpodobné, tak v roce 1971 dokázal americký informatik Stephen Cook překvapivou větu.
+Druhá podmínka v~definici \ref{def:np_uplny_problem} se možná zdá hodně silná. Existuje vůbec takový problém? Ač se to může zdát nepravděpodobné,~tak v~roce 1971~dokázal americký informatik Stephen Cook překvapivou větu.
 \begin{theorem}\label{thm:cook}
     Problém SAT je \NP-úplný.
 \end{theorem}
-Důkaz toho tvrzení si zde ukazovat nebudeme, neboť je zcela nadrámec tohoto výkladu. Tento výsledek má v této teorii velice silný důsledek. Pokud by se ukázalo, že nějaký \NP-úplný problém $A$ leží ve třídě \P{}, tak by z toho již plynulo, že $\P=\NP$. Každý problém z \NP{} bychom mohli jednoduše polynomiálně převést na $A$ a ten pak vyřešit opět polynomiálně. Toto je přesně důvod, proč problém SAT hraje v současné informatice takovou důležitou roli, neboť se historicky ukázalo, že pomocí něj lze řešit kterýkoliv jiný problém\footnote{Proto se někdy též říká, že \NP-úplné problémy tvoří v jistém smyslu ty ``nejtěžší'' v \NP, neboť pokud umíme řešit njěaký z nich, pak umíme vyřešit všechny.} v \NP.
+Důkaz toho tvrzení si zde ukazovat nebudeme,~neboť je zcela nadrámec tohoto výkladu. Tento výsledek má v~této teorii velice silný důsledek. Pokud by se ukázalo,~že nějaký \NP-úplný problém $A$ leží ve třídě \P{},~tak by z~toho již plynulo,~že $\P=\NP$. Každý problém z~\NP{} bychom mohli jednoduše polynomiálně převést na $A$ a~ten pak vyřešit opět polynomiálně. Toto je přesně důvod,~proč problém SAT hraje v~současné informatice takovou důležitou roli,~neboť se historicky ukázalo,~že pomocí něj lze řešit kterýkoliv jiný problém\footnote{Proto se někdy též říká,~že \NP-úplné problémy tvoří v~jistém smyslu ty ``nejtěžší'' v~\NP,~neboť pokud umíme řešit njěaký z~nich,~pak umíme vyřešit všechny.} v~\NP.
 
-\NP-plných problémů existuje více. Třída takových problémů se označuje jako \NPC{} (z anglického \emph{\NP-Complete}) a též platí $\NPC\subseteq\NP$, viz obrázek \ref{fig:vztah_p_np_npc}. Pokud jsme schopni nějaký \NP-úplný problém $A$ převést na jiný problém $B$, pak i problém $B$ je nutně \NP-úplný. Z toho plyne, že i problémy \emph{SAT, 3-SAT, NzMna a Klika} jsou též \NP-úplné. 
+\NP-plných problémů existuje více. Třída takových problémů se označuje jako \NPC{} (z~anglického \emph{\NP-Complete}) a~též platí $\NPC\subseteq\NP$,~viz obrázek \ref{fig:vztah_p_np_npc}. Pokud jsme schopni nějaký \NP-úplný problém $A$ převést na jiný problém $B$,~pak i~problém $B$ je nutně \NP-úplný. Z~toho plyne,~že i~problémy \emph{SAT,~3-SAT,~NzMna a~Klika} jsou též \NP-úplné. 
 \begin{figure}[h]
     \centering
     \includegraphics[scale=.7]{02-problemy/images/ch02_vztah_p_np_npc.pdf}
-    \caption{Ilustrace vztahu \P{}, \NP{} a \NPC.}
+    \caption{Ilustrace vztahu \P{},~\NP{} a~\NPC.}
     \label{fig:vztah_p_np_npc}
 \end{figure}
 
-Jak už jsme si ale uvedli, to zda platí $\P=\NP$, stále nevíme. Jaké by to ale mělo důsledky v praxi? Pojďme se alespoň na chvilku zamyslet nad oběma variantami.
+Jak už jsme si ale uvedli,~to zda platí $\P=\NP$,~stále nevíme. Jaké by to ale mělo důsledky v~praxi? Pojďme se alespoň na chvilku zamyslet nad oběma variantami.
 \begin{itemize}
-    \item $\P=\NP$. V tomto případě by každý vyhledávací problém byl rychle řešitelný, tedy nejpíše i prakticky a efektivně. Např. uvedený problém s rozvrhováním (viz podsekce \ref{subsec:int_graf}) by byl rychle řešitelný. Zároveň bychom tím ale přišli i o veškeré efektivní šifrování, které je z velké části přímo založené na hypotéze, neboť ke každé šifrovací funkci bychom mohli rychle spočítat i její inverzi.
-    \item $\P\neq\NP$. V tomto světě jsou třídy problémů \P{} a \NP-úplných problémů disjunktní. SAT, NzMna, Klika a mnohé jiné problémy nejsme schopni řešit rychle bez nápovědy. Naopak by byly ``posíleny'' mnohé kryptografické algoritmy.
+    \item $\P=\NP$. V~tomto případě by každý vyhledávací problém byl rychle řešitelný,~tedy nejpíše i~prakticky a~efektivně. Např. uvedený problém s~rozvrhováním (viz podsekce \ref{subsec:int_graf}) by byl rychle řešitelný. Zároveň bychom tím ale přišli i~o~veškeré efektivní šifrování,~které je z~velké části přímo založené na hypotéze,~neboť ke každé šifrovací funkci bychom mohli rychle spočítat i~její inverzi.
+    \item $\P\neq\NP$. V~tomto světě jsou třídy problémů \P{} a~\NP-úplných problémů disjunktní. SAT,~NzMna,~Klika a~mnohé jiné problémy nejsme schopni řešit rychle bez nápovědy. Naopak by byly ``posíleny'' mnohé kryptografické algoritmy.
 \end{itemize}
 
 \subsection{Další \NP-úplné problémy}\label{subsec:dalsi_npc}
 
-K závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné problémy a k nim i nějaké příklady jejich aplikací (resp. výskytů). \NP-úplnost si zde však již dokazovat pro žádný z nich nebudeme. Pro žádný z těchto problémů není známý polynomiální algoritmus.
+K~závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné problémy a~k~nim i~nějaké příklady jejich aplikací (resp. výskytů). \NP-úplnost si zde však již dokazovat pro žádný z~nich nebudeme. Pro žádný z~těchto problémů není známý polynomiální algoritmus.
 \begin{enumerate}[label=(\roman*)]
-    \item \textit{Hamiltonovská kružnice.} Máme zadaný graf $G=(V,E)$. Zajímá nás, zda existuje v grafu $G$ cyklus, který prochází všemi vrcholy. Viz obrázky \ref{subfig:hamilton1} a \ref{subfig:hamilton2}.
+    \item \textit{Hamiltonovská kružnice.} Máme zadaný graf $G=(V,E)$. Zajímá nás,~zda existuje v~grafu $G$ cyklus,~který prochází všemi vrcholy. Viz obrázky \ref{subfig:hamilton1} a~\ref{subfig:hamilton2}.
     \begin{figure}[h]
         \centering
         \begin{subfigure}{7cm}
             \centering
             \includegraphics[scale=.7]{02-problemy/images/ch02_hamilton1.pdf}
-            \caption{Příklad grafu, kde neexistuje hamiltonovská kružnice}
+            \caption{Příklad grafu,~kde neexistuje hamiltonovská kružnice}
             \label{subfig:hamilton1}
         \end{subfigure}
         \qquad
         \begin{subfigure}{7cm}
             \centering
             \includegraphics[scale=.7]{02-problemy/images/ch02_hamilton2.pdf}
-            \caption{Graf a jeho hamiltonovská kružnice}
+            \caption{Graf a~jeho hamiltonovská kružnice}
             \label{subfig:hamilton2}
         \end{subfigure}
     \end{figure}
-    Problém hledání hamiltonovské kružnice se objevuje typicky např. v logistice, kdy se snažíme optimalizovat trasy při doručování zboží (minimalizace času a nákladů).
-    \item \textit{Součet podmnožiny.} Máme zadanou množinu přirozených čísel $M$ a číslo $S\in\N$. Existuje podmnožina $N\subseteq M$ taková, že součet jejích čísel je roven $S$?
-    Např. pro množinu $M=\set{1,3,10,11,20}$ (ne)existují součty uvedené v tabulce \ref{tab:soucty}.
+    Problém hledání hamiltonovské kružnice se objevuje typicky např. v~logistice,~kdy se snažíme optimalizovat trasy při doručování zboží (minimalizace času a~nákladů).
+    \item \textit{Součet podmnožiny.} Máme zadanou množinu přirozených čísel $M$ a~číslo $S\in\N$. Existuje podmnožina $N\subseteq M$ taková,~že součet jejích čísel je roven $S$?
+    Např. pro množinu $M=\set{1,3,10,11,20}$ (ne)existují součty uvedené v~tabulce \ref{tab:soucty}.
     \begin{table}[h]
         \centering
         \begin{tabular}{|l|c|c|c|c|}
@@ -185,8 +185,8 @@ K závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné probl�
         \caption{Tabulka součtů množiny $M$}
         \label{tab:soucty}
     \end{table}
-    Rychlé řešení součtu podmnožiny by pomohlo např. s optimalizací plánování nákladů rozpočtem (např. ve firmě). Dále se též používá u tzv. \emph{jednosměrných funkcí} v kryptografii.
-    \item \textit{Barvení grafu.} Chceme zjistit, zda pro zadaný graf je možné jeho vrcholy obarit $k$ barvami (formálně přidělíme každému vrcholu číslo od $1$ do $k$) tak, aby vrcholy stejné barvy nebyly nikdy spojeny hranou? Pro příklady viz obrázky \ref{subfig:barveni_grafu1} a \ref{subfig:barveni_grafu2}.
+    Rychlé řešení součtu podmnožiny by pomohlo např. s~optimalizací plánování nákladů rozpočtem (např. ve firmě). Dále se též používá u~tzv. \emph{jednosměrných funkcí} v~kryptografii.
+    \item \textit{Barvení grafu.} Chceme zjistit,~zda pro zadaný graf je možné jeho vrcholy obarit $k$ barvami (formálně přidělíme každému vrcholu číslo od $1$ do $k$) tak,~aby vrcholy stejné barvy nebyly nikdy spojeny hranou? Pro příklady viz obrázky \ref{subfig:barveni_grafu1} a~\ref{subfig:barveni_grafu2}.
     \begin{figure}[h]
         \centering
         \begin{subfigure}{7cm}
@@ -203,11 +203,11 @@ K závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné probl�
             \label{subfig:barveni_grafu2}
         \end{subfigure}
     \end{figure}
-    \item \textit{Problém batohu.} Jsou dány předměty s váhami a cenami a kapacita batohu. Chceme najít co nejdražší pomdnožinu předmětů tak, abychom nepřekročili kapacitu batohu. Toto je nejčastější zadání, avšak pokud bychom chtěli problém upravit na rozhodovací, tak se budeme ptát, zda existuje podmnožina předmětů s celkovou cenou větší nebo rovnou zadané ceně $C$.
+    \item \textit{Problém batohu.} Jsou dány předměty s~váhami a~cenami a~kapacita batohu. Chceme najít co nejdražší pomdnožinu předmětů tak,~abychom nepřekročili kapacitu batohu. Toto je nejčastější zadání,~avšak pokud bychom chtěli problém upravit na rozhodovací,~tak se budeme ptát,~zda existuje podmnožina předmětů s~celkovou cenou větší nebo rovnou zadané ceně $C$.
     
-    Formálněji máme váhy předmětů $w_1,\dots,w_n$ a jejich ceny $c_1,\dots,c_n$, přičemž hledáme hodnoty $x_1,\dots,x_n\in\set{0,1}$ tak, aby platilo
+    Formálněji máme váhy předmětů $w_1,\dots,w_n$ a~jejich ceny $c_1,\dots,c_n$,~přičemž hledáme hodnoty $x_1,\dots,x_n\in\set{0,1}$ tak,~aby platilo
     \[\sum_{i=1}^{n}c_ix_i\geqslant C\qquad\text{a}\qquad\sum_{i=1}^{n}w_ix_i\leqslant W.\]
 
-    Problém batohu se též objevuje v kryptografii.
-    \item \textit{Dva loupežníci.} Ptáme se, zda lze zadanou množinu čísel rozdělit na dvě podmnožiny se stejným součtem\footnote{Loupežníci tedy vlastně řeší, jak spravedlivě rozdělit lup.} Např. $L=\set{1,3,-2,-1,-16}$ lze rozdělit na množiny $L_1=\set{1,3,-16}$ a $L_2=\set{-2,-10}$. S tímto problémem se lze setkat např. u distribuovaných systémů, kdy se snažíme spravedlivě rozdělit omezené výpočetní zdroje mezi dva nezávislé procesy.
+    Problém batohu se též objevuje v~kryptografii.
+    \item \textit{Dva loupežníci.} Ptáme se,~zda lze zadanou množinu čísel rozdělit na dvě podmnožiny se stejným součtem\footnote{Loupežníci tedy vlastně řeší,~jak spravedlivě rozdělit lup.} Např. $L=\set{1,3,-2,-1,-16}$ lze rozdělit na množiny $L_1=\set{1,3,-16}$ a~$L_2=\set{-2,-10}$. S~tímto problémem se lze setkat např. u~distribuovaných systémů,~kdy se snažíme spravedlivě rozdělit omezené výpočetní zdroje mezi dva nezávislé procesy.
 \end{enumerate}

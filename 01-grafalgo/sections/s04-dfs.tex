@@ -1,9 +1,9 @@
 \section{Prohledávání do hloubky}\label{sec:dfs}
-Na podobném přístupu, jako BFS, je založeno tzv. \emph{prohledávání do hloubky} (anglicky \emph{depth-first search}, zkráceně DFS). Vrcholy však tentokrát budeme zpracovávat rekurzivně. Pokaždé, když budeme otevírat nový vrchol, se rekurzivně zavoláme všechny jeho sousední vrcholy, u nichž opakujeme stejnou proceduru. Po prozkoumání všech sousedů daný vrchol uzavřeme. Stejně jako BFS si tak budeme uchovávat pole \emph{stavů} pro jednotlivé vrcholy.
+Na podobném přístupu,~jako BFS,~je založeno tzv. \emph{prohledávání do hloubky} (anglicky \emph{depth-first search},~zkráceně DFS). Vrcholy však tentokrát budeme zpracovávat rekurzivně. Pokaždé,~když budeme otevírat nový vrchol,~se rekurzivně zavoláme všechny jeho sousední vrcholy,~u~nichž opakujeme stejnou proceduru. Po prozkoumání všech sousedů daný vrchol uzavřeme. Stejně jako BFS si tak budeme uchovávat pole \emph{stavů} pro jednotlivé vrcholy.
 \begin{algorithm}
     \caption{DFS (prohledávání do hloubky)}
     \label{alg:dfs}
-    \KwIn{Graf $G=(V,E)$ a počáteční vrchol $v_0\in V$}
+    \KwIn{Graf $G=(V,E)$ a~počáteční vrchol $v_0\in V$}
     \tcp{Inicializace}
     \ForEach{\textup{vrchol $v\in v$}}{
         $stav(v)\gets$ \textit{nenalezený}
@@ -22,12 +22,12 @@ Na podobném přístupu, jako BFS, je založeno tzv. \emph{prohledávání do hl
 \end{algorithm}
 
 \begin{theorem}[Složitost DFS]\label{thm:dfs_slozitost}
-    Algoritmus DFS doběhne v čase $\bigO{n+m}$ a spotřebuje paměť $\bigO{n+m}$.
+    Algoritmus DFS doběhne v~čase $\bigO{n+m}$ a~spotřebuje paměť $\bigO{n+m}$.
 \end{theorem}
 \begin{proof}
-    Algoritmus DFS se oproti BFS liší pouze v pořadí, v jakém pořadí dosažitelné vrcholy zpracovává, to však nemá na časovou složitost žádný vliv. Argument pro její odvození je tak stejný jako u BFS, viz věta \ref{thm:bfs_slozitost} v minulé sekci.
+    Algoritmus DFS se oproti BFS liší pouze v~pořadí,~v~jakém pořadí dosažitelné vrcholy zpracovává,~to však nemá na časovou složitost žádný vliv. Argument pro její odvození je tak stejný jako u~BFS,~viz věta \ref{thm:bfs_slozitost} v~minulé sekci.
 
-    V paměti si musíme uchovávat reprezentaci grafu, to zabere $\bigO{n+m}$ paměti (opět např. pomocí seznamu sousedů) a máme seznam $stav$ s $n$ prvky (vrcholy). Zároveň si při volání \textsc{DFS2} musíme na zásobník rekurze ukládat jednotlivé \emph{aktivační záznamy}. Protože vrcholů je v grafu $n$, pak na zásobníku rekurze bude v jednu chvíli maximálně $n$ záznamů, tj. $\bigO{n}$. Celkově spotřebujeme $\bigO{n+m}+\bigO{n}+\bigO{n}=\bigO{n+m}$ paměti.
+    V~paměti si musíme uchovávat reprezentaci grafu,~to zabere $\bigO{n+m}$ paměti (opět např. pomocí seznamu sousedů) a~máme seznam $stav$ s~$n$ prvky (vrcholy). Zároveň si při volání \textsc{DFS2} musíme na zásobník rekurze ukládat jednotlivé \emph{aktivační záznamy}. Protože vrcholů je v~grafu $n$,~pak na zásobníku rekurze bude v~jednu chvíli maximálně $n$ záznamů,~tj. $\bigO{n}$. Celkově spotřebujeme $\bigO{n+m}+\bigO{n}+\bigO{n}=\bigO{n+m}$ paměti.
 \end{proof}
-\notebox{Je dobré si uvědomit, že byť algoritmy BFS a DFS mají stejnou časovou a prostorovou složitost, nelze zcela rovnocenně použít na stejné typy úloh. Např. BFS se hodí pro hledání nejkratší cesty \emph{v neohodnoceném grafu} (pro ohodnocené grafy se používá např. Dijkstrův algoritmus, viz sekce \ref{sec:dijkstra}), kdežto DFS se více hodí na prohledávání stavového prostoru, neboť typicky nezabere tolik paměti.}
-\warningbox{Cesta, kterou se DFS dostane do libovolného vrcholu $v$, nemusí být nutně nejkratší (silně závisí na pořadí, v jakém procházíme sousedy jednotlivých vrcholů).}
+\notebox{Je dobré si uvědomit,~že byť algoritmy BFS a~DFS mají stejnou časovou a~prostorovou složitost,~nelze zcela rovnocenně použít na stejné typy úloh. Např. BFS se hodí pro hledání nejkratší cesty \emph{v~neohodnoceném grafu} (pro ohodnocené grafy se používá např. Dijkstrův algoritmus,~viz sekce \ref{sec:dijkstra}),~kdežto DFS se více hodí na prohledávání stavového prostoru,~neboť typicky nezabere tolik paměti.}
+\warningbox{Cesta,~kterou se DFS dostane do libovolného vrcholu $v$,~nemusí být nutně nejkratší (silně závisí na pořadí,~v~jakém procházíme sousedy jednotlivých vrcholů).}

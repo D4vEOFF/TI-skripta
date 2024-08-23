@@ -1,16 +1,16 @@
 \section{Problém splnitelnosti}\label{sec:general_sat}
 
-Jako první začneme zdánlivě možná jednoduchým problémem, který však na poli informatiky hraje dosti důležitou roli. Předpokládejme, že máme zadanou nějakou logickou formuli $\varphi$ o libovolném počtu logických proměnných, označme např. $x_1,x_2,\dots,x_n$. Naší otázkou je, jestli je možné hodnoty proměnných $x_1,x_2,\dots,x_n$ nastavit tak (tj. dosadit hodnoty 0 a 1), aby byla formule splněna\footnote{Může se na první pohled zdát, že se jedná o dosti teoretickou záležitost, nicméně později uvidíme, že mnoho jiných problémů má se SAT silnou spojitost.}, tj. $\varphi(\dots)=1$. Takovému ohodnocení budeme říkat \emph{splňující}.
+Jako první začneme zdánlivě možná jednoduchým problémem,~který však na poli informatiky hraje dosti důležitou roli. Předpokládejme,~že máme zadanou nějakou logickou formuli $\varphi$ o~libovolném počtu logických proměnných,~označme např. $x_1,x_2,\dots,x_n$. Naší otázkou je,~jestli je možné hodnoty proměnných $x_1,x_2,\dots,x_n$ nastavit tak (tj. dosadit hodnoty 0~a~1),~aby byla formule splněna\footnote{Může se na první pohled zdát,~že se jedná o~dosti teoretickou záležitost,~nicméně později uvidíme,~že mnoho jiných problémů má se SAT silnou spojitost.},~tj. $\varphi(\dots)=1$. Takovému ohodnocení budeme říkat \emph{splňující}.
 
-\problem{Splnitelnost obecné logické formule}{Logická formule $\varphi$.}{1, pokud je $\varphi$ splnitelná, jinak 0.}
+\problem{Splnitelnost obecné logické formule}{Logická formule $\varphi$.}{1,~pokud je $\varphi$ splnitelná,~jinak 0.}
 
-Nejdříve si zopakujeme logické operace a spojky. Mezi ně řadíme $\neg, \land, \lor, \implies, \iff$.
+Nejdříve si zopakujeme logické operace a~spojky. Mezi ně řadíme $\neg,~\land,~\lor,~\implies,~\iff$.
 \begin{itemize}
     \item \textbf{Negace $\neg x$.} \emph{Převrací logickou hodnotu $x$.}
-    \item \textbf{Konjunkce $a\land b$.} \emph{Pravdivá, jsou-li obě hodnoty operandů $a,b$ pravdivé.}
-    \item \textbf{Disjunkce $a\lor b$.} \emph{Pravdivá, je-li alespoň jedna z hodnot operandů $a,b$ pravdivá.}
-    \item \textbf{Implikace $a\implies b$.} \emph{Je-li předpoklad $a$ splněn, je splněn i závěr $b$. Tj. implikace je nepravdivá, pokud platí $a$ a neplatí $b$.}
-    \item \textbf{Ekvivalence $a\iff b$.} \emph{$a$ platí právě tehdy, když platí $b$. Tj. ekvivalence je pravdivá, jsou-li hodnoty operandů $a,b$ současně 0 nebo 1.}
+    \item \textbf{Konjunkce $a\land b$.} \emph{Pravdivá,~jsou-li obě hodnoty operandů $a,b$ pravdivé.}
+    \item \textbf{Disjunkce $a\lor b$.} \emph{Pravdivá,~je-li alespoň jedna z~hodnot operandů $a,b$ pravdivá.}
+    \item \textbf{Implikace $a\implies b$.} \emph{Je-li předpoklad $a$ splněn,~je splněn i~závěr $b$. Tj. implikace je nepravdivá,~pokud platí $a$ a~neplatí $b$.}
+    \item \textbf{Ekvivalence $a\iff b$.} \emph{$a$ platí právě tehdy,~když platí $b$. Tj. ekvivalence je pravdivá,~jsou-li hodnoty operandů $a,b$ současně 0~nebo 1.}
 \end{itemize}
 \begin{table}[h]\label{table:logicke_operace}
     \centering
@@ -23,55 +23,55 @@ Nejdříve si zopakujeme logické operace a spojky. Mezi ně řadíme $\neg, \la
     1   & 1   & 0        & 1          & 1         & 1             & 1         \\ \hline
     \end{tabular}
 \end{table}
-Zde konstatujme, že ve všech příkladech bude mít negace $\neg$ vždy \emph{nejvyšší prioritu} oproti ostatním operacím. Prioritu ostatních operací budeme stanovovat pomocí závorek. 
+Zde konstatujme,~že ve všech příkladech bude mít negace $\neg$ vždy \emph{nejvyšší prioritu} oproti ostatním operacím. Prioritu ostatních operací budeme stanovovat pomocí závorek. 
 \begin{example}\label{ex:sat_formule}
     \begin{itemize}
-        \item $\varphi(x)=x\land\neg x$ \dots \textbf{ Není splnitelná}, pro $x=0$ i $x=1$ je $\varphi=0$.
-        \item $\psi(x)=x\lor\neg x$ \dots \textbf{ Je splnitelná}, a to jak pro $x=0$, tak $x=1$.
-        \item $\chi(a,b,c)=\big((a\land b)\lor \neg c\big)\implies (\neg a\land\neg c)$ \dots \textbf{Je splnitelná}, např. pro $a=0$, $b=0$ a $c=0$.
+        \item $\varphi(x)=x\land\neg x$ \dots \textbf{ Není splnitelná},~pro $x=0$ i~$x=1$ je $\varphi=0$.
+        \item $\psi(x)=x\lor\neg x$ \dots \textbf{ Je splnitelná},~a~to jak pro $x=0$,~tak $x=1$.
+        \item $\chi(a,b,c)=\big((a\land b)\lor \neg c\big)\implies (\neg a\land\neg c)$ \dots \textbf{Je splnitelná},~např. pro $a=0$,~$b=0$ a~$c=0$.
     \end{itemize}
 \end{example}
-V příkladu \ref{ex:sat_formule} výše se jedná o poměrně jednoduché instance, kdy jsme schopni vidět hned, zda je formule splnitelná. Pokud bychom však uvážili nějakou složitější formuli, problém se již značně zkomplikuje.
-\importantbox{Obecně pro formuli o $n$ proměnných je třeba prozkoumat řádově $2^n$ možných ohodnocení. Naivní algoritmus zkoušející všechny možnosti je tak \emph{exponenciální}.}
-Pro SAT není dodnes známý žádný algoritmus, který by jej uměl řešit pro libovolnou logickou formuli v polynomiálním čase.
+V~příkladu \ref{ex:sat_formule} výše se jedná o~poměrně jednoduché instance,~kdy jsme schopni vidět hned,~zda je formule splnitelná. Pokud bychom však uvážili nějakou složitější formuli,~problém se již značně zkomplikuje.
+\importantbox{Obecně pro formuli o~$n$ proměnných je třeba prozkoumat řádově $2^n$ možných ohodnocení. Naivní algoritmus zkoušející všechny možnosti je tak \emph{exponenciální}.}
+Pro SAT není dodnes známý žádný algoritmus,~který by jej uměl řešit pro libovolnou logickou formuli v~polynomiálním čase.
 
 \subsection{Konjunktivní normální forma}\label{subsec:cnf}
 
-Zkusíme se podívat na formule ve speciálním tvaru, a to tzv. \emph{konjunktivní normální formě}, neboli zkráceně \emph{CNF}.\footnote{Z angl. \emph{conjunctive normal form}.}
+Zkusíme se podívat na formule ve speciálním tvaru,~a~to tzv. \emph{konjunktivní normální formě},~neboli zkráceně \emph{CNF}.\footnote{Z~angl. \emph{conjunctive normal form}.}
 
-Každá formule skládá z tzv. \textbf{klauzulí} obsahujících tzv. \textbf{literály}, což je buď \emph{proměnná, nebo její negace}.
+Každá formule skládá z~tzv. \textbf{klauzulí} obsahujících tzv. \textbf{literály},~což je buď \emph{proměnná,~nebo její negace}.
 \begin{itemize}
     \item Klauzule jsou ve formuli odděleny \emph{logickou spojkou $\land$}
-    \item a v každé klauzuli jsou literály odděleny \emph{logickou spojkou $\lor$}.
+    \item a~v~každé klauzuli jsou literály odděleny \emph{logickou spojkou $\lor$}.
 \end{itemize}
 \[\varphi(\dots)=\underbrace{(\cdots\lor\cdots\lor\cdots)}_{\text{klauzule}}\land(\cdots\lor \overbrace{x}^{\text{literál}}\lor\cdots)\land(\cdots\lor\overbrace{\neg x}^{\text{literál}}\lor\cdots)\land(\cdots\lor \underbrace{y}_{\text{literál}}\lor\cdots)\land\cdots\]
 \begin{example}\label{ex:cnf_formule}
     \begin{itemize}
-        \item \(\varphi(x,y,z)=\neg x\land (y\lor z)\) \dots \textbf{Je v CNF.} Formule $\varphi$ obsahuje klauzule $x$ (klauzule o jednom literálu) a $y\lor z$.
-        \item \(\psi(a,b)=a\land b\) \dots \textbf{Je v CNF.}
-        \item \(\chi(a,b,c,d)=a\land \big(b\lor (c\land d)\big)\) \dots \textbf{Není v CNF}, protože výraz $c\land d$ není literál.
+        \item \(\varphi(x,y,z)=\neg x\land (y\lor z)\) \dots \textbf{Je v~CNF.} Formule $\varphi$ obsahuje klauzule $x$ (klauzule o~jednom literálu) a~$y\lor z$.
+        \item \(\psi(a,b)=a\land b\) \dots \textbf{Je v~CNF.}
+        \item \(\chi(a,b,c,d)=a\land \big(b\lor (c\land d)\big)\) \dots \textbf{Není v~CNF},~protože výraz $c\land d$ není literál.
     \end{itemize}
     Poslední formuli lze však převést do CNF: $a\land (b\lor c)\land (b\lor d)$.
 \end{example}
-Z příkladu \ref{ex:cnf_formule} se tak nabízí otázka, zda je možné \emph{libovolnou formuli} převést do CNF. Existuje vůbec pro každou formuli taková ekvivalentní\footnote{Libovolné formule $\varphi$ a $\psi$ jsou ekvivaletní, pokud pro stejné ohodnocení proměnných platí $\varphi(\dots)=\psi(\dots)$.} formule? Ale ano, v logice se i dokazuje, že každé formuli existuje existuje ekvivalentní formule v CNF.
+Z~příkladu \ref{ex:cnf_formule} se tak nabízí otázka,~zda je možné \emph{libovolnou formuli} převést do CNF. Existuje vůbec pro každou formuli taková ekvivalentní\footnote{Libovolné formule $\varphi$ a~$\psi$ jsou ekvivaletní,~pokud pro stejné ohodnocení proměnných platí $\varphi(\dots)=\psi(\dots)$.} formule? Ale ano,~v~logice se i~dokazuje,~že každé formuli existuje existuje ekvivalentní formule v~CNF.
 \begin{theorem}
-    Pro každou logickou formuli $\psi$ existuje ekvivalentní formule $\psi^\prime$ v CNF.
+    Pro každou logickou formuli $\psi$ existuje ekvivalentní formule $\psi^\prime$ v~CNF.
 \end{theorem}
-Toto tvrzení lze, pochopitelně, dokázat, ale zde se tím zabývat nebudeme a zkrátka jej přijmeme jako fakt. Podstatná věc, která z toho plyne, je, že pokud je nějaká formule $\psi$ splnitelná, pak je splnitelná i jí ekvivalentní formule $\psi^\prime$ v CNF a naopak pokud $\psi$ není splnitelná, není splnitelná ani $\psi^\prime$. Symbolicky
+Toto tvrzení lze,~pochopitelně,~dokázat,~ale zde se tím zabývat nebudeme a~zkrátka jej přijmeme jako fakt. Podstatná věc,~která z~toho plyne,~je,~že pokud je nějaká formule $\psi$ splnitelná,~pak je splnitelná i~jí ekvivalentní formule $\psi^\prime$ v~CNF a~naopak pokud $\psi$ není splnitelná,~není splnitelná ani $\psi^\prime$. Symbolicky
 \[\psi\,\text{je splnitelná}\iff\psi^\prime\,\text{je splnitelná}.\]
 
 \subsection{Převod do CNF pomocí tabulky}\label{subsec:cnf_prevod_tabulka}
 
-Podívejme se na způsob, jak lze převést libovolnou logickou formuli do CNF.
+Podívejme se na způsob,~jak lze převést libovolnou logickou formuli do CNF.
 
-Máme obecnou formuli $\varphi$ s proměnnými $x_1,x_2,\dots,x_n$, pro kterou budeme konstruovat ekvivalentní formuli $\varphi^\prime$ v CNF. Vycházíme z tabulky pravdivostníh hodnot, přičemž pro každé \textbf{nepravdivé} ohodnocení vytvoříme \emph{klauzuli} s $n$ literály, kde obecně $i$-tý literál je
+Máme obecnou formuli $\varphi$ s~proměnnými $x_1,x_2,\dots,x_n$,~pro kterou budeme konstruovat ekvivalentní formuli $\varphi^\prime$ v~CNF. Vycházíme z~tabulky pravdivostníh hodnot,~přičemž pro každé \textbf{nepravdivé} ohodnocení vytvoříme \emph{klauzuli} s~$n$ literály,~kde obecně $i$-tý literál je
 \begin{itemize}
-    \item $x_i$, pokud v daném ohodnocení je $x_i=0$,
+    \item $x_i$,~pokud v~daném ohodnocení je $x_i=0$,
     \item jinak $\neg x_i$ (tj. když $x_i=1$).
 \end{itemize}
 Podívejme se na úvod na příklad \ref{ex:prevod_cnf_1} níže.
 \begin{example}\label{ex:prevod_cnf_1}
-    Máme formuli $\psi(x,y,z)=(x\implies y)\implies z$, pro kterou chceme najít ekvivalentní formuli $\psi^\prime$ v CNF. Nejprve si tedy sestavíme tabulku pravdivostních hodnot.
+    Máme formuli $\psi(x,y,z)=(x\implies y)\implies z$,~pro kterou chceme najít ekvivalentní formuli $\psi^\prime$ v~CNF. Nejprve si tedy sestavíme tabulku pravdivostních hodnot.
     \begin{table}[h]
         \centering
         \begin{tabular}{|c|c|c|c|c|}
@@ -87,23 +87,23 @@ Podívejme se na úvod na příklad \ref{ex:prevod_cnf_1} níže.
         1   & 1   & 1   & 1             & 1                         \\ \hline
         \end{tabular}
     \end{table}
-    Z tabulky můžeme vidět, že formule $\varphi$ je nepravdivá pro
+    Z~tabulky můžeme vidět,~že formule $\varphi$ je nepravdivá pro
     \begin{itemize}
         \item $x=0,y=0,z=0$,
         \item $x=0,y=1,z=0$
-        \item a $x=1,y=1,z=0$.
+        \item a~$x=1,y=1,z=0$.
     \end{itemize}
-    Tedy celkově sestavíme 3 klauzule:
+    Tedy celkově sestavíme 3~klauzule:
     \begin{itemize}
         \item \((\overbrace{x}^{x=0}\lor \underbrace{y}_{y=0}\lor \overbrace{z}^{z=0})\),
         \item \((x\lor\underbrace{\neg y}_{y=1}\lor z)\),
         \item \((\neg x\lor\neg y\lor z)\).
     \end{itemize}
-    Výsledná formule v CNF bude mít tvar:
+    Výsledná formule v~CNF bude mít tvar:
     \[\psi^\prime(x,y,z)=(x\lor y\lor z)\land (x\lor \neg y\lor z)\land (\neg x\lor \neg y\lor z).\]
-    Čtenář se sám může přesvědčit, že formule $\psi$ a $\psi^\prime$ pro libovolné ohodnocení mají stejnou pravdivostní hodnotu.
+    Čtenář se sám může přesvědčit,~že formule $\psi$ a~$\psi^\prime$ pro libovolné ohodnocení mají stejnou pravdivostní hodnotu.
 \end{example}
-Nabízí se otázka: \emph{"proč tento postup funguje?"} Pokud nějaká formule v CNF není splněna pro určité ohodnocení, pak to nutně znamená, že \emph{alespoň jedna z klauzulí není splněna}. Každá klauzule však obsahuje literály spojené logickou spojkou $\lor$ a tedy existuje pro ni jen jediné ohodnocení daných literálů, tak, aby nebyla splněna. Z tohoto proncipu vychází ona konstrukce. Vybereme si ta ohodnocení původní formule, která ji nesplňují a sestrojíme takovou klauzuli, aby právě pro dané ohodnocení nebyla splňena.
+Nabízí se otázka: \emph{"proč tento postup funguje?"} Pokud nějaká formule v~CNF není splněna pro určité ohodnocení,~pak to nutně znamená,~že \emph{alespoň jedna z~klauzulí není splněna}. Každá klauzule však obsahuje literály spojené logickou spojkou $\lor$ a~tedy existuje pro ni jen jediné ohodnocení daných literálů,~tak,~aby nebyla splněna. Z~tohoto proncipu vychází ona konstrukce. Vybereme si ta ohodnocení původní formule,~která ji nesplňují a~sestrojíme takovou klauzuli,~aby právě pro dané ohodnocení nebyla splňena.
 \begin{example}
     \(\chi(x_1,x_2,x_3,x_4)=(x_1\iff x_2)\lor \neg(x_3\iff x_4)\).
     \begin{table}[h]
@@ -130,27 +130,27 @@ Nabízí se otázka: \emph{"proč tento postup funguje?"} Pokud nějaká formule
         \end{tabular}
     \end{table}
     \[\chi^\prime(x_1,x_2,x_3,x_4)=(x_1\lor x_2\lor \neg x_3\lor x_4)\land(x_1\lor\neg x_2\lor\neg x_3\lor\neg x_4)\land(\neg x_1\lor x_2\lor x_3\lor x_4)\land(\neg x_1\lor x_2\lor \neg x_3\lor\neg x_4).\]
-    \importantbox{\textbf{Problém:} Generování tabulky (resp. procházení všech možných ohodnocení) nás přivádí zpět k původnímu problému, a to sice \emph{exponenciální časové složitosti}.}
-    V tomto případě však nejsme schopni postup učinit více efektivní, neboť ve skutečnosti se může stát, že pro obecnou logickou formuli se může jí ekvivalentní formule v CNF až exponenciálně prodloužit.\footnote{Stačí např. vzít formuli, která je \emph{nesplnitelná}, tj. pro všechna možná ohodnocení platí $\psi(\dots)=0$. Celkově by tak ekvivalentní formule měla až $2^n$ klauzulí.}
+    \importantbox{\textbf{Problém:} Generování tabulky (resp. procházení všech možných ohodnocení) nás přivádí zpět k~původnímu problému,~a~to sice \emph{exponenciální časové složitosti}.}
+    V~tomto případě však nejsme schopni postup učinit více efektivní,~neboť ve skutečnosti se může stát,~že pro obecnou logickou formuli se může jí ekvivalentní formule v~CNF až exponenciálně prodloužit.\footnote{Stačí např. vzít formuli,~která je \emph{nesplnitelná},~tj. pro všechna možná ohodnocení platí $\psi(\dots)=0$. Celkově by tak ekvivalentní formule měla až $2^n$ klauzulí.}
 \end{example}
 
 \subsection{Tseitinova transformace}\label{subsec:cnf_tseitin}
 
-Značně rychlejší způsob převodu formule do CNF předvedl ruský informatik \emph{Grigori~Tseitin}. Problém s předchozím postupem v podsekci \ref{subsec:cnf_prevod_tabulka} je ten, že se v nové formuli $\psi$ snažíme ponechat \emph{pouze} proměnné v původní formuli $\varphi$, což způsobí, že formule se může až exponenciálně prodloužit. Postup, který si nyní ukážeme, zavádí do výsledné formule některé proměnné navíc, avšak za cenu rychlejšího algoritmu.
+Značně rychlejší způsob převodu formule do CNF předvedl ruský informatik \emph{Grigori~Tseitin}. Problém s~předchozím postupem v~podsekci \ref{subsec:cnf_prevod_tabulka} je ten,~že se v~nové formuli $\psi$ snažíme ponechat \emph{pouze} proměnné v~původní formuli $\varphi$,~což způsobí,~že formule se může až exponenciálně prodloužit. Postup,~který si nyní ukážeme,~zavádí do výsledné formule některé proměnné navíc,~avšak za cenu rychlejšího algoritmu.
 
 Postup Tseitinovy transformace formule $\varphi$ lze rozdělit do celkem $4$ kroků.
 \begin{enumerate}
     \item Rozdělíme formuli $\varphi$ na jednotlivé podformule.
-    \item Pro každou dílčí podformuli $\varphi_i$ si zavedeme novou proměnnou $y_i$. Speciálně $y_1$ je logicky ekvivalentní s celou původní formulí $\varphi$, tj. $y_1\iff\varphi$.
+    \item Pro každou dílčí podformuli $\varphi_i$ si zavedeme novou proměnnou $y_i$. Speciálně $y_1$ je logicky ekvivalentní s~celou původní formulí $\varphi$,~tj. $y_1\iff\varphi$.
     \item Vytvoříme novou formuli $\psi$ následovně:
     \[\psi=y_1\land(y_1\iff\varphi_1)\land(y_2\iff\varphi_2)\land\dots\land(y_n\iff\varphi_n).\]
 \end{enumerate}
-Hned se nabízí námitka, že nová formule $\psi$ není v CNF, avšak stačí si uvedomit, že logickou ekvivalenci lze přepsat pomocí $\land$ a $\lor$ následovně:
+Hned se nabízí námitka,~že nová formule $\psi$ není v~CNF,~avšak stačí si uvedomit,~že logickou ekvivalenci lze přepsat pomocí $\land$ a~$\lor$ následovně:
 \begin{equation}\label{eq:equiv_identita}
     a\iff b=(a\implies b)\land(b\implies a)=(\neg a\lor b)\land(\neg b\lor a).
 \end{equation}
 
-Nové proměnné $y_1,y_2,\dots,y_n$ v podstatě indikují, jaké hodnoty nabývá daný logický výraz v původní formuli pro nějaké konkrétní ohodnocení původních proměnných. Chceme-li tedy zjistit, jaké logické hodnoty nabývá daná formule $\varphi$ pro určité logické hodnoty jejích proměnných, stačí novým proměnným přiřadit logickou hodnotu podle toho, jaké hodnoty nabývá výraz $\varphi_i$, který reprezentují. Přesně proto jsme ostatně konstruovali podformule $y_i\iff\varphi_i$.
+Nové proměnné $y_1,y_2,\dots,y_n$ v~podstatě indikují,~jaké hodnoty nabývá daný logický výraz v~původní formuli pro nějaké konkrétní ohodnocení původních proměnných. Chceme-li tedy zjistit,~jaké logické hodnoty nabývá daná formule $\varphi$ pro určité logické hodnoty jejích proměnných,~stačí novým proměnným přiřadit logickou hodnotu podle toho,~jaké hodnoty nabývá výraz $\varphi_i$,~který reprezentují. Přesně proto jsme ostatně konstruovali podformule $y_i\iff\varphi_i$.
 
 Pojďme se podívat na konkrétní příklad.
 \begin{example}
@@ -161,14 +161,14 @@ Pojďme se podívat na konkrétní příklad.
         \item $\neg p$,
         \item $p\lor q$,
         \item $(p\lor q)\land r$,
-        \item a $((p\lor q)\land r)\implies \neg p$ (původní formule $\alpha$).
+        \item a~$((p\lor q)\land r)\implies \neg p$ (původní formule $\alpha$).
     \end{itemize}
-    Pro ně si zřídíme nové proměmnné $y_1,y_2,y_3$ a $y_4$. Tzn. do nové formule $\beta$ přidáme výrazy
+    Pro ně si zřídíme nové proměmnné $y_1,y_2,y_3$ a~$y_4$. Tzn. do nové formule $\beta$ přidáme výrazy
     \begin{itemize}
         \item $y_1\iff((p\lor q)\land r)\implies \neg p$,
         \item $y_2\iff(p\lor q)\land r$,
         \item $y_3\iff p\lor q$
-        \item a $y_4\iff\neg p$.
+        \item a~$y_4\iff\neg p$.
     \end{itemize}
     Výsledná formule bude tedy vypadat následovně:
     \begin{align*}
@@ -177,16 +177,16 @@ Pojďme se podívat na konkrétní příklad.
         &\land(y_3\iff (p\lor q))\\
         &\land(y_4\iff\neg p).
     \end{align*}
-    Ekvivalence ve formuli bychom mohli přepsat pomocí vztahu \eqref{eq:equiv_identita}, který jsme si ukazovali výše.
+    Ekvivalence ve formuli bychom mohli přepsat pomocí vztahu \eqref{eq:equiv_identita},~který jsme si ukazovali výše.
 
-    Zkusme nyní formuli vyhodnotit např. pro ohodnocení proměnných $p=1,q=0$ a $r=0$. Původní formule je rovna:
+    Zkusme nyní formuli vyhodnotit např. pro ohodnocení proměnných $p=1,q=0$ a~$r=0$. Původní formule je rovna:
     \[\alpha(1,0,0)=((1\lor 0)\land 0)\implies\neg 1=(1\land 0)\implies\neg 1=0\implies 1=1.\]
     Hodnoty nových proměnných nastavíme tedy následovně:
     \begin{itemize}
-        \item $y_4=0$, protože $\neg p=0$,
-        \item $y_3=1$, protože $p\lor q=1$,
-        \item $y_2=0$, protože $(p\lor q)\land r=0$,
-        \item a $y_1=1$, protože $((p\lor q)\land r)\implies \neg p=1$.
+        \item $y_4=0$,~protože $\neg p=0$,
+        \item $y_3=1$,~protože $p\lor q=1$,
+        \item $y_2=0$,~protože $(p\lor q)\land r=0$,
+        \item a~$y_1=1$,~protože $((p\lor q)\land r)\implies \neg p=1$.
     \end{itemize}
     Nyní můžeme vyhodnotit novou formuli $\beta$:
     \begin{align*}
@@ -194,9 +194,9 @@ Pojďme se podívat na konkrétní příklad.
         &\land(1\iff(1\lor 0))\land(0\iff\neg 1)\\
         &=1\land 1\land 1\land 1\land 1=1.
     \end{align*}
-    Lze se tedy přesvědčit, že formule $\beta$ má stejnou logickou hodnotu jako původní formule $\alpha$.
+    Lze se tedy přesvědčit,~že formule $\beta$ má stejnou logickou hodnotu jako původní formule $\alpha$.
 \end{example}
 
-Obecně vždy bude platit, že nově vzniklá formule je splnitelná, právě tehdy když je splnitelná i původní formule. Ovšem podstatnou výhodou oproti postupu s tabulkou je ta, že nová formule je podstatně kratší a lze ji tedy sestrojit mnohem rychleji.
-\tipbox{Pro každý z podvýrazů $\varphi_i$ sestrojíme klauzuli $y_i\iff\varphi_i$, tzn. celkově jich bude lineárně mnoho v počtu podvýrazů.}
-Při hlubší analýze tohoto postupu (resp. algoritmu) se lze přesvědčit, že velikost výsledné formule $\psi$ je \textbf{lineární} ve velikosti původní formule $\varphi$.
+Obecně vždy bude platit,~že nově vzniklá formule je splnitelná,~právě tehdy když je splnitelná i~původní formule. Ovšem podstatnou výhodou oproti postupu s~tabulkou je ta,~že nová formule je podstatně kratší a~lze ji tedy sestrojit mnohem rychleji.
+\tipbox{Pro každý z~podvýrazů $\varphi_i$ sestrojíme klauzuli $y_i\iff\varphi_i$,~tzn. celkově jich bude lineárně mnoho v~počtu podvýrazů.}
+Při hlubší analýze tohoto postupu (resp. algoritmu) se lze přesvědčit,~že velikost výsledné formule $\psi$ je \textbf{lineární} ve velikosti původní formule $\varphi$.

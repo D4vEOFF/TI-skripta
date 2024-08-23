@@ -1,12 +1,12 @@
-\section{Grafy a jejich reprezentace}\label{sec:grafy}
+\section{Grafy a~jejich reprezentace}\label{sec:grafy}
 
-Grafy jsou základním stavebním kamenem pro mnoho úloh informatice. Lze jimi obecně reprezentovat mnoho situací, v nichž jsou klíčové určité prvky a jejich vzájemné vztahy. Např. propojení zařízení (router, switch, hub či koncový uživatel) v počítačové síti, schéma zapojení elektrického obvodu, mapa města nebo např. v chemii vazby mezi atomy. Jejich matematická podstata je však velice jednoduchá -- \emph{vrcholy} propojené \emph{hranami}.
+Grafy jsou základním stavebním kamenem pro mnoho úloh informatice. Lze jimi obecně reprezentovat mnoho situací,~v~nichž jsou klíčové určité prvky a~jejich vzájemné vztahy. Např. propojení zařízení (router,~switch,~hub či koncový uživatel) v~počítačové síti,~schéma zapojení elektrického obvodu,~mapa města nebo např. v~chemii vazby mezi atomy. Jejich matematická podstata je však velice jednoduchá -- \emph{vrcholy} propojené \emph{hranami}.
 
 \begin{definition}[Graf]
-    Grafem $G$ nazveme uspořádanou dvojici $(V, E)$, kde $V$ je množina \emph{vrcholů} (nebo také \emph{uzlů}) a $E$ množina \emph{hran}, přičemž pokud
+    Grafem $G$ nazveme uspořádanou dvojici $(V,~E)$,~kde $V$ je množina \emph{vrcholů} (nebo také \emph{uzlů}) a~$E$ množina \emph{hran},~přičemž pokud
     \begin{itemize}
-        \item $E\subseteq\set{\set{u,v}\,|\,u,v\in V}$, pak $G$ nazýváme \emph{neorientovaným} grafem (tj. po hraně lze pohybovat v obou směrech).
-        \item $E\subseteq\set{(u,v)\,|\,u,v\in V}$, pak $G$ nazýváme \emph{orientovaným} grafem (tj. po hranách se lze pohybovat pouze v jednom směru).
+        \item $E\subseteq\set{\set{u,v}\,|\,u,v\in V}$,~pak $G$ nazýváme \emph{neorientovaným} grafem (tj. po hraně lze pohybovat v~obou směrech).
+        \item $E\subseteq\set{(u,v)\,|\,u,v\in V}$,~pak $G$ nazýváme \emph{orientovaným} grafem (tj. po hranách se lze pohybovat pouze v~jednom směru).
     \end{itemize}
 \end{definition}
 
@@ -27,11 +27,11 @@ Grafy jsou základním stavebním kamenem pro mnoho úloh informatice. Lze jimi 
     \end{subfigure}
 \end{figure}
 
-Podstatnou otázkou u grafů jsou způsoby jejich reprezentace, neboť při programování různé způsoby různě efektivní a je dobré si mezi nimi umět vybrat. Pracujme tedy s obecným grafem $G=(V,E)$, přičemž vrcholy grafu si pro jednoduchost označíme přirozenými čísly $1,2,\dots,n$, tzn. $V=\set{1,2,\dots,n}$.
+Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při programování různé způsoby různě efektivní a~je dobré si mezi nimi umět vybrat. Pracujme tedy s~obecným grafem $G=(V,E)$,~přičemž vrcholy grafu si pro jednoduchost označíme přirozenými čísly $1,2,\dots,n$,~tzn. $V=\set{1,2,\dots,n}$.
 \begin{itemize}
-    \item \textbf{Matice sousednosti.} První způsob, jak graf reprezentovat, je pomocí matice. V tomto případě graf $G$ popisuje matice $n\times n$, kde na pozici $ij$ je $1$, pokud z vrcholu $i$ do vrcholu $j$ vede hrana, jinak $0$.
+    \item \textbf{Matice sousednosti.} První způsob,~jak graf reprezentovat,~je pomocí matice. V~tomto případě graf $G$ popisuje matice $n\times n$,~kde na pozici $ij$ je $1$,~pokud z~vrcholu $i$ do vrcholu $j$ vede hrana,~jinak $0$.
     \begin{example}[Prásátkový graf]
-        Orientovaný graf $G$ (viz obrázek \ref{fig:graf_prasatko}) a jeho matice sousednosti $A$.
+        Orientovaný graf $G$ (viz obrázek \ref{fig:graf_prasatko}) a~jeho matice sousednosti $A$.
         \begin{figure}[h]
             \centering
             \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_prasatko.pdf}
@@ -51,9 +51,9 @@ Podstatnou otázkou u grafů jsou způsoby jejich reprezentace, neboť při prog
             0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0
         \end{matrix}\right)\]
     \end{example}
-    \item \textbf{Matice incidence.} Řádky jsou indexovány vrcholy a sloupce jednotlivými hranami. Na místě $ij$ je $1$, pokud hrana vede \emph{do} vrcholu $i$, nebo $-1$, pokud z něj vychází, jinak $0$. Pro neorientované grafy píšeme vždy $1$, pokud daná hrana vede \emph{do/z} vrcholu.
+    \item \textbf{Matice incidence.} Řádky jsou indexovány vrcholy a~sloupce jednotlivými hranami. Na místě $ij$ je $1$,~pokud hrana vede \emph{do} vrcholu $i$,~nebo $-1$,~pokud z~něj vychází,~jinak $0$. Pro neorientované grafy píšeme vždy $1$,~pokud daná hrana vede \emph{do/z} vrcholu.
     \begin{example}[Úplný graf $K_4$]
-        Graf $G$ má $4$ vrcholy a celkem $6$ hran (viz obrázek \ref{fig:graf_k4}) a její matice incidence $I$. Řádky představují (shora dolů) čísla vrcholů $0,1,2,3$ a sloupce (zleva doprava) jednotlivé hrany $e_1,\dots,e_6$.
+        Graf $G$ má $4$ vrcholy a~celkem $6$ hran (viz obrázek \ref{fig:graf_k4}) a~její matice incidence $I$. Řádky představují (shora dolů) čísla vrcholů $0,1,2,3$ a~sloupce (zleva doprava) jednotlivé hrany $e_1,\dots,e_6$.
         \begin{figure}[h]
             \centering
             \includegraphics[scale=.7]{01-grafalgo/images/ch01_graf_k4.pdf}
@@ -67,9 +67,9 @@ Podstatnou otázkou u grafů jsou způsoby jejich reprezentace, neboť při prog
             0 & 0 & 1 & 1 & 0 & 1
         \end{matrix}\right)\]
     \end{example}
-    \item \textbf{Seznam sousedů.} Jedná se pravděpodobně o nejpoužívanejší variantu reprezentace grafů. Pro každý vrchol $v\in V$ si jednoduše pamatujeme seznam\footnote{Formálně vzato se spíše jedná množinu.} $S[v]$ všech vrcholů, do kterých přímo vede hrana z vrcholu $v$.
+    \item \textbf{Seznam sousedů.} Jedná se pravděpodobně o~nejpoužívanejší variantu reprezentace grafů. Pro každý vrchol $v\in V$ si jednoduše pamatujeme seznam\footnote{Formálně vzato se spíše jedná množinu.} $S[v]$ všech vrcholů,~do kterých přímo vede hrana z~vrcholu $v$.
     \begin{example}
-        Graf $G$ s vrcholy $1,\dots,4$ a jejich seznamy sousedů $S$ (viz obrázek \ref{fig:graf_seznam_sousedu}).
+        Graf $G$ s~vrcholy $1,\dots,4$ a~jejich seznamy sousedů $S$ (viz obrázek \ref{fig:graf_seznam_sousedu}).
         \begin{figure}[h]
             \centering
             \begin{subfigure}{6cm}
@@ -85,15 +85,15 @@ Podstatnou otázkou u grafů jsou způsoby jejich reprezentace, neboť při prog
                 \end{align*}
                 \vfill
             \end{subfigure}
-            \caption{Graf $G$ a seznamy sousedů pro jeho každý vrchol.}
+            \caption{Graf $G$ a~seznamy sousedů pro jeho každý vrchol.}
             \label{fig:graf_seznam_sousedu}
         \end{figure}
     \end{example}
 \end{itemize}
 
-Tím jsme si ukázali základní možnosti reprezentace grafů, avšak zatím jsme si je mezi sebou nijak neporovnali. Pojďme se tedy podívat na paměťové nároky daných variant. Označme si počet vrcholů grafu $\abs{V}=n$ a celkový počet hran $\abs{E}=m$.
+Tím jsme si ukázali základní možnosti reprezentace grafů,~avšak zatím jsme si je mezi sebou nijak neporovnali. Pojďme se tedy podívat na paměťové nároky daných variant. Označme si počet vrcholů grafu $\abs{V}=n$ a~celkový počet hran $\abs{E}=m$.
 \begin{itemize}
-    \item \textit{Matice sousednosti} spotřebuje paměť $\bigO{n^2}$, neboť potřebujeme uložit matici velikosti $n\times n$. Je tak vhodná především pro husté grafy, tedy grafy s velkým počtem hran.
-    \item \textit{Matice incidence} využije $\bigO{nm}$ paměťových buněk. Tento způsob reprezentace je vhodný především pro matematickou práci s grafy, avšak při programování se moc nevyužívá, neboť obsahuje spoustu nadbytečných informací.
-    \item \textit{Reprezentace pomocí seznamů sousedů} je obecně hodně využívaná. Řadově spotřebuje $\bigO{n+m}$ paměťi\footnote{Odvození zatím necháme stranou, avšak jednoduchým důvodem je fakt, že si musíme v paměti uchovat celkem $n$ vrcholů a pro každý z nich si musíme pamatovat všechny hrany, které z nich vychází. Blíže se na tento argument podíváme v odvození časové složitosti algoritmu BFS, viz \ref{thm:bfs_slozitost}.} a je tak dobrou alternativou oproti matici sousednosti v případech, kdy naopak daný graf je řídký, tedy neobsahuje příliš mnoho hran (např. strom).
+    \item \textit{Matice sousednosti} spotřebuje paměť $\bigO{n^2}$,~neboť potřebujeme uložit matici velikosti $n\times n$. Je tak vhodná především pro husté grafy,~tedy grafy s~velkým počtem hran.
+    \item \textit{Matice incidence} využije $\bigO{nm}$ paměťových buněk. Tento způsob reprezentace je vhodný především pro matematickou práci s~grafy,~avšak při programování se moc nevyužívá,~neboť obsahuje spoustu nadbytečných informací.
+    \item \textit{Reprezentace pomocí seznamů sousedů} je obecně hodně využívaná. Řadově spotřebuje $\bigO{n+m}$ paměťi\footnote{Odvození zatím necháme stranou,~avšak jednoduchým důvodem je fakt,~že si musíme v~paměti uchovat celkem $n$ vrcholů a~pro každý z~nich si musíme pamatovat všechny hrany,~které z~nich vychází. Blíže se na tento argument podíváme v~odvození časové složitosti algoritmu BFS,~viz \ref{thm:bfs_slozitost}.} a~je tak dobrou alternativou oproti matici sousednosti v~případech,~kdy naopak daný graf je řídký,~tedy neobsahuje příliš mnoho hran (např. strom).
 \end{itemize}
