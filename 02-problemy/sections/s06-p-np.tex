@@ -185,7 +185,7 @@ K závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné probl�
         \caption{Tabulka součtů množiny $M$}
         \label{tab:soucty}
     \end{table}
-    Rychlé řešení součtu podmnožiny by pomohlo např. s optimalizací plánování nákladů rozpočtem (např. ve firmě).
+    Rychlé řešení součtu podmnožiny by pomohlo např. s optimalizací plánování nákladů rozpočtem (např. ve firmě). Dále se též používá u tzv. \emph{jednosměrných funkcí} v kryptografii.
     \item \textit{Barvení grafu.} Chceme zjistit, zda pro zadaný graf je možné jeho vrcholy obarit $k$ barvami (formálně přidělíme každému vrcholu číslo od $1$ do $k$) tak, aby vrcholy stejné barvy nebyly nikdy spojeny hranou? Pro příklady viz obrázky \ref{subfig:barveni_grafu1} a \ref{subfig:barveni_grafu2}.
     \begin{figure}[h]
         \centering
@@ -203,6 +203,11 @@ K závěru této kapitoly si ještě uvedeme nějaké další \NP-úplné probl�
             \label{subfig:barveni_grafu2}
         \end{subfigure}
     \end{figure}
-    \item \textit{Problém batohu.}
-    \item \textit{Dva loupežníci.}
+    \item \textit{Problém batohu.} Jsou dány předměty s váhami a cenami a kapacita batohu. Chceme najít co nejdražší pomdnožinu předmětů tak, abychom nepřekročili kapacitu batohu. Toto je nejčastější zadání, avšak pokud bychom chtěli problém upravit na rozhodovací, tak se budeme ptát, zda existuje podmnožina předmětů s celkovou cenou větší nebo rovnou zadané ceně $C$.
+    
+    Formálněji máme váhy předmětů $w_1,\dots,w_n$ a jejich ceny $c_1,\dots,c_n$, přičemž hledáme hodnoty $x_1,\dots,x_n\in\set{0,1}$ tak, aby platilo
+    \[\sum_{i=1}^{n}c_ix_i\geqslant C\qquad\text{a}\qquad\sum_{i=1}^{n}w_ix_i\leqslant W.\]
+
+    Problém batohu se též objevuje v kryptografii.
+    \item \textit{Dva loupežníci.} Ptáme se, zda lze zadanou množinu čísel rozdělit na dvě podmnožiny se stejným součtem\footnote{Loupežníci tedy vlastně řeší, jak spravedlivě rozdělit lup.} Např. $L=\set{1,3,-2,-1,-16}$ lze rozdělit na množiny $L_1=\set{1,3,-16}$ a $L_2=\set{-2,-10}$. S tímto problémem se lze setkat např. u distribuovaných systémů, kdy se snažíme spravedlivě rozdělit omezené výpočetní zdroje mezi dva nezávislé procesy.
 \end{enumerate}
