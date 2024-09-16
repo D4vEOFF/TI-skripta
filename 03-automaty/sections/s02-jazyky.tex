@@ -6,22 +6,22 @@ Formální jazyky lze chápat jako abstraktní systémy pro popis pravidel, podl
 
 Pro začátek si (jako vždy) uvedeme definice některých základních pojmů.
 \begin{definition}
-    Máme neprázdnou množinu znaků $\Sigma$, tzv. \textbf{abecedu}.
+    Máme neprázdnou množinu znaků $\Sigma$, tzv. \emph{abecedu}.
     \begin{itemize}
-        \item \textbf{Slovo (řetězec)} je libovolná konečná posloupnost znaků ze $\Sigma$.
-        \item \textbf{Prázdné slovo} je slovo neobsahující žádné znaky\footnote{Symbol $\lambda$ zde představuje speciální znak zastupující prázdné slovo. Neuvažujeme jej tedy jako součást abecedy $\Sigma$, tzn. $\lambda\notin\Sigma$.}, značíme $\lambda$.
-        \item \textbf{Množina všech slov v abecedě $\Sigma$} se značí $\Sigma^*$.
-        \item \textbf{Jazyk} je libovolná podmnožina slov $L\subseteq\Sigma$. Říkáme, že jazyk $L$ je \emph{nad abecedou $\Sigma$} (viz obrázek \ref{fig:jazyk}).
+        \item \emph{Slovo (řetězec)} je libovolná konečná posloupnost znaků ze $\Sigma$.
+        \item \emph{Prázdné slovo} je slovo neobsahující žádné znaky\footnote{Symbol $\lambda$ zde představuje speciální znak zastupující prázdné slovo. Neuvažujeme jej tedy jako součást abecedy $\Sigma$, tzn. $\lambda\notin\Sigma$.}, značíme $\lambda$.
+        \item \emph{Množina všech slov v abecedě $\Sigma$} se značí $\Sigma^*$.
+        \item \emph{Jazyk} je libovolná podmnožina slov $L\subseteq\Sigma$. Říkáme, že jazyk $L$ je \emph{nad abecedou $\Sigma$} (viz obrázek \ref{fig:jazyk}).
         \begin{figure}[h]
             \centering
             \includegraphics[scale=.7]{03-automaty/images/ch03_jazyk.pdf}
             \caption{Obecný jazyk $L$ nad abecedou $\Sigma$.}
             \label{fig:jazyk}
         \end{figure}
-        \item \textbf{Délka slova} $w$ (tzn. počet znaků) se značí $|w|$.
-        \item \textbf{Konkantenace} slov $u,v\in\Sigma^*$, kde $u=u_1u_2\dots u_n$ a $v=v_1v_2\dots v_m$ je slovo
+        \item \emph{Délka slova} $w$ (tzn. počet znaků) se značí $|w|$.
+        \item \emph{Konkantenace} slov $u,v\in\Sigma^*$, kde $u=u_1u_2\dots u_n$ a $v=v_1v_2\dots v_m$ je slovo
         \[uv=u_1u_2\dots u_nv_1v_2\dots v_m.\]
-        \item \textbf{$n$-tá mocnina} slova $u\in\Sigma^*$ je slovo
+        \item \emph{$n$-tá mocnina} slova $u\in\Sigma^*$ je slovo
         \[u^n=\underbrace{uu\dots u}_{\text{$n$-krát}},\]
         kde $n\in\N_0$. Speciálně $u^0=\lambda$.
     \end{itemize}
