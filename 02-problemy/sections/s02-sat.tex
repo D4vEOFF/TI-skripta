@@ -14,7 +14,7 @@ Tento algoritmus je založený na rekurzivním postupu. Na vstupu algoritmu je l
 
 Tato procedura přijímá hledá v~dané formuli $\varphi$ tzn. \emph{jednotkovou klauzuli}. To je klauzule,~která obsahuje \textbf{pouze jeden literál}. Např. formule $\omega$ níže obsahuje jednotkovou klauzuli.
 \[\omega(x,y)=(x\lor\neg y)\land \underbrace{\neg y}_{\text{jednotková kl.}}\land (\neg x\lor y).\]
-Pokud se taková klauzule nachází ve formuli,~lze toho využít,~neboť pro danou proměnnou existuje vždy jen jediné ohodnocení,~takové,~aby celá formule byla splňena (každá klauzule musí být splněna). Obecně pokud formule $\varphi$ obsahuje jednotkovou klauzuli s~proměnnou $x$,~pak mohou nastat dva případy. Označme $varphi^\prime$ zbytek klauzulí ve formuli $\varphi$.
+Pokud se taková klauzule nachází ve formuli,~lze toho využít,~neboť pro danou proměnnou existuje vždy jen jediné ohodnocení,~takové,~aby celá formule byla splňena (každá klauzule musí být splněna). Obecně pokud formule $\varphi$ obsahuje jednotkovou klauzuli s~proměnnou $x$,~pak mohou nastat dva případy. Označme $\varphi^\prime$ zbytek klauzulí ve formuli $\varphi$.
 \begin{enumerate}
     \item Pokud má formule tvar $\varphi=x\land\varphi^\prime$,~pak nutně $x=1$.
     \item Jinak pokud má formule tvar $\varphi=\neg x\land\varphi^\prime$,~pak musí být $x=0$.
