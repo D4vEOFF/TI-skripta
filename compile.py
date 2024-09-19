@@ -7,10 +7,12 @@ import argparse
 def modify_tex_file(content):
     # Replace the \chapter command with the new format
     modified_content = re.sub(
-        r'\\chapter{(.+?)}',
-        r'\\begin{center}\n    {\\huge \\textbf{\1}}\\\\[1.2cm]\n\\end{center}',
+        r'\\chapter{(.+?)}',  # Regex to match \chapter{...}
+        r'\\begin{center}\n    {\\huge \\textbf{\\MakeUppercase{\1}}}\\\\[1.2cm]\n\\end{center}',  # Replacing with new format
         content
     )
+    # Remove any \label commands
+    modified_content = re.sub(r'\\label{.*?}', '', modified_content)
     # Insert the modified content into the LaTeX template
     new_content = r'''\documentclass[11pt,a4paper,oneside]{article} 
 
@@ -23,6 +25,7 @@ def modify_tex_file(content):
 ''' % modified_content
     return new_content
 
+
 # Function to compile a .tex file using pdflatex
 def compile_tex_file(file_path):
     try:
@@ -30,6 +33,7 @@ def compile_tex_file(file_path):
         print(f"Compiled {file_path} successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error compiling {file_path}: {e}")
+
 
 # Function to process 'sep-*.tex' files
 def process_sep_tex_files(root_project_path):
@@ -57,6 +61,7 @@ def process_sep_tex_files(root_project_path):
                 # Compile the new LaTeX file
                 compile_tex_file(new_file_path)
 
+
 # Function to remove unnecessary files after compilation
 def remove_auxiliary_files(root_project_path):
     extensions_to_remove = ['.aux', '.log', '.out']
@@ -69,6 +74,7 @@ def remove_auxiliary_files(root_project_path):
                     print(f"Removed file: {file_path}")
                 except OSError as e:
                     print(f"Error removing file {file_path}: {e}")
+
 
 # Main function
 def main():
@@ -95,6 +101,7 @@ def main():
     # If the '--rem' argument is provided, remove auxiliary files
     if args.rem:
         remove_auxiliary_files(root_project_path)
+
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
