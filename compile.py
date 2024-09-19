@@ -1,0 +1,101 @@
+import os
+import re
+import subprocess
+import argparse
+
+# Function to modify the content of the LaTeX file
+def modify_tex_file(content):
+    # Replace the \chapter command with the new format
+    modified_content = re.sub(
+        r'\\chapter{(.+?)}',
+        r'\\begin{center}\n    {\\huge \\textbf{\1}}\\\\[1.2cm]\n\\end{center}',
+        content
+    )
+    # Insert the modified content into the LaTeX template
+    new_content = r'''\documentclass[11pt,a4paper,oneside]{article} 
+
+\input{settings.tex}
+
+\begin{document}
+%s
+
+\end{document}
+''' % modified_content
+    return new_content
+
+# Function to compile a .tex file using pdflatex
+def compile_tex_file(file_path):
+    try:
+        subprocess.run(['pdflatex', file_path], check=True)
+        print(f"Compiled {file_path} successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error compiling {file_path}: {e}")
+
+# Function to process 'sep-*.tex' files
+def process_sep_tex_files(root_project_path):
+    for root, dirs, files in os.walk(root_project_path):
+        for file in files:
+            # Check if the file name starts with 'ch0' and ends with '.tex'
+            if file.startswith('ch0') and file.endswith('.tex'):
+                original_path = os.path.join(root, file)
+
+                # Read the content of the original .tex file
+                with open(original_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                # Modify the content of the .tex file
+                modified_content = modify_tex_file(content)
+
+                # Define the new file name with the 'sep-' prefix
+                new_file_name = 'sep-' + file
+                new_file_path = os.path.join(root_project_path, new_file_name)
+
+                # Write the modified content to the new file in the root directory
+                with open(new_file_path, 'w', encoding='utf-8') as f:
+                    f.write(modified_content)
+
+                # Compile the new LaTeX file
+                compile_tex_file(new_file_path)
+
+# Function to remove unnecessary files after compilation
+def remove_auxiliary_files(root_project_path):
+    extensions_to_remove = ['.aux', '.log', '.out']
+    for root, dirs, files in os.walk(root_project_path):
+        for file in files:
+            if any(file.endswith(ext) for ext in extensions_to_remove):
+                file_path = os.path.join(root, file)
+                try:
+                    os.remove(file_path)
+                    print(f"Removed file: {file_path}")
+                except OSError as e:
+                    print(f"Error removing file {file_path}: {e}")
+
+# Main function
+def main():
+    # Argument parser setup
+    parser = argparse.ArgumentParser(description="Compile LaTeX files")
+    parser.add_argument('--all', action='store_true', help="Compile 'sep-*.tex' files and 'ti-tretak.tex'")
+    parser.add_argument('--rem', action='store_true', help="Remove auxiliary files (*.aux, *.log, *.out) after compilation")
+    args = parser.parse_args()
+
+    # Get the current working directory (root of the project)
+    root_project_path = os.getcwd()
+
+    # Compile 'ti-tretak.tex'
+    ti_tretak_path = os.path.join(root_project_path, 'ti-tretak.tex')
+    if os.path.exists(ti_tretak_path):
+        compile_tex_file(ti_tretak_path)
+    else:
+        print("'ti-tretak.tex' not found in the project root.")
+
+    # If the '--all' argument is provided, process and compile 'sep-*.tex' files
+    if args.all:
+        process_sep_tex_files(root_project_path)
+
+    # If the '--rem' argument is provided, remove auxiliary files
+    if args.rem:
+        remove_auxiliary_files(root_project_path)
+
+# Run the main function when the script is executed
+if __name__ == '__main__':
+    main()

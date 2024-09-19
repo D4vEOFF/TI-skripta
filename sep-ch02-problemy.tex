@@ -1,0 +1,23 @@
+\documentclass[11pt,a4paper,oneside]{article} 
+
+\input{settings.tex}
+
+\begin{document}
+\begin{center}
+    {\huge \textbf{Algoritmicky těžké problémy}}\\[1.2cm]
+\end{center}\label{chap:tezke-problemy}
+
+Mnoho problémů lze v~informatice řešit pomocí polynomiálních algoritmů,~tzn. běžících v~čase $\bigO{n^k}$ pro nějaké prvné $k$. Např. problém řazení prvků v~poli jsme schopni řešit pomocí různých algoritmů,~např. \emph{BubbleSortem},~jehož časová složitost je v~nejhorším případě $\bigO{n^2}$,~kde $n$ je počet prvků pole. Podobně hledání nejkratší cesty v~grafu dokážeme řešit polynomiálně např. Dijkstrovým algoritmem,~který i~v~případě implementace pomocí pole běží v~čase $\bigO{n^2+m}$,~kde $n$ je počet vrcholů a~$m$ počet hran\footnote{Může se zdát matoucí,~že zde figurují dvě proměnné $n$ a~$m$ místo jedné,~ale počet hran je omezený (nejvýše mohou být každé dva vrcholy spojeny hranou) a~to výrazem $n(n+1)/2$,~což je polynom. Tedy všechny prezentované grafové algoritmy běží v~polynomiálním čase}. S~jistou rezervou lze říci,~že polynomiální algoritmy jsou prakticky dobře použitelné.
+
+Bohužel ne vždy je situace takto příznivá. Lze totiž narazit na problémy,~na které není známý polynomiální algoritmus a~o~některých dokonce s~jistotou víme,~že je v~polynomiálním čase řešit nelze. Dobrým příkladem jsou v~tomto ohledu např. \emph{Hanojské věže}\footnote{Pro zájemce podrobnější vysvětlení: \url{https://en.wikipedia.org/wiki/Tower_of_Hanoi}},~kde nejlepší algoritmus je exponenciální,~tj. $\bigO{2^n}$,~neboť je vždy potřeba exponenciálně mnoho kroků k~vyřešení.
+
+Nás budou zajímat ty nejdůležitější problémy z~této oblasti,~protože mezi nimi lze nalézt zajímavé vztahy,~a~posléze si uděláme menší ochutnávku z~problematiky \P{} a~\NP.
+
+\input{02-problemy/sections/s01-obecny-sat}
+\input{02-problemy/sections/s02-sat}
+\input{02-problemy/sections/s03-3sat.tex}
+\input{02-problemy/sections/s04-nzmna.tex}
+\input{02-problemy/sections/s05-klika.tex}
+\input{02-problemy/sections/s06-p-np.tex}
+
+\end{document}
