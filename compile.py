@@ -88,12 +88,25 @@ def remove_auxiliary_files(root_project_path):
                 except OSError as e:
                     print(f"Error removing file {file_path}: {e}")
 
+# Function to remove sep-*.tex files
+def remove_sep_tex_files(root_project_path):
+    for root, dirs, files in os.walk(root_project_path):
+        for file in files:
+            if file.startswith('sep-') and file.endswith('.tex'):
+                file_path = os.path.join(root, file)
+                try:
+                    os.remove(file_path)
+                    print(f"Removed sep file: {file_path}")
+                except OSError as e:
+                    print(f"Error removing sep file {file_path}: {e}")
+
 # Main function
 def main():
     # Argument parser setup
     parser = argparse.ArgumentParser(description="Compile LaTeX files")
     parser.add_argument('--all', action='store_true', help="Compile 'sep-*.tex' files and 'ti-skripta-3-rocnik.tex'")
     parser.add_argument('--rem', action='store_true', help="Remove auxiliary files (*.aux, *.log, *.out) after compilation")
+    parser.add_argument('--remsep', action='store_true', help="Remove sep-*.tex files after compilation")
     args = parser.parse_args()
 
     # Get the current working directory (root of the project)
@@ -116,6 +129,10 @@ def main():
     # If the '--rem' argument is provided, remove auxiliary files
     if args.rem:
         remove_auxiliary_files(root_project_path)
+    
+    # If the '--remsep' argument is provided, remove sep-*.tex files
+    if args.remsep:
+        remove_sep_tex_files(root_project_path)
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
