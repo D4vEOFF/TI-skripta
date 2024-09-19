@@ -110,3 +110,14 @@
 
 % Images
 \newcommand{\graphimgsize}{.75}
+
+% Chytrý křížový odkaz
+\NewDocumentCommand{\smartref}{ O{} O{} m m m }{%
+  \ifthenelse{\equal{#3}{true}}{%
+    % Pokud je true, zobrazí se odkaz
+    #1\ref{#4}#2% Zobrazí se prefix, odkaz a postfix
+  }{%
+    % Pokud není true, zobrazí se alternativní text
+    #5%
+  }%
+}

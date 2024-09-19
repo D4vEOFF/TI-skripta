@@ -3,6 +3,7 @@ import re
 import subprocess
 import argparse
 
+
 # Function to modify the content of the LaTeX file
 def modify_tex_file(content):
     # Replace the \chapter command with the new format and remove any \label
@@ -27,17 +28,20 @@ def modify_tex_file(content):
 ''' % modified_content
     return new_content
 
-# Function to compile a .tex file using pdflatex twice (to handle references)
+
+# Function to compile a .tex file twice using pdflatex
 def compile_tex_file(file_path):
     try:
-        # Run pdflatex twice to ensure proper referencing
+        # First compilation
         subprocess.run(['pdflatex', file_path], check=True)
+        # Second compilation to resolve references
         subprocess.run(['pdflatex', file_path], check=True)
         print(f"Compiled {file_path} successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error compiling {file_path}: {e}")
 
-# Function to process 'sep-*.tex' files
+
+# Function to process 'sep-*.tex' files and remove duplicates from subfolders
 def process_sep_tex_files(root_project_path):
     for root, dirs, files in os.walk(root_project_path):
         for file in files:
@@ -52,16 +56,29 @@ def process_sep_tex_files(root_project_path):
                 # Modify the content of the .tex file
                 modified_content = modify_tex_file(content)
 
-                # Define the new file name with the 'sep-' prefix
+                # Define the new file name with the 'sep-' prefix in the root directory
                 new_file_name = 'sep-' + file
-                new_file_path = os.path.join(root, new_file_name)
+                new_file_path = os.path.join(root_project_path, new_file_name)
 
                 # Write the modified content to the new file in the root directory
                 with open(new_file_path, 'w', encoding='utf-8') as f:
                     f.write(modified_content)
 
-                # Compile the new LaTeX file twice for referencing
+                # Compile the new LaTeX file
                 compile_tex_file(new_file_path)
+
+    # Remove any 'sep-*.tex' files from subdirectories
+    for root, dirs, files in os.walk(root_project_path):
+        for file in files:
+            if file.startswith('sep-') and file.endswith('.tex') and root != root_project_path:
+                # File is in a subdirectory, remove it
+                file_to_remove = os.path.join(root, file)
+                try:
+                    os.remove(file_to_remove)
+                    print(f"Removed duplicate file: {file_to_remove}")
+                except OSError as e:
+                    print(f"Error removing file {file_to_remove}: {e}")
+
 
 # Function to remove unnecessary files after compilation
 def remove_auxiliary_files(root_project_path):
@@ -76,6 +93,7 @@ def remove_auxiliary_files(root_project_path):
                 except OSError as e:
                     print(f"Error removing file {file_path}: {e}")
 
+
 # Main function
 def main():
     # Argument parser setup
@@ -87,10 +105,10 @@ def main():
     # Get the current working directory (root of the project)
     root_project_path = os.getcwd()
 
-    # Compile 'ti-skripta-3-rocnik.tex'
-    skripta_file = os.path.join(root_project_path, 'ti-skripta-3-rocnik.tex')
-    if os.path.exists(skripta_file):
-        compile_tex_file(skripta_file)
+    # Compile 'ti-skripta-3-rocnik.tex' (instead of 'ti-tretak.tex')
+    ti_skripta_path = os.path.join(root_project_path, 'ti-skripta-3-rocnik.tex')
+    if os.path.exists(ti_skripta_path):
+        compile_tex_file(ti_skripta_path)
     else:
         print("'ti-skripta-3-rocnik.tex' not found in the project root.")
 
@@ -101,6 +119,7 @@ def main():
     # If the '--rem' argument is provided, remove auxiliary files
     if args.rem:
         remove_auxiliary_files(root_project_path)
+
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
