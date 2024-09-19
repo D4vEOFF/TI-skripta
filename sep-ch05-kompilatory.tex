@@ -2,7 +2,13 @@
 
 \input{settings.tex}
 
+\ifcsname showrefs\endcsname
+\else
+    \NewDocumentCommand{\showrefs}{}{false}
+\fi
+
 \begin{document}
+
 \begin{center}
     {\huge \textbf{\MakeUppercase{Kompilátory}}}\\[1.2cm]
 \end{center}

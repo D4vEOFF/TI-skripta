@@ -3,7 +3,6 @@ import re
 import subprocess
 import argparse
 
-
 # Function to modify the content of the LaTeX file
 def modify_tex_file(content):
     # Replace the \chapter command with the new format and remove any \label
@@ -21,13 +20,18 @@ def modify_tex_file(content):
 
 \input{settings.tex}
 
+\ifcsname showrefs\endcsname
+\else
+    \NewDocumentCommand{\showrefs}{}{false}
+\fi
+
 \begin{document}
+
 %s
 
 \end{document}
 ''' % modified_content
     return new_content
-
 
 # Function to compile a .tex file twice using pdflatex
 def compile_tex_file(file_path):
@@ -40,9 +44,10 @@ def compile_tex_file(file_path):
     except subprocess.CalledProcessError as e:
         print(f"Error compiling {file_path}: {e}")
 
+# Function to process 'sep-*.tex' files, copying them into root but not compiling yet
+def process_and_copy_sep_tex_files(root_project_path):
+    copied_files = []  # List to store the copied files for later compilation
 
-# Function to process 'sep-*.tex' files and remove duplicates from subfolders
-def process_sep_tex_files(root_project_path):
     for root, dirs, files in os.walk(root_project_path):
         for file in files:
             # Check if the file name starts with 'ch0' and ends with '.tex'
@@ -64,21 +69,11 @@ def process_sep_tex_files(root_project_path):
                 with open(new_file_path, 'w', encoding='utf-8') as f:
                     f.write(modified_content)
 
-                # Compile the new LaTeX file
-                compile_tex_file(new_file_path)
+                # Add the new file path to the list of copied files for later compilation
+                copied_files.append(new_file_path)
 
-    # Remove any 'sep-*.tex' files from subdirectories
-    for root, dirs, files in os.walk(root_project_path):
-        for file in files:
-            if file.startswith('sep-') and file.endswith('.tex') and root != root_project_path:
-                # File is in a subdirectory, remove it
-                file_to_remove = os.path.join(root, file)
-                try:
-                    os.remove(file_to_remove)
-                    print(f"Removed duplicate file: {file_to_remove}")
-                except OSError as e:
-                    print(f"Error removing file {file_to_remove}: {e}")
-
+    # Return the list of copied files to be compiled later
+    return copied_files
 
 # Function to remove unnecessary files after compilation
 def remove_auxiliary_files(root_project_path):
@@ -92,7 +87,6 @@ def remove_auxiliary_files(root_project_path):
                     print(f"Removed file: {file_path}")
                 except OSError as e:
                     print(f"Error removing file {file_path}: {e}")
-
 
 # Main function
 def main():
@@ -112,14 +106,16 @@ def main():
     else:
         print("'ti-skripta-3-rocnik.tex' not found in the project root.")
 
-    # If the '--all' argument is provided, process and compile 'sep-*.tex' files
+    # If the '--all' argument is provided, process and copy 'sep-*.tex' files, then compile them all
     if args.all:
-        process_sep_tex_files(root_project_path)
+        copied_files = process_and_copy_sep_tex_files(root_project_path)  # Copy files
+        # Now compile all copied files
+        for file_path in copied_files:
+            compile_tex_file(file_path)
 
     # If the '--rem' argument is provided, remove auxiliary files
     if args.rem:
         remove_auxiliary_files(root_project_path)
-
 
 # Run the main function when the script is executed
 if __name__ == '__main__':
