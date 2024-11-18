@@ -150,7 +150,9 @@ Hned se nabízí námitka,~že nová formule $\psi$ není v~CNF,~avšak stačí 
     a\iff b=(a\implies b)\land(b\implies a)=(\neg a\lor b)\land(\neg b\lor a).
 \end{equation}
 
-Nové proměnné $y_1,y_2,\dots,y_n$ v~podstatě indikují,~jaké hodnoty nabývá daný logický výraz v~původní formuli pro nějaké konkrétní ohodnocení původních proměnných. Chceme-li tedy zjistit,~jaké logické hodnoty nabývá daná formule $\varphi$ pro určité logické hodnoty jejích proměnných,~stačí novým proměnným přiřadit logickou hodnotu podle toho,~jaké hodnoty nabývá výraz $\varphi_i$,~který reprezentují. Přesně proto jsme ostatně konstruovali podformule $y_i\iff\varphi_i$.
+Podformule $\varphi_1,\varphi_2,\dots,\varphi_n$ lze ještě dále přepsat pomocí standardních logických identit. Pro jednoduchost to zde však řešit nebudeme.
+
+Nové proměnné $y_1,y_2,\dots,y_n$ indikují,~jaké hodnoty nabývá daný logický výraz v~původní formuli pro nějaké konkrétní ohodnocení původních proměnných. Chceme-li tedy zjistit,~jaké logické hodnoty nabývá daná formule $\varphi$ pro určité logické hodnoty jejích proměnných,~stačí novým proměnným přiřadit logickou hodnotu podle toho,~jaké hodnoty nabývá výraz $\varphi_i$,~který reprezentují. Přesně proto jsme ostatně konstruovali podformule $y_i\iff\varphi_i$.
 
 Pojďme se podívat na konkrétní příklad.
 \begin{example}
@@ -165,15 +167,15 @@ Pojďme se podívat na konkrétní příklad.
     \end{itemize}
     Pro ně si zřídíme nové proměmnné $y_1,y_2,y_3$ a~$y_4$. Tzn. do nové formule $\beta$ přidáme výrazy
     \begin{itemize}
-        \item $y_1\iff((p\lor q)\land r)\implies \neg p$,
-        \item $y_2\iff(p\lor q)\land r$,
-        \item $y_3\iff p\lor q$
-        \item a~$y_4\iff\neg p$.
+        \item $y_4\iff\neg p$,
+        \item $y_3\iff(p\lor q)$,
+        \item $y_2\iff(y_3\land r)$
+        \item a $y_1\iff(y_2\implies y_4)$.
     \end{itemize}
     Výsledná formule bude tedy vypadat následovně:
     \begin{align*}
-        \beta(p,q,r,y_1,y_2,y_3,y_4)&=y_1\land(y_1\iff((p\lor q)\land r)\implies \neg p)\\
-        &\land(y_2\iff((p\lor q)\land r))\\
+        \beta(p,q,r,y_1,y_2,y_3,y_4)&=y_1\land(y_1\iff(y_2\implies y_4))\\
+        &\land(y_2\iff(y_3\land r))\\
         &\land(y_3\iff (p\lor q))\\
         &\land(y_4\iff\neg p).
     \end{align*}
@@ -185,12 +187,12 @@ Pojďme se podívat na konkrétní příklad.
     \begin{itemize}
         \item $y_4=0$,~protože $\neg p=0$,
         \item $y_3=1$,~protože $p\lor q=1$,
-        \item $y_2=0$,~protože $(p\lor q)\land r=0$,
-        \item a~$y_1=1$,~protože $((p\lor q)\land r)\implies \neg p=1$.
+        \item $y_2=0$,~protože $y_3\land r=0$,
+        \item a~$y_1=1$,~protože $y_2\implies \neg p=1$.
     \end{itemize}
     Nyní můžeme vyhodnotit novou formuli $\beta$:
     \begin{align*}
-        \beta(1,0,0,1,0,1,0)&=1\land(1\iff((1\lor 0)\land 0)\implies\neg 1)\land(0\iff((1\lor 0)\land 0))\\
+        \beta(1,0,0,1,0,1,0)&=1\land(1\iff(0\implies\neg 1))\land(0\iff(1\land 0))\\
         &\land(1\iff(1\lor 0))\land(0\iff\neg 1)\\
         &=1\land 1\land 1\land 1\land 1=1.
     \end{align*}
