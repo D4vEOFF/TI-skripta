@@ -32,7 +32,7 @@ Jednotlivé části mají následující úlohy:
 
 Uživatel obvykle spustí jediný ovladač překladače,~například \texttt{gcc},~který jednotlivé nástroje zavolá za něj. Rozdělení je však důležité při hledání chyb: chyba kompilace,~chybějící symbol při linkování a~chyba vzniklá až za běhu programu jsou tři různé situace.
 
-\subsection{Strojový kód a~mezikód}
+\paragraph{Strojový kód a~mezikód.}
 
 \emph{Strojový kód} obsahuje instrukce konkrétního procesoru. Procesor jej může vykonávat přímo,~ale stejný soubor zpravidla nelze přenést na počítač s~jinou instrukční sadou nebo jiným operačním systémem.
 
@@ -62,7 +62,7 @@ První tři fáze tvoří \emph{přední část překladače} (anglicky \emph{fr
 
 \notebox{Jednotlivé fáze nemusí odpovídat samostatným programům ani jedinému průchodu zdrojovým textem. Jde především o~logické rozdělení odpovědností. Praktický překladač může několik fází spojit nebo některou z~nich provést vícekrát.}
 
-\subsection{Průběžný příklad}
+\paragraph{Průběžný příklad.}
 
 V~dalších sekcích vytvoříme malý jazyk s~číselnými výrazy,~deklarací proměnné příkazem \texttt{let} a~výpisem příkazem \texttt{print}. Program
 \begin{verbatim}

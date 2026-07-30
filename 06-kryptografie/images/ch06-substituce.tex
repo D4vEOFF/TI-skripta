@@ -1,10 +1,10 @@
 \begin{tikzpicture}[
-    font=\small,
+    font=\normalsize,
     cell/.style={draw=black!55, rounded corners=.5mm,
                  minimum width=6.5mm, minimum height=6.5mm, inner sep=0pt},
     arrow/.style={-{Latex}, draw=black!60, line width=.6pt}
 ]
-    \node[font=\small\bfseries] at (-3.8,1.65) {permutace znaků};
+    \node[font=\bfseries] at (-3.8,1.65) {permutace znaků};
     \foreach \x/\letter in {0/A,1/B,2/C,3/D,4/E,5/F,6/G,7/H}{
         \node[cell, fill=black!4] (u\x) at ({-6.25+.7*\x},.8) {\letter};
     }
@@ -16,7 +16,7 @@
     }
 
     \draw[draw=black!35] (-.25,-1.3) -- (-.25,1.55);
-    \node[font=\small\bfseries] at (3.4,1.65) {četnosti se pouze přejmenují};
+    \node[font=\bfseries] at (3.4,1.65) {četnosti se pouze přejmenují};
 
     \foreach \x/\h/\lab in {0/1.7/E,1/1.2/A,2/.9/T,3/.55/Z}{
         \draw[fill=blue!22, draw=blue!65!black]

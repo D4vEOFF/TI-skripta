@@ -31,7 +31,7 @@ Prvních $r$ bitů tvoří část \emph{rate}, která komunikuje se vstupem a~v�
     \mapping{f}{\set{0,1}^{b}}{\set{0,1}^{b}}.
 \]
 
-\subsection{Fáze absorbing}
+\paragraph{Fáze absorbing.}
 
 Zprávu $m$ nejprve jednoznačně doplníme předepsaným paddingem a~rozdělíme na $r$-bitové bloky
 \[
@@ -46,7 +46,7 @@ Začneme nulovým stavem $S_0=0^b$. Každý blok prodloužíme o~$c$ nulových b
 \]
 Řetězec $p_i0^c$ má délku $r+c=b$, takže jej lze XORovat s~celým stavem. Vstupní blok ovlivní po aplikaci permutace obě části stavu.
 
-\subsection{Fáze squeezing}
+\paragraph{Fáze squeezing.}
 
 Po zpracování všech bloků čteme bity z~části rate výsledného stavu $S_t$. Potřebujeme-li více než $r$ výstupních bitů, znovu použijeme permutaci $f$ a~z~nového stavu odebereme další část rate. Proces opakujeme, dokud nemáme požadovanou délku otisku.
 

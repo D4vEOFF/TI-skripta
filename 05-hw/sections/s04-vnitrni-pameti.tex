@@ -47,7 +47,7 @@ Označení \emph{random access} neznamená, že by paměť vracela náhodná dat
 
 Na obrázku~\ref{fig:hw-ram-linearni} jsou na adresách $0$ až $7$ uloženy osmibitové hodnoty zapsané v~šestnáctkové soustavě. Chce-li procesor přečíst hodnotu z~adresy $3$, předá tuto adresu paměti a~obdrží uloženou hodnotu \texttt{00}. Větší datový objekt, například 32bitové celé číslo, obvykle zabírá několik sousedních bajtů. Instrukční sada a~program pak určují, jak se mají tyto bajty společně interpretovat.
 
-\subsection{Fyzické uspořádání RAM}
+\paragraph{Fyzické uspořádání RAM.}
 
 Lineární posloupnost adres je rozhraním určeným pro procesor a~program. Uvnitř paměťového čipu nejsou buňky nutně uspořádány v~jediné řadě, ale tvoří matice řádků a~sloupců. Část adresy se použije k~výběru řádku a~další část k~výběru sloupce. Řádkový a~sloupcový dekodér tak určí buňku nebo skupinu buněk, s~nimiž se má pracovat.
 

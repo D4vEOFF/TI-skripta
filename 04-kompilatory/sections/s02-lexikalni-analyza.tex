@@ -59,7 +59,7 @@ Pro každý druh tokenu můžeme sestrojit konečný automat. Jejich počátečn
     \label{fig:lexer-automaty}
 \end{figure}
 
-\subsection{Nejdelší lexém a~priorita}
+\paragraph{Nejdelší lexém a~priorita.}
 
 Při čtení vstupu může automat projít přijímajícím stavem a~později přijmout ještě delší část. Lexer proto obvykle používá pravidlo \emph{nejdelšího lexému}: pokračuje,~dokud lze získat delší platný lexém,~a~vrátí poslední přijatou možnost. Ze vstupu \texttt{abc123} tak vznikne jeden identifikátor,~nikoliv šest jednopísmenných tokenů.
 
@@ -67,7 +67,7 @@ Pokud stejný lexém vyhovuje více pravidlům,~rozhodne jejich priorita. Slovo 
 
 \warningbox{Lexer nerozhoduje,~zda tokeny tvoří správný program. Posloupnost \texttt{let + ; 7} lze bez problému rozdělit na tokeny,~ale její syntaktickou chybu odhalí až parser.}
 
-\subsection{Implementace tokenů}
+\paragraph{Implementace tokenů.}
 
 V~našem jazyce použijeme dva druhy příkazů a~výrazy s~identifikátory,~čísly a~čtyřmi aritmetickými operátory. Potřebujeme také tokeny pro přiřazení,~středník a~závorky. Jejich druhy a~samotný token zachycuje program \ref{lst:tokens}.
 
@@ -76,7 +76,7 @@ V~našem jazyce použijeme dva druhy příkazů a~výrazy s~identifikátory,~č�
     label={lst:tokens}
 ]{04-kompilatory/code/mini_compiler/tokens.py}
 
-\subsection{Implementace lexeru}
+\paragraph{Implementace lexeru.}
 
 Lexer v~programu \ref{lst:lexer} prochází vstup zleva doprava. Čísla a~identifikátory čte pomocí samostatných metod,~jednoznakové symboly vyhledává ve slovníku. Bílé znaky ignoruje a~text od \texttt{//} do konce řádku považuje za komentář.
 

@@ -27,7 +27,7 @@ Mezi běžné lokální úpravy patří:
 
 \warningbox{Transformace musí respektovat přesnou sémantiku jazyka. Nahrazení $0\cdot E$ nulou například není bezpečné,~pokud vyhodnocení $E$ může mít vedlejší účinek nebo skončit chybou.}
 
-\subsection{Výpočet konstant v~AST}
+\paragraph{Výpočet konstant v~AST.}
 
 Optimalizátor v~programu \ref{lst:optimizer} prochází strom zdola nahoru. Jsou-li oba operandy binární operace číselné konstanty,~nahradí celý podstrom jediným číselným vrcholem. Dělení nulou záměrně ponechá beze změny,~aby příslušná chyba vznikla až při vykonání programu.
 

@@ -5,9 +5,9 @@
 \begin{definition}\label{def:krypto-hash}
     \emph{Hešovací funkce} je zobrazení
     \[
-        \mapping{H_n}{\set{0,1}^{*}}{\set{0,1}^{n}}.
+        \mapping{\mathcal{H}_n}{\set{0,1}^{*}}{\set{0,1}^{n}}.
     \]
-    Pro $x\in\set{0,1}^{*}$ nazýváme hodnotu $H_n(x)$ \emph{hash} nebo \emph{otisk} řetězce $x$.
+    Pro $x\in\set{0,1}^{*}$ nazýváme hodnotu $\mathcal{H}_n(x)$ \emph{hash} nebo \emph{otisk} řetězce $x$.
 \end{definition}
 
 Index $n$ připomíná délku výstupu. Ať je vstupem krátké heslo, rozsáhlý dokument nebo obraz disku, výsledkem je vždy právě $n$ bitů. Kryptografická hešovací funkce má být rychle vyčíslitelná a~malá změna vstupu má typicky změnit velkou část výstupních bitů. Tato citlivost se často označuje jako lavinový efekt.
@@ -18,7 +18,7 @@ Index $n$ připomíná délku výstupu. Ať je vstupem krátké heslo, rozsáhl�
 
 Množina $\set{0,1}^{*}$ je nekonečná, zatímco množina $\set{0,1}^{n}$ obsahuje pouze $2^n$ prvků. Z~Dirichletova principu proto plyne, že existují různá data $x\neq y$ se stejným otiskem:
 \[
-    H_n(x)=H_n(y).
+    \mathcal{H}_n(x)=\mathcal{H}_n(y).
 \]
 Takovou dvojici nazýváme \emph{kolize}.
 
@@ -90,7 +90,7 @@ K~pravděpodobnosti blízké jedné polovině stačí jen o~konstantní faktor v
 
 Uvažujme rodinu hešovacích funkcí
 \[
-    \mapping{H_n}{\set{0,1}^{*}}{\set{0,1}^{n}}
+    \mapping{\mathcal{H}_n}{\set{0,1}^{*}}{\set{0,1}^{n}}
 \]
 a~pravděpodobnostní polynomiální algoritmus $\mathcal A$, který představuje záškodníka.
 
@@ -99,7 +99,7 @@ Záškodník dostane otisk náhodně zvoleného vstupu a~snaží se najít libov
 \[
     \Pr_{x\in\set{0,1}^{n}}
     \left[
-        H_n\bigl(\mathcal A(H_n(x))\bigr)=H_n(x)
+        \mathcal{H}_n\bigl(\mathcal A(\mathcal{H}_n(x))\bigr)=\mathcal{H}_n(x)
     \right]
     \leqslant\varepsilon(n).
 \]
@@ -111,7 +111,7 @@ Záškodník se snaží vytvořit libovolné dva různé vstupy se stejným otis
     \Pr\left[
         \begin{array}{c}
             \mathcal A\text{ vypíše }(x,y),\\
-            x\neq y\ \text{a}\ H_n(x)=H_n(y)
+            x\neq y\ \text{a}\ \mathcal{H}_n(x)=\mathcal{H}_n(y)
         \end{array}
     \right]
     \leqslant\varepsilon(n),
@@ -125,10 +125,10 @@ kde pravděpodobnost počítáme přes náhodné volby algoritmu $\mathcal A$.
     \label{fig:krypto-hash-vlastnosti}
 \end{figure}
 
-Tyto požadavky nelze zaměňovat s~pouhou malou pravděpodobností, že se srazí dva náhodně vybrané vstupy. Odolnost vůči kolizím se ptá na aktivního záškodníka, který vstupy volí záměrně a~může využít strukturu algoritmu $H_n$.
+Tyto požadavky nelze zaměňovat s~pouhou malou pravděpodobností, že se srazí dva náhodně vybrané vstupy. Odolnost vůči kolizím se ptá na aktivního záškodníka, který vstupy volí záměrně a~může využít strukturu algoritmu $\mathcal{H}_n$.
 
-\subsection{Vztah k~jednosměrným funkcím}
+\paragraph{Vztah k~jednosměrným funkcím.}
 
-Odolnost vůči nalezení vzoru připomíná definici jednosměrné funkce: dopředný výpočet $H_n(x)$ je rychlý, ale z~výstupu má být těžké získat libovolný odpovídající vstup. Bezpečná hešovací funkce navíc požaduje obtížné hledání kolizí. Ne každá jednosměrná funkce proto musí být vhodnou hešovací funkcí a~ne každá rychlá funkce s~krátkým výstupem splňuje kryptografické požadavky.
+Odolnost vůči nalezení vzoru připomíná definici jednosměrné funkce: dopředný výpočet $\mathcal{H}_n(x)$ je rychlý, ale z~výstupu má být těžké získat libovolný odpovídající vstup. Bezpečná hešovací funkce navíc požaduje obtížné hledání kolizí. Ne každá jednosměrná funkce proto musí být vhodnou hešovací funkcí a~ne každá rychlá funkce s~krátkým výstupem splňuje kryptografické požadavky.
 
 \tipbox{Hešovací funkce není šifrování bez klíče. Šifrování je navrženo tak, aby oprávněný příjemce mohl data obnovit. U~hešování se žádná dešifrovací operace nepředpokládá a~ztráta informace je záměrná.}

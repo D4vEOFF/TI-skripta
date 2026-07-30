@@ -17,7 +17,7 @@ Při kreslení někdy kvůli přehlednosti vynecháme \emph{odpadní stav}: vše
 
 Automat zakreslujeme jako orientovaný graf. Stavy jsou vrcholy,~přechody hrany s~popisky. Počáteční stav označíme šipkou vedoucí \uv{odnikud} a~přijímající stavy dvojitým okrajem.
 
-\subsection{Výpočet automatu}
+\paragraph{Výpočet automatu.}
 
 Na začátku se automat nachází ve stavu $q_0$. Vstupní slovo čte zleva doprava. Nachází-li se ve stavu $q$ a~čte znak $a$,~přejde do stavu $\delta(q,a)$. Po přečtení celého slova přijme právě tehdy,~když skončil ve stavu z~$F$.
 
@@ -39,7 +39,7 @@ Na začátku se automat nachází ve stavu $q_0$. Vstupní slovo čte zleva dopr
     Slovo $0110$ přijme,~zatímco $001$ odmítne už při čtení druhého znaku.
 \end{example}
 
-\subsection{Složitější příklady}
+\paragraph{Složitější příklady.}
 
 \begin{example}[Slova končící na $01$]\label{ex:dfa-suffix}
     Nyní už nestačí zkontrolovat první dva znaky. Automat si musí průběžně pamatovat nejdelší konec dosud přečtené části,~který by mohl být začátkem slova $01$:

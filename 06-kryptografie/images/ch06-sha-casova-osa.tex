@@ -1,5 +1,5 @@
 \begin{tikzpicture}[
-    font=\small,
+    font=\normalsize,
     >=Latex,
     point/.style={circle, draw=blue!65!black, fill=blue!18,
                   minimum size=6mm, inner sep=0pt},
@@ -14,7 +14,7 @@
         5/2015/SHA-3/Keccak
     }{
         \node[point] (p\x) at (\x,0) {};
-        \node[above=2mm of p\x, font=\small\bfseries] {\year};
+        \node[above=2mm of p\x, font=\bfseries] {\year};
         \node[label, below=5mm of p\x] {\name\\\desc};
     }
 \end{tikzpicture}

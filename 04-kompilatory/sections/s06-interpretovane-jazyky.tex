@@ -13,7 +13,7 @@ Dosud jsme předpokládali,~že překladač vytvoří cílový program a~ten se 
 
 \warningbox{Přesnější je mluvit o~kompilované nebo interpretované \emph{implementaci},~nikoliv o~neměnné vlastnosti jazyka. Tentýž jazyk může mít klasický překladač,~interpret i~běhové prostředí kombinující více přístupů.}
 
-\subsection{Výhody a~nevýhody interpretace}
+\paragraph{Výhody a~nevýhody interpretace.}
 
 Interpretované vykonávání usnadňuje přenos programu mezi platformami: stačí,~aby na nich existoval odpovídající interpret. Často také zjednodušuje interaktivní práci,~ladění a~rychlé úpravy programu.
 
@@ -43,7 +43,7 @@ U~binární operace leží na vrcholu zásobníku pravý operand a~pod ním lev�
 
 Tento přístup kombinuje přenositelnost mezikódu s~rychlejším vykonáváním často používaných částí. JIT navíc zná skutečné chování programu za běhu,~a~může tedy využít informace,~které statický překladač neměl. Platí za to časem a~pamětí spotřebovanými na překlad během spuštění. Není proto automaticky nejlepší pro každý program. Známými příklady běhových prostředí využívajících JIT jsou virtuální stroj Javy,~prostředí .NET a~moderní implementace JavaScriptu.
 
-\subsection{Celý překlad}
+\subsubsection*{Celý překlad}
 
 Program \ref{lst:main_compiler} spojuje všechny vytvořené části. Zdrojový text projde lexerem,~parserem,~sémantickou kontrolou,~výpočtem konstant a~generátorem bajtkódu. Nakonec jej vykoná virtuální stroj.
 

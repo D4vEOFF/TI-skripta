@@ -1,40 +1,41 @@
 \begin{tikzpicture}[
-    font=\small,
+    font=\normalsize,
     >=Latex,
     box/.style={rounded corners=1mm, draw=black!55, fill=black!4,
-                minimum width=1.8cm, minimum height=9mm, align=center},
+                minimum width=2cm, minimum height=10mm, align=center},
     function/.style={rounded corners=1mm, draw=orange!75!black, fill=orange!18,
-                     minimum width=1.2cm, minimum height=9mm},
+                     minimum width=1.4cm, minimum height=10mm},
     flow/.style={-{Latex}, draw=black!65, line width=.8pt},
     hard/.style={-{Latex}, dashed, draw=red!75!black, line width=.9pt}
 ]
-    \node[font=\small\bfseries] at (-3.7,2) {nalezení vzoru};
-    \node[box] (h) at (-5.7,.65) {daný otisk\\\(h\)};
-    \node[inner sep=0pt] (a1) at (-3.7,.65)
+    \node[font=\bfseries] at (-3.7,2.35) {nalezení vzoru};
+    \node[box] (h) at (-5.7,.8) {daný otisk\\\(h\)};
+    \node[inner sep=0pt] (a1) at (-3.7,.8)
         {\includegraphics[height=1.1cm]{06-kryptografie/images/hacker-icon.pdf}};
-    \node[box] (xp) at (-1.5,.65) {hledané\\\(x'\)};
-    \node[function] (H1) at (-3.7,-1) {\(H_n\)};
+    \node[box] (xp) at (-1.5,.8) {hledané\\\(x'\)};
+    \node[function] (H1) at (-5.7,-1.2) {\(\mathcal{H}_n\)};
     \draw[hard] (h) -- (a1);
     \draw[hard] (a1) -- (xp);
-    \draw[flow] (xp.south) -- (H1.east);
-    \draw[flow] (H1.west) to[bend right=30] (h.south);
+    \draw[flow] (xp.south) to[out=-90,in=0] (H1.east);
+    \draw[flow] (H1.north) -- (h.south);
 
-    \draw[draw=black!35] (0,-2) -- (0,2.3);
+    \draw[draw=black!35] (0,-2.15) -- (0,2.55);
 
-    \node[font=\small\bfseries] at (3.7,2) {nalezení kolize};
-    \node[inner sep=0pt] (a2) at (1.2,.4)
+    \node[font=\bfseries] at (3.7,2.35) {nalezení kolize};
+    \node[inner sep=0pt] (a2) at (1.15,.5)
         {\includegraphics[height=1.1cm]{06-kryptografie/images/hacker-icon.pdf}};
     \node[box] (x) at (3,.95) {\(x\)};
-    \node[box] (y) at (3,-.45) {\(y\neq x\)};
-    \node[function] (Hx) at (4.8,.95) {\(H_n\)};
-    \node[function] (Hy) at (4.8,-.45) {\(H_n\)};
-    \node[box] (outx) at (6.5,.95) {\(h\)};
-    \node[box] (outy) at (6.5,-.45) {\(h\)};
+    \node[box] (y) at (3,-.55) {\(y\neq x\)};
+    \node[function] (Hx) at (4.9,.95) {\(\mathcal{H}_n\)};
+    \node[function] (Hy) at (4.9,-.55) {\(\mathcal{H}_n\)};
+    \node[box] (outx) at (6.8,.95) {\(h\)};
+    \node[box] (outy) at (6.8,-.55) {\(h\)};
     \draw[hard] (a2) -- (x);
     \draw[hard] (a2) -- (y);
     \draw[flow] (x) -- (Hx);
     \draw[flow] (y) -- (Hy);
     \draw[flow] (Hx) -- (outx);
     \draw[flow] (Hy) -- (outy);
-    \node[text=red!75!black] at (4.8,-1.55) {\(H_n(x)=H_n(y)\)};
+    \node[text=red!75!black] at (4.9,-1.7)
+        {\(\mathcal{H}_n(x)=\mathcal{H}_n(y)\)};
 \end{tikzpicture}

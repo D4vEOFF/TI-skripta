@@ -63,34 +63,92 @@ Podmínka neříká, že jsou obě rozdělení stejná. Výstupů $G$ může bý
 
 \tipbox{Pseudonáhodnost není vlastnost jediného konkrétního řetězce. Je to vlastnost způsobu generování a~říká, že celé rozdělení výstupů je pro efektivního pozorovatele nerozlišitelné od rovnoměrného rozdělení.}
 
-\subsection{Důsledek rovnosti tříd P a~NP}
+\subsection{Žádné pseudonáhodné generátory při \texorpdfstring{$\classP=\classNP$}{P = NP}}
 
-Pro pevný generátor $G$ uvažujme množinu jeho možných výstupů
-\[
-    L_G=
-    \set{
-        z\in\set{0,1}^{\ell(n)}
-        \mid
-        \text{existuje }s\in\set{0,1}^{n}\text{ takové, že }G(s)=z
-    }.
-\]
-Jazyk $L_G$ patří do $\classNP$: jako certifikát stačí předložit seed $s$ a~v~polynomiálním čase ověřit rovnost $G(s)=z$. Kdyby platilo $\classP=\classNP$, mohli bychom členství v~$L_G$ rozhodovat v~polynomiálním čase.
+\begin{proposition}
+    Jestliže $\classP=\classNP$, pak neexistuje žádný pseudonáhodný generátor.
+\end{proposition}
 
-Rozlišovač $\mathcal D$ by potom přijal právě řetězce z~$L_G$. Pro výstup $G(s)$ by přijímal vždy:
-\[
-    \Pr_{s\in\set{0,1}^{n}}[\mathcal D(G(s))=1]=1.
-\]
-Rovnoměrně náhodný řetězec délky $\ell(n)$ však patří do obrazu $G$ s~pravděpodobností nejvýše
-\[
-    \frac{2^n}{2^{\ell(n)}}=2^{n-\ell(n)}\leqslant\frac{1}{2}.
-\]
-Rozlišovací výhoda by proto byla alespoň $\frac{1}{2}$, což není zanedbatelná hodnota. Dostáváme tedy:
-\[
-    \text{existuje PRG}
-    \quad\Longrightarrow\quad
-    \classP\neq\classNP.
-\]
-Opačná implikace z~pouhé nerovnosti $\classP\neq\classNP$ neplyne.
+\begin{proof}[Důkaz]
+    Předpokládejme, že $\classP=\classNP$, a~vezměme libovolnou polynomiálně vyčíslitelnou funkci
+    \[
+        \mapping{G}{\set{0,1}^{n}}{\set{0,1}^{\ell(n)}},
+        \qquad
+        \ell(n)>n.
+    \]
+    Pro bezpečnostní parametr $n$ označme množinu všech jejích možných výstupů
+    \[
+        L_{G,n}
+        =
+        \set{
+            z\in\set{0,1}^{\ell(n)}
+            \mid
+            \text{existuje }s\in\set{0,1}^{n}\text{ takové, že }G(s)=z
+        }.
+    \]
+    Ověřit, že $z\in L_{G,n}$, lze v~nedeterministickém polynomiálním čase: certifikátem je seed
+    $s\in\set{0,1}^{n}$ a~ověřovatel pouze spočítá $G(s)$ a~porovná výsledek se~$z$. Při předpokladu
+    $\classP=\classNP$ proto existuje deterministický polynomiální algoritmus $\mathcal D$, který
+    rozhodne, zda $z\in L_{G,n}$:
+    \[
+        \mathcal D(z)=1
+        \quad\Longleftrightarrow\quad
+        z\in L_{G,n}.
+    \]
+
+    Pokud rozlišovač dostane řetězec $G(s)$ vytvořený z~náhodného seedu, přijme jej vždy:
+    \[
+        \Pr_{s\in\set{0,1}^{n}}
+        \bigl[\mathcal D(G(s))=1\bigr]
+        =
+        1.
+    \]
+    Množina $L_{G,n}$ obsahuje nejvýše $2^n$ řetězců, protože existuje pouze $2^n$ seedů. Pro
+    rovnoměrně náhodný řetězec $z\in\set{0,1}^{\ell(n)}$ tedy platí
+    \[
+        \Pr_{z\in\set{0,1}^{\ell(n)}}
+        \bigl[\mathcal D(z)=1\bigr]
+        =
+        \frac{\sizeof{L_{G,n}}}{2^{\ell(n)}}
+        \leqslant
+        \frac{2^n}{2^{\ell(n)}}
+        =
+        2^{n-\ell(n)}.
+    \]
+    Celá rozlišovací výhoda algoritmu $\mathcal D$ je proto
+    \begin{align*}
+        &
+        \left|
+        \Pr_{z\in\set{0,1}^{\ell(n)}}
+        \bigl[\mathcal D(z)=1\bigr]
+        -
+        \Pr_{s\in\set{0,1}^{n}}
+        \bigl[\mathcal D(G(s))=1\bigr]
+        \right|
+        \\[1mm]
+        &=
+        \left|
+        \frac{\sizeof{L_{G,n}}}{2^{\ell(n)}}-1
+        \right|
+        =
+        1-\frac{\sizeof{L_{G,n}}}{2^{\ell(n)}}
+        \\[1mm]
+        &\geqslant
+        1-\frac{2^n}{2^{\ell(n)}}
+        =
+        1-2^{n-\ell(n)}
+        \geqslant
+        1-\frac{1}{2}
+        =
+        \frac{1}{2}.
+    \end{align*}
+    Poslední nerovnost plyne z~$\ell(n)>n$, a~tedy $\ell(n)\geqslant n+1$. Konstantní funkce
+    $\frac{1}{2}$ není zanedbatelná, takže $G$ nesplňuje podmínku nerozlišitelnosti z~definice PRG.
+    Protože jsme takto vyloučili libovolného kandidáta $G$, při rovnosti $\classP=\classNP$ žádný
+    pseudonáhodný generátor neexistuje.
+\end{proof}
+
+\notebox{Jde o~obměněnou implikaci tvrzení „existence PRG implikuje $\classP\neq\classNP$“. Samotná nerovnost $\classP\neq\classNP$ však existenci pseudonáhodných generátorů nezaručuje.}
 
 \subsection{Jednosměrná funkce}
 
@@ -128,7 +186,7 @@ První podmínka je nutná pro oprávněné použití: funkci musíme umět rych
 
 \importantbox{Nejhorší případ známý z~teorie složitosti pro kryptografii nestačí. Systém není bezpečný, pokud záškodník snadno prolomí třeba polovinu náhodně generovaných klíčů, i~kdyby zbývající případy byly mimořádně obtížné.}
 
-\subsection{Kandidáti a~padací vrátka}
+\paragraph{Kandidáti a~padací vrátka.}
 
 Není dokázáno, že jednosměrné funkce existují. Známe však přirozené kandidáty:
 \begin{itemize}

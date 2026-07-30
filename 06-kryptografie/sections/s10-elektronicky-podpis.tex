@@ -2,7 +2,7 @@
 
 Šifrování chrání důvěrnost, ale samo o~sobě nemusí prokazovat původ zprávy. Bob může obdržet šifrový text, který dokáže otevřít svým soukromým klíčem, a~přesto neví, zda jej skutečně vytvořila Alice. Elektronický podpis má propojit konkrétní obsah zprávy se soukromým klíčem podepisující osoby.
 
-\subsection{Proč nestačí připsat jméno?}
+\paragraph{Proč nestačí připsat jméno?}
 
 Představme si, že Alice pošle
 \[
@@ -23,7 +23,7 @@ Bob zprávu správně dešifruje, ale mylně ji přisoudí záškodníkovi. Oby�
 
 Podpis musí záviset na obsahu zprávy i~na tajné informaci podepisující osoby. Změní-li se zpráva, starý podpis už nesmí projít ověřením. Zároveň jej nesmí umět vytvořit nikdo, kdo nezná Alicin soukromý klíč $k_S^A$.
 
-\subsection{Komutativita klíčů jako didaktická představa}
+\paragraph{Komutativita klíčů jako didaktická představa.}
 
 U~učebnicového RSA platí nejen
 \[
@@ -49,17 +49,17 @@ Protože $k_V^A$ je veřejný, podpis může ověřit kdokoliv. Vytvořit odpov�
 
 Podepisovat přímo dlouhou zprávu by bylo pomalé a~nepraktické. Proto použijeme hešovací funkci
 \[
-    \mapping{H_n}{\set{0,1}^{*}}{\set{0,1}^{n}}.
+    \mapping{\mathcal{H}_n}{\set{0,1}^{*}}{\set{0,1}^{n}}.
 \]
-Alice nejprve spočítá krátký otisk $h=H_n(m)$ a~podepíše až jej:
+Alice nejprve spočítá krátký otisk $h=\mathcal{H}_n(m)$ a~podepíše až jej:
 \[
-    \sigma=\mathbf{D}\left(H_n(m),k_S^A\right).
+    \sigma=\mathbf{D}\left(\mathcal{H}_n(m),k_S^A\right).
 \]
-Bob z~přijaté zprávy sám vypočítá $H_n(m)$ a~ověří
+Bob z~přijaté zprávy sám vypočítá $\mathcal{H}_n(m)$ a~ověří
 \[
     \mathbf{E}\left(\sigma,k_V^A\right)
     \stackrel{?}{=}
-    H_n(m).
+    \mathcal{H}_n(m).
 \]
 Pokud někdo zprávu pozmění, její nový otisk se s~hodnotou získanou z~podpisu neshoduje.
 
@@ -95,7 +95,7 @@ V~České republice na evropskou úpravu navazuje zejména \href{https://www.e-s
 
 \notebox{Právní předpisy a~seznamy poskytovatelů se mohou měnit. Při skutečném právním jednání je proto potřeba ověřit aktuální znění předpisů, požadovaný druh podpisu a~platnost použitého certifikátu.}
 
-\subsection{Co podpis zajišťuje a~co nikoli}
+\paragraph{Co podpis zajišťuje a~co nikoli.}
 
 Správně navržený a~ověřený elektronický podpis pomáhá prokázat integritu dat a~vazbu na soukromý klíč podepisující osoby. Nezajišťuje však důvěrnost: podepsaná zpráva může zůstat veřejně čitelná. Potřebujeme-li obsah zároveň utajit, kombinujeme podpis se šifrováním.
 
