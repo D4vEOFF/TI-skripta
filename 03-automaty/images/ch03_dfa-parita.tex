@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+    \state{ss}{(0,0)}{$q_{SS}$}
+    \acceptingstate{sl}{(4.8,0)}{$q_{SL}$}
+    \state{ls}{(0,-3.4)}{$q_{LS}$}
+    \state{ll}{(4.8,-3.4)}{$q_{LL}$}
+    \draw[transition] (-1.3,0) -- (ss.180);
+    \transitionarrow[bend left=24]{ss}{above,fill=white,inner sep=1pt}{$1$}{sl}
+    \transitionarrow[bend left=24]{sl}{below,fill=white,inner sep=1pt}{$1$}{ss}
+    \transitionarrow[bend left=24]{ls}{above,fill=white,inner sep=1pt}{$1$}{ll}
+    \transitionarrow[bend left=24]{ll}{below,fill=white,inner sep=1pt}{$1$}{ls}
+    \transitionarrow[bend left=24]{ss}{left,fill=white,inner sep=1pt}{$0$}{ls}
+    \transitionarrow[bend left=24]{ls}{right,fill=white,inner sep=1pt}{$0$}{ss}
+    \transitionarrow[bend left=24]{sl}{left,fill=white,inner sep=1pt}{$0$}{ll}
+    \transitionarrow[bend left=24]{ll}{right,fill=white,inner sep=1pt}{$0$}{sl}
+\end{tikzpicture}

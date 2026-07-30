@@ -1,0 +1,7 @@
+\begin{tikzpicture}
+    \node[vertex] (u) at (-2,0) {$u$};
+    \node[vertex] (v) at (2,0) {$v$};
+    \draw[edge] (u)-- node[above]{z~$u$} node[below]{z~$v$} (v);
+    \draw[diredge,red,bend left=22] (u) to (v);
+    \draw[diredge,blue,bend left=22] (v) to (u);
+\end{tikzpicture}

@@ -1,0 +1,13 @@
+\begin{tikzpicture}[node distance=22mm]
+    \node[task,fill=blue!10,minimum width=38mm] (source)
+        {zdrojový program};
+    \node[task,fill=orange!12,minimum width=34mm,right=of source] (lexer)
+        {lexer};
+    \node[task,fill=green!10,minimum width=43mm,right=of lexer] (tokens)
+        {posloupnost tokenů};
+    \draw[diredge] (source)--(lexer);
+    \draw[diredge] (lexer)--(tokens);
+    \node[below=4mm of source,font=\small] {\texttt{position = speed * 60;}};
+    \node[below=4mm of tokens,align=center,font=\small]
+        {\texttt{id = id * num ;}};
+\end{tikzpicture}

@@ -1,0 +1,72 @@
+\section{Úvodem}\label{sec:kompilatory-uvod}
+
+\emph{Kompilátor} je program,~který překládá program zapsaný ve zdrojovém jazyce do ekvivalentního programu v~cílovém jazyce. Vstup obvykle nazýváme \emph{zdrojovým kódem} a~výstup \emph{cílovým kódem}.
+
+Cílovým jazykem nemusí být přímo strojový kód konkrétního procesoru. Překladač může vytvářet assembler,~bajtkód pro virtuální stroj,~jiný programovací jazyk nebo obecnější mezikód. Podstatné je,~aby se zachoval význam programu: pro stejné vstupy má cílový program poskytovat stejné výsledky jako program zdrojový.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_preklad.tex}
+    \caption{Základní pohled na kompilátor.}
+    \label{fig:kompilator-zaklad}
+\end{figure}
+
+\subsection{Překladový řetězec}
+
+Slovem \emph{kompilátor} někdy neformálně označujeme celý systém,~který vytvoří spustitelný program. Ve skutečnosti může být práce rozdělena mezi několik nástrojů. Typický překlad jednoduchého programu v~jazyce C znázorňuje obrázek \ref{fig:prekladovy-retezec-c}.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_retezec-c.tex}
+    \caption{Zjednodušený překladový řetězec jazyka C.}
+    \label{fig:prekladovy-retezec-c}
+\end{figure}
+
+Jednotlivé části mají následující úlohy:
+\begin{itemize}
+    \item \emph{preprocesor} zpracuje direktivy,~například vložení hlavičkového souboru pomocí \texttt{\#include};
+    \item vlastní \emph{kompilátor} převede předzpracovaný program do assembleru;
+    \item \emph{assembler} vytvoří objektový soubor se strojovými instrukcemi a~pomocnými informacemi;
+    \item \emph{linker} neboli sestavovací program spojí objektové soubory a~potřebné knihovny do výsledného programu.
+\end{itemize}
+
+Uživatel obvykle spustí jediný ovladač překladače,~například \texttt{gcc},~který jednotlivé nástroje zavolá za něj. Rozdělení je však důležité při hledání chyb: chyba kompilace,~chybějící symbol při linkování a~chyba vzniklá až za běhu programu jsou tři různé situace.
+
+\subsection{Strojový kód a~mezikód}
+
+\emph{Strojový kód} obsahuje instrukce konkrétního procesoru. Procesor jej může vykonávat přímo,~ale stejný soubor zpravidla nelze přenést na počítač s~jinou instrukční sadou nebo jiným operačním systémem.
+
+\emph{Mezikód} je vnitřní reprezentace programu ležící mezi zdrojovým a~strojovým kódem. Může být navržen hlavně pro další analýzu a~optimalizaci nebo jako přenositelný bajtkód pro virtuální stroj. Díky mezikódu nemusíme pro každou dvojici zdrojového jazyka a~cílové platformy vytvářet celý překladač znovu: přední část přeloží různé jazyky do společné reprezentace a~koncová část ji převede pro konkrétní počítač.
+
+\subsection{Fáze překladače}
+
+Překladač zdrojový program obvykle nezpracuje jediným obřím krokem. Postupně jej převádí do reprezentací,~se kterými se stále snáze pracuje.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_faze.tex}
+    \caption{Základní fáze překladače.}
+    \label{fig:faze-prekladace}
+\end{figure}
+
+\begin{enumerate}
+    \item \emph{Lexikální analýza} seskupí znaky do tokenů.
+    \item \emph{Syntaktická analýza} z~tokenů sestaví strom podle gramatiky.
+    \item \emph{Sémantická analýza} zkontroluje například deklarace,~typy a~platnost operací.
+    \item Z~ověřeného stromu vznikne \emph{mezikód}.
+    \item \emph{Optimalizace} mezikód upraví,~aniž by změnila význam programu.
+    \item \emph{Generování kódu} vytvoří cílový kód.
+\end{enumerate}
+
+První tři fáze tvoří \emph{přední část překladače} (anglicky \emph{front end}). Ta závisí hlavně na zdrojovém jazyce. Optimalizace a~generování cílového kódu se obvykle řadí do \emph{koncové části} (anglicky \emph{back end}),~která více závisí na cílové platformě. Hranice ale není u~všech překladačů úplně stejná.
+
+\notebox{Jednotlivé fáze nemusí odpovídat samostatným programům ani jedinému průchodu zdrojovým textem. Jde především o~logické rozdělení odpovědností. Praktický překladač může několik fází spojit nebo některou z~nich provést vícekrát.}
+
+\subsection{Průběžný příklad}
+
+V~dalších sekcích vytvoříme malý jazyk s~číselnými výrazy,~deklarací proměnné příkazem \texttt{let} a~výpisem příkazem \texttt{print}. Program
+\begin{verbatim}
+let x = 2 + 3 * 4;
+print x;
+\end{verbatim}
+má vypsat číslo $14$. Překladač jej převede do jednoduchého zásobníkového bajtkódu. Ten potom vykoná náš virtuální stroj. Příklad je záměrně malý,~ale projde všemi hlavními fázemi z~obrázku \ref{fig:faze-prekladace}.

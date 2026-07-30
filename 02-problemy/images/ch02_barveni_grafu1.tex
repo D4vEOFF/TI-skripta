@@ -1,0 +1,7 @@
+\begin{tikzpicture}[scale=0.8]
+    \node[vertex,fill=red!25,draw=red] (c) at (0,0) {};
+    \foreach \i in {0,...,7} {
+        \node[vertex,fill=blue!25,draw=blue] (v\i) at ({45*\i}:2) {};
+        \draw[edge] (c)--(v\i);
+    }
+\end{tikzpicture}

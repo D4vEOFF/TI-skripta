@@ -1,0 +1,9 @@
+\begin{tikzpicture}
+    \node[vertex] (s) at (0,0) {$v_0$};
+    \node[vertex] (y) at (2.3,0) {$y$};
+    \node[vertex,draw=red] (x) at (4.6,0) {$x$};
+    \node[vertex,draw=red] (v) at (7,0) {$v$};
+    \draw[edge,very thick] (s)--(y)--(x)--(v);
+    \draw[dashed,blue,thick,bend left=40] (s) to node[above] {nalezená cesta ceny $D(v)$} (v);
+    \node[below=5mm of x] {nejkratší cesta do $v$};
+\end{tikzpicture}

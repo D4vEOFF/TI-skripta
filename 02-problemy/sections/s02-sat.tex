@@ -1,10 +1,10 @@
 \section{Problém SAT}\label{sec:sat}
 
-Již jsme v~podsekci \ref{subsec:cnf} nahlédli,~že převod do obecné formule do CNF ``hrubou silou'' je problematický,~neboť se nová formule může až exponenciálně prodloužit. V~podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci,~která původní postup zefektivnila přidáním nových proměnných do výsledné formule. To znamená,~že každou formuli jsme schopni efektivně převést do CNF. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní,~že formule,~které máme na vstupu,~jsou již v~CNF. Tento problém je v~informatice velmi význačný a~označuje se zkratkou SAT (z~angl. \emph{satisfiability},~neboli splnitelnost).
+V~podsekci \ref{subsec:cnf} jsme viděli,~že převod obecné formule do CNF \uv{hrubou silou} je problematický. Nová formule se totiž může až exponenciálně prodloužit. V~podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci,~která pomocí nových proměnných sestrojí stejně splnitelnou CNF efektivně. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní,~že formule na vstupu jsou již v~CNF. Tento problém je v~informatice velmi význačný a~označuje se zkratkou SAT (z~angl. \emph{satisfiability},~neboli splnitelnost).
 
 \problem{Splnitelnost logické formule v~CNF (SAT)}{Logická formule $\varphi$ v~CNF.}{1,~pokud je $\varphi$ splnitelná,~jinak 0.}
 
-Nyní se již skutečně zaměříme na samotnou splnitelnost dané formule na vstupu. Pro tento účel se obecně využivají tzv. \emph{SAT~solvery},~tedy algoritmy,~které na vstupu dostanou \emph{formuli $\varphi$ v~CNF},~o~níž rozhodnou,~zda je či není splnitelná. Přitom využívají formy,~v~níž je formule zapsaná. Pro tento účel si ukážeme tzn. \emph{algoritmus DPLL} pojmenovaný po svých autorech\footnote{\emph{Martin (D)avid,~Davis (P)utnam,~George (L)ogemann} a~\emph{Donald W. (L)oveland.}},~kteří s~ním přišli roku 1961.
+Nyní se zaměříme na samotnou splnitelnost vstupní formule. V~praxi se používají tzv. \emph{SAT solvery},~které rozhodují,~zda je formule v~CNF splnitelná. Ukážeme si klasický algoritmus \emph{DPLL},~jehož název připomíná příjmení Martina Davise,~Hilaryho Putnama,~George Logemanna a~Donalda Lovelanda. Jeho základní podoba pochází z~počátku 60.~let 20.~století.
 
 \subsection{Algoritmus DPLL}\label{subsec:dpll}
 
@@ -12,20 +12,20 @@ Tento algoritmus je založený na rekurzivním postupu. Na vstupu algoritmu je l
 
 \subsubsection*{Unit propagation}
 
-Tato procedura přijímá hledá v~dané formuli $\varphi$ tzn. \emph{jednotkovou klauzuli}. To je klauzule,~která obsahuje \textbf{pouze jeden literál}. Např. formule $\omega$ níže obsahuje jednotkovou klauzuli.
+Tato procedura hledá v~dané formuli $\varphi$ tzv. \emph{jednotkovou klauzuli}. To je klauzule,~která obsahuje \textbf{pouze jeden literál}. Například formule $\omega$ níže obsahuje jednotkovou klauzuli.
 \[\omega(x,y)=(x\lor\neg y)\land \underbrace{\neg y}_{\text{jednotková kl.}}\land (\neg x\lor y).\]
-Pokud se taková klauzule nachází ve formuli,~lze toho využít,~neboť pro danou proměnnou existuje vždy jen jediné ohodnocení,~takové,~aby celá formule byla splňena (každá klauzule musí být splněna). Obecně pokud formule $\varphi$ obsahuje jednotkovou klauzuli s~proměnnou $x$,~pak mohou nastat dva případy. Označme $\varphi^\prime$ zbytek klauzulí ve formuli $\varphi$.
+Pokud se taková klauzule nachází ve formuli,~lze toho využít,~neboť pro danou proměnnou existuje právě jedno ohodnocení,~které tuto klauzuli splní. Obecně pokud formule $\varphi$ obsahuje jednotkovou klauzuli s~proměnnou $x$,~pak mohou nastat dva případy. Označme $\varphi^\prime$ zbytek klauzulí ve formuli $\varphi$.
 \begin{enumerate}
     \item Pokud má formule tvar $\varphi=x\land\varphi^\prime$,~pak nutně $x=1$.
     \item Jinak pokud má formule tvar $\varphi=\neg x\land\varphi^\prime$,~pak musí být $x=0$.
 \end{enumerate}
-Fakt,~že jsme schopni hned rozhodnout,~jakou ohodnocení musí mít daná proměnná,~je v~tomto případě hodně ku prospěchu,~neboť formuli můžeme zjednodušit. Protože ohodnocení dané jednotkové klauzule již známe,~můžeme ji z~formule $\varphi$ odstranit. Zároveň můžeme \textbf{odstranit všechny klauzule},~které se vyhodnotí díky proměnné $x$ na $1$,~neboť nemohou již nijak ovlivnit logickou hodnotu zbylých klauzulí.
+Fakt,~že jsme schopni hned rozhodnout,~jaké ohodnocení musí mít daná proměnná,~je v~tomto případě hodně ku prospěchu,~neboť formuli můžeme zjednodušit. Protože ohodnocení dané jednotkové klauzule již známe,~můžeme ji z~formule $\varphi$ odstranit. Zároveň můžeme \textbf{odstranit všechny klauzule},~které se díky proměnné $x$ vyhodnotí na $1$,~neboť již nemohou nijak ovlivnit logickou hodnotu zbylých klauzulí.
 
 Např. pokud formule obsahuje literál $x$ v~jednotkové klauzuli,~pak hodnota proměnné musí být $1$. Tzn. klauzule obsahující $x$ se vyhodnotí též na $1$. tj. 
 \[(\dots\lor x\lor\dots)=1.\]
 Naopak pokud obsahuje literál $\neg x$,~pak nutně $x=0$ a~tedy
 \[(\dots\lor \neg x\lor\dots)=1.\]
-Dále ještě odstraníme výskyty literálu $x$,~resp. $\neg x$ v~\emph{opačné polaritě},~tedy negaci původního literálu. Tzn. pokud literál v~jednotkové klauzuli byl $x$,~pak opačná polarita literálu je $\neg x$ a~naopak. Důvod,~proč jej můžeme odstranit,~je ten,~že v~rámci kterékoliv jiné klauzule se daný literál v~opačné polaritě vyhodnotí vždy na $0$. Protože je však spojen s~ostatními literály pomocí $\lor$,~nemůže nijak ovlivnit výslednou logickou hodnotu klauzule a~tudíž jej můžeme odstranit. Tedy např. pokud $x=1$,~pak můžeme klazule tvaru
+Dále ještě odstraníme výskyty literálu $x$,~resp. $\neg x$ v~\emph{opačné polaritě},~tedy negaci původního literálu. Tzn. pokud literál v~jednotkové klauzuli byl $x$,~pak opačná polarita literálu je $\neg x$ a~naopak. Důvod,~proč jej můžeme odstranit,~je ten,~že v~rámci kterékoliv jiné klauzule se daný literál v~opačné polaritě vyhodnotí vždy na $0$. Protože je však spojen s~ostatními literály pomocí $\lor$,~nemůže nijak ovlivnit výslednou logickou hodnotu klauzule a~tudíž jej můžeme odstranit. Tedy např. pokud $x=1$,~pak můžeme klauzule tvaru
 \[(\dots\lor y \lor \underbrace{\neg x}_{\text{odstraníme}} \lor z~\lor \dots)\]
 zjednodušit na
 \[(\dots\lor y \lor z~\lor \dots).\]
@@ -34,10 +34,10 @@ Podobně pro $x=0$:
 
 \begin{example}
     Máme formuli
-    \[\chi(x,y,z)=(x\lor y)\land y\land (z\lor \neg y)\land(\neg x\land \neg y\lor \neg z).\]
+    \[\chi(x,y,z)=(x\lor y)\land y\land (z\lor \neg y)\land(\neg x\lor \neg y\lor \neg z).\]
     Aplikujme na ni proceduru \emph{Unit propagation}. Můžeme si všimnout,~že klauzule $y$ je jednotková a~proměnná $y$ tedy musí být nastavena na $1$.
 
-    Protože $y=1$,~je zároveň splněna i~klauzule $x\lor y$,~tj. můžeme ji odstranit. Zároveň můžeme odstranit literál $\neg y$ ze zbylých klauzulí $z\lor \neg y$ a~$\neg x\land \neg y\lor \neg y$.
+    Protože $y=1$,~je zároveň splněna i~klauzule $x\lor y$,~takže ji můžeme odstranit. Zároveň odstraníme literál $\neg y$ ze zbývajících klauzulí $z\lor\neg y$ a~$\neg x\lor\neg y\lor\neg z$.
     Celkově dostaneme novou zjednodušenou formuli
     \[\chi^\prime(x,y,z)=z\land(\neg x\lor \neg z).\]
 \end{example}
@@ -52,11 +52,11 @@ Podobně pro negaci,~tj.
 Poté,~co jsme si vysvětlili základní dvojici procedur,~se nyní nabízí trojice případů,~které je ještě třeba prozkoumat.
 \begin{itemize}
     \item \emph{Co když postupným odstraňováním proměnných mi ve formuli vznikne prázdná klauzule?} Taková situace může nastat v~případě procedury Unit propagation,~kdy odstraňujeme proměnné v~opačné polaritě. Pokud nastane situace,~že je nějaká klauzule prázdná,~pak to znamená,~že daná klauzule pod zvoleným ohodnocením \textbf{není splnitelná} a~tudíž ani celá formule. V~takovou chvíli můžeme prohlásit formuli za \textbf{nesplnitelnou pod daným ohodnocením}\footnote{Je potřeba si uvědomit,~že ohodnocení proměnných si během výpočtu volíme,~tedy v~takovém případě to ještě nutně neznamená,~že je formule celkově nesplnitelná. Pouze víme,~že dané ohodnocení určitě není splňující}.
-    \item \emph{Co když odstraníme postupně všechny klauzule?} K~takové situaci může dojít,~pokud jsou všechny klauzule splněny. V~takovou určitě chvíli víme,~že je původní formule \textbf{splnitelná}.
-    \item \emph{Co když po aplikaci obou procedur stále nevíme,~zda je $\varphi$ splnitelná?} V~takovou chvíli nám nezbývá nic jiného,~než si náhodně zvolit nějaký literál a~prozkoumat obě možnosti jeho ohodnocení. Náhodně si tedy vybereme literál $\ell$ a~zkusíme jej nastavit jednou na hodnotu $1$ a~podruhé na hodnotu $0$. Tím můžeme formuli $\varphi$ zjednodušit a~nově vzniklou formuli $\varphi^\prime$ rekurzivně aplikovat stejný algoritmus. Pokud lze splnit zbytek formule $\varphi^\prime$,~pak lze splnit i~původní formuli $\varphi$.
+    \item \emph{Co když odstraníme postupně všechny klauzule?} K~takové situaci může dojít,~pokud jsou všechny klauzule splněny. V~takovou chvíli určitě víme,~že je původní formule \textbf{splnitelná}.
+    \item \emph{Co když po aplikaci obou procedur stále nevíme,~zda je $\varphi$ splnitelná?} V~takovou chvíli nám nezbývá nic jiného než si zvolit nějakou dosud neohodnocenou proměnnou a~prozkoumat obě možnosti jejího ohodnocení. Vybereme tedy proměnnou $x$ a~zkusíme ji nastavit jednou na hodnotu $1$ a~podruhé na hodnotu $0$. Tím můžeme formuli $\varphi$ zjednodušit a~na nově vzniklou formuli $\varphi^\prime$ rekurzivně aplikovat stejný algoritmus. Pokud lze splnit zbytek formule $\varphi^\prime$,~pak lze splnit i~původní formuli $\varphi$.
     
-    Toho můžeme dosáhout tak,~že za formuli $\varphi$ přidáme uměle jednotkovou klauzuli $\ell$,~resp. v~druhém případě $\neg\ell$. Tuto jednotkovou klauzuli si pak opětovně vybere procedura Unit propagation,~která vyhodnotí $\ell$ buď na $1$,~nebo na $0$. Tzn. zavoláme algoritmus DPLL rekurzivně na formule
-    \[\varphi\land\ell\quad\text{a}\quad\varphi\land\neg\ell.\]
+    Toho můžeme dosáhnout tak,~že k~formuli $\varphi$ přidáme uměle jednotkovou klauzuli $x$,~resp. v~druhém případě $\neg x$. Tuto jednotkovou klauzuli si pak vybere procedura Unit propagation,~která proměnnou ohodnotí. Zavoláme tedy algoritmus DPLL rekurzivně na formule
+    \[\varphi\land x\quad\text{a}\quad\varphi\land\neg x.\]
 \end{itemize}
 
 S~těmito informacemi můžeme dát dohromady pseudokód algoritmu.
@@ -75,10 +75,10 @@ S~těmito informacemi můžeme dát dohromady pseudokód algoritmu.
 
     \tcp{Všechny literály v~klauzuli jsou nepravdivé}
     \lIf{\textup{obsahuje $\varphi$ prázdnou klauzuli}}{\Return{$0$}}
-    \tcp{Zkusíme ohodnocení pro $\ell=0$ a~$\ell=1$}
-    Vyber náhodně literál $\ell$\\
+    \tcp{Zkusíme obě ohodnocení proměnné $x$}
+    Vyber dosud neohodnocenou proměnnou $x$\\
 
-    \Return{$\textup{DPLL}(\varphi\land\ell)\lor\textup{DPLL}(\varphi\land\neg\ell)$}
+    \Return{$\textup{DPLL}(\varphi\land x)\lor\textup{DPLL}(\varphi\land\neg x)$}
 
     \KwOut{$1$,~je-li formule $\varphi$ splnitelná,~jinak $0$.}
 \end{algorithm}
@@ -98,12 +98,12 @@ Zkusme si algoritmus odsimulovat na příkladu.
     \end{itemize}
     Nově vzniklá formule $\gamma^{\prime\prime}$ již žádné další jednotkové klauzule neobsahuje. Dále tedy můžeme aplikovat proceduru \emph{Pure literal elimination}.
     \begin{itemize}
-        \item Formule $\gamma^{\prime\prime}$ obsahuje pouze jeden literál v~jediné polaritě,~a~to $\neg x_2$. Tím pádem hodnotu $x_2$ můžeme nastavit na $0$,~čímž splníme dvojici klazulí $(\neg x_2\lor\neg x_3)$ a~$(\neg x_2\lor x_3)$. Ty můžeme odstranit,~čímž dostaneme formuli
+        \item Formule $\gamma^{\prime\prime}$ obsahuje pouze jeden literál v~jediné polaritě,~a~to $\neg x_2$. Tím pádem hodnotu $x_2$ můžeme nastavit na $0$,~čímž splníme dvojici klauzulí $(\neg x_2\lor\neg x_3)$ a~$(\neg x_2\lor x_3)$. Ty můžeme odstranit,~čímž dostaneme formuli
         \[\gamma^{\prime\prime\prime}(x_1,x_2,x_3,x_4)=\neg x_3\lor x_3.\]
     \end{itemize}
     Protože formule $\gamma^{\prime\prime\prime}$ není ani prázdná,~ani neobsahuje prázdnou klauzuli,~vybereme náhodně jeden literál a~prozkoumáme jeho obě možná ohodnocení. V~tomto případě nám zbývají pouze literály $x_3$ a~$\neg x_3$. Vyberme např. literál $\neg x_3$. Nyní máme sestrojit dvojici nových formulí $(\neg x_3\lor x_3)\land\neg x_3$ a~$(\neg x_3\lor x_3)\land x_3$,~na které rekurzivně zavoláme DPLL.
     \begin{itemize}
-        \item \textbf{Formule $(\neg x_3\lor x_3)\land\neg x_3$.} Opět začneme aplikací Unit propagation. K~původní formuli $\gamma^{\prime\prime\prime}$ jsme uměle přidali jednotkovou klauzuli $\neg x_3$. Z~jí je zjevné,~že $x_3$ musí být $0$. Tím zároveň splníme i~klauzuli $(\neg x_3\lor x_3)$,~kterou můžeme odstanit,~čímž dostáváme prázdnou formuli. Pure literal elimination aplikovat nemůžeme. Protože je nově zvniklá formule prázdná,~vrátíme na výstup $1$.
+        \item \textbf{Formule $(\neg x_3\lor x_3)\land\neg x_3$.} Opět začneme aplikací Unit propagation. K~původní formuli $\gamma^{\prime\prime\prime}$ jsme uměle přidali jednotkovou klauzuli $\neg x_3$. Z~ní je zjevné,~že $x_3$ musí být $0$. Tím zároveň splníme i~klauzuli $(\neg x_3\lor x_3)$,~kterou můžeme odstranit,~čímž dostáváme prázdnou formuli. Pure literal elimination aplikovat nemůžeme. Protože je nově vzniklá formule prázdná,~vrátíme na výstup $1$.
         \item \textbf{Formule $(\neg x_3\lor x_3)\land x_3$.} I~zde začneme eliminací jednotkových klauzulí. Tu zde představuje literál $x_3$,~jehož ohodnocení tedy musí být $1$. Tím opět splníme i~klauzuli $(\neg x_3\lor x_3)$,~jejímž odstraněním dostaneme zase prázdnou formuli. Tedy opět vrátíme $1$.
     \end{itemize}
     Obě ohodnocení pro $x_3$ jsou tedy splňující a~tedy i~původní formule $\gamma$ \emph{je splnitelná}.
@@ -113,39 +113,23 @@ Ukažme si ještě jeden jednodušší příklad.
 \begin{example}
     Mějme formuli $\tau(x,y,z)=x\land (\neg x\lor y\lor z)\land \neg x$. Chceme opět pomocí DPLL určit splnitelnost.
 
-    Jako první jednotkovou klauzuli můžeme vzít $x$. Tedy můžeme ji odstranit společně se všemi výskyty daného literálu v~opačné polaritě,~tj. $\neg x$. Tzn. dostanem formuli
+    Jako první jednotkovou klauzuli můžeme vzít $x$. Tedy můžeme ji odstranit společně se všemi výskyty daného literálu v~opačné polaritě,~tj. $\neg x$. Tzn. dostaneme formuli
     \[\tau^\prime(x,y,z)=(y\lor z)\land().\]
-    Všimněte si,~že odstraněním literálu $\neg x$ jsme dostali ve formuli prázdnou klauzuli\footnote{Z~dané jednotkové klazulu jsme odebrali daný literál v~rámci procedury Unit propagation,~neprovedli jsme smazání klauzule jako takové.} $()$. Aplikací Pure literal elimination se zbavíme i~literálů $y$ a~$z$.
+    Všimněte si,~že odstraněním literálu $\neg x$ jsme dostali ve formuli prázdnou klauzuli\footnote{Z~jednotkové klauzule jsme odebrali její jediný literál v~rámci procedury Unit propagation; klauzule samotná ve formuli zůstala.} $()$. Aplikací Pure literal elimination se zbavíme i~literálů $y$ a~$z$.
     \[\tau^{\prime\prime}(x,y,z)=()\]
     Formule $\tau^{\prime\prime}$ obsahuje pouze prázdnou klauzuli. V~tuto chvíli algoritmus prohlásí formuli $\tau$ za \emph{nesplnitelnou}.
 \end{example}
 
 Poslední otázka,~která se nabízí,~je (jako obvykle) časová složitost algoritmu. Vezmeme-li v~potaz nejhorší případ,~časová složitost bohužel nevychází úplně příznivě.
 \begin{theorem}[Složitost DPLL]
-    Algoritmus DPLL nad formulí $\varphi$ o~$n$ literálech doběhne v~čase $\bigO{2^n}$ a~spotřebuje paměť $\bigO{n}$.
+    Nechť formule $\varphi$ obsahuje $v$ proměnných a~její délka je $s$. Jednoduchá implementace DPLL doběhne v~čase $\bigO{s2^v}$. Při kopírování formule v~každé úrovni rekurze spotřebuje nejvýše $\bigO{sv}$ pomocné paměti.
 \end{theorem}
 \begin{proof}
-    Nyní je třeba se zamyslet,~jaká nejhorší situace může při zpracovávání formule $\varphi$ nastat. Pokud ve formuli neexistuje žádná jednotková klauzule,~ani žádný z~literálů není pouze v~jedné polaritě (tedy procedury Unit propagation a~Pure literal elimination nemůžeme vůbec aplikovat),~pak musíme náhodně vybrat nějaký z~literálů $\ell$ a~rekurzivně zkusit obě možnosti ohodnocení. Pokud toto nastane v~každém volání DPLL,~vždy eliminujeme pouze jeden literál. Uvažujme,~že jedno volání funkce DPLL obecně zabere $c$ kroků,~přičemž následně voláme funkci \emph{dvakrát} na formuli o~$n-1$ literálech (jeden jsme eliminovali). Pokud si označíme počet kroků nad formulí o~$n$ literálech $T(n)$,~pak můžeme dojít k~následujícímu vztahu:
-    \[T(n)=\underbrace{c}_{\text{zpracování $\varphi$}}+2\cdot \overbrace{T(n-1)}^{\text{rekurze}}.\]
-    Tomuto typu rovnice se v~matematice říká tzv. \emph{rekurentní} či \emph{rekurzivní} rovnice\footnote{Jedná se vlastně o~posloupnost zadanou rekurentně.},~neboť hodnota $T(n)$ přímo závisí na předešlé hodnotě $T(n-1)$. Určitě víme,~že prázdnou formuli umíme zpracovat okamžitě,~tj. $T(0)=\bigO{1}$.
-
-    Lze ukázat\footnote{
-        \emph{Pro zájemce:} U~rekurentní rovnice se snažíme najít předpis pro $T(n)$,~takový,~aby jeho hodnota nezávisela na jiných hodnotách $T$. Řešení obsahuje práci s~geometrickými řadami. Víme,~že platí $T(n)=c+2\cdot T(n-1)$. Zkusme podle tohoto předpisu rozepsat $T(n-1)$.
-        \[T(n)=c+2\cdot T(n-1)=c+2\cdot(c+2\cdot T(n-2))=3c+4\cdot T(n-2)\]
-        Zkusme rozepsat opět i~$T(n-2)$.
-        \[T(n)=3c+4\cdot T(n-2)=3c+4\cdot(c+2\cdot T(n-3))=7c+8\cdot T(n-3)\]
-        Obecně lze pororovat,~že $k$ rozepsáních dostaneme pro $T(n)$ následující vzorec:
-        \[T(n)=c\cdot\sum_{i=0}^{k-1}2^i+2^k\cdot T(n-k).\]
-        Je důležité si nyní uvědomit,~že jedinou hodnotu,~kterou známe,~je $T(0)=\bigO{1}$. Pokud vzorec rozepíšemem $n$-krát,~tj. $k=n$,~můžeme se tak zbavit rekurence v~rovnici.
-        \[T(n)=c\cdot\sum_{i=0}^{n-1}2^i+2^n\cdot T(0)=c\cdot\sum_{i=0}^{n-1}2^i+2^n\cdot \bigO{1}=c\cdot\sum_{i=0}^{n-1}2^i+2^n\]
-        Řada $\sum_{i=0}^{n-1}2^i$ je geometrická s~kvocientem $q=2$ a~prvním členem rovnému $2^0=1$,~přičemž celkový počet členů je $n$. Můžeme na ni aplikovat známý vzorec pro součet.
-        \[T(n)=c\cdot\dfrac{2^n-1}{2-1}+2^n=c\cdot(2^n-1)+2^n=(c+1)2^n-c.\]
-        Protože nás však zajímá asymptotické chování algoritmu,~konstanty $c+1$ a~$c$ můžeme zanedbat. Z~toho již můžeme vidět,~že složitost je exponenciální.
-        \[T(n)=\bigO{(c+1)2^n-c}=\bigO{2^n}\]
-    },~že platí $T(n)=\bigO{2^n}$.
-
-    Na formuli o~$n$ literálech spotřebuje algoritmus lineární paměť.
+    V~nejhorším případě nepomůže ani jednotková propagace,~ani eliminace čistých literálů. Algoritmus pak zvolí proměnnou a~vytvoří dvě větve,~jednu pro hodnotu $0$ a~druhou pro hodnotu $1$. Hloubka stromu je nejvýše $v$ a~počet jeho uzlů nejvýše
+    \[1+2+4+\dots+2^v=2^{v+1}-1=\bigO{2^v}.\]
+    V~každém uzlu lze naivně projít celou formuli v~čase $\bigO{s}$,~odkud plyne čas $\bigO{s2^v}$. Rekurze probíhá do hloubky,~takže současně uchováváme nejvýše $v$ kopií formule délky nejvýše $s$; to dává $\bigO{sv}$ pomocné paměti.
 \end{proof}
+\notebox{Praktické SAT solvery formuli při každém volání celou nekopírují. Změny zapisují do pomocných struktur a~při návratu je vracejí zpět,~takže paměťový odhad lze podstatně zlepšit.}
 
 S~exponenciální časovou složitostí se sotva spokojíme,~avšak v~tomto případě je dobré si říci,~že zkoumáme složitost v~nejhorším případě a~v~praxi bývají zkoumané logické formule poměrně rychle řešitelné pomocí DPLL.
 \importantbox{Problém je však dodnes ten,~že na rozhodnutí splnitelnosti logické formule (i~těch v~CNF) není známý žádný algoritmus,~který by běžel v~polynomiálním čase,~tj. $\bigO{n^k}$,~pro nějaké $k$. K~tomuto tématu se ještě vrátíme v~sekci \ref{sec:p_np}.}

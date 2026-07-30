@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+    \initialstate{s}{(0,0)}{$s$}{(-1.2,0)}{180}
+    \acceptingstate{i}{(2.5,0)}{$q_i$}
+    \state{dot}{(5,0)}{$q_t$}
+    \acceptingstate{f}{(7.5,0)}{$q_f$}
+    \transitionarrow{s}{above}{$0,\dots,9$}{i}
+    \transitionarrow[loop above]{i}{above}{$0,\dots,9$}{i}
+    \transitionarrow{i}{above}{\texttt{.}}{dot}
+    \transitionarrow{dot}{above}{$0,\dots,9$}{f}
+    \transitionarrow[loop above]{f}{above}{$0,\dots,9$}{f}
+\end{tikzpicture}

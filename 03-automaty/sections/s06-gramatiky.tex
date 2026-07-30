@@ -1,1 +1,195 @@
 \section{Gramatiky}\label{sec:gramatiky}
+
+Automat dostane hotové slovo a~rozhodne,~zda do jazyka patří. Gramatika jde opačným směrem: z~počátečního symbolu slova jazyka postupně vyrábí.
+
+\begin{definition}[Gramatika]
+    \emph{Gramatika} je čtveřice
+    \[
+        G=(N,T,P,S),
+    \]
+    kde
+    \begin{itemize}
+        \item $N$ je konečná množina \emph{neterminálů},
+        \item $T$ je konečná množina \emph{terminálů},~přičemž $N\cap T=\emptyset$,
+        \item $P$ je konečná množina \emph{přepisovacích pravidel}. Pravidlo zapisujeme ve tvaru $\alpha\to\beta$: na levé straně stojí řetězec terminálů a~neterminálů obsahující alespoň jeden neterminál,~na pravé straně může stát libovolný řetězec terminálů a~neterminálů,~případně prázdné slovo $\lambda$,
+        \item $S\in N$ je \emph{počáteční neterminál}.
+    \end{itemize}
+\end{definition}
+
+Levá strana pravidla tedy musí obsahovat alespoň jeden neterminál,~pravá strana může být i~prázdné slovo $\lambda$. Terminály už dále nepřepisujeme; budou tvořit výsledné slovo.
+
+\begin{definition}[Odvození a~jazyk gramatiky]
+    Řekneme,~že se slovo $u\alpha v$ \emph{přímo odvodí} na $u\beta v$,~a~píšeme
+    \[
+        u\alpha v\Rightarrow u\beta v,
+    \]
+    jestliže $\alpha\to\beta$ je pravidlo gramatiky. Zápis
+    \[
+        x\Rightarrow^*y
+    \]
+    znamená,~že z~$x$ lze dostat $y$ pomocí nula nebo více přímých odvození.
+
+    Jazyk generovaný gramatikou $G$ je
+    \[
+        L(G)=\set{w\in T^*:S\Rightarrow^*w}.
+    \]
+\end{definition}
+
+\begin{example}[Všechna binární slova]
+    Gramatika
+    \[
+        S\to0S\mid1S\mid\lambda
+    \]
+    generuje jazyk $\set{0,1}^*$. Při každém kroku přidá na konec nulu nebo jedničku a~pravidlem $S\to\lambda$ skončí. Například
+    \[
+        S\Rightarrow1S\Rightarrow10S\Rightarrow101S\Rightarrow101.
+    \]
+\end{example}
+
+\begin{example}[Stejný počet blokových znaků]
+    Gramatika
+    \[
+        S\to0S1\mid\lambda
+    \]
+    generuje jazyk
+    \[
+        \set{0^n1^n:n\geqslant0}.
+    \]
+    Každé použití prvního pravidla přidá jednu nulu vlevo a~jednu jedničku vpravo. Třeba
+    \[
+        S\Rightarrow0S1\Rightarrow00S11\Rightarrow000S111
+        \Rightarrow000111.
+    \]
+    Tento jazyk není regulární,~takže gramatiky dovedou popisovat i~jazyky,~na které konečné automaty nestačí.
+\end{example}
+
+\begin{example}[Dva nezávislé bloky]
+    Gramatika
+    \[
+        S\to aS\mid B,\qquad B\to bB\mid\lambda
+    \]
+    generuje $\set{a^nb^m:n,m\geqslant0}$. Po přechodu z~$S$ na $B$ už nelze přidat žádné další $a$,~ale počty obou druhů znaků na sobě nezávisejí.
+\end{example}
+
+\begin{example}[Správně uzávorkované výrazy]
+    Gramatika
+    \[
+        S\to SS\mid(S)\mid\lambda
+    \]
+    generuje správně uzávorkovaná slova. Pravidlo $S\to(S)$ vloží již hotový výraz do závorek a~$S\to SS$ spojí dva výrazy za sebe. Například
+    \[
+        S\Rightarrow SS\Rightarrow(S)S\Rightarrow()S
+        \Rightarrow()(S)\Rightarrow()((S))\Rightarrow()(()).
+    \]
+\end{example}
+
+\subsection{Derivační stromy}
+
+U~gramatik,~jejichž pravidla mají na levé straně jediný neterminál,~můžeme průběh odvození znázornit stromem. Takový tvar mají všechna pravidla v~našich dosavadních příkladech. Kořenem je počáteční neterminál. Použijeme-li pravidlo $A\to x_1\cdots x_k$,~přidáme vrcholu $A$ zleva doprava syny $x_1,\dots,x_k$. Terminály v~listech přečtené zleva doprava vytvoří výsledné slovo.
+
+\begin{figure}[h]
+    \centering
+    \input{03-automaty/images/ch03_derivacni-strom.tex}
+    \caption{Derivační strom pro slovo $000111$ v~gramatice $S\to0S1\mid\lambda$.}
+    \label{fig:derivacni-strom}
+\end{figure}
+
+Pořadí přepisování neterminálů se může lišit,~aniž by se změnil derivační strom. U~některých gramatik však může mít totéž slovo dva skutečně různé derivační stromy. Takovou gramatiku nazýváme \emph{nejednoznačnou}. Třeba gramatika $S\to SS\mid a$ odvodí slovo $aaa$ seskupením $(aa)a$ i~$a(aa)$.
+
+\subsection{Příklad z~přirozeného jazyka}
+
+Gramatika může popisovat i~jednoduché věty:
+\[
+\begin{aligned}
+    \textit{Věta}&\to\textit{JmennáČást}\ \textit{SlovesnáČást},\\
+    \textit{JmennáČást}&\to\textit{Člen}\ \textit{PodstatnéJméno},\\
+    \textit{SlovesnáČást}&\to\textit{Sloveso}\ \textit{JmennáČást},\\
+    \textit{Člen}&\to\text{ten}\mid\text{jeden},\\
+    \textit{PodstatnéJméno}&\to\text{algoritmus}\mid\text{automat},\\
+    \textit{Sloveso}&\to\text{zkoumá}\mid\text{napodobuje}.
+\end{aligned}
+\]
+Vygeneruje například větu \uv{ten algoritmus zkoumá jeden automat}. Jde samozřejmě o~hodně zjednodušený model češtiny; ukazuje ale,~že pravidla určují nejen použitá slova,~nýbrž i~jejich stavbu.
+
+\begin{figure}[h]
+    \centering
+    \input{03-automaty/images/ch03_prirozeny-jazyk.tex}
+    \caption{Derivační strom věty \uv{ten algoritmus zkoumá jeden automat}.}
+    \label{fig:prirozeny-jazyk}
+\end{figure}
+
+\subsection{Regulární gramatiky}
+
+\begin{definition}[Regulární gramatika]
+    Gramatika $G=(N,T,P,S)$ je \emph{regulární},~pokud má každé její pravidlo jeden z~tvarů
+    \[
+        A\to wB
+        \qquad\text{nebo}\qquad
+        A\to w,
+    \]
+    kde $A,B\in N$ a~$w\in T^*$.
+\end{definition}
+
+Na pravé straně je tedy nejvýše jeden neterminál a~ten navíc stojí až na konci. Gramatika pro $0^n1^n$ regulární není: pravidlo $S\to0S1$ má terminál také za neterminálem. Naproti tomu gramatika pro $a^nb^m$ z~předchozího příkladu regulární je.
+
+\begin{theorem}\label{thm:regular-grammar}
+    Jazyk je regulární právě tehdy,~když jej generuje nějaká regulární gramatika.
+\end{theorem}
+
+\begin{proof}
+    Opět ukážeme konstrukci v~obou směrech.
+
+    \emph{Z~DFA na gramatiku.}
+    Mějme DFA $A=(Q,\Sigma,\delta,q_0,F)$. Pro každý stav $q\in Q$ vytvoříme stejnojmenný neterminál,~terminály budou znaky z~$\Sigma$ a~počátečním neterminálem bude $q_0$. Za každý přechod $\delta(q,a)=r$ přidáme pravidlo
+    \[
+        q\to ar
+    \]
+    a~za každý přijímající stav $f\in F$ pravidlo $f\to\lambda$. Všechna pravidla jsou regulární.
+
+    Každý krok automatu po znaku $a$ odpovídá použití jednoho pravidla $q\to ar$. Slovo lze dovést z~$q_0$ do přijímajícího stavu právě tehdy,~když jej gramatika může vypsat a~zbývající přijímající neterminál nakonec odstranit pravidlem $f\to\lambda$. Jazyky automatu a~gramatiky jsou proto stejné.
+
+    \emph{Z~gramatiky na automat.}
+    Mějme regulární gramatiku $G=(N,T,P,S)$. Neterminály použijeme jako stavy $\lambda$-NFA,~stav $S$ bude počáteční a~přidáme jediný nový přijímající stav $f$.
+
+    Pro pravidlo
+    \[
+        A\to a_1a_2\cdots a_kB
+    \]
+    vytvoříme cestu ze stavu $A$ do stavu $B$ označenou postupně $a_1,\dots,a_k$. Je-li $k>1$,~vložíme na cestu nové pomocné stavy,~které nepoužijeme u~žádného jiného pravidla. Pro $k=0$,~tedy pro pravidlo $A\to B$,~přidáme $\lambda$-přechod. Stejně zpracujeme pravidlo $A\to a_1\cdots a_k$,~jen cesta skončí v~$f$; pravidlo $A\to\lambda$ tedy vytvoří $\lambda$-přechod z~$A$ do $f$.
+
+    Použití pravidla v~odvození přesně odpovídá průchodu po jemu přidělené cestě. Gramatika proto odvodí terminální slovo $w$ právě tehdy,~když sestrojený $\lambda$-NFA po přečtení $w$ dojde do $f$. $\lambda$-NFA umíme převést na DFA,~takže $L(G)$ je regulární.
+\end{proof}
+
+\begin{figure}[h]
+    \centering
+    \input{03-automaty/images/ch03_automat-gramatika.tex}
+    \caption{Ukázka převodu DFA na ekvivalentní regulární gramatiku.}
+    \label{fig:automat-gramatika}
+\end{figure}
+
+\subsection{Jeden jazyk třemi způsoby}
+
+Jazyk všech slov nad $\set{a,b}$ končících na $ab$ můžeme popsat regulárním výrazem
+\[
+    (a\mid b)^*ab.
+\]
+Přijímá jej také automat na obrázku \ref{fig:dfa-suffix-ab}.
+
+\begin{figure}[h]
+    \centering
+    \input{03-automaty/images/ch03_dfa-suffix-ab.tex}
+    \caption{DFA pro slova končící na $ab$.}
+    \label{fig:dfa-suffix-ab}
+\end{figure}
+
+Stejný jazyk generuje regulární gramatika
+\[
+\begin{aligned}
+    S&\to aA\mid bS,\\
+    A&\to aA\mid bB,\\
+    B&\to aA\mid bS\mid\lambda.
+\end{aligned}
+\]
+Neterminály $S,A,B$ odpovídají stavům automatu. Každé pravidlo se znakem opisuje jeden přechod a~pravidlo $B\to\lambda$ označuje přijímající stav.
+
+\notebox{Automat se hodí,~když chceme slova rychle rozpoznávat. Regulární výraz bývá nejkratším popisem a~gramatika je přirozená při generování. Kleeneho věta a~věta \ref{thm:regular-grammar} říkají,~že u~regulárních jazyků si můžeme vybrat ten pohled,~který se zrovna hodí nejvíc.}

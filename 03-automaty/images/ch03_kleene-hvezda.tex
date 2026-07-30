@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+    \initialstate{s}{(0,0)}{} {(-1,0)}{180}
+    \draw[thick,rounded corners=3pt,fill=blue!8] (1.75,-0.9) rectangle (6.25,0.9);
+    \node at (4,0.5) {automat pro $R$};
+    \state{r0}{(2.5,-0.2)}{}
+    \state{r1}{(5.5,-0.2)}{}
+    \acceptingstate{f}{(8,0)}{}
+    \transitionarrow{s}{above,fill=white,inner sep=1pt}{$\lambda$}{r0}
+    \transitionarrow[bend left=38]{s}{above,fill=white,inner sep=1pt,pos=0.52}{$\lambda$}{f}
+    \draw[transition] (r0) -- (r1);
+    \transitionarrow{r1}{above,fill=white,inner sep=1pt}{$\lambda$}{f}
+    \transitionarrow[bend left=42]{r1}{below,fill=white,inner sep=1pt}{$\lambda$}{r0}
+\end{tikzpicture}

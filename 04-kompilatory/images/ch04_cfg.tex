@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+    \node[task,fill=blue!10,minimum width=28mm] (b1) at (0,0) {$B_1$\\podmínka};
+    \node[task,fill=orange!12,minimum width=28mm] (b2) at (-2.6,-2) {$B_2$\\větev ano};
+    \node[task,fill=orange!12,minimum width=28mm] (b3) at (2.6,-2) {$B_3$\\větev ne};
+    \node[task,fill=green!10,minimum width=28mm] (b4) at (0,-4) {$B_4$\\pokračování};
+    \node[task,fill=gray!10,minimum width=28mm] (dead) at (5.8,-4) {$B_5$\\mrtvý blok};
+
+    \draw[diredge] (b1)--node[left,font=\small]{ano}(b2);
+    \draw[diredge] (b1)--node[right,font=\small]{ne}(b3);
+    \draw[diredge] (b2)--(b4);
+    \draw[diredge] (b3)--(b4);
+\end{tikzpicture}

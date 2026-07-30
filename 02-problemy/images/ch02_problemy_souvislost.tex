@@ -1,0 +1,11 @@
+\begin{tikzpicture}[node distance=17mm]
+    \node[task] (sat) {SAT};
+    \node[task,right=of sat] (tsat) {$3$-SAT};
+    \node[task,below=of tsat] (ind) {NzMna};
+    \node[task,left=of ind] (clq) {Klika};
+    \draw[diredge] (sat)--(tsat);
+    \draw[diredge] (tsat)--(ind);
+    \draw[diredge,bend left=15] (ind) to (clq);
+    \draw[diredge,bend left=15] (clq) to (ind);
+    \draw[diredge,dashed] (ind) to[bend left=35] (sat);
+\end{tikzpicture}

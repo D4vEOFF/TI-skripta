@@ -1,0 +1,89 @@
+\section{Syntaktická analýza}\label{sec:syntakticka-analyza}
+
+Lexer už zdrojový text rozdělil na tokeny. Nyní potřebujeme rozhodnout,~zda jsou seřazeny podle pravidel programovacího jazyka,~a~zachytit jejich strukturu.
+
+\emph{Syntaktický analyzátor} neboli \emph{parser} dostane posloupnost tokenů a~podle gramatiky rozhodne,~zda tvoří syntakticky správný program. Jeho výstupem bývá derivační nebo syntaktický strom,~případně zpráva o~syntaktické chybě.
+
+\subsection{Bezkontextové gramatiky}
+
+Obecná gramatika zavedená v~sekci \smartref{\showrefs}{sec:gramatiky}{o~gramatikách} dovoluje mít na levé straně pravidla celý řetězec. Syntaxi programovacích jazyků však obvykle popisujeme jednodušším druhem gramatik.
+
+\begin{definition}[Bezkontextová gramatika]
+    Gramatika $G=(N,T,P,S)$ je \emph{bezkontextová},~pokud má každé pravidlo tvar
+    \[
+        A\to\alpha,
+    \]
+    kde $A\in N$ je jediný neterminál a~$\alpha\in(N\cup T)^*$.
+\end{definition}
+
+Název vyjadřuje,~že neterminál $A$ smíme přepsat bez ohledu na symboly stojící kolem něj. Regulární gramatiky jsou zvláštním případem bezkontextových gramatik,~ale opačná inkluze neplatí. Například pravidlo $S\to aSb$ je bezkontextové,~nikoliv však regulární.
+
+\subsection{Aritmetické výrazy}
+
+Prioritu běžných aritmetických operátorů zachycuje gramatika
+\[
+\begin{aligned}
+    E&\to E+T\mid E-T\mid T,\\
+    T&\to T*F\mid T/F\mid F,\\
+    F&\to (E)\mid\texttt{id}\mid\texttt{num}.
+\end{aligned}
+\]
+Neterminál $E$ představuje výraz,~$T$ term a~$F$ faktor. Násobení a~dělení se objeví hlouběji ve stromu než sčítání a~odčítání,~a~proto se vyhodnotí dříve. Strom na obrázku \ref{fig:strom-vyrazu} odpovídá posloupnosti tokenů
+\[
+    \texttt{id}+\texttt{id}*\texttt{num}.
+\]
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_derivacni-strom.tex}
+    \caption{Derivační strom aritmetického výrazu.}
+    \label{fig:strom-vyrazu}
+\end{figure}
+
+Derivační strom,~se kterým jsme se poprvé setkali v~sekci \smartref{\showrefs}{sec:gramatiky}{o~gramatikách},~obsahuje i~neterminály a~pomocné kroky gramatiky. Překladač si často vytvoří úspornější \emph{abstraktní syntaktický strom} (zkráceně AST),~v~němž zůstanou jen informace potřebné pro další zpracování. Ve stromu výrazu $2+3*4$ bude kořenem sčítání,~jeho levým synem číslo $2$ a~pravým synem násobení čísel $3$ a~$4$.
+
+\subsection{Analýza shora dolů a~zdola nahoru}
+
+Parser \emph{shora dolů} začíná počátečním neterminálem a~volí pravidla tak,~aby vytvořil vstupní posloupnost tokenů. Strom tedy staví od kořene k~listům. Jednoduchým příkladem je rekurzivní sestup,~v~němž každému neterminálu odpovídá jedna funkce.
+
+Parser \emph{zdola nahoru} naopak začíná tokeny. Hledá úseky odpovídající pravým stranám pravidel a~nahrazuje je jejich levou stranou. Strom staví od listů ke kořeni. Praktické generátory parserů často používají některou z~variant této metody.
+
+Levá rekurze v~pravidle $E\to E+T$ by pro přímočarý rekurzivní sestup vedla k~nekonečnému volání funkce pro $E$. Pro implementaci proto použijeme ekvivalentní tvar
+\[
+\begin{aligned}
+    E&\to TE',&
+    E'&\to +TE'\mid-TE'\mid\lambda,\\
+    T&\to FT',&
+    T'&\to *FT'\mid/FT'\mid\lambda,\\
+    F&\to (E)\mid\texttt{id}\mid\texttt{num}.
+\end{aligned}
+\]
+Opakování v~$E'$ a~$T'$ lze v~Pythonu přirozeně zapsat cyklem.
+
+\subsection{Gramatika malého jazyka}
+
+Celý průběžný jazyk popíšeme pravidly
+\[
+\begin{aligned}
+    \mathit{Program}&\to\text{\textit{Příkaz}}\ \mathit{Program}\mid\lambda,\\
+    \text{\textit{Příkaz}}&\to\texttt{let id = }E\texttt{;}
+        \mid\texttt{print }E\texttt{;},
+\end{aligned}
+\]
+doplněnými předchozími pravidly pro $E$,~$T$ a~$F$. Jazyk tedy dovoluje deklarovat číselnou proměnnou a~vypsat hodnotu výrazu.
+
+Datové třídy v~programu \ref{lst:ast} popisují AST. Společní předkové \texttt{Expr} a~\texttt{Stmt} umožňují snadno rozlišovat výrazy a~příkazy.
+
+\lstinputlisting[
+    caption={Vrcholy abstraktního syntaktického stromu.},
+    label={lst:ast}
+]{04-kompilatory/code/mini_compiler/ast_nodes.py}
+
+Parser v~programu \ref{lst:parser} přímo odpovídá gramatice. Metoda \texttt{\_statement} rozpoznává oba druhy příkazů. Metody \texttt{\_expression} a~\texttt{\_term} zpracovávají operátory,~zatímco \texttt{\_factor} číslo,~identifikátor nebo závorku.
+
+\lstinputlisting[
+    caption={Parser metodou rekurzivního sestupu.},
+    label={lst:parser}
+]{04-kompilatory/code/mini_compiler/parser.py}
+
+Metoda \texttt{\_consume} zároveň kontroluje povinný následující token. Chybí-li například středník,~parser skončí s~chybou obsahující pozici neočekávaného tokenu. Kvalitní praktický parser se navíc pokusí najít vhodné místo,~od něhož může pokračovat a~oznámit více chyb během jednoho překladu.

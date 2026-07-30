@@ -1,53 +1,73 @@
 \section{Formální jazyky}\label{sec:jazyky}
 
-Nyní, když jsme si vysvětlili základy konečných automatů a~jejich roli ve zpracovávání formálních jazyků, můžeme se hlouběji ponořit do problematiky formálních jazyků samotných. Tyto jazyky jsou totiž základem pro popis množin řetězců a~jsou klíčové pro definování toho, co automaty rozpoznávají.
+Než se pustíme do přesné definice automatu,~potřebujeme si ujasnit,~co vlastně automat dostává na vstupu a~jak budeme popisovat množiny přípustných vstupů.
 
-Formální jazyky lze chápat jako abstraktní systémy pro popis pravidel, podle kterých jsou vytvářeny řetězce symbolů. Jsou zásadní nejen pro teorii automatů, ale také pro návrh programovacích jazyků a~kompilátorů. V~následujících částech se zaměříme na různé typy gramatik, které jsou základem pro definici formálních jazyků, a~ukážeme si, jak konečné automaty mohou tyto jazyky rozpoznávat a~zpracovávat.
-
-Pro začátek si (jako vždy) uvedeme definice některých základních pojmů.
-\begin{definition}
-    Máme neprázdnou množinu znaků $\Sigma$, tzv. \emph{abecedu}.
+\begin{definition}[Abeceda,~slovo a~jazyk]
+    Mějme konečnou neprázdnou množinu znaků $\Sigma$,~kterou nazýváme \emph{abecedou}. Pak
     \begin{itemize}
-        \item \emph{Slovo (řetězec)} je libovolná konečná posloupnost znaků ze $\Sigma$.
-        \item \emph{Prázdné slovo} je slovo neobsahující žádné znaky\footnote{Symbol $\lambda$ zde představuje speciální znak zastupující prázdné slovo. Neuvažujeme jej tedy jako součást abecedy $\Sigma$, tzn. $\lambda\notin\Sigma$.}, značíme $\lambda$.
-        \item \emph{Množina všech slov v abecedě $\Sigma$} se značí $\Sigma^*$.
-        \item \emph{Jazyk} je libovolná podmnožina slov $L\subseteq\Sigma$. Říkáme, že jazyk $L$ je \emph{nad abecedou $\Sigma$} (viz obrázek \ref{fig:jazyk}).
-        \begin{figure}[h]
-            \centering
-            \includegraphics[scale=.7]{03-automaty/images/ch03_jazyk.pdf}
-            \caption{Obecný jazyk $L$ nad abecedou $\Sigma$.}
-            \label{fig:jazyk}
-        \end{figure}
-        \item \emph{Délka slova} $w$ (tzn. počet znaků) se značí $|w|$.
-        \item \emph{Konkantenace} slov $u,v\in\Sigma^*$, kde $u=u_1u_2\dots u_n$ a $v=v_1v_2\dots v_m$ je slovo
-        \[uv=u_1u_2\dots u_nv_1v_2\dots v_m.\]
-        \item \emph{$n$-tá mocnina} slova $u\in\Sigma^*$ je slovo
-        \[u^n=\underbrace{uu\dots u}_{\text{$n$-krát}},\]
-        kde $n\in\N_0$. Speciálně $u^0=\lambda$.
+        \item \emph{slovo (řetězec)} je libovolná konečná posloupnost znaků z~$\Sigma$;
+        \item \emph{prázdné slovo} je slovo neobsahující žádný znak,~značíme je $\lambda$;
+        \item množinu všech slov nad $\Sigma$ značíme $\Sigma^*$;
+        \item množinu všech neprázdných slov značíme $\Sigma^+=\Sigma^*\setminus\set{\lambda}$;
+        \item \emph{jazyk nad abecedou $\Sigma$} je libovolná množina $L\subseteq\Sigma^*$;
+        \item délku slova $w$ značíme $|w|$ a~počet výskytů znaku $a$ ve slově $w$ značíme $|w|_a$.
     \end{itemize}
 \end{definition}
-Podívejme se na jednoduchý příklad.
-\begin{example}
-    Mějme dvouznakovou abecedu $\Sigma=\set{a,b}$.
+
+Symbol $\lambda$ není znakem abecedy. Je to označení posloupnosti délky nula. Proto pro každé slovo $w$ platí $\lambda w=w\lambda=w$.
+
+\begin{figure}[h]
+    \centering
+    \input{03-automaty/images/ch03_jazyk.tex}
+    \caption{Jazyk $L$ je libovolná podmnožina množiny všech slov $\Sigma^*$.}
+    \label{fig:jazyk}
+\end{figure}
+
+\begin{definition}[Operace nad slovy]
+    Nechť $u=u_1u_2\dots u_n$ a~$v=v_1v_2\dots v_m$ jsou slova nad $\Sigma$.
     \begin{itemize}
-        \item Např. slovem v takto zadané abecedě $\Sigma$ je $w=abba$. Tzn. $|w|=4$.
-        \item Množina všech slov\footnote{Je pochopiltené, že tato množina je nekonečná (délka slov není nijak omezená).} $\Sigma^*=\set{\lambda,a,b,aa,ab,ba,bb,aaa,aab,aba,\dots}$.
-        \item Jednoduchý příklad jazyka nad abecedou $\Sigma$ je $L_1=\Sigma^*$, tedy všechna možná slova sestávající ze znaků $a,b$.
-        \item Dalším příkladem může být např. jazyk $L_2=\set{w\in\Sigma^*\mid |w|\leqslant 2}$. Jazyk $L_2$ tedy obsahuje všechna slova délky nejvýše $2$, tj.
-        \[L_2=\set{\lambda,a,b,aa,ab,ba,bb}.\]
-        \item Pátá mocnina slova $w=abba$:
-        \[w^5=abbaabbaabbaabbaabba.\]
-        \item Konkantenace slov $u=aabb$ a $v=bbaa$
-        \[uv=aabbbbaa.\]
+        \item Jejich \emph{konkatenace (zřetězení)} je slovo
+        \[uv=u_1u_2\dots u_nv_1v_2\dots v_m.\]
+        \item Mocniny slova definujeme vztahy $u^0=\lambda$ a~$u^{k+1}=u^ku$ pro $k\in\N_0$.
+    \end{itemize}
+\end{definition}
+
+\begin{definition}[Operace nad jazyky]
+    Pro jazyky $K,L\subseteq\Sigma^*$ definujeme
+    \begin{align*}
+        K\cup L&=\set{w\in\Sigma^*:w\in K\text{ nebo }w\in L},\\
+        KL&=\set{uv:u\in K,\ v\in L},\\
+        L^0&=\set{\lambda},\qquad L^{n+1}=L^nL,\\
+        L^*&=\bigcup_{n=0}^{\infty}L^n.
+    \end{align*}
+    Množině $L^*$ říkáme \emph{Kleeneho uzávěr} jazyka $L$.
+\end{definition}
+
+\begin{example}
+    Mějme abecedu $\Sigma=\set{a,b}$ a~slova $u=aabb$,~$v=bba$.
+    \begin{itemize}
+        \item $|u|=4$,~$|u|_a=2$ a~$uv=aabbbba$.
+        \item $v^3=bbabbabba$.
+        \item $\Sigma^*=\set{\lambda,a,b,aa,ab,ba,bb,aaa,aab,\dots}$.
+        \item Jazyk všech slov délky nejvýše dva je
+        \[\set{w\in\Sigma^*:|w|\leqslant2}=\set{\lambda,a,b,aa,ab,ba,bb}.\]
     \end{itemize}
 \end{example}
 
-Jazyky nejsou v matematickém pojetí nic jiné než množiny objektů, tedy v tomto případě slov.
-\begin{example}
-    Další příklady jazyků:
-    \begin{itemize}
-        \item Jazyk $U=\set{w\in\Sigma^*\mid w\subseteq\set{X,Y}^*}$ obsahující všechna \emph{slova sestávající pouze z velkých písmen} nad abecedou $\Sigma=\set{x,y,X,Y}$.
-        \item Jazyk $N=\set{u\in\Lambda^*\mid |u|\geqslant 1}$ obsahující všechna \emph{neprázdná slova} nad obecnou abecedou $\Lambda$ (může být jakákoliv).
-        \item Jazyk $Z=\set{0^n1^n\mid n\in\N}$ nad abecedou $\Omega=\set{0,1}$.
-    \end{itemize}
-\end{example}
+Jazyky mohou být zadané výčtem,~vlastností nebo jiným popisem. Uveďme si tři o~něco zajímavější příklady nad binární abecedou $\Sigma=\set{0,1}$:
+\begin{align*}
+    L_{\mathrm{suff}}
+        &=\set{w\in\Sigma^*: \text{$w$ končí na $01$}}
+          =\set{u01:u\in\Sigma^*},\\
+    L_{\mathrm{bez}\,11}
+        &=\set{w\in\Sigma^*: \text{$w$ neobsahuje podslovo $11$}},\\
+    L_{\mathrm{eq}}
+        &=\set{w\in\Sigma^*:|w|_0=|w|_1}.
+\end{align*}
+První dva jazyky budou regulární a~později pro ně sestrojíme automaty. Třetí jazyk regulární není: konečný automat si neumí pamatovat neomezeně velký rozdíl mezi počtem nul a~jedniček.
+
+\subsection{Rozhodovací problémy jako jazyky}
+
+V~minulé kapitole jsme vstupy rozhodovacích problémů kódovali pomocí nul a~jedniček. Rozhodovací problém tak můžeme ztotožnit s~jazykem všech zakódovaných vstupů,~pro které je odpověď kladná. Například
+\[\SAT=\set{\langle\varphi\rangle:\text{$\varphi$ je splnitelná formule v~CNF}},\]
+kde $\langle\varphi\rangle\in\set{0,1}^*$ značí binární kód formule $\varphi$. Tento pohled nám později umožňuje studovat výpočetní problémy pomocí strojů,~které přijímají jazyky.

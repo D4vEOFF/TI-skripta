@@ -1,0 +1,16 @@
+\begin{tikzpicture}[node distance=6mm]
+    \node[task,fill=blue!10,minimum width=24mm,minimum height=12mm,
+        font=\normalsize] (source) {zdrojový\\kód};
+    \node[task,fill=orange!12,minimum width=24mm,minimum height=12mm,
+        font=\normalsize,right=of source] (front) {přední část\\překladače};
+    \node[task,fill=orange!12,minimum width=24mm,minimum height=12mm,
+        font=\normalsize,right=of front] (ast) {strom po\\optimalizaci};
+    \node[task,fill=green!10,minimum width=24mm,minimum height=12mm,
+        font=\normalsize,right=of ast] (bytecode) {bajtkód};
+    \node[task,fill=green!10,minimum width=24mm,minimum height=12mm,
+        font=\normalsize,right=of bytecode] (vm) {virtuální\\stroj};
+    \draw[diredge] (source)--(front);
+    \draw[diredge] (front)--(ast);
+    \draw[diredge] (ast)--(bytecode);
+    \draw[diredge] (bytecode)--(vm);
+\end{tikzpicture}

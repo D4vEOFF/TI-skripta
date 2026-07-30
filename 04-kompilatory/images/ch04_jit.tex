@@ -1,0 +1,16 @@
+\begin{tikzpicture}[
+    box/.style={task,minimum width=29mm,font=\small}
+]
+    \node[box,fill=blue!10] (source) at (0,0) {zdrojový\\kód};
+    \node[box,fill=orange!12] (compiler) at (3.3,0) {kompilátor};
+    \node[box,fill=green!10] (bytecode) at (6.6,0) {bajtkód /\\mezikód};
+    \node[box,fill=orange!12] (runtime) at (9.9,0) {běhové\\prostředí};
+    \node[box,fill=green!10] (machine) at (13.2,0) {strojový\\kód};
+
+    \draw[diredge] (source)--(compiler);
+    \draw[diredge] (compiler)--(bytecode);
+    \draw[diredge] (bytecode)--(runtime);
+    \draw[diredge] (runtime)--(machine);
+    \node[below=4mm of runtime,align=center,font=\small]
+        {interpretace a případně\\JIT kompilace často používaných částí};
+\end{tikzpicture}

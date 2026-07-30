@@ -1,0 +1,10 @@
+\begin{tikzpicture}[
+    code/.style={task,minimum width=46mm,minimum height=23mm,align=left,font=\ttfamily\small}
+]
+    \node[code,fill=red!8] (before) at (0,0)
+        {x := 2 * 60\\y := x + 5\\print y};
+    \node[code,fill=green!10] (after) at (7.2,0)
+        {x := 120\\y := 125\\print 125};
+    \draw[diredge] (before)--node[above,align=center,font=\small]
+        {výpočet konstant\\a jejich šíření}(after);
+\end{tikzpicture}

@@ -1,0 +1,18 @@
+\begin{tikzpicture}[
+    expr/.style={task,fill=blue!8,minimum width=28mm,font=\small},
+    value/.style={task,fill=orange!12,minimum width=24mm,font=\small}
+]
+    \node[value] (steps) at (-3.2,0) {\texttt{steps}\\\texttt{number}};
+    \node[value] (speed) at (0,0) {\texttt{speed}\\\texttt{number}};
+    \node[expr] (mul) at (-1.6,-1.5) {$*$\\výsledek: \texttt{number}};
+    \node[value] (position) at (3.2,-1.5) {\texttt{position}\\\texttt{number}};
+    \node[expr] (add) at (0.8,-3.1) {$+$\\výsledek: \texttt{number}};
+    \node[value,fill=green!10] (target) at (0.8,-4.7)
+        {\texttt{newPosition}\\\texttt{number}};
+
+    \draw[diredge] (steps)--(mul);
+    \draw[diredge] (speed)--(mul);
+    \draw[diredge] (mul)--(add);
+    \draw[diredge] (position)--(add);
+    \draw[diredge] (add)--node[right,font=\small]{přiřazení}(target);
+\end{tikzpicture}

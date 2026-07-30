@@ -1,0 +1,10 @@
+\begin{tikzpicture}[scale=0.85]
+    \node[vertex] (a) at (0,0) {$1$};
+    \node[vertex] (b) at (-1.5,-1.3) {$4$};
+    \node[vertex] (c) at (1.5,-1.3) {$6$};
+    \node[vertex] (d) at (-2.2,-2.6) {$7$};
+    \node[vertex] (e) at (-0.8,-2.6) {$8$};
+    \node[vertex,draw=red] (f) at (0.8,-2.6) {$2$};
+    \foreach \x/\y in {a/b,a/c,b/d,b/e,c/f}\draw[edge](\x)--(\y);
+    \draw[red,diredge,bend left=35] (f) to node[right] {nahoru} (c);
+\end{tikzpicture}

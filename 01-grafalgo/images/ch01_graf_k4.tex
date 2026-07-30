@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+    \node[vertex] (v0) at (0,1.6) {$0$};
+    \node[vertex] (v1) at (-1.6,0) {$1$};
+    \node[vertex] (v2) at (0,-1.6) {$2$};
+    \node[vertex] (v3) at (1.6,0) {$3$};
+    \foreach \a/\b in {v0/v1,v0/v2,v0/v3,v1/v2,v1/v3,v2/v3}
+        \draw[edge] (\a)--(\b);
+\end{tikzpicture}

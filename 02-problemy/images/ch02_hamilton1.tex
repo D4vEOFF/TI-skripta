@@ -1,0 +1,9 @@
+\begin{tikzpicture}[scale=0.85]
+    \node[vertex,fill=black,minimum size=2mm] (c) at (0,0) {};
+    \foreach \i in {1,...,5} {
+        \node[vertex,fill=black,minimum size=2mm] (v\i) at ({90-72*(\i-1)}:2) {};
+        \draw[edge] (c)--(v\i);
+    }
+    \draw[edge](v1)--(v2);
+    \draw[edge](v3)--(v4);
+\end{tikzpicture}

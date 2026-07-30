@@ -50,8 +50,9 @@ def process_and_copy_sep_tex_files(root_project_path):
 
     for root, dirs, files in os.walk(root_project_path):
         for file in files:
-            # Check if the file name starts with 'ch0' and ends with '.tex'
-            if file.startswith('ch0') and file.endswith('.tex'):
+            # Překládáme pouze vstupní soubory kapitol (např.
+            # ch01-grafove-algoritmy.tex), nikoli TikZ obrázky ch01_*.tex.
+            if re.fullmatch(r'ch\d{2}-.+\.tex', file):
                 original_path = os.path.join(root, file)
 
                 # Read the content of the original .tex file

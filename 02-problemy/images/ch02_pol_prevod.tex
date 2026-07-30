@@ -1,0 +1,8 @@
+\begin{tikzpicture}[node distance=18mm]
+    \node[task] (a) {vstup $x$ problému $A$};
+    \node[task,right=of a] (f) {převod $f$};
+    \node[task,right=of f] (b) {vstup $f(x)$ problému $B$};
+    \draw[diredge] (a)--(f);
+    \draw[diredge] (f)--(b);
+    \node[below=7mm of f] {$x\in A\iff f(x)\in B$};
+\end{tikzpicture}

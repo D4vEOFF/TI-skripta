@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+    \initialstate{s}{(0,0)}{$S$}{(-1.2,0)}{180}
+    \state{a}{(3.4,0)}{$A$}
+    \acceptingstate{b}{(6.8,0)}{$B$}
+    \transitionarrow[loop above]{s}{above,fill=white,inner sep=1pt}{$b$}{s}
+    \transitionarrow{s}{above,fill=white,inner sep=1pt}{$a$}{a}
+    \transitionarrow[loop above]{a}{above,fill=white,inner sep=1pt}{$a$}{a}
+    \transitionarrow{a}{above,fill=white,inner sep=1pt}{$b$}{b}
+    \transitionarrow[bend left=46]{b}{below,fill=white,inner sep=1pt,pos=0.42}{$b$}{s}
+    \transitionarrow[bend left=28]{b}{below,fill=white,inner sep=1pt}{$a$}{a}
+\end{tikzpicture}

@@ -1,11 +1,11 @@
 \section{Binární halda}\label{sec:halda}
-Uveďme motivační příklad na úvod. Mějme seznam čísel,~z~něhož chceme (pokud možno co nejrychleji) vybrat minimální/maximální hodnotu. Pro maximum bychom sestavit následující jednoduchý algoritmus.
+Uveďme na úvod motivační příklad. Mějme seznam čísel,~z~něhož chceme co nejrychleji vybrat minimální nebo maximální hodnotu. Pro maximum bychom mohli sestavit následující jednoduchý algoritmus.
 \begin{algorithm}
     \caption{Vyhledání maximální hodnoty v~seznamu (\textsc{Max})}
     \label{alg:max}
     \KwIn{Seznam čísel $x_1,x_2,\dots,x_n$}
     $m\gets x_1$\\
-    \For{$i=1,2,\dots,x_n$}{
+    \For{$i=2,3,\dots,n$}{
         \If{$x_i>m$}{
             $m\gets x_i$
         }
@@ -14,11 +14,11 @@ Uveďme motivační příklad na úvod. Mějme seznam čísel,~z~něhož chceme 
     \KwOut{Maximální hodnota seznamu \textit{m}}
 \end{algorithm}
 
-Časová složitost bude zjevně $\bigO{n}$,~neboť algoritmus prochází všech $n$ prvků. Takovou úlohu lze však řešit rychleji,~pokud si prvky vhodně uspořádáme. K~tomu můžeme použít tzv. \emph{haldu}. 
+Časová složitost bude zjevně $\bigO{n}$,~neboť algoritmus prochází všech $n$ prvků. Pokud ale se seznamem pracujeme opakovaně a~průběžně jej udržujeme vhodně uspořádaný,~můžeme minimum či maximum získat rychleji. K~tomu můžeme použít tzv. \emph{haldu}.
 \begin{definition}[Minimová binární halda]\label{def:binarni_halda}
     Minimová binární halda je datová struktura tvaru binárního stromu,~kde v~každém vrcholu je uložena \emph{právě jedna} hodnota (tzv. \emph{klíč},~pro vrchol $v$ budeme značit jeho klíč $k(v)$) a~navíc platí:
     \begin{enumerate}[label=(\roman*)]
-        \item\label{binhalda_podminka_1} každá hladina je \emph{plně obsazena},~kromě poslední,~pričemž hladiny jsou zaplněny \emph{zleva}
+        \item\label{binhalda_podminka_1} každá hladina je \emph{plně obsazena},~kromě poslední,~přičemž vrcholy poslední hladiny jsou zaplněny \emph{zleva},
         \item\label{binhalda_podminka_2} a~je-li $v$ libovolný vrchol a~$s$ jeho syn,~pak $k(v)\leqslant k(s)$.
     \end{enumerate}
 \end{definition}
@@ -27,21 +27,21 @@ Uveďme motivační příklad na úvod. Mějme seznam čísel,~z~něhož chceme 
     \centering
     \begin{subfigure}{6cm}
         \centering
-        \includegraphics[scale=.4]{01-grafalgo/images/ch01_halda}
+        \input{01-grafalgo/images/ch01_halda.tex}
         \caption{Korektní halda.}
         \label{subfig:korektni_halda}
     \end{subfigure}
     \quad
     \begin{subfigure}{5cm}
         \centering
-        \includegraphics[scale=.4]{01-grafalgo/images/ch01_nekor_halda_1}
-        \caption{Chybějící vrchol v~1. hladině.}
+        \input{01-grafalgo/images/ch01_nekor_halda_1.tex}
+        \caption{Mezera před obsazeným místem v~poslední hladině.}
         \label{subfig:nekorektni_halda_1}
     \end{subfigure}
     \quad
     \begin{subfigure}{5cm}
         \centering
-        \includegraphics[scale=.4]{01-grafalgo/images/ch01_nekor_halda_2}
+        \input{01-grafalgo/images/ch01_nekor_halda_2.tex}
         \caption{Klíč levého syna je menší než klíč kořene.}
         \label{subfig:nekorektni_halda_2}
     \end{subfigure}
@@ -49,7 +49,7 @@ Uveďme motivační příklad na úvod. Mějme seznam čísel,~z~něhož chceme 
     \label{fig:halda_modely}
 \end{figure}
 
-Zde se nyní na chvíli pozastavme. Podmínka \ref{binhalda_podminka_2} v~definici binární haldy \ref{def:binarni_halda} má za následek totiž velmi příjemnou vlastnost,~když se podíváme,~kde se v~haldě nachází minimum. Pokud se budeme pohybovat od kořene směrem "dolů",~hodnoty ve vrcholech se budou pouze zvětšovat,~neboť klíče synů musí mít vždy stejnou nebo větší hodnotu než klíč v~rodiči. Minimum se tak vždy nachází \emph{v~kořeni stromu},~což znamená,~že zjistění minima tak můžeme provést v~\emph{konstantním čase} $\bigO{1}$.
+Zde se na chvíli pozastavme. Podmínka \ref{binhalda_podminka_2} v~definici binární haldy \ref{def:binarni_halda} má velmi příjemný důsledek. Pokud se budeme pohybovat od kořene směrem dolů,~hodnoty klíčů se nemohou zmenšovat. Minimum se proto vždy nachází \emph{v~kořeni stromu},~takže jeho zjištění zvládneme v~\emph{konstantním čase} $\bigO{1}$.
 \notebox{Pokud bychom chtěli naopak \emph{maximovou binární haldu},~bude definice \ref{def:binarni_halda} vypadat obdobně,~akorát v~podmínce \ref{binhalda_podminka_2} bude obrácená nerovnost,~tj. $k(v)\geqslant k(s)$ (klíč v~rodiči má vždy stejnou nebo vyšší hodnotu než klíče v~jeho synech). Maximum se bude opět nacházet v~kořeni haldy.}
 Je však více operací,~které bychom rádi s~haldou prováděli. Vypišme si všechny,~které nás budou zajímat.
 \begin{itemize}
@@ -64,14 +64,14 @@ Podívejme se postupně na jednotlivé operace a~jejich realizaci. S~dovolením 
 
 \subsection{Vkládání nového vrcholu}
 
-Při vkládání nového vrcholu (\textsc{Insert}) se nejdříve potřebujeme vypořádat s~tím,~kam vrchol v~haldě umístíme. S~tím nám ale pomůže podmínka \ref{binhalda_podminka_1} v~definici binární haldy. Všechny hladiny stromu jsou vždy plně obsazené,~kromě poslední,~která se všechny vrcholy nachází vlevo. To znamená,~že nový vrchol můžeme umístit na první volnou pozici vlevo na poslední hladině. To však nemůžeme provést zcela beztrestně,~neboť nemáme nijak zaručeno,~že bude splněna podmínka \ref{binhalda_podminka_2}. Klíč v~novém vrcholu může mít hodnotu \emph{ostře menší} než jeho rodič. Haldu "opravíme" postupným prohazováním vrcholu s~jeho rodičem,~dokud nebude podmínka splněna (viz obrázek \ref{fig:vkladani_vrcholu_halda}).
+Při vkládání nového vrcholu (\textsc{Insert}) nejdříve potřebujeme rozhodnout,~kam jej umístíme. S~tím nám pomůže podmínka \ref{binhalda_podminka_1}: nový vrchol vložíme na první volné místo v~pořadí zleva doprava. Pokud je dosavadní poslední hladina plná,~založíme novou hladinu a~vrchol umístíme zcela vlevo. Tím zachováme tvar haldy,~ale nemusí být splněna podmínka \ref{binhalda_podminka_2}. Klíč nového vrcholu může být menší než klíč jeho rodiče. Haldu opravíme postupným prohazováním klíče s~rodičem,~dokud nebude podmínka splněna (viz obrázek \ref{fig:vkladani_vrcholu_halda}).
 \begin{figure}[h]
     \centering
     \begin{subfigure}{7cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_vkladani_1}
+        \input{01-grafalgo/images/ch01_vkladani_1.tex}
     \end{subfigure}
     \begin{subfigure}{7cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_vkladani_2}
+        \input{01-grafalgo/images/ch01_vkladani_2.tex}
     \end{subfigure}
     \caption{Vkládání nového vrcholu do haldy.}
     \label{fig:vkladani_vrcholu_halda}
@@ -85,42 +85,42 @@ Postup můžeme zapsat zkráceně ve třech bodech takto:
 
 \subsection{Odstranění minima}
 
-Co se týče získání minimálního klíče v~haldě,~jedná se o~velmi triviální operaci. Zkrátka "přečteme" klíč v~kořeni a~jsme hotovi. Ovšem pokud bychom chtěli minimum (\textsc{ExtractMin}) ze stromu odstanit,~bude to již o~něco složtější. Kořen ze stromu nemůžeme "jen tak" smazat,~jeho pozici musí zastoupit jiný vrchol. Abychom neporušili vlastnosti haldy,~nahradíme odstraněný kořen \emph{nejlevějším vrcholem na poslední hladině}. Tím jsme jistě neporušili vlastnost \ref{binhalda_podminka_1},~neboť poslední hladina,~jako jediná,~nemusí být plně obsazená.
+Získání minimálního klíče v~haldě je triviální: přečteme klíč v~kořeni a~jsme hotovi. Pokud však chceme minimum operací \textsc{ExtractMin} také odstranit,~je to o~něco složitější. Kořen nemůžeme jen smazat,~jeho pozici musí zastoupit jiný vrchol. Abychom neporušili tvar haldy,~přesuneme do kořene \emph{poslední vrchol v~pořadí zleva doprava},~tedy nejpravější obsazený vrchol poslední hladiny,~a~jeho původní pozici odstraníme.
 
-Nyní však (stejně jako u~vkládání vrcholu) nastavá problém s~druhou podmínkou,~neboť touto operací jsme ji mohli porušit. Provedeme obdobný proces,~jako pri vkládání vrcholu do haldy,~ale vrchol nyní bude "probublávat" směrem dolů. Podíváme se na syny daného vrcholu a~pokud klíč některého z~nich je menší než klíč nového kořene,~pak jej s~ním prohodíme (v~případě,~že klíče obou synů jsou menší,~než klíč kořene,~prohodíme s~menším z~nich).
+Nyní však (stejně jako u~vkládání vrcholu) nastává problém s~druhou podmínkou,~neboť touto operací jsme ji mohli porušit. Provedeme obdobný proces,~jako při vkládání vrcholu do haldy,~ale vrchol nyní bude "probublávat" směrem dolů. Podíváme se na syny daného vrcholu a~pokud klíč některého z~nich je menší než klíč nového kořene,~pak jej s~ním prohodíme (v~případě,~že klíče obou synů jsou menší,~než klíč kořene,~prohodíme s~menším z~nich).
 \begin{figure}[h]
     \centering
     \begin{subfigure}{5cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_odebirani_1}
+        \input{01-grafalgo/images/ch01_odebirani_1.tex}
     \end{subfigure}
     \begin{subfigure}{5cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_odebirani_2}
+        \input{01-grafalgo/images/ch01_odebirani_2.tex}
     \end{subfigure}
     \begin{subfigure}{5cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_odebirani_3}
+        \input{01-grafalgo/images/ch01_odebirani_3.tex}
     \end{subfigure}
     \begin{subfigure}{5cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_odebirani_4}
+        \input{01-grafalgo/images/ch01_odebirani_4.tex}
     \end{subfigure}
     \begin{subfigure}{5cm}
-        \includegraphics[scale=.5]{01-grafalgo/images/ch01_odebirani_5}
+        \input{01-grafalgo/images/ch01_odebirani_5.tex}
     \end{subfigure}
     \caption{Odebírání vrcholu (kořene) s~minimálním klíčem.}
     \label{fig:odebirani_vrcholu_halda}
 \end{figure}
 V~bodech můžeme zapsat celou operaci následovně:
 \begin{itemize}
-    \item Smažeme kořen a~nahradíme jej nejlevějším vrcholem na poslední hladině.
+    \item Smažeme kořen a~nahradíme jej nejpravějším obsazeným vrcholem na poslední hladině.
     \item Tento vrchol (resp. jeho klíč) porovnáme s~jeho syny a~případně prohodíme s~tím,~jehož klíč je menší.
     \item Opakujeme druhý krok.
 \end{itemize}
-Operacím,~které jsme prezentovali při vkládání vrcholu,~resp. odebírání minima z~haldy,~kdy vrchol "probublával" nahoru,~resp. dolů,~se někdy nazývají \textsc{BubbleUp} a~\textsc{BubbleDown}. Ještě se nám budou hodit u~operací \textsc{Increase} a~\textsc{Decrease}.
+Operace,~při nichž vrchol během vkládání \uv{probublává} nahoru nebo během odebírání minima dolů,~se někdy nazývají \textsc{BubbleUp} a~\textsc{BubbleDown}. Ještě se nám budou hodit u~operací \textsc{Increase} a~\textsc{Decrease}.
 
 \subsection{Zvýšení a~snížení hodnoty klíče ve vrcholu}
 
-Poslední dvojice operací,~která se nám bude hodit,~je zvýšení (\textsc{Increase}) a~snížení (\textsc{Decrease}) hodnoty klíče ve vybraném vrcholu. K~tomu potřebujeme akorát vyřešit,~jak budeme k~vrcholům přistupovat. Podle klíče vyhledávat neumíme,~ale můžeme si zavést např. pomocný slovník,~který budeme "adresovat" pomocí příslušného vrcholu a~vracenou hodnotou bude klíč ve vrcholu. Takto spotřebujeme navíc pouze $\bigO{n}$ paměti,~kde $n$ je počet vrcholů v~haldě.
+Poslední dvojicí operací,~která se nám bude hodit,~je zvýšení (\textsc{Increase}) a~snížení (\textsc{Decrease}) klíče ve vybraném vrcholu. Předpokládáme přitom,~že umíme daný vrchol v~haldě přímo najít. Pokud v~haldě uchováváme složitější objekty,~můžeme si například vést pomocný slovník,~který každému objektu přiřadí jeho současnou pozici v~haldě. Při každém prohození pak aktualizujeme i~slovník. Ten spotřebuje navíc $\bigO{n}$ paměti.
 
-Realizace samotných operací je již jednoduchá. Pokud protovedeme \textsc{Increase} klíče v~určitém vrcholu,~pak z~důvodu,~že klíče v~synech vrcholu jsou stejné nebo větší,~se halda může pokazit pouze "směrem dolů". Tedy provedeme nám již známé prohazování vrcholu s~jeho syny,~dokud nebude halda opravena (\textsc{BubbleDown}),~stejně jako v~případě odebírání kořene (\textsc{ExtractMin}).
+Realizace samotných operací je již jednoduchá. Pokud provedeme \textsc{Increase} klíče v~určitém vrcholu,~může se halda pokazit pouze směrem dolů. Provedeme tedy \textsc{BubbleDown},~stejně jako při odebírání kořene.
 
 Operaci \textsc{Decrease} provedeme zcela stejně,~akorát nyní se halda bude kazit "směrem nahoru",~takže provedeme \textsc{BubbleUp},~jako při vkládání nového vrcholu (\textsc{Insert}).
 \notebox{V~případě \emph{maximové binární haldy} by operace vypadaly zcela stejně,~akorát při operaci \textsc{Increase} budeme opravovat haldu směrem nahoru a~u~\textsc{Decrease} směrem dolů.}
@@ -131,7 +131,7 @@ Pojďme si nyní rozebrat časové složitosti zmíněných operací \textsc{Ins
 \tipbox{Všimněme si,~že po každém prohození vrcholů při \textsc{BubbleUp} nebo \textsc{BubbleDown} se vrchol posune o~jednu hladinu výše/níže.}
 Víme tak,~že při opravování haldy se vrchol může posunout \emph{maximálně o~počet hladin},~který má daná halda. Časová složitost daných operací bude tak závislá na jejich počtu. Tím jsme se dostali o~trochu blíže řešení,~ale rádi bychom věděli,~jak se bude době trvání daných operací měnit v~závislosti na \emph{počtu vrcholů v~haldě},~nikoliv počtu hladin. Mezi těmito proměnnými však existuje hezká závislost.
 
-Dejme tomu,~že naše halda má $n$ vrcholů v~celkově $h$ hladinách,~přičemž poslední hladina \emph{je plně obsazena} (viz obrázek \ref{fig:halda_hladiny}). (Mohlo by se,~v~obecném případě,~samozřejmě stát,~že poslední hladina plně obsazena nebude,~ale jediné,~co se tím změní,~bude,~že mezi $n$ a~výsledným výrazem bude místo rovnosti nerovnost. S~plnou hladinou se nám ale bude lépe počítat,~protože při analýze časové složitost nás zajímá nejhorší možný případ.) Pokud budeme mít haldu s~jednou hladinou,~bude mít pouze jeden vrchol,~a~to kořen. S~dvěma hladinami budou již 3~vrcholy v~haldě. S~třemi hladinami jich bude 7,~atd (viz tabulka \ref{tab:halda_vrcholy_hladiny}).
+Dejme tomu,~že naše halda má $n$ vrcholů v~celkově $h$ hladinách. Halda s~jednou plnou hladinou má jeden vrchol,~se dvěma plnými hladinami tři vrcholy,~se třemi sedm vrcholů atd. (viz tabulka \ref{tab:halda_vrcholy_hladiny}).
 \begin{table}[h]
     \centering
     \begin{tabular}{|l|c|c|c|c|c|c|}
@@ -144,20 +144,20 @@ Dejme tomu,~že naše halda má $n$ vrcholů v~celkově $h$ hladinách,~přičem
 \end{table}
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.75]{01-grafalgo/images/ch01_halda_hladiny}
-    \caption{Plná binární halda s obecně $h$ hladinami.}
+    \input{01-grafalgo/images/ch01_halda_hladiny.tex}
+    \caption{Plná binární halda s~obecně $h$ hladinami.}
     \label{fig:halda_hladiny}
 \end{figure}
-Z~tabulky \ref{tab:halda_vrcholy_hladiny} si můžeme všimnout,~že počet vrcholů je vždy \emph{mocnina dvojky snížená o~jedna}. Výsledná závislost je tedy $n=2^h-1$. V~případě,~že by poslední hladina nebyla plně obsazena,~by se rovnost změnila v~nerovnost,~tj. $n\leqslant2^h-1$. Tím máme již vše připravené k~tomu,~abychom odvodili časovou složitost daných operací.
+Je-li všech $h$ hladin plných,~platí $n=2^h-1$. V~obecné haldě jsou první $h-1$ hladiny plné a~poslední obsahuje alespoň jeden vrchol. Proto
+\[2^{h-1}\leqslant n\leqslant 2^h-1.\]
+Z~levé nerovnosti dostáváme $h\leqslant\log_2 n+1$,~tedy počet hladin je $\bigO{\log n}$. Tím máme vše připravené k~odvození složitosti operací.
 \begin{theorem}[Složitost operací v~binární haldě]
     Operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} mají časovou složitost $\bigO{\log{n}}$. Operace \textsc{Min} má časovou složitost $\bigO{1}$.
 \end{theorem}
 \begin{proof}
-    V~případě \textsc{Min} je to jednoduché,~zkrátka jen přečteme klíč v~kořeni,~což zjevně potrvá $\bigO{1}$. U~zbývajících operací opravujeme haldu pomocí \textsc{BubbleUp} a~\textsc{BubbleDown}. Předpokládejme,~nastal nejhorší možný případ,~tj. halda má $h$ hladin a~je plně obsazena (tzn. včetně poslední hladiny). Víme,~že "probublání" vrcholu haldou nahoru/dolů potrvá řádově $\bigO{h}$. My však víme,~že $n=2^h-1$. Tedy zde bude stačit,~když si vyjádříme $h$ z~rovnosti.
-    \[n=2^h-1 \iff 2^h=n+1 \iff h=\log_2{(n+1)}\stackrel{\texttt{*}}{=}\dfrac{1}{\log{2}}\cdot\log{(n+1)}.\]
-    (V~rovnosti \texttt{*} jsme využili vzorec $\log_b{a}=\log{a}/\log{b}$.) Operace \textsc{BubbleUp} a~\textsc{BubbleDown} tedy potrvají
-    \[\bigO{h}=\bigO{\dfrac{1}{\log{2}}\cdot\log{(n+1)}}\stackrel{\texttt{*}}{=}\bigO{\log{n}}.\]
-    (V~\texttt{*} je jednička v~logaritmu zanedbatelná v~rámci $\mathcal{O}$-notace. Výraz $1/\log{2}$ představuje konstantu a~tudíž je též zanedbatelný.) Tedy operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} mají logaritmickou časovou složitost.
+    V~případě \textsc{Min} jen přečteme klíč v~kořeni,~což potrvá $\bigO{1}$. U~zbývajících operací opravujeme haldu pomocí \textsc{BubbleUp} nebo \textsc{BubbleDown}. Při každém prohození se zpracovávaný klíč posune o~jednu hladinu. Provede se tedy nejvýše $h-1$ prohození. Protože $h\leqslant\log_2 n+1$,~dostáváme
+    \[\bigO{h}=\bigO{\log n}.\]
+    Operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} proto mají logaritmickou časovou složitost.
 \end{proof}
 Zkusme si na závěr udělat menší porovnání oproti poli,~se kterým jsme začínali (viz tabulka \ref{tab:halda_pole_operace}).
 \begin{table}[h]

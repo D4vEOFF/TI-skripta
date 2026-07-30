@@ -1,0 +1,23 @@
+\begin{tikzpicture}[
+    box/.style={task,minimum width=25mm,minimum height=10mm,font=\small}
+]
+    \node[font=\bfseries] at (4.95,2.2) {kompilovaný překlad};
+    \node[box,fill=blue!10] (src1) at (0,1.1) {zdrojový\\program};
+    \node[box,fill=orange!12] (comp) at (3.3,1.1) {překladač};
+    \node[box,fill=green!10] (target) at (6.6,1.1) {cílový\\program};
+    \node[box,fill=green!10] (result1) at (9.9,1.1) {výsledky};
+    \node[box,fill=gray!10] (data1) at (6.6,-0.2) {data};
+    \draw[diredge] (src1)--(comp);
+    \draw[diredge] (comp)--(target);
+    \draw[diredge] (data1)--(target);
+    \draw[diredge] (target)--(result1);
+
+    \node[font=\bfseries] at (4.95,-1.4) {interpretovaný překlad};
+    \node[box,fill=blue!10] (src2) at (0,-2.5) {zdrojový\\program};
+    \node[box,fill=orange!12] (interp) at (4.95,-2.5) {interpret};
+    \node[box,fill=green!10] (result2) at (9.9,-2.5) {výsledky};
+    \node[box,fill=gray!10] (data2) at (4.95,-3.8) {data};
+    \draw[diredge] (src2)--(interp);
+    \draw[diredge] (data2)--(interp);
+    \draw[diredge] (interp)--(result2);
+\end{tikzpicture}

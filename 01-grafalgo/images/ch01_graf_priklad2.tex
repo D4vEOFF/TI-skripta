@@ -1,0 +1,6 @@
+\begin{tikzpicture}[scale=0.9]
+    \foreach \i in {1,...,6}
+        \node[vertex] (v\i) at ({90-60*(\i-1)}:1.7) {$\i$};
+    \foreach \a/\b in {1/2,1/3,1/4,1/6,2/3,2/5,3/4,3/6,4/5,5/6}
+        \draw[edge] (v\a)--(v\b);
+\end{tikzpicture}

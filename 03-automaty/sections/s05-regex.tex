@@ -1,1 +1,136 @@
 \section{Regulární výrazy}\label{sec:regex}
+
+Automat je názorný,~ale pro větší jazyky se rychle rozroste. Regulární výraz popisuje tentýž druh jazyků stručněji: skládá malé jazyky pomocí sjednocení,~zřetězení a~Kleeneho hvězdy.
+
+\begin{definition}[Regulární výraz]
+    Mějme abecedu $\Sigma$. Množinu regulárních výrazů nad $\Sigma$,~značenou $\regex(\Sigma)$,~definujeme následovně:
+    \begin{enumerate}
+        \item $\emptyset$,~$\lambda$ a~každý znak $a\in\Sigma$ jsou regulární výrazy;
+        \item jsou-li $R,S\in\regex(\Sigma)$,~pak také
+        \[
+            (R\mid S),\qquad (RS),\qquad (R^*)
+        \]
+        jsou regulární výrazy;
+        \item nic dalšího regulárním výrazem není.
+    \end{enumerate}
+\end{definition}
+
+Každému regulárnímu výrazu přiřadíme jazyk:
+\[
+\begin{aligned}
+    L(\emptyset)&=\emptyset, &
+    L(\lambda)&=\set{\lambda}, &
+    L(a)&=\set{a},\\
+    L(R\mid S)&=L(R)\cup L(S),&
+    L(RS)&=L(R)L(S),&
+    L(R^*)&=L(R)^*.
+\end{aligned}
+\]
+Řekneme,~že výraz $R$ \emph{popisuje} jazyk $L(R)$.
+
+Závorky se obvykle vynechávají. Nejvyšší prioritu má hvězda,~potom zřetězení a~nakonec sjednocení. Výraz $01^*\mid 10$ tedy znamená $(0(1^*))\mid(10)$.
+
+\begin{example}
+    Nad abecedou $\Sigma=\set{0,1}$ platí:
+    \begin{enumerate}
+        \item $(0\mid1)^*$ popisuje všechna binární slova;
+        \item $(0\mid1)^*01$ popisuje slova končící na $01$;
+        \item $0^*10^*10^*$ popisuje slova s~právě dvěma jedničkami;
+        \item $0^*(10^*10^*)^*$ popisuje slova se sudým počtem jedniček;
+        \item $(0\mid10)^*(\lambda\mid1)$ popisuje slova bez dvou jedniček vedle sebe;
+        \item
+        \[
+            0(0\mid1)^*0\mid1(0\mid1)^*1\mid0\mid1
+        \]
+        popisuje neprázdná slova,~která začínají a~končí stejným znakem.
+    \end{enumerate}
+\end{example}
+
+\notebox{U~složitějšího regulárního výrazu se vyplatí nejdřív slovně říct,~co znamenají jeho části. Například v~$0^*(10^*10^*)^*$ přidá každý průchod vnější hvězdou právě dvě jedničky; nuly mohou být kdekoliv mezi nimi.}
+
+\subsection{Kleeneho věta}
+
+Regulární výrazy nejsou jen pohodlnou zkratkou pro několik oblíbených jazyků. Popisují přesně totéž co konečné automaty.
+
+\begin{theorem}[Kleeneho věta]\label{thm:kleene}
+    Jazyk je regulární právě tehdy,~když jej popisuje nějaký regulární výraz.
+\end{theorem}
+
+\begin{proof}
+    Dokážeme obě implikace konstrukcí.
+
+    \emph{Z~regulárního výrazu na automat.}
+    Postupujeme indukcí podle stavby výrazu. Pro základní výrazy $\emptyset$,~$\lambda$ a~$a\in\Sigma$ sestrojíme $\lambda$-NFA na obrázku \ref{fig:kleene-base}. Automat pro $\emptyset$ nemá mezi počátečním a~přijímajícím stavem žádnou cestu,~automat pro $\lambda$ má jediný $\lambda$-přechod a~automat pro $a$ jediný přechod označený $a$.
+
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_kleene-zaklad.tex}
+        \caption{Základní automaty pro výrazy $\emptyset$,~$\lambda$ a~$a$.}
+        \label{fig:kleene-base}
+    \end{figure}
+
+    Předpokládejme nyní,~že už máme automaty pro výrazy $R$ a~$S$. Jejich stavy případně přejmenujeme,~aby se množiny stavů nepřekrývaly. Navíc můžeme bez újmy předpokládat,~že každý z~nich má právě jeden přijímající stav bez odchozích přechodů: stačí přidat nový přijímající stav a~ze všech původních přijímajících stavů do něj vést $\lambda$-přechod.
+
+    Pro sjednocení $R\mid S$ přidáme nový počáteční a~nový přijímající stav. Z~nového začátku se automat $\lambda$-přechodem vydá do automatu pro $R$ nebo $S$ a~z~jejich konců přejde do nového přijímajícího stavu.
+
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_kleene-sjednoceni.tex}
+        \caption{Konstrukce automatu pro sjednocení $R\mid S$.}
+        \label{fig:kleene-union}
+    \end{figure}
+
+    Pro zřetězení $RS$ spojíme přijímající stav automatu pro $R$ $\lambda$-přechodem s~počátečním stavem automatu pro $S$. První část vstupu tedy musí přijmout automat pro $R$ a~zbytek automat pro $S$.
+
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_kleene-konkatenace.tex}
+        \caption{Konstrukce automatu pro zřetězení $RS$.}
+        \label{fig:kleene-concat}
+    \end{figure}
+
+    Pro $R^*$ přidáme nový začátek a~konec. Přímý $\lambda$-přechod mezi nimi přijme nula opakování. Další přechody umožní spustit automat pro $R$,~po jednom průchodu skončit,~nebo se vrátit a~spustit jej znovu.
+
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_kleene-hvezda.tex}
+        \caption{Konstrukce automatu pro Kleeneho hvězdu $R^*$.}
+        \label{fig:kleene-star}
+    \end{figure}
+
+    Každá konstrukce přijímá právě jazyk odpovídající operace. Indukce tedy pro každý regulární výraz vytvoří ekvivalentní $\lambda$-NFA. Přechody bez čtení znaku umíme odstranit a~podmnožinovou konstrukcí dostaneme DFA. Jazyk výrazu je proto regulární.
+
+    \emph{Z~automatu na regulární výraz.}
+    Mějme DFA $A=(Q,\Sigma,\delta,q_s,F)$ a~očíslujme jeho stavy
+    \[
+        Q=\set{q_1,\dots,q_n}.
+    \]
+    Pro dvojici stavů $q_i,q_j$ a~číslo $k\in\set{0,\dots,n}$ sestrojíme regulární výraz $R_{ij}^{(k)}$. Bude popisovat právě slova,~po jejichž přečtení se automat dostane z~$q_i$ do $q_j$ a~všechny mezilehlé stavy cesty patří do množiny $\set{q_1,\dots,q_k}$. Počáteční ani koncový stav se za mezilehlý nepovažují.
+
+    Pro $k=0$ nesmíme použít žádný mezilehlý stav. Výraz $R_{ij}^{(0)}$ proto vytvoříme jako sjednocení všech znaků $a$,~pro které $\delta(q_i,a)=q_j$. Je-li $i=j$,~přidáme do sjednocení také $\lambda$; není-li co sjednotit,~použijeme $\emptyset$.
+
+    Pro $k\geqslant1$ položíme
+    \begin{equation}
+        R_{ij}^{(k)}
+        =
+        R_{ij}^{(k-1)}
+        \mid
+        R_{ik}^{(k-1)}
+        \bigl(R_{kk}^{(k-1)}\bigr)^*
+        R_{kj}^{(k-1)}.
+        \label{eq:kleene-recurrence}
+    \end{equation}
+    Každá cesta povolená pro $R_{ij}^{(k)}$ buď stav $q_k$ jako mezilehlý vůbec nepoužije,~a~pak ji popisuje první člen,~nebo jej použije. Ve druhém případě cestu rozřízneme při prvním příchodu do $q_k$ a~při posledním odchodu z~něj. Dostaneme cestu z~$q_i$ do $q_k$,~libovolný počet návratů z~$q_k$ do něj samého a~cestu z~$q_k$ do $q_j$; žádná z~těchto částí už nemá $q_k$ uvnitř. Právě to popisuje druhý člen vztahu \eqref{eq:kleene-recurrence}. Obráceně lze části popsané kterýmkoliv členem vždy spojit v~povolenou cestu. Rekurence je tedy správná.
+
+    Po dosazení $k=n$ dovolíme jako mezilehlé všechny stavy automatu. Hledaný regulární výraz je sjednocení
+    \[
+        \mathop{\mid}_{q_j\in F} R_{sj}^{(n)},
+    \]
+    kde $q_s$ je počáteční stav. Je-li $F=\emptyset$,~vezmeme místo sjednocení výraz $\emptyset$. Jeho jazyk tvoří právě slova,~která dovedou automat z~počátečního stavu do některého přijímajícího stavu. Je tedy roven $L(A)$.
+\end{proof}
+
+\notebox{Obě poloviny důkazu jsou zároveň algoritmy. Z~výrazu umíme mechanicky postavit automat a~z~automatu zase výraz. Výsledek může být mnohem větší než zadání; věta slibuje existenci a~postup,~nikoliv vždy hezkému výsledku.}
+
+\subsection{Regulární výrazy v~praxi}
+
+Programovací jazyky a~nástroje pro hledání v~textu často používají rozšířené regulární výrazy. Zápisy jako \texttt{[0-9]} nebo \texttt{+} bývají jen zkratkami pro naše tři operace. Některé nástroje však přidávají třeba zpětné odkazy na dříve nalezenou část textu. Takový \uv{regex} už může popisovat i~neregulární jazyk,~a~není tedy regulárním výrazem ve smyslu této kapitoly.

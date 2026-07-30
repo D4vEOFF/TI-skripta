@@ -1,0 +1,28 @@
+\begin{tikzpicture}[
+    phase/.style={task,minimum width=27mm,font=\small},
+    data/.style={task,minimum width=24mm,font=\small}
+]
+    \draw[thick,rounded corners=4pt] (-1.5,1.45) rectangle (10.7,-2.75);
+    \node[fill=white,inner xsep=6pt] at (4.6,1.45) {\textbf{překladač}};
+
+    \node[data,fill=red!12] (src) at (0,0) {zdrojový\\kód};
+    \node[phase,fill=red!12] (lex) at (3,0) {lexikální\\analýza};
+    \node[phase,fill=red!12] (syn) at (6,0) {syntaktická\\analýza};
+    \node[phase,fill=red!12] (sem) at (9,0) {sémantická\\analýza};
+
+    \node[data,fill=orange!15] (ir) at (9,-1.6) {mezikód};
+    \node[phase,fill=orange!15] (opt) at (6,-1.6) {optimalizace};
+    \node[phase,fill=orange!15] (gen) at (3,-1.6) {generování\\kódu};
+    \node[data,fill=green!12] (target) at (0,-1.6) {cílový\\kód};
+
+    \draw[diredge] (src)--(lex);
+    \draw[diredge] (lex)--(syn);
+    \draw[diredge] (syn)--(sem);
+    \draw[diredge] (sem)--(ir);
+    \draw[diredge] (ir)--(opt);
+    \draw[diredge] (opt)--(gen);
+    \draw[diredge] (gen)--(target);
+
+    \node[font=\small] at (4.5,0.85) {\textbf{přední část (front end)}};
+    \node[font=\small] at (4.5,-2.35) {\textbf{koncová část (back end)}};
+\end{tikzpicture}

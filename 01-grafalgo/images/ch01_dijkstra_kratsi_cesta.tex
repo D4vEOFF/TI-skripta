@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+    \node[vertex] (s) at (0,0) {$v_0$};
+    \node[vertex] (a) at (2,1.4) {$a$};
+    \node[vertex] (b) at (4,1.4) {$b$};
+    \node[vertex] (c) at (2,-1.4) {$c$};
+    \node[vertex] (d) at (4,-1.4) {$d$};
+    \node[vertex] (t) at (6,0) {$v$};
+    \foreach \x/\y/\w in {s/a/2,a/b/2,b/t/5,s/c/3,c/d/1,d/t/2,a/c/2,b/d/1}
+        \draw[edge] (\x)--node[fill=white,inner sep=1pt]{$\w$}(\y);
+    \draw[red,very thick] (s)--(c)--(d)--(t);
+    \node[red] at (3,-2) {dosud nejlepší cesta};
+\end{tikzpicture}

@@ -1,0 +1,25 @@
+\begin{tikzpicture}[
+    file/.style={task,fill=blue!8,minimum width=22mm,font=\small},
+    tool/.style={task,fill=orange!12,minimum width=25mm,
+        text width=21mm,align=center,font=\small}
+]
+    \node[file] (c) at (0,0) {\texttt{hello.c}};
+    \node[tool] (pre) at (3,0) {preprocesor};
+    \node[file] (i) at (6,0) {\texttt{hello.i}};
+    \node[tool] (comp) at (9,0) {kompilátor};
+    \node[file] (s) at (12,0) {\texttt{hello.s}};
+
+    \node[tool] (asm) at (9,-1.8) {assembler};
+    \node[file] (o) at (6,-1.8) {\texttt{hello.o}};
+    \node[tool] (link) at (3,-1.8) {linker};
+    \node[file,fill=green!10] (exe) at (0,-1.8) {\texttt{hello}};
+
+    \draw[diredge] (c)--(pre);
+    \draw[diredge] (pre)--(i);
+    \draw[diredge] (i)--(comp);
+    \draw[diredge] (comp)--(s);
+    \draw[diredge] (s.south)--++(0,-0.45)-|(asm.east);
+    \draw[diredge] (asm)--(o);
+    \draw[diredge] (o)--(link);
+    \draw[diredge] (link)--(exe);
+\end{tikzpicture}

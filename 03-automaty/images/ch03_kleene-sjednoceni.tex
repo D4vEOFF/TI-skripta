@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+    \initialstate{s}{(0,0)}{} {(-1,0)}{180}
+    \draw[thick,rounded corners=3pt,fill=blue!8] (1.6,0.55) rectangle (5.5,2.35);
+    \draw[thick,rounded corners=3pt,fill=green!8] (1.6,-0.55) rectangle (5.5,-2.35);
+    \node at (3.55,1.95) {automat pro $R$};
+    \node at (3.55,-1.95) {automat pro $S$};
+    \state{r0}{(2.25,1.25)}{}
+    \state{r1}{(4.85,1.25)}{}
+    \state{t0}{(2.25,-1.25)}{}
+    \state{t1}{(4.85,-1.25)}{}
+    \acceptingstate{f}{(7.1,0)}{}
+    \transitionarrow[bend left=8]{s}{above,fill=white,inner sep=1pt}{$\lambda$}{r0}
+    \transitionarrow[bend right=8]{s}{below,fill=white,inner sep=1pt}{$\lambda$}{t0}
+    \draw[transition] (r0) -- (r1);
+    \draw[transition] (t0) -- (t1);
+    \transitionarrow[bend left=8]{r1}{above,fill=white,inner sep=1pt}{$\lambda$}{f}
+    \transitionarrow[bend right=8]{t1}{below,fill=white,inner sep=1pt}{$\lambda$}{f}
+\end{tikzpicture}

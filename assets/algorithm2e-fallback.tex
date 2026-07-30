@@ -1,0 +1,59 @@
+% Jednoduchá kompatibilní vrstva pro prostředí, kde není nainstalován
+% algorithm2e. V plné instalaci TeX Live se tento soubor vůbec nenačte.
+\newcounter{algocf}[section]
+\renewcommand{\thealgocf}{\thesection.\arabic{algocf}}
+\newcommand{\algorithmcfname}{Algoritmus}
+
+\newenvironment{algorithm}{%
+    \par\medskip
+    \refstepcounter{algocf}%
+    \noindent\begin{minipage}{\linewidth}
+    \hrule\smallskip
+    \renewcommand{\caption}[1]{%
+        \textbf{Algoritmus \thealgocf:} ##1\par\smallskip
+    }%
+    \ttfamily
+}{%
+    \par\smallskip\hrule
+    \end{minipage}
+    \par\medskip
+}
+
+\newcommand{\SetKwInput}[2]{%
+    \expandafter\newcommand\csname #1\endcsname[1]{%
+        \textnormal{\textbf{#2:} ##1}\par
+    }%
+}
+\newcommand{\SetKwProg}[4]{%
+    \expandafter\newcommand\csname #1\endcsname[2]{%
+        \textnormal{\textbf{#2} ##1}\par
+        \begingroup\leftskip=1.5em ##2\par\endgroup
+    }%
+}
+\newcommand{\SetKw}[2]{%
+    \expandafter\newcommand\csname #1\endcsname[1]{%
+        \textnormal{\textbf{#2} ##1}%
+    }%
+}
+
+\newcommand{\tcp}[1]{\textnormal{\itshape // #1}\par}
+\newcommand{\Return}[1]{\textnormal{\textbf{vrať} #1}}
+\newcommand{\For}[2]{%
+    \textnormal{\textbf{pro} #1 \textbf{opakuj}}\par
+    \begingroup\leftskip=1.5em #2\par\endgroup
+}
+\newcommand{\ForEach}[2]{%
+    \textnormal{\textbf{pro každý} #1 \textbf{opakuj}}\par
+    \begingroup\leftskip=1.5em #2\par\endgroup
+}
+\newcommand{\While}[2]{%
+    \textnormal{\textbf{dokud} #1 \textbf{opakuj}}\par
+    \begingroup\leftskip=1.5em #2\par\endgroup
+}
+\newcommand{\If}[2]{%
+    \textnormal{\textbf{pokud} #1 \textbf{pak}}\par
+    \begingroup\leftskip=1.5em #2\par\endgroup
+}
+\newcommand{\lIf}[2]{%
+    \textnormal{\textbf{pokud} #1 \textbf{pak} #2}\par
+}

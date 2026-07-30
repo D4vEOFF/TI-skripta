@@ -1,0 +1,86 @@
+\section{Optimalizace}\label{sec:optimalizace}
+
+Po přední části máme ověřenou reprezentaci programu. Mohli bychom z~ní rovnou vytvořit cílový kód,~ale výsledek by často prováděl zbytečnou práci.
+
+\emph{Optimalizace programu} je úprava jeho vnitřní reprezentace,~která zachová pozorovatelné chování programu a~zlepší zvolené vlastnosti výsledného kódu,~například dobu běhu,~velikost nebo spotřebu energie.
+
+Slovo \uv{optimalizace} neznamená,~že překladač vždy nalezne nejlepší možný program. Takový požadavek by byl příliš drahý a~obecně i~algoritmicky problematický. Překladač používá sadu transformací,~které bývají výhodné a~jejichž správnost umí zdůvodnit.
+
+\subsection{Lokální optimalizace}
+
+\emph{Základní blok} je souvislá posloupnost instrukcí,~do níž se vstupuje pouze na začátku a~z~níž se odchází pouze na konci. Uvnitř bloku se tedy tok řízení nevětví. \emph{Lokální optimalizace} pracuje s~jedním takovým blokem.
+
+Mezi běžné lokální úpravy patří:
+\begin{itemize}
+    \item \emph{výpočet konstant} (anglicky \emph{constant folding}) --- výraz $2\cdot60$ lze spočítat už při překladu;
+    \item \emph{šíření konstant a~kopií} --- známe-li $x=120$,~můžeme následující použití $x$ nahradit touto hodnotou;
+    \item \emph{odstranění mrtvého kódu} --- výpočet,~jehož výsledek se nikde nepoužije,~může být zbytečný;
+    \item \emph{odstranění společných podvýrazů} --- nezměnily-li se operandy,~nemusíme stejný výraz počítat podruhé.
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_optimalizace.tex}
+    \caption{Příklad výpočtu a~šíření konstant.}
+    \label{fig:optimalizace-konstant}
+\end{figure}
+
+\warningbox{Transformace musí respektovat přesnou sémantiku jazyka. Nahrazení $0\cdot E$ nulou například není bezpečné,~pokud vyhodnocení $E$ může mít vedlejší účinek nebo skončit chybou.}
+
+\subsection{Výpočet konstant v~AST}
+
+Optimalizátor v~programu \ref{lst:optimizer} prochází strom zdola nahoru. Jsou-li oba operandy binární operace číselné konstanty,~nahradí celý podstrom jediným číselným vrcholem. Dělení nulou záměrně ponechá beze změny,~aby příslušná chyba vznikla až při vykonání programu.
+
+\lstinputlisting[
+    caption={Optimalizace výpočtem konstant.},
+    label={lst:optimizer}
+]{04-kompilatory/code/mini_compiler/optimizer.py}
+
+Ve výrazu $2+3\cdot4$ se nejprve podstrom $3\cdot4$ nahradí číslem $12$ a~potom celý součet číslem $14$. Optimalizace tedy přirozeně využívá stromovou strukturu vytvořenou parserem.
+
+\subsection{Globální optimalizace a~graf toku řízení}
+
+Optimalizace přes podmínky,~cykly a~více bloků potřebuje znát možné pořadí vykonávání programu. Základní bloky proto použijeme jako vrcholy \emph{grafu toku řízení}. Hrana $B_i\to B_j$ znamená,~že po bloku $B_i$ může následovat blok $B_j$.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_cfg.tex}
+    \caption{Příklad grafu toku řízení s~nedosažitelným blokem $B_5$.}
+    \label{fig:graf-toku-rizeni}
+\end{figure}
+
+Blok je dosažitelný,~jestliže do něj vede cesta z~počátečního bloku. Nedosažitelné bloky nelze za běhu navštívit a~můžeme je odstranit. K~jejich nalezení stačí BFS ze sekce \smartref{\showrefs}{sec:bfs}{o~BFS} nebo DFS ze sekce \smartref{\showrefs}{sec:dfs}{o~DFS}.
+
+Další důležitou informací je \emph{živost proměnné}. Hodnota proměnné je za danou instrukcí živá,~pokud může být později přečtena dříve,~než ji přepíše jiná hodnota. Instrukce,~která zapisuje mrtvou hodnotu a~nemá jiný účinek,~může být odstraněna.
+
+Ve zjednodušeném základním bloku lze živost spočítat průchodem instrukcí odzadu:
+\begin{enumerate}
+    \item začneme množinou proměnných potřebných na konci bloku;
+    \item proměnnou,~do které aktuální instrukce zapisuje,~z~množiny odstraníme;
+    \item proměnné,~které instrukce čte,~do množiny přidáme.
+\end{enumerate}
+U~celého grafu se informace mezi bloky předávají a~výpočet se opakuje,~dokud se množiny nepřestanou měnit.
+
+\subsection{Generování bajtkódu}
+
+Po optimalizaci převedeme AST do jednoduchého zásobníkového bajtkódu. Instrukce \texttt{PUSH} vloží konstantu na zásobník,~\texttt{LOAD} načte proměnnou a~instrukce \texttt{ADD},~\texttt{SUB},~\texttt{MUL} a~\texttt{DIV} odeberou dva operandy a~vloží výsledek. Příkazy završují instrukce \texttt{STORE} a~\texttt{PRINT}.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_bajtkod.tex}
+    \caption{Překlad malého jazyka do bajtkódu pro virtuální stroj.}
+    \label{fig:preklad-bajtkod}
+\end{figure}
+
+Generátor v~programu \ref{lst:codegen} prochází výraz v~pořadí \emph{levý podstrom,~pravý podstrom,~operace}. Tím automaticky vytvoří pořadí vhodné pro zásobníkový stroj.
+
+\lstinputlisting[
+    caption={Generování jednoduchého zásobníkového bajtkódu.},
+    label={lst:codegen}
+]{04-kompilatory/code/mini_compiler/codegen.py}
+
+Po optimalizaci se příkaz \texttt{let x = 2 + 3 * 4;} přeloží jen na
+\[
+    \texttt{PUSH 14},\qquad \texttt{STORE x}.
+\]
+Bez optimalizace by vznikly tři instrukce \texttt{PUSH},~násobení,~sčítání a~teprve potom uložení.

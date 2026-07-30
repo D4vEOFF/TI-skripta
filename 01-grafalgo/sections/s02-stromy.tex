@@ -1,37 +1,37 @@
 \section{Stromy}\label{sec:stromy}
 
-Stromy tvoří spciální oblast v~teorii grafů. V~informatice se jedná silně dominující typ grafu a~bylo by proto dobré mu věnovat zvláštní sekci,~kde si připomeneme některé základní typy.
+Stromy tvoří speciální oblast teorie grafů. V~informatice jde o~jeden z~nejčastěji používaných typů grafů,~a~proto jim věnujeme samostatnou sekci,~v~níž si připomeneme některé základní pojmy.
 
 \begin{definition}[Strom]\label{def:strom}
-    Graf $G=(V,E)$ je strom,~pokud
+    Neorientovaný graf $G=(V,E)$ je strom,~pokud
     \begin{enumerate}[label=(\roman*)]
         \item je souvislý\footnote{Mezi každou dvojicí vrcholů vede cesta.}
         \item a~neobsahuje kružnici.
     \end{enumerate}
 \end{definition}
 
-Je dobré si uvědomit,~že mezi každou dvojicí vrcholů ve stromě vede \textbf{právě jedna} cesta. Zároveň z~definice stromu také plyne,~že odebráním libovolné hrany se již nutně poruší souvislost (minimálně přestane exostovat cesta mezi koncovými vrcholy).
+Je dobré si uvědomit,~že mezi každou dvojicí vrcholů ve stromě vede \textbf{právě jedna} cesta. Zároveň z~definice stromu plyne,~že odebráním libovolné hrany se nutně poruší souvislost: přestane existovat cesta mezi koncovými vrcholy odebrané hrany.
 
 \begin{figure}[h]
     \centering
     \begin{subfigure}{6cm}
         \centering
-        \includegraphics[scale=.7]{01-grafalgo/images/ch01_strom_priklad1.pdf}
+        \input{01-grafalgo/images/ch01_strom_priklad1.tex}
         \caption{Příklad korektního stromu.}
         \label{subfig:strom_priklad1}
     \end{subfigure}
     \qquad
     \begin{subfigure}{6cm}
         \centering
-        \includegraphics[scale=.7]{01-grafalgo/images/ch01_strom_priklad2.pdf}
-        \caption{Příklad nekorektního stromu (obsahuje cyklus).}
+        \input{01-grafalgo/images/ch01_strom_priklad2.tex}
+        \caption{Graf,~který není stromem,~protože obsahuje kružnici.}
         \label{subfig:strom_priklad2}
     \end{subfigure}
     \qquad
     \begin{subfigure}{6cm}
         \centering
-        \includegraphics[scale=.7]{01-grafalgo/images/ch01_strom_priklad3.pdf}
-        \caption{Příklad nekorektního stromu (porušena souvisloust).}
+        \input{01-grafalgo/images/ch01_strom_priklad3.tex}
+        \caption{Graf,~který není stromem,~protože není souvislý.}
         \label{subfig:strom_priklad3}
     \end{subfigure}
 \end{figure}
@@ -44,12 +44,12 @@ Poslední příklad \ref{subfig:strom_priklad3} sice není z~definice strom,~av�
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{01-grafalgo/images/ch01_les_priklad.pdf}
-    \caption{Příklad lesa}
+    \input{01-grafalgo/images/ch01_les_priklad.tex}
+    \caption{Příklad lesa.}
     \label{fig:les}
 \end{figure}
 
-Ekvivalentně můžeme les definovat jako \emph{sjednocení stromů}. Jako poslední si uveďme speciální typ stromu,~se kterým budeme dále nejčastěji pracovat,~a~to tzv. \emph{binární strom}. Blíže se s~ním setkáme v~sekci \smartref[][,~kdy budeme rozebírat tzv. \emph{binární haldu}]{\showrefs}{sec:halda}{o~haldě}.
+Ekvivalentně můžeme les definovat jako \emph{disjunktní sjednocení stromů}. Jako poslední si uveďme speciální typ stromu,~se kterým budeme dále nejčastěji pracovat,~a~to tzv. \emph{binární strom}. Blíže se s~ním setkáme v~sekci \smartref[][,~kdy budeme rozebírat tzv. \emph{binární haldu}]{\showrefs}{sec:halda}{o~haldě}.
 
 \begin{definition}[Binární strom]\label{def:binarni_strom}
     Strom $T=(V,E)$ nazveme binární,~pokud
@@ -63,7 +63,7 @@ Jeden z~vrcholů stromu $T$ je označen jako \emph{kořen}. Typicky jej zakreslu
 
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{01-grafalgo/images/ch01_binarni_strom_priklad.pdf}
-    \caption{Příklad binárního stromu}
+    \input{01-grafalgo/images/ch01_binarni_strom_priklad.tex}
+    \caption{Příklad binárního stromu.}
     \label{fig:binarni_strom_priklad}    
 \end{figure}

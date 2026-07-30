@@ -1,0 +1,5 @@
+\begin{tikzpicture}[scale=0.72]
+    \foreach \name/\x/\y in {a/-2/2,b/-3/0.5,c/-1/0.5,d/-3.6/-1,e/-2.4/-1,f/-1/-1,g/2/1.3,h/1/-0.4,i/3/-0.4}
+        \node[vertex,fill=black,minimum size=2mm] (\name) at (\x,\y) {};
+    \foreach \a/\b in {a/b,a/c,b/d,b/e,c/f,g/h,g/i}\draw[edge](\a)--(\b);
+\end{tikzpicture}

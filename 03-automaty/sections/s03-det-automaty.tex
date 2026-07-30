@@ -1,77 +1,79 @@
 \section{Deterministické konečné automaty}\label{sec:det-automaty}
 
-Již jsme si představili jazyky jakožto prostředek pro reprezentaci vstupů pro konečné automaty. Stále jsme si ovšem neřekli, co to ten automat vlastně je. Podobně jako v definici grafu, kdy máme uspořádanou dvojici vrcholů a hran, i zde bude myšlenka velice podobná.
-\begin{definition}[Deterministický končný automat]
-    \emph{Deterministický konečný automat} je uspořádaná pětice $A=(Q,\Sigma,\delta,q_0,F)$, kde
+\begin{definition}[Deterministický konečný automat]
+    \emph{Deterministický konečný automat} (zkráceně DFA) je uspořádaná pětice
+    \[A=(Q,\Sigma,\delta,q_0,F),\]
+    kde
     \begin{itemize}
-        \item $Q$ je konečná \emph{množina stavů},
-        \item $\Sigma$ je abeceda, z níž sestávají slova na vstupu,
-        \item $\delta$ je tzv. \emph{přechodová funkce} $Q\times\Sigma\rightarrow Q$ udávající přechody mezi stavy,
-        \item $q_0\in Q$ je \emph{počáteční stav} automatu
-        \item a $F\subseteq Q$ je \emph{množina přijímajících stavů}.
+        \item $Q$ je konečná množina stavů,
+        \item $\Sigma$ je vstupní abeceda,
+        \item $\delta:Q\times\Sigma\to Q$ je přechodová funkce,~která každé dvojici stavu a~znaku přiřazuje právě jeden následující stav,
+        \item $q_0\in Q$ je počáteční stav a
+        \item $F\subseteq Q$ je množina přijímajících stavů.
     \end{itemize}
 \end{definition}
-Automaty zakreslujeme pomocí stavového diagramu (formálně orientovaného grafu), přičemž
-\begin{itemize}
-    \item \emph{vrcholy} jsou jednotlivé stavy automatu (dvojitý kruh značí přijímající stav a do počátečního stavu vede šipka ``odnikud'')
-    \item a \emph{šipky} reprezentují přechody mezi stavy.
-\end{itemize}
-Na začátku výpočtu dostane automat na vstupu slovo $w\in\Sigma^*$, které čte znak po znaku (zleva doprava). Začínáme v počátečním stavu $q_0$, přičemž vždy podle následujícího čteného znaku se automat přesouvá do nového stavu. Přechodová funkce $\delta:Q\times\Sigma\rightarrow Q$ nám udává pro každou dvojici $(q,a)$, kde $q$ je stav, v němž se automat nachází a $a$ je aktuálně čtený znak, do jakého stavu se má automat přesunout. Pokud na konci čtení slova $w$ skončí výpočet v jednom z přijímajících stavů, pak automat slovo přijímá. V opačném případě, kdy výpočet neskončí v přijímajícím stavu nebo přechod pro určitý znak z určitéhoi stavu není definovaný, pak výpočet končí a automat slovo nepřijímá.
-\begin{example}
-    Máme automat $A=(Q,\Sigma,\delta,q_0,F)$, kde
-    \begin{itemize}
-        \item $Q=\set{q_0,q_1,q_2}$,
-        \item $q_0$ je počáteční stav,
-        \item $F=\set{q_2}$,
-        \item $\Sigma=\set{0,1}$,
-        \item Přechodová funkce $\delta$ (viz tabulka \ref{tab:prechodova-funkce-A}):
-        \begin{itemize}
-            \item $\delta(q_0,0)=q_1$,
-            \item $\delta(q_0,1)=q_2$,
-            \item $\delta(q_0,0)=q_2$,
-            \item $\delta(q_0,1)=q_2$.
-        \end{itemize}
-    \end{itemize}
-    Schéma automatu lze vidět na obrázku \ref{fig:automat-A} níže.
+
+Při kreslení někdy kvůli přehlednosti vynecháme \emph{odpadní stav}: všechny nezakreslené přechody si pak představujeme vedené do tohoto nepřijímajícího stavu,~který má smyčku pro každý znak. Formálně je tak přechodová funkce stále definována pro každou dvojici.
+
+Automat zakreslujeme jako orientovaný graf. Stavy jsou vrcholy,~přechody hrany s~popisky. Počáteční stav označíme šipkou vedoucí \uv{odnikud} a~přijímající stavy dvojitým okrajem.
+
+\subsection{Výpočet automatu}
+
+Na začátku se automat nachází ve stavu $q_0$. Vstupní slovo čte zleva doprava. Nachází-li se ve stavu $q$ a~čte znak $a$,~přejde do stavu $\delta(q,a)$. Po přečtení celého slova přijme právě tehdy,~když skončil ve stavu z~$F$.
+
+\begin{definition}[Jazyk automatu]
+    Jazykem automatu $A$ nad abecedou $\Sigma$ rozumíme množinu
+    \[L(A)=\set{w\in\Sigma^*:\text{$A$ přijme slovo $w$}}.\]
+\end{definition}
+
+\begin{example}[Slova začínající na $01$]\label{ex:dfa-prefix}
+    Automat na obrázku \ref{fig:dfa-prefix} nejprve vyžaduje znaky $0$ a~$1$. Jakmile je přečte,~zůstane v~přijímajícím stavu bez ohledu na zbytek vstupu.
     \begin{figure}[h]
         \centering
-        \centering
-        \begin{center}
-            \begin{tikzpicture}[scale=0.2]
-            \tikzstyle{every node}+=[inner sep=0pt]
-            \draw [black] (18.8,-30.5) circle (3);
-            \draw (18.8,-30.5) node {$q_0$};
-            \draw [black] (32.6,-30.5) circle (3);
-            \draw (32.6,-30.5) node {$q_1$};
-            \draw [black] (46.9,-30.5) circle (3);
-            \draw (46.9,-30.5) node {$q_2$};
-            \draw [black] (46.9,-30.5) circle (2.4);
-            \draw [black] (21.8,-30.5) -- (29.6,-30.5);
-            \fill [black] (29.6,-30.5) -- (28.8,-30) -- (28.8,-31);
-            \draw (25.7,-31) node [below] {$0$};
-            \draw [black] (35.6,-30.5) -- (43.9,-30.5);
-            \fill [black] (43.9,-30.5) -- (43.1,-30) -- (43.1,-31);
-            \draw (39.75,-31) node [below] {$1$};
-            \draw [black] (45.577,-27.82) arc (234:-54:2.25);
-            \draw (46.9,-23.25) node [above] {$0,1$};
-            \fill [black] (48.22,-27.82) -- (49.1,-27.47) -- (48.29,-26.88);
-            \draw [black] (11.8,-30.5) -- (15.8,-30.5);
-            \fill [black] (15.8,-30.5) -- (15,-30) -- (15,-31);
-            \end{tikzpicture}
-        \end{center}
-        \caption{Schéma automatu $A$ a tabulka přechodové funkce $\delta$}
-        \label{fig:automat-A}
+        \input{03-automaty/images/ch03_dfa-prefix-01.tex}
+        \caption{DFA přijímající právě slova začínající na $01$.}
+        \label{fig:dfa-prefix}
     \end{figure}
-    \begin{table}[h]
-        \centering
-        \begin{tabular}{c|cc}
-        & $0$           & $1$           \\ \hline
-        $q_0$      & $q_1$        & -- \\
-        $q_1$      & -- & $q_2$        \\
-        $q_2$      & $q_2$        & $q_2$        \\
-        \end{tabular}
-        \caption{Tabulka přechodové funkce $\delta$ automatu $A$}
-        \label{tab:prechodova-funkce-A}
-    \end{table}
+    Jeho jazyk je
+    \[L(A)=\set{01u:u\in\set{0,1}^*}.\]
+    Slovo $0110$ přijme,~zatímco $001$ odmítne už při čtení druhého znaku.
 \end{example}
 
+\subsection{Složitější příklady}
+
+\begin{example}[Slova končící na $01$]\label{ex:dfa-suffix}
+    Nyní už nestačí zkontrolovat první dva znaky. Automat si musí průběžně pamatovat nejdelší konec dosud přečtené části,~který by mohl být začátkem slova $01$:
+    \begin{itemize}
+        \item $q_0$: poslední znak není $0$ nebo jsme zatím nic nepřečetli;
+        \item $q_1$: poslední znak je $0$;
+        \item $q_2$: poslední dva znaky jsou $01$.
+    \end{itemize}
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_dfa-suffix-01.tex}
+        \caption{DFA pro jazyk $L_{\mathrm{suff}}=\set{u01:u\in\set{0,1}^*}$.}
+        \label{fig:dfa-suffix}
+    \end{figure}
+\end{example}
+
+\begin{example}[Sudý počet nul a~lichý počet jedniček]\label{ex:dfa-parita}
+    Potřebujeme si pamatovat dvě informace,~každou se dvěma možnostmi. Dostaneme proto čtyři stavy $q_{SS},q_{SL},q_{LS},q_{LL}$; první index udává paritu počtu nul a~druhý paritu počtu jedniček. Znak $0$ změní první index,~znak $1$ druhý.
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_dfa-parita.tex}
+        \caption{DFA přijímající slova se sudým počtem nul a~lichým počtem jedniček.}
+        \label{fig:dfa-parita}
+    \end{figure}
+    Jediným přijímajícím stavem je $q_{SL}$.
+\end{example}
+
+\begin{example}[Binární čísla dělitelná třemi]\label{ex:dfa-delitelnost}
+    Čteme-li binární číslo zleva doprava a~dosud přečtená část dává po dělení třemi zbytek $r$,~pak po připsání bitu $b\in\set{0,1}$ dostaneme zbytek čísla $2r+b$. Stačí si tedy pamatovat zbytek $0$,~$1$ nebo $2$.
+    \begin{figure}[h]
+        \centering
+        \input{03-automaty/images/ch03_dfa-delitelnost-3.tex}
+        \caption{DFA pro neprázdné binární zápisy čísel dělitelných třemi.}
+        \label{fig:dfa-delitelnost}
+    \end{figure}
+    Kvůli vyloučení prázdného slova používáme zvláštní počáteční stav $s$. Automat například přijme $110_2=6$,~ale odmítne $101_2=5$.
+\end{example}

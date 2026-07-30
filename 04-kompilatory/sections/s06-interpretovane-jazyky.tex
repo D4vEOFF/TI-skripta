@@ -1,0 +1,61 @@
+\section{Interpretované jazyky}\label{sec:interpretovane-jazyky}
+
+Dosud jsme předpokládali,~že překladač vytvoří cílový program a~ten se spustí až potom. Druhou základní možností je vykonávat program prostřednictvím jiného programu --- interpretu.
+
+\emph{Interpret} načítá reprezentaci programu a~vykonává její příkazy nebo instrukce. Nemusí předem vytvořit samostatný spustitelný soubor se strojovým kódem.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_kompilace-interpretace.tex}
+    \caption{Zjednodušené porovnání kompilovaného a~interpretovaného překladu.}
+    \label{fig:kompilace-interpretace}
+\end{figure}
+
+\warningbox{Přesnější je mluvit o~kompilované nebo interpretované \emph{implementaci},~nikoliv o~neměnné vlastnosti jazyka. Tentýž jazyk může mít klasický překladač,~interpret i~běhové prostředí kombinující více přístupů.}
+
+\subsection{Výhody a~nevýhody interpretace}
+
+Interpretované vykonávání usnadňuje přenos programu mezi platformami: stačí,~aby na nich existoval odpovídající interpret. Často také zjednodušuje interaktivní práci,~ladění a~rychlé úpravy programu.
+
+Za běhu se však opakuje práce,~kterou by klasický překladač mohl provést předem. Interpret musí načítat instrukce své vnitřní reprezentace,~rozhodovat o~jejich významu a~spravovat zásobník či prostředí proměnných. Čistá interpretace proto bývá pomalejší než přímé vykonávání dobře přeloženého strojového kódu. Navíc musí být při spuštění přítomno běhové prostředí.
+
+\subsection{Virtuální stroj}
+
+Náš překladač vytváří bajtkód. Program \ref{lst:vm} jej vykonává pomocí zásobníku a~slovníku proměnných. Jde tedy o~malý \emph{virtuální stroj}: instrukce nejsou instrukcemi skutečného procesoru,~ale mají přesně definovaný účinek v~našem programu.
+
+\lstinputlisting[
+    caption={Interpret zásobníkového bajtkódu.},
+    label={lst:vm}
+]{04-kompilatory/code/mini_compiler/virtual_machine.py}
+
+U~binární operace leží na vrcholu zásobníku pravý operand a~pod ním levý. Virtuální stroj je odebere,~spočítá výsledek a~ten opět vloží na zásobník. Instrukce \texttt{HALT} ukončí interpretační smyčku.
+
+\subsection{JIT kompilace}
+
+\emph{JIT kompilace} (z~anglického \emph{just-in-time compilation}) překládá mezikód do strojového kódu až za běhu programu. Běhové prostředí může nejprve bajtkód interpretovat,~sledovat často používané části a~jen ty později přeložit a~optimalizovat.
+
+\begin{figure}[h]
+    \centering
+    \resizebox{\textwidth}{!}{\input{04-kompilatory/images/ch04_jit.tex}}
+    \caption{Překlad přes mezikód s~možnou JIT kompilací.}
+    \label{fig:jit}
+\end{figure}
+
+Tento přístup kombinuje přenositelnost mezikódu s~rychlejším vykonáváním často používaných částí. JIT navíc zná skutečné chování programu za běhu,~a~může tedy využít informace,~které statický překladač neměl. Platí za to časem a~pamětí spotřebovanými na překlad během spuštění. Není proto automaticky nejlepší pro každý program. Známými příklady běhových prostředí využívajících JIT jsou virtuální stroj Javy,~prostředí .NET a~moderní implementace JavaScriptu.
+
+\subsection{Celý překlad}
+
+Program \ref{lst:main_compiler} spojuje všechny vytvořené části. Zdrojový text projde lexerem,~parserem,~sémantickou kontrolou,~výpočtem konstant a~generátorem bajtkódu. Nakonec jej vykoná virtuální stroj.
+
+\lstinputlisting[
+    caption={Sestavení a~spuštění celého malého překladače.},
+    label={lst:main_compiler}
+]{04-kompilatory/code/mini_compiler/main.py}
+
+Pro přiložený vstup optimalizátor nahradí výraz $2+3\cdot4$ číslem $14$. Vygenerovaný bajtkód nejprve uloží hodnotu do proměnné \texttt{x},~vypíše ji,~spočítá proměnnou \texttt{y} a~vypíše také její hodnotu. Výstupem je
+\begin{verbatim}
+14.0
+4.0
+\end{verbatim}
+
+\tipbox{Ukázkový překladač je malý,~ale hranice mezi částmi odpovídají skutečným systémům: lexer neřeší gramatiku,~parser neřeší deklarace,~sémantická analýza nemění význam programu a~generátor kódu už dostává ověřenou reprezentaci. Právě toto rozdělení umožňuje každou část samostatně testovat a~později nahradit propracovanější variantou.}

@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+    \initialstate{s}{(0,0)}{$q_0$}{(-1.2,0)}{180}
+    \state{t}{(2.1,0)}{$q_1$}
+    \state{th}{(4.2,0)}{$q_2$}
+    \state{the}{(6.3,0)}{$q_3$}
+    \acceptingstate{then}{(8.4,0)}{$q_4$}
+    \transitionarrow{s}{above}{\texttt{t}}{t}
+    \transitionarrow{t}{above}{\texttt{h}}{th}
+    \transitionarrow{th}{above}{\texttt{e}}{the}
+    \transitionarrow{the}{above}{\texttt{n}}{then}
+\end{tikzpicture}

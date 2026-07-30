@@ -1,0 +1,11 @@
+\begin{tikzpicture}[node distance=24mm]
+    \node[task,fill=blue!10,minimum width=31mm] (source) {zdrojový\\kód};
+    \node[task,fill=orange!12,minimum width=31mm,right=of source] (compiler) {kompilátor};
+    \node[task,fill=green!10,minimum width=31mm,right=of compiler] (target) {cílový\\kód};
+    \draw[diredge] (source)--(compiler);
+    \draw[diredge] (compiler)--(target);
+    \node[below=4mm of source,align=center,font=\small]
+        {\texttt{C}, \texttt{Java},\\\texttt{C\#}, \dots};
+    \node[below=4mm of target,align=center,font=\small]
+        {assembler, mezikód,\\strojový kód};
+\end{tikzpicture}

@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+    \initialstate{s}{(-3.5,0)}{$s$}{(-4.8,0)}{180}
+    \acceptingstate{r0}{(0,0)}{$q_0$}
+    \state{r1}{(3.8,2.1)}{$q_1$}
+    \state{r2}{(3.8,-2.1)}{$q_2$}
+    \transitionarrow{s}{above,fill=white,inner sep=1pt}{$0$}{r0}
+    \transitionarrow[bend left=18]{s}{above,fill=white,inner sep=1pt}{$1$}{r1}
+    \transitionarrow[loop above]{r0}{above,fill=white,inner sep=1pt}{$0$}{r0}
+    \transitionarrow[bend left=23]{r0}{above,fill=white,inner sep=1pt}{$1$}{r1}
+    \transitionarrow[bend left=23]{r1}{below,fill=white,inner sep=1pt}{$1$}{r0}
+    \transitionarrow[bend left=24]{r1}{right,fill=white,inner sep=1pt}{$0$}{r2}
+    \transitionarrow[loop right]{r2}{right,fill=white,inner sep=1pt}{$1$}{r2}
+    \transitionarrow[bend left=24]{r2}{left,fill=white,inner sep=1pt}{$0$}{r1}
+\end{tikzpicture}

@@ -1,0 +1,8 @@
+\begin{tikzpicture}
+    \node[vertex,fill=red!30] (a) at (0,2) {$(2,7)$};
+    \node[vertex,fill=green!30] (b) at (2.2,1) {$(6,8)$};
+    \node[vertex,fill=orange!35] (c) at (2.2,-1) {$(7,10)$};
+    \node[vertex,fill=green!30] (d) at (-2.2,1) {$(1,3)$};
+    \node[vertex,fill=orange!35] (e) at (-2.2,-1) {$(3,7)$};
+    \foreach \x/\y in {a/b,a/d,a/e,b/c,b/e,d/a,e/b}\draw[edge](\x)--(\y);
+\end{tikzpicture}

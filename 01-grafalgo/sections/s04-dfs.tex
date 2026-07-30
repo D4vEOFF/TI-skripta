@@ -1,11 +1,11 @@
 \section{Prohledávání do hloubky}\label{sec:dfs}
-Na podobném přístupu,~jako BFS,~je založeno tzv. \emph{prohledávání do hloubky} (anglicky \emph{depth-first search},~zkráceně DFS). Vrcholy však tentokrát budeme zpracovávat rekurzivně. Pokaždé,~když budeme otevírat nový vrchol,~se rekurzivně zavoláme všechny jeho sousední vrcholy,~u~nichž opakujeme stejnou proceduru. Po prozkoumání všech sousedů daný vrchol uzavřeme. Stejně jako BFS si tak budeme uchovávat pole \emph{stavů} pro jednotlivé vrcholy.
+Na podobném přístupu jako BFS je založeno tzv. \emph{prohledávání do hloubky} (anglicky \emph{depth-first search},~zkráceně DFS). Vrcholy však tentokrát budeme zpracovávat rekurzivně. Pokaždé,~když otevřeme nový vrchol,~rekurzivně zpracujeme každého jeho dosud nenalezeného souseda. Po prozkoumání všech sousedů daný vrchol uzavřeme. Stejně jako u~BFS si budeme uchovávat pole \emph{stavů} jednotlivých vrcholů.
 \begin{algorithm}
     \caption{DFS (prohledávání do hloubky)}
     \label{alg:dfs}
     \KwIn{Graf $G=(V,E)$ a~počáteční vrchol $v_0\in V$}
     \tcp{Inicializace}
-    \ForEach{\textup{vrchol $v\in v$}}{
+    \ForEach{\textup{vrchol $v\in V$}}{
         $stav(v)\gets$ \textit{nenalezený}
     }
     Zavolej DFS2($v_0$)\\
@@ -25,9 +25,9 @@ Na podobném přístupu,~jako BFS,~je založeno tzv. \emph{prohledávání do hl
     Algoritmus DFS doběhne v~čase $\bigO{n+m}$ a~spotřebuje paměť $\bigO{n+m}$.
 \end{theorem}
 \begin{proof}
-    Algoritmus DFS se oproti BFS liší pouze v~pořadí,~v~jakém pořadí dosažitelné vrcholy zpracovává,~to však nemá na časovou složitost žádný vliv. Argument pro její odvození je tak stejný jako u~BFS,~viz věta \ref{thm:bfs_slozitost} v~minulé sekci.
+    Algoritmus DFS se oproti BFS liší pouze v~pořadí,~v~jakém dosažitelné vrcholy zpracovává. To však nemá na časovou složitost žádný vliv. Argument pro její odvození je stejný jako u~BFS,~viz věta \ref{thm:bfs_slozitost} v~minulé sekci.
 
     V~paměti si musíme uchovávat reprezentaci grafu,~to zabere $\bigO{n+m}$ paměti (opět např. pomocí seznamu sousedů) a~máme seznam $stav$ s~$n$ prvky (vrcholy). Zároveň si při volání \textsc{DFS2} musíme na zásobník rekurze ukládat jednotlivé \emph{aktivační záznamy}. Protože vrcholů je v~grafu $n$,~pak na zásobníku rekurze bude v~jednu chvíli maximálně $n$ záznamů,~tj. $\bigO{n}$. Celkově spotřebujeme $\bigO{n+m}+\bigO{n}+\bigO{n}=\bigO{n+m}$ paměti.
 \end{proof}
-\notebox{Je dobré si uvědomit,~že byť algoritmy BFS a~DFS mají stejnou časovou a~prostorovou složitost,~nelze zcela rovnocenně použít na stejné typy úloh. Např. BFS se hodí pro hledání nejkratší cesty \emph{v~neohodnoceném grafu} (pro ohodnocené grafy se používá např. Dijkstrův algoritmus,~viz sekce \ref{sec:dijkstra}),~kdežto DFS se více hodí na prohledávání stavového prostoru,~neboť typicky nezabere tolik paměti.}
+\notebox{Je dobré si uvědomit,~že byť algoritmy BFS a~DFS mají stejnou asymptotickou časovou i~prostorovou složitost,~nehodí se rovnocenně na stejné úlohy. BFS nalezne nejkratší cestu v~neohodnoceném grafu. DFS se naopak často hodí tam,~kde chceme nejprve prozkoumat jednu možnost opravdu do hloubky. Jeho zásobník obsahuje nejvýše jednu právě rozpracovanou cestu,~zatímco fronta BFS může současně obsahovat celou širokou vrstvu grafu; v~konkrétní úloze proto může DFS spotřebovat méně paměti,~nejde však o~obecnou asymptotickou záruku.}
 \warningbox{Cesta,~kterou se DFS dostane do libovolného vrcholu $v$,~nemusí být nutně nejkratší (silně závisí na pořadí,~v~jakém procházíme sousedy jednotlivých vrcholů).}

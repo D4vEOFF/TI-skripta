@@ -1,0 +1,8 @@
+\begin{tikzpicture}[scale=0.8]
+    \node[vertex,fill=red!25,draw=red,label=above:$v_1$] (a) at (0,1.8) {};
+    \node[vertex,fill=red!25,draw=red,label=left:$v_2$] (b) at (-1.6,0) {};
+    \node[vertex,label=right:$v_3$] (c) at (1.6,0) {};
+    \node[vertex,label=below left:$v_4$] (d) at (-1,-1.7) {};
+    \node[vertex,label=below right:$v_5$] (e) at (1,-1.7) {};
+    \foreach \x/\y in {a/c,b/c,b/d,c/d,c/e,d/e}\draw[edge](\x)--(\y);
+\end{tikzpicture}

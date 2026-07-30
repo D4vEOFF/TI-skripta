@@ -1,0 +1,24 @@
+\begin{tikzpicture}[
+    nt/.style={state,fill=orange!12,font=\small},
+    term/.style={task,fill=green!10,minimum width=10mm,minimum height=7mm,font=\small}
+]
+    \node[nt] (e0) at (0,0) {$E$};
+    \node[nt] (e1) at (-2.6,-1.4) {$E$};
+    \node[term] (plus) at (0,-1.4) {$+$};
+    \node[nt] (t1) at (2.6,-1.4) {$T$};
+
+    \node[nt] (t0) at (-2.6,-2.8) {$T$};
+    \node[nt] (t2) at (1.4,-2.8) {$T$};
+    \node[term] (mul) at (2.6,-2.8) {$*$};
+    \node[nt] (f2) at (3.8,-2.8) {$F$};
+
+    \node[nt] (f0) at (-2.6,-4.2) {$F$};
+    \node[nt] (f1) at (1.4,-4.2) {$F$};
+    \node[term] (id1) at (-2.6,-5.5) {\texttt{id}};
+    \node[term] (id2) at (1.4,-5.5) {\texttt{id}};
+    \node[term] (num) at (3.8,-4.2) {\texttt{num}};
+
+    \foreach \x/\y in {e0/e1,e0/plus,e0/t1,e1/t0,t1/t2,t1/mul,
+        t1/f2,t0/f0,t2/f1,f0/id1,f1/id2,f2/num}
+        \draw[thick] (\x)--(\y);
+\end{tikzpicture}

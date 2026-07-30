@@ -1,14 +1,14 @@
 \section{Prohledávání do šířky}\label{sec:bfs}
 
-Jednou ze základních úloh je procházení grafu z~určitého vrcholu a~zjištění dosažitelnosti ostatních vrcholů. Nejednodušším algoritmem v~tomto ohledu je tzv. \emph{prohledávání do šířky} (angl. \emph{breadth-first search},~zkráceně BFS). Jeho základní princip spočívá v~postupném objevování následníků již nalezených vrcholů. Na počátku dostaneme graf $G=(V,E)$ a~nějaký počáteční vrchol $v_0\in V$. Postupně objevíme všechny sousedy vrcholu $v_0$,~poté všechny sousedy těchto nalezených sousedů,~atd. Na BFS lze nahlížet tak,~že do počátečního vrcholu nalijeme vodu a~sledujeme,~jak postupuje vzniklá vlna.
+Jednou ze základních úloh je procházení grafu z~určitého vrcholu a~zjištění dosažitelnosti ostatních vrcholů. Nejjednodušším algoritmem v~tomto ohledu je tzv. \emph{prohledávání do šířky} (anglicky \emph{breadth-first search},~zkráceně BFS). Jeho základní princip spočívá v~postupném objevování sousedů již nalezených vrcholů. Na počátku dostaneme graf $G=(V,E)$ a~počáteční vrchol $v_0\in V$. Postupně objevíme všechny sousedy vrcholu $v_0$,~poté všechny dosud nenalezené sousedy těchto vrcholů atd. Na BFS lze nahlížet tak,~že do počátečního vrcholu nalijeme vodu a~sledujeme,~jak grafem postupuje vzniklá vlna.
 
 Pro každý vrchol si budeme uchovávat jeho \emph{stav}.
 \begin{itemize}
     \item \emph{Nenalezený} -- vrchol jsme ještě během výpočtu neviděli.
-    \item \emph{Otevřený} -- vrchol jsme viděli,~ale ještě nejsme neprozkoumali všechny jeho sousedy.
+    \item \emph{Otevřený} -- vrchol jsme již nalezli,~ale ještě jsme neprozkoumali všechny jeho sousedy.
     \item \emph{Uzavřený} -- vrchol jsme prozkoumali společně se všemi jeho sousedy a~dál se jím již netřeba zabývat.
 \end{itemize}
-Na počátku začneme s~jedním otevřeným vrcholem a~to $v_0$ (zde začínáme). Po prozkoumání všech sousedních vrcholů se jejich stav změní na otevřený a~počáteční vrchol $v_0$ se uzavře. Obdobně pokračujeme pro nově otevřené vrcholy. Pokud by náhodou mezi dvojicí otevřených vrcholů existovala hrana,~pak si sousedního vrcholu všímat nebudeme,~neboť byl již otevřen. Pro každý vrchol se ještě dodatečně můžeme uchovávat informaci,~jak daleko se nachází od $v_0$,~co do počtu hran ležících na cestě.
+Na počátku začneme s~jedním otevřeným vrcholem,~a~to $v_0$ (zde začínáme). Po prozkoumání všech jeho dosud nenalezených sousedů se jejich stav změní na otevřený a~počáteční vrchol $v_0$ se uzavře. Obdobně pokračujeme pro nově otevřené vrcholy. Pokud by náhodou mezi dvojicí otevřených vrcholů existovala hrana,~pak si sousedního vrcholu všímat nebudeme,~neboť byl již otevřen. Pro každý vrchol si ještě dodatečně můžeme uchovávat informaci,~jak daleko se nachází od $v_0$,~co do počtu hran ležících na cestě.
 \begin{algorithm}
     \caption{BFS (prohledávání do šířky)}
     \label{alg:bfs}
@@ -23,7 +23,7 @@ Na počátku začneme s~jedním otevřeným vrcholem a~to $v_0$ (zde začínáme
     Založ frontu $Q$ a~přidej do ní vrchol $v_0$\\
     \While{\textup{fronta $Q$ je neprázdná}}{
         $v\gets$ první vrchol ve frontě $Q$,~který z~ní odebereme\\
-        \tcp{Prozkomáváme všechny dosud neobjevené sousedy}
+        \tcp{Prozkoumáváme všechny dosud neobjevené sousedy}
         \ForEach{\textup{sousední vrchol $w$ vrcholu $v$}}{
             \If{$stav(w)=$ \textit{nenalezený}}{
                 $stav(w)\gets$ \textit{otevřený}\\
@@ -39,7 +39,7 @@ Na počátku začneme s~jedním otevřeným vrcholem a~to $v_0$ (zde začínáme
 BFS rozděluje vrcholy do vrstev podle toho,~v~jaké vzdálenosti od počátečního vrcholu se nachází (viz obrázek \ref{fig:bfs_vrstvy}). Nejdříve jsou prozkoumány vrcholy ve vzdálenosti 0 (tj. pouze $v_0$),~poté ve vzdálenostech 1,~2,~\dots Z~toho vyplývá,~že kdykoliv při otevírání libovolného vrcholu $v$ nastavujeme hodnotu $D(v)$,~bude tato hodnota vždy odpovídat délce nejkratší cesty z~$v_0$ do $v$. Tato hodnota bude však nastavena pouze u~těch vrcholů,~které jsou z~$v_0$ dosažitelné (ostatní vrcholy zůstanou ve stavu nenalezený).
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.75]{01-grafalgo/images/ch01_bfs_vrstvy.pdf}
+    \input{01-grafalgo/images/ch01_bfs_vrstvy.tex}
     \caption{Vrcholy rozdělené do vrstev podle průběhu BFS.}
     \label{fig:bfs_vrstvy}
 \end{figure}
@@ -62,11 +62,11 @@ Zbývá prozkoumat časovou a~paměťovou složitost BFS. Označme si počet vrc
     V~druhém případě dojdeme ke stejnému výsledku,~akorát zmíněná suma bude,~kvůli orientaci hran,~rovna přesně počtu hran,~tj.
     \[\bigO{n+\sum_i{d_i}}=\bigO{n+m}.\]
 
-    Nyní k~prostorové složitosti algoritmu. Na reprezentaci grafu (např. pomocí seznamu sousedů) spotřebujeme paměť $\bigO{n+m}$ ($n$ vrcholů,~$m$ hran)\footnote{Resp. každá hrana je v~neorientovaných grafech započítána dvakrát,~protože každý vrchol obsahuje v~seznamu svých sousedů vždy "protější" vrchol (stejný argument,~jako u~odvozování časové složitosti BFS).}. Dále si uchováváme vrcholy ve frontě,~v~níž může být v~jednu chvíli maximálně $n$ vrcholů,~tj. $\bigO{n}$,~a~k~tomu máme seznam $stav$,~kde je uloženo $\bigO{n}$ vrcholů. Celkově spotřebujeme paměti
-    \[\bigO{n+m}+\bigO{n}+\bigO{n}=\bigO{n+m}.\]
+    Nyní k~prostorové složitosti algoritmu. Na reprezentaci grafu (např. pomocí seznamu sousedů) spotřebujeme paměť $\bigO{n+m}$ ($n$ vrcholů,~$m$ hran)\footnote{Resp. každá hrana je v~neorientovaných grafech započítána dvakrát,~protože každý vrchol obsahuje v~seznamu svých sousedů vždy "protější" vrchol (stejný argument jako u~odvozování časové složitosti BFS).}. Dále si uchováváme vrcholy ve frontě,~v~níž může být v~jednu chvíli maximálně $n$ vrcholů,~tj. $\bigO{n}$,~a~k~tomu máme seznamy $stav$ a~$D$,~oba s~$n$ položkami. Celkově spotřebujeme paměti
+    \[\bigO{n+m}+\bigO{n}+\bigO{n}+\bigO{n}=\bigO{n+m}.\]
 \end{proof}
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{01-grafalgo/images/ch01_zapocitavani_hran.pdf}
+    \input{01-grafalgo/images/ch01_zapocitavani_hran.tex}
     \caption{Znázornění situace v~důkazu části \ref{bfs_slozitost_neor_graf} věty \ref{thm:bfs_slozitost}.}
 \end{figure}

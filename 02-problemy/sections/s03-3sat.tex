@@ -1,10 +1,10 @@
 \section{Problém 3-SAT}\label{sec:3sat}
 
-Zkusme nyní původní problém ještě zjednodušit. Přidáme podmínku,~že každá klauzule může obsahovat nejvýše 3~literály. Tím dostáváme variantu problému SAT známý jako \emph{3-SAT}. O~formuli,~která splňuje zmíněnou formu,~budeme říkat,~že je v~3-CNF.
+Zkusme nyní původní problém ještě omezit. Přidáme podmínku,~že každá klauzule může obsahovat nejvýše tři literály. Tím dostáváme variantu problému SAT známou jako \emph{3-SAT}. O~formuli,~která splňuje uvedenou podmínku,~budeme říkat,~že je v~3-CNF.
 
 \problem{Splnitelnost logické formule v~3-CNF (3-SAT)}{Formule $\varphi$ v~3-CNF}{1,~je-li $\varphi$ splnitelná,~jinak $0$.}
 
-Nabízí se otázka,~jestli jsme si skutečně nějak pomohli. Zdánlivě ano,~neboť máme kratší klauzule,~avšak 3-SAT převdstavuje,~překvapivě,~stejně těžkou úlohu jako původní problém SAT. Proč? Lze totiž ukázat,~že pokud bychom uměli rychle řešit 3-SAT,~uměli bychom rychle řešit i~původní SAT a~naopak. To ukážeme tak,~že jeden problém v~jistém smyslu ``převést'' na ten druhý. Pro určitou instanci (tedy formuli) problému SAT můžeme sestrojit odpovídající instanci problému 3-SAT,~jejímž vyřešením získáme odpověď i~na původní problém. Podívejme se na tuto situaci blíže v~podsekci \ref{subsec:prevod_sat_3sat}.
+Nabízí se otázka,~zda jsme si skutečně pomohli. Zdánlivě ano,~protože máme kratší klauzule. Překvapivě však 3-SAT zůstává stejně obtížný v~tom smyslu,~že SAT lze na 3-SAT převést v~polynomiálním čase. Pro libovolnou instanci SAT sestrojíme instanci 3-SAT,~která je splnitelná právě tehdy,~když byla splnitelná původní formule.
 
 \subsection{Převod SAT na 3-SAT}\label{subsec:prevod_sat_3sat}
 
@@ -20,7 +20,7 @@ Nyní přidáme novou proměnnou $x$ a~klauzuli $\alpha\lor\beta$ rozdělíme na
 Podívejme se nyní na délky nových klauzulí $\alpha\lor x$ a~$\beta\lor\neg x$.
 \begin{itemize}
     \item Klauzule $\alpha\lor x=\ell_1\lor\ell_2\lor x$ obsahuje $3$ literály,~takže s~ní dále nic provádět nemusíme.
-    \item Klauzule $\beta\lor\neg x=\ell_3\lor\dots\lor\ell_k\lor\neg x$ obsahuje $k-1$ literálů. To znamená,~že jsme zkrátili původní klazuli o~jeden literál. Pokud $k-1>3$,~můžeme postup pro tuto klauzuli opakovat.
+    \item Klauzule $\beta\lor\neg x=\ell_3\lor\dots\lor\ell_k\lor\neg x$ obsahuje $k-1$ literálů. To znamená,~že jsme zkrátili původní klauzuli o~jeden literál. Pokud $k-1>3$,~můžeme postup pro tuto klauzuli opakovat.
 \end{itemize}
 Nyní zbývá dořešit,~jak to bude s~hodnotou proměnné $x$. Podobně jako u~Tseitinovy transformace (viz podsekce \ref{subsec:cnf_tseitin}),~i~zde bude její hodnota záviset na hodnotách ostatních proměnných,~konkrétně výrazu $\alpha$.
 \begin{itemize}
@@ -32,33 +32,59 @@ Nyní zbývá dořešit,~jak to bude s~hodnotou proměnné $x$. Podobně jako u~
     \[(\alpha\lor x)\land(\beta\lor\neg x)=(0\lor 1)\land(0\lor 0)=1\land 0=0,\]
     tzn. ani nová dvojice klauzulí by nebyla splněna,~což chceme.
 \end{itemize}
+Platí i~opačný směr: kdyby byla $\alpha\lor\beta$ nepravdivá,~muselo by být $\alpha=\beta=0$. Nové klauzule by pak vyžadovaly současně $x=1$ a~$\neg x=1$,~což není možné. Nová dvojice je tedy splnitelná právě tehdy,~když je splnitelná původní klauzule.
 Tím jsme dostali obecný postup pro převod formule z~CNF do 3-CNF.
 \begin{example}
-    Máme formuli $\varphi(a,b,c,d)=a\lor b\lor \neg c\lor \neg b\lor d\lor \neg d$ o~jedné klauzuli,~kterou chceme převést do 3-CNF. K~tomu si pořídíme novou proměnnou $x$. Podle postupu popsaného výše si sestavíme dvojici nových klazulí $\alpha\lor x$ a~$\beta\lor\neg x$.
-    \[\underbrace{a\lor b}_{\alpha}\lor \overbrace{\neg c\lor \neg b\lor d\lor \neg d}^{\beta}\]
+    Máme formuli
+    \[
+        \varphi(a,b,c,d,e,f)=a\lor b\lor\neg c\lor d\lor\neg e\lor f
+    \]
+    o~jedné klauzuli,~kterou chceme převést do 3-CNF. K~tomu si pořídíme novou proměnnou $x$. Podle postupu popsaného výše sestavíme dvojici nových klauzulí $\alpha\lor x$ a~$\beta\lor\neg x$.
+    \[\underbrace{a\lor b}_{\alpha}\lor \overbrace{\neg c\lor d\lor\neg e\lor f}^{\beta}\]
     Tím dostáváme novou formuli
-    \[\varphi^\prime(a,b,c,d,x)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor d\lor \neg d\lor\neg x).\]
-    První klauzule $a\lor b\lor x$ obsahuje 3~literály,~avšak klauzule $\neg c\lor \neg b\lor d\lor \neg d\lor\neg x$ je však stále dlouhá (všimněte si ale,~že obsahuje o~jeden literál méně než původní klauzule). Postup tedy opakujeme.
+    \[
+        \varphi^\prime=(a\lor b\lor x)
+        \land(\neg c\lor d\lor\neg e\lor f\lor\neg x).
+    \]
+    První klauzule $a\lor b\lor x$ obsahuje tři literály,~avšak druhá klauzule je stále dlouhá (všimněte si ale,~že obsahuje o~jeden literál méně než původní klauzule). Postup tedy opakujeme.
 
     Vytvoříme si opět novou proměnnou,~označme ji $y$. Podobně jako výše i~zde rozložíme danou klauzuli na dvě kratší.
-    \[(\underbrace{\neg c\lor \neg b}_{\alpha^\prime}\lor y)\land(\overbrace{d\lor \neg d\lor\neg x}^{\beta^\prime}\lor\neg y)\]
-    Tedy dostáváme opět novou formuli
-    \[\varphi^\prime(a,b,c,d,x,y)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor y)\land(d\lor \neg d\lor\neg x\lor\neg y).\]
+    \[
+        (\underbrace{\neg c\lor d}_{\alpha^\prime}\lor y)
+        \land(\overbrace{\neg e\lor f\lor\neg x}^{\beta^\prime}\lor\neg y).
+    \]
+    Tedy dostáváme formuli
+    \[
+        \varphi^{\prime\prime}
+        =(a\lor b\lor x)\land(\neg c\lor d\lor y)
+        \land(\neg e\lor f\lor\neg x\lor\neg y).
+    \]
 
     Třetí klauzule je stále ještě dlouhá,~tedy postup zopakujeme ještě jednou s~novou proměnnou $z$.
-    \[(\underbrace{d\lor \neg d}_{\alpha^{\prime\prime}}\lor z)\land(\overbrace{\neg x\lor\neg y}^{\beta^{\prime\prime}}\lor\neg z)\]
-    Celkově dotáváme formuli,~která je již v~3-CNF:
-    \[\psi(a,b,c,d,x,y,z)=(a\lor b\lor x)\land(\neg c\lor \neg b\lor y)\land(d\lor \neg d\lor z)\land(\neg x\lor\neg y\lor\neg z).\]
+    \[
+        (\underbrace{\neg e\lor f}_{\alpha^{\prime\prime}}\lor z)
+        \land(\overbrace{\neg x\lor\neg y}^{\beta^{\prime\prime}}\lor\neg z).
+    \]
+    Celkově dostáváme formuli,~která je již v~3-CNF:
+    \[
+        \psi=(a\lor b\lor x)\land(\neg c\lor d\lor y)
+        \land(\neg e\lor f\lor z)\land(\neg x\lor\neg y\lor\neg z).
+    \]
 
-    Nyní si zkusíme určit hodnoty pomocných proměnných $x,y,z$ na základě zadaného ohodnocení proměnných v~původní formuli $\varphi$. Zkusme např. $a=0,b=0,c=0,d=1$. Lze jednoduše vypočítat,~že $\varphi(0,0,0,1)=1$.
+    Nyní si zkusíme určit hodnoty pomocných proměnných $x,y,z$ na základě zadaného ohodnocení původních proměnných. Zkusme
+    \[
+        a=0,\quad b=0,\quad c=0,\quad d=0,\quad e=1,\quad f=0.
+    \]
+    Původní formule je díky literálu $\neg c$ splněna.
     \begin{itemize}
-        \item Protože ve $\varphi^\prime$ platí,~že $a\lor b=0\lor 0=0$,~tak položíme $x=1$.
-        \item Dále ve $\varphi^{\prime\prime}$ máme $\neg c\lor\neg b=1\lor 1=1$,~tedy $y=0$
-        \item a~jako poslední pro $\psi$ platí $d\lor\neg d=1\lor 0=1$,~tj. opět $z=0$.
+        \item Protože $a\lor b=0$,~položíme $x=1$.
+        \item Dále máme $\neg c\lor d=1$,~tedy položíme $y=0$.
+        \item Nakonec $\neg e\lor f=0$,~a~proto položíme $z=1$.
     \end{itemize}
-    Pomocné proměnné tedy nastavíme následovně: $x=1,y=0,z=0$. Můžeme se přesvědčit,~že nová formule $\psi$ je v~tomto ohodnocení také splněna:
+    Můžeme se přesvědčit,~že nová formule $\psi$ je v~tomto ohodnocení také splněna:
     \begin{align*}
-        \psi(0,0,0,1,1,0,0)&=(0\lor 0\lor 1)\land(1\lor 1\lor 0)\land(1\lor 0\lor 0)\land(0\lor 1\lor 1)\\
+        \psi&=(0\lor0\lor1)\land(1\lor0\lor0)
+        \land(0\lor0\lor1)\land(0\lor1\lor0)\\
         &=1\land 1\land 1\land 1\\
         &=1.
     \end{align*}
@@ -66,9 +92,9 @@ Tím jsme dostali obecný postup pro převod formule z~CNF do 3-CNF.
 
 Tímto způsobem jsme ukázali,~že problém SAT lze ``převést'' na $3$-SAT. Opačný směr je triviální,~protože každá formule v~$3$-CNF už je i~v~CNF,~takže nic převádět nemusíme.
 
-Zkusme se zamyslet nad rychlostí onoho převodu formule. Obecně formuli o~$k>3$ literálech rozložíme na $k-2$ nových formulí. Celkově tedy strávíme převodem lineární čas,~tj. $\bigO{n}$,~kde $n$ je počet literálů formule.
+Zkusme se zamyslet nad rychlostí převodu. Klauzuli o~$k>3$ literálech nahradíme $k-2$ klauzulemi a~použijeme $k-3$ nových proměnných. Celkový počet vytvořených symbolů je tedy lineární v~délce původní formule.
 
-Z~tohoto vlastně vyplývá,~že tyto problémy v~jistém smyslu ``stejně těžké''. Kdybychom uměli vyřešit polynomiálně $3$-SAT,~pak i~SAT bychom uměli vyřešit s~nějakým zpomalením. Obecně uvažujme,~že nějaká formule $\varphi$ v~CNF obsahuje $n$ literálů. Tu převedeme na novou formuli $\psi$,~která bude obsahovat nejvýše $n-2$ nových proměnných,~tedy její délka bude $n+n-2=2n-2$,~tedy má stále lineární délku. Určení splnitelnosti výsledné formule $\psi$ by tedy zabralo lineární čas $\bigO{2n-2}=\bigO{n}$.
+Z~toho plyne,~že kdybychom uměli řešit 3-SAT v~polynomiálním čase,~uměli bychom polynomiálně řešit i~SAT: nejprve bychom lineárně sestrojili formuli v~3-CNF a~poté na ni spustili předpokládaný polynomiální algoritmus pro 3-SAT. Samotný převod je lineární; \emph{to však neznamená,~že lineárně umíme rozhodnout splnitelnost výsledné formule}.
 
 Toto byla ukázka tzv. \textbf{polynomiálního převodu} mezi problémy. Pojďme si toto trochu rigorózněji definovat.
 \begin{definition}[Polynomiální převoditelnost]\label{def:pol_prev}
@@ -77,10 +103,10 @@ Toto byla ukázka tzv. \textbf{polynomiálního převodu} mezi problémy. Pojďm
 Co tato definice říká? Pokud platí $A\rightarrow B$,~pak odpověď na vstup $x^\prime$ je zároveň i~odpovědí na původní vstup $x$. V~našem případě je formule v~CNF $\varphi$ splnitelná (to je naše $x$),~právě když je nová formule v~3-CNF $\psi$ (to je $x^\prime$) splnitelná.
 
 Zároveň $A\rightarrow B$ znamená,~že problém $B$ je alespoň tak těžký jako problém $A$.\footnote{Mnemotechnická pomůcka: "Obtížnost teče ve směru šipky."}
-\warningbox{Pokud pro problém $A$ neexistuje polynomiální algoritmus,~pak ani pro $B$ nemůže existovat. Naopak pokud $B$ lze řešit polynomiálně,~pak i~$A$ lze řešit polynomiálně. Pokud obecně budeme mít pro problém $A$ vstup velikosti $n$,~přičemž převod potrvá $\bigO{n^\ell}$ pro nějaké $\ell$,~pak délka nového vstupu bude též $\bigO{n^\ell}$. Pokud problém $B$ umíme řešit v~čase $\bigO{b^k}$ pro nějaké $k$,~kde $b$ je velikost vstupu,~pak pro nový vstup potrvá výpočet $\bigO{n^{k\ell}}$. Celkově tedy strávíme čas $\bigO{n^\ell}$ převodem a~pak čas $\bigO{n^{k\ell}}$ samotným řešením problému $B$. To celkově potrvá $\bigO{n^\ell+n^{k\ell}}$,~což je zase polynom. Viz obrázek \ref{fig:pol_prevod}.}
+\warningbox{Ze směru převodu plyne následující podmíněné tvrzení: pokud $A\rightarrow B$ a~problém $B$ lze řešit polynomiálně,~pak lze polynomiálně řešit i~$A$. Obrácený závěr obecně neplatí. Pokud by navíc bylo dokázáno,~že $A$ polynomiálně řešit nelze,~pak by z~$A\rightarrow B$ plynulo,~že polynomiálně nelze řešit ani $B$. U~SAT však takový dolní odhad zatím dokázán není.}
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{02-problemy/images/ch02_pol_prevod.pdf}
+    \input{02-problemy/images/ch02_pol_prevod.tex}
     \caption{Schéma polynomiálního převodu.}
     \label{fig:pol_prevod}
 \end{figure}

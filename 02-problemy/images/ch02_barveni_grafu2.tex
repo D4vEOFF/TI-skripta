@@ -1,0 +1,7 @@
+\begin{tikzpicture}[scale=0.9]
+    \foreach \i/\col in {1/red,2/blue,3/green!60!black,4/red,5/blue} {
+        \node[vertex,fill=\col!25,draw=\col] (v\i) at ({90-72*(\i-1)}:2) {};
+    }
+    \foreach \a/\b in {1/2,2/3,3/4,4/5,5/1}\draw[edge](v\a)--(v\b);
+    \draw[edge] (v1)--(v3);
+\end{tikzpicture}

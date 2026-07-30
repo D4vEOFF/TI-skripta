@@ -1,0 +1,37 @@
+\section{Sémantická analýza}\label{sec:semanticka-analyza}
+
+Parser zaručuje,~že program odpovídá gramatice. To ještě neznamená,~že dává smysl. Příkaz \texttt{let x = ;} je syntakticky chybný,~protože za rovnítkem chybí výraz. Příkaz \texttt{print y;} je naopak syntakticky správný,~ale není možné jej vykonat,~pokud proměnná \texttt{y} nebyla deklarována.
+
+\emph{Sémantický analyzátor} proto kontroluje podmínky,~které nelze nebo není vhodné vyjadřovat samotnou gramatikou. Patří mezi ně zejména existence deklarací,~viditelnost jmen,~typová správnost výrazů a~platnost jednotlivých operací.
+
+\subsection{Tabulka symbolů}
+
+Překladač si pro každý deklarovaný identifikátor uchovává informace v~\emph{tabulce symbolů}. U~proměnné to může být jméno,~typ,~oblast platnosti a~místo uložení; u~funkce navíc typy parametrů a~návratová hodnota.
+
+Při čtení deklarace překladač přidá nový záznam. Při každém použití identifikátoru hledá odpovídající záznam v~aktuální a~okolních oblastech platnosti. Díky tomu odhalí použití nedeklarované proměnné i~nepovolenou opakovanou deklaraci.
+
+\subsection{Typová kontrola}
+
+Typová kontrola přiřazuje typy listům stromu a~postupuje směrem ke kořeni. Je-li například \texttt{steps} číslo a~\texttt{speed} číslo,~výsledek jejich násobení je opět číslo. Součet s~číselnou proměnnou \texttt{position} proto může být přiřazen do další číselné proměnné.
+
+\begin{figure}[h]
+    \centering
+    \input{04-kompilatory/images/ch04_typova-kontrola.tex}
+    \caption{Zjednodušená typová kontrola výrazu.}
+    \label{fig:typova-kontrola}
+\end{figure}
+
+Jiný jazyk může některé kombinace automaticky převádět,~například celé číslo na desetinné,~zatímco další kombinace odmítne. Pravidla typového systému jsou proto součástí definice konkrétního jazyka,~nikoliv univerzální vlastností všech překladačů.
+
+\subsection{Sémantická kontrola malého jazyka}
+
+Náš jazyk má jediný číselný typ. Nemusíme tedy porovnávat různé typy,~ale stále musíme zkontrolovat deklarace. Analyzátor v~programu \ref{lst:semantic} prochází příkazy v~pořadí,~ukládá deklarovaná jména do množiny a~rekurzivně kontroluje výrazy.
+
+\lstinputlisting[
+    caption={Sémantická kontrola deklarací a~použití proměnných.},
+    label={lst:semantic}
+]{04-kompilatory/code/mini_compiler/semantic.py}
+
+Inicializační výraz se kontroluje ještě před vložením nového jména do tabulky. Program \texttt{let x = x + 1;} proto nemůže použít právě deklarovanou proměnnou,~dokud pro ni neexistuje předchozí hodnota. Po úspěšné kontrole ví další fáze,~že každé jméno odkazuje na existující proměnnou.
+
+\tipbox{Syntaktický strom může být po sémantické analýze doplněn o~typy,~odkazy do tabulky symbolů a~další atributy. Hovoříme pak o~anotovaném stromu. Další fáze díky tomu nemusí stejné informace zjišťovat znovu.}

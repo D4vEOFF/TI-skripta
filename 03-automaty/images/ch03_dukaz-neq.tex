@@ -1,0 +1,10 @@
+\begin{tikzpicture}[node distance=18mm]
+    \node[task] (a) {$0^i$};
+    \node[task,below=12mm of a] (b) {$0^j$};
+    \state{q}{(3.3,-0.65)}{$q$}
+    \acceptingstate{f}{(6.6,-0.65)}{$f$}
+    \draw[diredge] (a) -- node[above,sloped]{čtení} (q);
+    \draw[diredge] (b) -- node[below,sloped]{čtení} (q);
+    \transitionarrow{q}{above}{$1^i$}{f}
+    \node[below=8mm of f] {$0^i1^i\in L_{\mathrm{eq}}$, ale $0^j1^i\notin L_{\mathrm{eq}}$};
+\end{tikzpicture}

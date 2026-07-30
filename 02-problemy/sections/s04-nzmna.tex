@@ -1,69 +1,71 @@
 \section{Problém nezávislé množiny v~grafu}\label{sec:nzmna}
 
-Od problému SAT,~resp. 3-SAT se na chvíli přesuneme ke zdánlivě odlišnému problému z~teorie grafů. Později si ukážeme i~jeho praktický důsledek v~podsekci \ref{subsec:int_graf}. Nejdříve však bude dobré začít definicí.
+Od problému SAT,~resp. 3-SAT se na chvíli přesuneme ke zdánlivě odlišnému problému z~teorie grafů. Později si ukážeme i~jeho praktické použití v~podsekci \ref{subsec:int_graf}. Nejdříve však bude dobré začít definicí.
 \begin{definition}[Nezávislá množina]\label{def:nzmna}
-    Mějme libovolný graf $G=(V,E)$. Množina $N\subseteq V$ je \emph{nezávislá},~pokud žádné dva vrcholy nejsou spojeny hranu.
+    Mějme libovolný neorientovaný graf $G=(V,E)$. Množina $N\subseteq V$ je \emph{nezávislá},~pokud žádné dva různé vrcholy z~$N$ nejsou spojeny hranou.
 \end{definition}
-Definice \ref{def:nzmna} jednoduše říká,~že jakákoliv vybraná množina vrcholů z~daného grafu je nezávisá,~pokud mezi všemi vybranými vrcholy nevede hrana. Podívejme se na konkrétní příklad.
+Definice \ref{def:nzmna} jednoduše říká,~že jakákoliv vybraná množina vrcholů z~daného grafu je nezávislá,~pokud mezi všemi vybranými vrcholy nevede hrana. Podívejme se na konkrétní příklad.
 \begin{example}
     Nezávislé množiny $M_1$ a~$M_2$ v~grafech $G_1$ a~$G_2$ (viz obrázky \ref{subfig:nzmna_priklad1} a~\ref{subfig:nzmna_priklad2}).
     \begin{figure}[h]
         \centering
         \begin{subfigure}{7cm}
             \centering
-            \includegraphics[scale=.7]{02-problemy/images/ch02_nzmna_priklad1.pdf}
+            \input{02-problemy/images/ch02_nzmna_priklad1.tex}
             \caption{Nezávislá množina vrcholů $M_1=\set{v_1,v_2}$ v~$G_1$}
             \label{subfig:nzmna_priklad1}
         \end{subfigure}
         \qquad
         \begin{subfigure}{7cm}
             \centering
-            \includegraphics[scale=.7]{02-problemy/images/ch02_nzmna_priklad2.pdf}
+            \input{02-problemy/images/ch02_nzmna_priklad2.tex}
             \caption{Nezávislá množina vrcholů $M_2=\set{3,5,8}$ v~$G_2$}
             \label{subfig:nzmna_priklad2}
         \end{subfigure}
     \end{figure}
 \end{example}
 
-Zde poznamenejme,~že na existenci nezávislé množiny nemá smysl se ptát,~neboť v~libovolném neprázdném grafu (tedy má alespoň jeden vrchol) existuje nezávislá množina,~např. libovolná jednovrcholová množina je určitě z~definice nezávislá. Zajímavější otázkou je spíše,~zda v~zadaném grafu existuje nezávislá množina,~která má alespoň určitou velikost (tzn. počet vrcholů).
+Zde poznamenejme,~že na pouhou existenci neprázdné nezávislé množiny nemá smysl se ptát,~neboť v~libovolném neprázdném grafu existuje nezávislá množina: libovolná jednovrcholová množina je z~definice nezávislá. Zajímavější otázkou je spíše,~zda v~zadaném grafu existuje nezávislá množina,~která má alespoň určitou velikost (tzn. počet vrcholů).
 
 \problem{Nezávislá množina v~grafu (NzMna)}{Graf $G=(V,E)$ a~číslo $k\in\N$.}{$1$,~pokud v~grafu $G$ existuje nezávislá množina velikosti alespoň $k$,~jinak $0$.}
 
 Jak později uvidíme,~otázka existence nezávislé má i~své aplikace při řešení praktických problémů (opět viz podsekce \ref{subsec:int_graf}),~avšak ještě než tak učiníme,~zkusme se podívat na souvislosti s~problémy,~které již známe.
 
 \subsection{Převod 3-SAT na NzMna}\label{subsec:prevod_3sat_nzmna}
-Mezi dvojicí problémů NzMna a~$3$-SAT existuje přímá souvislost oběma směry. Problém $3$-SAT lze tedy převést na problém nezávislé množiny a~naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem,~ten druhý je již podstatně složitější\footnote{Pro zájemnce viz kniha \emph{Průvodce labyrintem algoritmů (2. vydání),~str. 471}}.
+Mezi dvojicí problémů NzMna a~$3$-SAT existuje přímá souvislost oběma směry. Problém $3$-SAT lze tedy převést na problém nezávislé množiny a~naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem,~ten druhý je již podstatně složitější\footnote{Pro zájemce viz kniha \emph{Průvodce labyrintem algoritmů (2. vydání),~str. 471}}.
 
 Začínáme s~formulí $\varphi$,~která je ve formě $3$-CNF. Uvažujme,~že obsahuje obecně $k$ klauzulí,~kde každá obsahuje maximálně $3$ literály. Chceme pro tuto formuli sestrojit graf $G$ a~číslo $n$ takové,~že v~něm existuje nezávislá množina velikosti alespoň $n$.
 \[\varphi=\underbrace{(\dots)}_{\text{max. 3~literály}}\land(\dots)\land\dots\land(\dots)\]
-Aby byla formule $\varphi$ splněná,~musí být splněny všechny její klauzule. K~tomu je potřeba,~aby v~každé klauzuli existoval alespoň jeden literál,~který ji bude splňovat (může jich být i~více). Z~každé klauzule tedy vybereme jeden literál,~který ji bude splňovat. Je však nutné upozornit,~že nesmíme vybírat konfliktně,~tedy např. nelze v~jedné klauzulu vybrat jako splňující literál $x$ a~v~jiné klauzuli $\neg x$.
+Aby byla formule $\varphi$ splněná,~musí být splněny všechny její klauzule. K~tomu je potřeba,~aby v~každé klauzuli existoval alespoň jeden literál,~který ji bude splňovat (může jich být i~více). Z~každé klauzule tedy vybereme jeden literál,~který ji bude splňovat. Je však nutné upozornit,~že nesmíme vybírat konfliktně,~tedy např. nelze v~jedné klauzuli vybrat jako splňující literál $x$ a~v~jiné klauzuli $\neg x$.
 \[(\dots)\land(\dots\lor \underbrace{x}_{\text{vybereme}} \lor \dots)\land\dots\land(\dots\lor\overbrace{\neg x}^{\text{nesmíme vybrat}}\lor \dots)\land\dots\]
-Pro každou klauzuli vytvoříme v~novém grafu $G$ \textbf{trojúhelník},~kde jeho vrcholy představují literály dané klauzule. A~jako poslední spojíme hranou \textbf{každý literál s~jeho negací}. Např. pro formuli
+Pro každý výskyt literálu vytvoříme v~novém grafu jeden vrchol. Vrcholy náležející stejné klauzuli navzájem všechny spojíme; pro tříliterálovou klauzuli tak vznikne trojúhelník,~pro kratší klauzuli hrana nebo jediný vrchol. Nakonec spojíme hranou každý výskyt literálu $x$ s~každým výskytem opačného literálu $\neg x$ v~jiné klauzuli. Například pro formuli
 \[\psi(x,y,z)=(x\lor y\lor \neg z)\land(\neg x\lor y)\land(\neg z\lor\neg y\lor x)\]
 je příslušný graf znázorněný na obrázku \ref{fig:prevod_3sat_nzmna}.
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{02-problemy/images/ch02_prevod_3sat_nzmna.pdf}
+    \input{02-problemy/images/ch02_prevod_3sat_nzmna.tex}
     \caption{Ukázka sestrojeného grafu pro formuli $\psi$.}
     \label{fig:prevod_3sat_nzmna}
 \end{figure}
 
-Pojďme se nyní promyslet danou konstrukci grafu $G$. Pokud v~nějaké klauzuli vybereme jeden literál,~který ji bude splňovat,~tak v~daném grafu $G$ budou vrcholy příslušné daným literálům tvořit nezávislou množinu. Zároveň však nemůže dojít k~situaci,~kdy bychom vybrali jednou vybrali literál a~v~jiné klauzuli jeho negaci,~protože příslušné dvojice jsou v~grafu $G$ spojeny hranou.
+Pojďme nyní ověřit obě strany konstrukce. Je-li formule splnitelná,~vybereme z~každé klauzule jeden pravdivý literál. Získané vrcholy pocházejí z~různých klauzulí a~nemohou obsahovat současně $x$ i~$\neg x$,~takže mezi nimi nevede žádná hrana. Tvoří proto nezávislou množinu velikosti $k$.
 
-Např. pro již zmíněnou formuli $\psi$,~která je splnitelná např. pomocí ohodnocení $x=1,y=1$ a~$z=0$ je příslušná nezávislá množina znázorněna na obrázku \ref{fig:prevod_3sat_nzmna_2},~kde jsou splňující literály jednotlivých klauzulí $x,y$ a~$\neg z$.
+Naopak nechť graf obsahuje nezávislou množinu velikosti $k$. Z~každé z~$k$ klauzulí může obsahovat nejvýše jeden vrchol,~protože vrcholy jedné klauzule jsou navzájem spojené. Musí tedy obsahovat právě jeden vrchol z~každé klauzule. Vybrané literály si navzájem neodporují,~jinak by jejich vrcholy byly spojeny hranou. Nastavíme proměnné tak,~aby byly všechny vybrané literály pravdivé; tím splníme každou klauzuli.
+
+Pro již zmíněnou formuli $\psi$,~která je splnitelná např. pomocí ohodnocení $x=1,y=1$ a~$z=0$,~je příslušná nezávislá množina znázorněna na obrázku \ref{fig:prevod_3sat_nzmna_2}. Vybrané splňující literály jednotlivých klauzulí jsou $x,y$ a~$\neg z$.
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{02-problemy/images/ch02_prevod_3sat_nzmna_2.pdf}
+    \input{02-problemy/images/ch02_prevod_3sat_nzmna_2.tex}
     \caption{Ukázka nezávislé množiny příslušné splňujícím literálům pro formuli $\psi$.}
     \label{fig:prevod_3sat_nzmna_2}
 \end{figure}
 
-Jako poslední musíme ještě určit číslo $n$. To je ale velice jednoduché,~protože v~každé klauzuli vybíráme právě jeden literál a~celkově těchto klauzulí je obecně $k$. Tedy v~takto sestrojeném grafu se nachází právě $k$ trojúhelníků,~v~každém z~nichž vybíráme právě jeden vrchol,~tedy $n=k$.
+Jako poslední musíme určit cílové číslo $n$. Protože formule obsahuje $k$ klauzulí a~z~každé vybíráme právě jeden literál,~položíme $n=k$.
 
 K~převodu NzMna na $3$-SAT přidáme jen krátký komentář. Idea převodu je využití klasického SATu. Zadaný graf $G$ a~číslo $k$ se převede na formuli v~CNF a~ta se následně převede do $3$-CNF. Problém SAT tak využijeme v~jistém smyslu jako ``prostředníka'' (viz obrázek \ref{fig:prevod_nzmna_3sat}).
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{02-problemy/images/ch02_prevod_nzmna_3sat.pdf}
+    \input{02-problemy/images/ch02_prevod_nzmna_3sat.tex}
     \caption{Idea převodu NzMna $\rightarrow$ $3$-SAT.}
     \label{fig:prevod_nzmna_3sat}
 \end{figure}
@@ -72,22 +74,23 @@ K~převodu NzMna na $3$-SAT přidáme jen krátký komentář. Idea převodu je 
 
 Nyní se podíváme na jednu z~aplikací nezávislé množiny v~praktických problémech.
 
-Představme si,~že máme $n$ vyučovacích hodin ve škole,~které chceme rozvrhnout do co nejmenšího počtu učeben tak,~aby se žádné dvě z~nich nepřekrývaly. Každá vyučovací hodina má čas začátku a~čas svého konce. Matematicky toto můžeme reprezentovat pomocí intervalu $(a,b)$,~kde $a$ je čas začátku a~$b$ je čas konce. Jednotlivé hodiny tedy můžeme reperzentovat pomocí intervalů $(a_1,b_1),(a_2,b_2),(a_3,b_3),\dots,(a_n,b_n)$. V~tomto případě záměrně volíme otevřené intervaly. Později uvidíme,~proč se nám toto hodí.
+Představme si,~že máme $n$ vyučovacích hodin ve škole,~které chceme rozvrhnout do co nejmenšího počtu učeben tak,~aby se žádné dvě z~nich nepřekrývaly. Každá vyučovací hodina má čas začátku a~čas svého konce. Matematicky toto můžeme reprezentovat pomocí intervalu $(a,b)$,~kde $a$ je čas začátku a~$b$ je čas konce. Jednotlivé hodiny tedy můžeme reprezentovat pomocí intervalů $(a_1,b_1),(a_2,b_2),(a_3,b_3),\dots,(a_n,b_n)$. V~tomto případě záměrně volíme otevřené intervaly. Později uvidíme,~proč se nám toto hodí.
 
-Dané hodiny tedy chceme rozdělit do co nejměnšího počtu učeben. Každou z~učeben si můžeme označit nějakou barvou. Nyní sestrojíme tzv. \textbf{intervalový graf}. Jeho vrcholy představují dané vyučovací hodiny,~resp. příslušné intervaly,~přičemž mezi dvojicí vrcholů vede hrana,~právě když dané intervaly mají neprázdný průnik,~tj. obecně $(a_i,b_i)\cap(a_j,b_j)\neq\emptyset$ (to znamená,~že se hodiny svým časem kryjí). Zde si všimněme,~proč se nám hodí pracovat s~otevřenými intervaly. Pokud by dvojice hodin navazovala těsně po sobě ve stejné učebně,~např. $(7,9)$ a~$(9,10)$,~pak bychom takovou situaci také mohli shledat přípustnou. Pokud bychom však používali uzavřené intervaly,~pak by průnik vycházel neprázdný. Např. viz obrázek \ref{fig:int_graf}.
+Dané hodiny tedy chceme rozdělit do co nejmenšího počtu učeben. Každou z~učeben si můžeme označit nějakou barvou. Nyní sestrojíme tzv. \textbf{intervalový graf}. Jeho vrcholy představují dané vyučovací hodiny,~resp. příslušné intervaly,~přičemž mezi dvojicí vrcholů vede hrana,~právě když dané intervaly mají neprázdný průnik,~tj. obecně $(a_i,b_i)\cap(a_j,b_j)\neq\emptyset$ (to znamená,~že se hodiny svým časem kryjí). Zde si všimněme,~proč se nám hodí pracovat s~otevřenými intervaly. Pokud by dvojice hodin navazovala těsně po sobě ve stejné učebně,~např. $(7,9)$ a~$(9,10)$,~pak bychom takovou situaci také mohli shledat přípustnou. Pokud bychom však používali uzavřené intervaly,~pak by průnik vycházel neprázdný. Např. viz obrázek \ref{fig:int_graf}.
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{02-problemy/images/ch02_int_graf.pdf}
+    \input{02-problemy/images/ch02_int_graf.tex}
     \caption{Příklad intervalového grafu pro intervaly $(2,7),(6,8),(7,10),(1,3),(3,7)$.}
     \label{fig:int_graf}
 \end{figure}
 Nyní každý vrchol obarvíme barvou nějaké učebny. Přitom dvojice vyučovacích hodin nesmí být rozvržena do stejné učebny,~pokud se časově kryjí. To znamená,~že sousední vrcholy musí mít vždy různé barvy (viz obrázek \ref{fig:int_graf2}).
 \begin{figure}[h]
     \centering
-    \includegraphics[scale=.7]{02-problemy/images/ch02_int_graf2.pdf}
+    \input{02-problemy/images/ch02_int_graf2.tex}
     \caption{Obarvení intervalového grafu pro intervaly $(2,7),(6,8),(7,10),(1,3),(3,7)$.}
     \label{fig:int_graf2}
 \end{figure}
 Zde si všimněte,~že libovolná skupina vrcholů obarvená stejnou barvou tvoří nezávislou množinu.
 
-V~praxi je (efektivní) rozvrhování běžnou záležitostí (např. rozvrhování procesů mezi vlákna). Později si však vysvětlíme,~proč je tento problém v~obecném případě algoritmicky těžký.
+V~praxi je efektivní rozvrhování běžnou záležitostí,~například při přidělování úloh procesorům.
+\notebox{Barvení obecného grafu je algoritmicky těžké,~ale intervalové grafy mají zvláštní strukturu. Minimální počet učeben lze určit polynomiálním hladovým algoritmem: hodiny zpracujeme podle času začátku a~použijeme nejdříve uvolněnou dostupnou učebnu; není-li žádná volná,~otevřeme novou. Tento příklad tedy ukazuje,~že omezená varianta obecně těžkého problému může být naopak dobře řešitelná.}

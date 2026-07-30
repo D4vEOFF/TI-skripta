@@ -29,6 +29,40 @@
 \newtheorem{example}[theorem]{Příklad}
 \newtheorem*{example*}{Příklad}
 
+% Zdrojové kódy
+\definecolor{codebackground}{RGB}{247,248,250}
+\definecolor{codecomment}{RGB}{63,127,95}
+\definecolor{codekeyword}{RGB}{34,73,150}
+\definecolor{codestring}{RGB}{150,58,58}
+\lstdefinestyle{python}{
+    language=Python,
+    backgroundcolor=\color{codebackground},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{codekeyword}\bfseries,
+    commentstyle=\color{codecomment}\itshape,
+    stringstyle=\color{codestring},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{gray!45},
+    framesep=5pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    keepspaces=true,
+    columns=fullflexible,
+    tabsize=4,
+    captionpos=t,
+    upquote=true
+}
+\lstset{style=python}
+\AtBeginDocument{%
+    \renewcommand{\lstlistingname}{Program}%
+    \renewcommand{\lstlistlistingname}{Seznam programů}%
+    \counterwithin{lstlisting}{section}%
+}
+
 % Enumerate
 \setlist[enumerate]{topsep=0pt,itemsep=-1ex,partopsep=1ex,parsep=1ex,label=\arabic*.}
 
@@ -60,6 +94,7 @@
 \def\P{\textsf{P}}
 \def\NP{\textsf{NP}}
 \def\NPC{\textsf{NPC}}
+\DeclareMathOperator{\SAT}{SAT}
 
 \setlength{\fboxsep}{3mm}
 \newcommand{\problem}[3]{
@@ -92,6 +127,7 @@
 % \renewcommand{\iff}{\Leftrightarrow}
 
 \newcommand{\abs}[1]{\left|\,#1\,\right|}
+\DeclareMathOperator{\regex}{RegE}
 
 %%% Prostor reálných čísel, přirozených čísel, ...
 \newcommand{\R}{\mathbb{R}}
@@ -110,6 +146,40 @@
 
 % Images
 \newcommand{\graphimgsize}{.75}
+
+% TikZ makra převzatá z prezentací. V knižní třídě nepotřebujeme
+% beamerovské parametry pro překryvy, názvy a vzhled však zůstávají stejné.
+\tikzstyle{vertex} = [thick, draw, circle, minimum size=4mm,
+  inner sep=1pt, outer sep=1pt, align=center]
+\tikzstyle{vertexplain} = [minimum size=4mm, inner sep=1pt,
+  outer sep=1pt, align=center]
+\tikzstyle{verteximg} = [draw, circle, minimum size=4mm, inner sep=0pt,
+  outer sep=1pt, align=center, clip]
+\tikzstyle{verteximgplain} = [minimum size=4mm, inner sep=0pt,
+  outer sep=1pt, align=center]
+\tikzstyle{task} = [draw, rounded corners=2pt, minimum width=14mm,
+  minimum height=8mm, inner sep=2pt, align=center]
+\tikzstyle{edge} = [thick, >=stealth]
+\tikzstyle{diredge} = [thick, ->, >=stealth]
+
+\tikzstyle{state} = [draw, circle, thick, minimum size=10mm,
+  inner sep=0pt, outer sep=0pt]
+\tikzstyle{acceptstate} = [state, double, double distance=1pt]
+\tikzstyle{transition} = [->, >=stealth, thick]
+
+\newcommand{\state}[4][]{%
+  \node[state,#1] (#2) at #3 {#4};%
+}
+\newcommand{\acceptingstate}[4][]{%
+  \node[acceptstate,#1] (#2) at #3 {#4};%
+}
+\newcommand{\transitionarrow}[5][]{%
+  \path (#2) edge[transition,#1] node[#3] {#4} (#5);%
+}
+\newcommand{\initialstate}[6][]{%
+  \node[state,#1] (#2) at #3 {#4};%
+  \draw[transition] #5 -- (#2.#6);%
+}
 
 % Chytrý křížový odkaz
 \NewDocumentCommand{\smartref}{ O{} O{} m m m }{%

@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+    \draw[thick,rounded corners=3pt,fill=blue!8] (-0.4,-0.9) rectangle (3.4,0.9);
+    \draw[thick,rounded corners=3pt,fill=green!8] (4.6,-0.9) rectangle (8.4,0.9);
+    \node at (1.5,0.5) {automat pro $R$};
+    \node at (6.5,0.5) {automat pro $S$};
+    \initialstate{r0}{(0.25,-0.2)}{} {(-1,-0.2)}{180}
+    \state{r1}{(2.75,-0.2)}{}
+    \state{s0}{(5.25,-0.2)}{}
+    \acceptingstate{s1}{(7.75,-0.2)}{}
+    \draw[transition] (r0) -- (r1);
+    \transitionarrow{r1}{above,fill=white,inner sep=1pt}{$\lambda$}{s0}
+    \draw[transition] (s0) -- (s1);
+\end{tikzpicture}

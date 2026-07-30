@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+    \initialstate{q0}{(0,0)}{$q_0$}{(-1.2,0)}{180}
+    \state{q1}{(2.5,0)}{$q_1$}
+    \acceptingstate{q2}{(5,0)}{$q_2$}
+    \state{sink}{(2.5,-2.3)}{$q_\bot$}
+    \transitionarrow{q0}{above}{$0$}{q1}
+    \transitionarrow{q1}{above}{$1$}{q2}
+    \transitionarrow[loop above]{q2}{above}{$0,1$}{q2}
+    \transitionarrow[bend right=18]{q0}{left}{$1$}{sink}
+    \transitionarrow{q1}{right}{$0$}{sink}
+    \transitionarrow[loop below]{sink}{below}{$0,1$}{sink}
+\end{tikzpicture}

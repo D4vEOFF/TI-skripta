@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+    \node at (1,2.05) {$\emptyset$};
+    \initialstate{e0}{(0,0.9)}{} {(-1.25,0.9)}{180}
+    \acceptingstate{e1}{(2,0.9)}{}
+
+    \node at (5.25,2.05) {$\lambda$};
+    \initialstate{l0}{(4.25,0.9)}{} {(3,0.9)}{180}
+    \acceptingstate{l1}{(6.25,0.9)}{}
+    \transitionarrow{l0}{above,fill=white,inner sep=1pt}{$\lambda$}{l1}
+
+    \node at (9.5,2.05) {$a$};
+    \initialstate{a0}{(8.5,0.9)}{} {(7.25,0.9)}{180}
+    \acceptingstate{a1}{(10.5,0.9)}{}
+    \transitionarrow{a0}{above,fill=white,inner sep=1pt}{$a$}{a1}
+\end{tikzpicture}

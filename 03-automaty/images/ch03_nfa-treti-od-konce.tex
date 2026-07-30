@@ -1,0 +1,10 @@
+\begin{tikzpicture}
+    \initialstate{q0}{(0,0)}{$q_0$}{(-1.2,0)}{180}
+    \state{q1}{(2.5,0)}{$q_1$}
+    \state{q2}{(5,0)}{$q_2$}
+    \acceptingstate{q3}{(7.5,0)}{$q_3$}
+    \transitionarrow[loop above]{q0}{above}{$0,1$}{q0}
+    \transitionarrow{q0}{above}{$1$}{q1}
+    \transitionarrow{q1}{above}{$0,1$}{q2}
+    \transitionarrow{q2}{above}{$0,1$}{q3}
+\end{tikzpicture}

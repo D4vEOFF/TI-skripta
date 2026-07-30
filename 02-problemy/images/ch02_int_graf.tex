@@ -1,0 +1,10 @@
+\begin{tikzpicture}[scale=0.85]
+    \draw[diredge] (-0.3,0)--(10.7,0);
+    \foreach \x in {1,...,10}\draw(\x,.12)--(\x,-.12)node[below]{\scriptsize\x};
+    \foreach \a/\b/\y/\lab in {2/7/1/{(2,7)},6/8/2/{(6,8)},7/10/3/{(7,10)},1/3/4/{(1,3)},3/7/5/{(3,7)}} {
+        \draw[very thick,blue] (\a,\y)--(\b,\y);
+        \draw[blue,fill=white] (\a,\y) circle(2pt);
+        \draw[blue,fill=white] (\b,\y) circle(2pt);
+        \node[left] at (\a,\y) {$\lab$};
+    }
+\end{tikzpicture}

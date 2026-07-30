@@ -1,0 +1,26 @@
+\begin{tikzpicture}[scale=0.85]
+    \coordinate (ca1) at (-2,1.5);
+    \coordinate (ca2) at (0,1.5);
+    \coordinate (ca3) at (2,1.5);
+    \coordinate (cb1) at (-1,-0.2);
+    \coordinate (cb2) at (1,-0.2);
+    \coordinate (cc1) at (-2,-2);
+    \coordinate (cc2) at (0,-2);
+    \coordinate (cc3) at (2,-2);
+
+    \foreach \x/\y in {ca1/ca2,ca2/ca3,ca1/ca3,cb1/cb2,cc1/cc2,cc2/cc3,cc1/cc3}
+        \draw[edge] (\x)--(\y);
+    \draw[edge,dashed,red] (ca1)--(cb1);
+    \draw[edge,dashed,red] (cb1)--(cc3);
+    \draw[edge,dashed,red] (ca2)--(cc2);
+    \draw[edge,dashed,red] (cb2)--(cc2);
+
+    \node[vertex,fill=yellow!45] at (ca1) {$x$};
+    \node[vertex,fill=white] at (ca2) {$y$};
+    \node[vertex,fill=white] at (ca3) {$\neg z$};
+    \node[vertex,fill=white] at (cb1) {$\neg x$};
+    \node[vertex,fill=yellow!45] at (cb2) {$y$};
+    \node[vertex,fill=yellow!45] at (cc1) {$\neg z$};
+    \node[vertex,fill=white] at (cc2) {$\neg y$};
+    \node[vertex,fill=white] at (cc3) {$x$};
+\end{tikzpicture}

@@ -4,13 +4,29 @@
 
 \usepackage[colorlinks=true,urlcolor=magenta,bookmarksopen=true]{hyperref} 	% Záložky v~souboru
 \usepackage[a-2u]{pdfx}
-\usepackage[czech]{babel}
+\IfFileExists{czech.ldf}{%
+    % Český babel ve výchozím nastavení aktivuje také znak -.
+    % To poškozuje názvy značek, záporné hodnoty v TikZu i cesty
+    % externích souborů načítaných pomocí listings. Ponecháme proto
+    % aktivní pouze zkratky začínající znakem ".
+    \usepackage[czech,shorthands="]{babel}%
+}{%
+    % Umožní překlad i v minimální instalaci TeX Live bez českého
+    % jazykového balíčku. V plné instalaci se použije větev výše.
+    \usepackage{babel}%
+    \providecommand{\uv}[1]{„##1“}%
+    \AtBeginDocument{\emergencystretch=2em}%
+}
 % \usepackage[defaultfam,tabular,lining]{montserrat}
 \usepackage{lmodern}
 % \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
-\usepackage[linesnumbered,ruled,vlined]{algorithm2e}                % Pseudokód algoritmů
+\IfFileExists{algorithm2e.sty}{%
+    \usepackage[linesnumbered,ruled,vlined]{algorithm2e}%           % Pseudokód algoritmů
+}{%
+    \input{assets/algorithm2e-fallback.tex}%                        % Náhrada pro minimální TeX Live
+}
 \usepackage{ifthen}
 
 %\usepackage{times}						% Font (~ Times New Roman)
@@ -28,13 +44,20 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}						% Věta, lemma, důsledek, důkaz
+\usepackage{listings}                   % Zdrojové kódy
 \usepackage{tikz}						% Schémata automatů
+\usetikzlibrary{arrows.meta,babel,calc,positioning,patterns,shapes.geometric}
 \IfFileExists{fontawesome5.sty}{%
     \usepackage{awesomebox}%            % infoboxíky
 }{%
     % Jednoduchá náhrada pro minimální instalace TeX Live.
     \newcommand{\faInfoCircle}{\ensuremath{\mathrm{i}}}
     \newcommand{\awesomebox}[5][]{\fbox{\parbox{0.9\linewidth}{##5}}}
+    \newcommand{\notebox}[1]{\par\medskip\noindent\awesomebox{2pt}{}{gray}{##1}\par\medskip}
+    \newcommand{\tipbox}[1]{\par\medskip\noindent\awesomebox{2pt}{}{gray}{##1}\par\medskip}
+    \newcommand{\warningbox}[1]{\par\medskip\noindent\awesomebox{2pt}{}{gray}{##1}\par\medskip}
+    \newcommand{\cautionbox}[1]{\par\medskip\noindent\awesomebox{2pt}{}{gray}{##1}\par\medskip}
+    \newcommand{\importantbox}[1]{\par\medskip\noindent\awesomebox{2pt}{}{gray}{##1}\par\medskip}
 }
 
 \usepackage{pgfplots}

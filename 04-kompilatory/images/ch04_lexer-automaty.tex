@@ -1,0 +1,22 @@
+\begin{tikzpicture}[
+    desc/.style={task,fill=blue!8,minimum width=37mm,font=\small},
+    phasebox/.style={task,fill=orange!12,minimum width=23mm,font=\small}
+]
+    \node[desc] (id) at (0,1.3) {identifikátor\\\texttt{[A-Za-z\_][A-Za-z0-9\_]*}};
+    \node[desc] (num) at (4.7,1.3) {číslo\\\texttt{[0-9]+}};
+    \node[desc] (op) at (9.4,1.3) {operátory\\\texttt{+ - * / =}};
+
+    \node[phasebox,minimum width=39mm] (nfa) at (4.7,-0.4)
+        {společný NFA};
+    \node[phasebox,minimum width=39mm] (dfa) at (4.7,-2.2)
+        {ekvivalentní DFA};
+    \node[task,fill=green!10,minimum width=31mm] (lexer) at (9.3,-2.2)
+        {lexer};
+
+    \draw[diredge] (id.south)--(nfa.north);
+    \draw[diredge] (num.south)--(nfa.north);
+    \draw[diredge] (op.south)--(nfa.north);
+    \draw[diredge] (nfa)--node[midway,right=2mm,font=\small]
+        {podmnožinová konstrukce}(dfa);
+    \draw[diredge] (dfa)--(lexer);
+\end{tikzpicture}

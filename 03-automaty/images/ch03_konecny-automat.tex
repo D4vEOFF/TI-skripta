@@ -1,0 +1,7 @@
+\begin{tikzpicture}[node distance=12mm]
+    \node[task,minimum width=25mm] (input) {vstupní slovo};
+    \node[task,minimum width=28mm,right=22mm of input] (automaton) {konečný automat};
+    \node[task,minimum width=24mm,right=22mm of automaton] (answer) {přijme / odmítne};
+    \draw[diredge] (input) -- (automaton);
+    \draw[diredge] (automaton) -- (answer);
+\end{tikzpicture}

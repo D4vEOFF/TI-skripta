@@ -1,0 +1,19 @@
+\begin{tikzpicture}[
+    level distance=11mm,
+    level 1/.style={sibling distance=36mm},
+    level 2/.style={sibling distance=25mm},
+    level 3/.style={sibling distance=17mm},
+    every node/.style={inner sep=1.5pt}
+]
+    \node {$S$}
+        child {node {$0$}}
+        child {node {$S$}
+            child {node {$0$}}
+            child {node {$S$}
+                child {node {$0$}}
+                child {node {$S$}
+                    child {node {$\lambda$}}}
+                child {node {$1$}}}
+            child {node {$1$}}}
+        child {node {$1$}};
+\end{tikzpicture}

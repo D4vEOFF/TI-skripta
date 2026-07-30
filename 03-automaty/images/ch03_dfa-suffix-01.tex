@@ -1,0 +1,11 @@
+\begin{tikzpicture}
+    \initialstate{q0}{(0,0)}{$q_0$}{(-1.2,0)}{180}
+    \state{q1}{(3,0)}{$q_1$}
+    \acceptingstate{q2}{(6,0)}{$q_2$}
+    \transitionarrow[loop above]{q0}{above}{$1$}{q0}
+    \transitionarrow{q0}{above}{$0$}{q1}
+    \transitionarrow[loop above]{q1}{above}{$0$}{q1}
+    \transitionarrow{q1}{above}{$1$}{q2}
+    \transitionarrow[bend left=24]{q2}{below}{$1$}{q0}
+    \transitionarrow[bend left=24]{q2}{below}{$0$}{q1}
+\end{tikzpicture}

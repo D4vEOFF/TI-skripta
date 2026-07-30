@@ -1,0 +1,9 @@
+\begin{tikzpicture}[scale=0.8]
+    \node[vertex] (a) at (0,1.8) {};
+    \node[vertex] (b) at (-1.5,0) {};
+    \node[vertex,fill=red!30,draw=red] (c) at (1.5,0) {};
+    \node[vertex,fill=red!30,draw=red] (d) at (0,-1.6) {};
+    \node[vertex,fill=red!30,draw=red] (e) at (2.5,-1.6) {};
+    \foreach \x/\y in {a/b,a/c,b/d,c/d,c/e,d/e}\draw[edge](\x)--(\y);
+    \foreach \x/\y in {c/d,c/e,d/e}\draw[edge,red,very thick](\x)--(\y);
+\end{tikzpicture}
