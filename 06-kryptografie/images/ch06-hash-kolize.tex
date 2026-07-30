@@ -1,0 +1,29 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    input/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                  minimum width=2.4cm, minimum height=8mm},
+    hash/.style={rounded corners=1mm, draw=blue!65!black, fill=blue!12,
+                 minimum width=2cm, minimum height=8mm},
+    flow/.style={-{Latex}, draw=black!55, line width=.7pt},
+    collision/.style={-{Latex}, draw=red!75!black, line width=1.1pt}
+]
+    \node[input] (x) at (-5,1.35) {\(x=\texttt{1010\ldots}\)};
+    \node[input] (y) at (-5,.25) {\(y=\texttt{0111\ldots}\)};
+    \node[input] (z) at (-5,-1) {\(\texttt{1100\ldots}\)};
+    \node[rounded corners=1.2mm, draw=orange!75!black, fill=orange!18,
+          minimum width=1.4cm, minimum height=10mm] (H) at (0,0) {\(H_n\)};
+    \node[hash] (h1) at (5,1) {\(00\ldots 1\)};
+    \node[hash] (h2) at (5,-.6) {\(10\ldots 0\)};
+
+    \draw[flow] (x) -- (H);
+    \draw[flow] (y) -- (H);
+    \draw[flow] (z) -- (H);
+    \draw[flow] (H) -- (h1);
+    \draw[flow] (H) -- (h2);
+
+    \draw[collision] (x.east) to[bend left=18] (h1.west);
+    \draw[collision] (y.east) to[bend right=8] (h1.west);
+    \node[text=red!75!black, above=2mm of H]
+        {kolize: \(x\neq y\), ale \(H_n(x)=H_n(y)\)};
+\end{tikzpicture}

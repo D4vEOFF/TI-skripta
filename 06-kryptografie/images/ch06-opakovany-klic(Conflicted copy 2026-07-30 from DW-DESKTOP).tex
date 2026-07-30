@@ -1,0 +1,27 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    >=Latex,
+    box/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                minimum width=3.1cm, minimum height=9mm, align=center},
+    xor/.style={circle, draw=orange!75!black, fill=orange!18,
+                minimum size=9mm, inner sep=0pt},
+    flow/.style={-{Latex}, draw=black!70, line width=.9pt}
+]
+    \node[box] (c1) at (-4.8,1.1) {\(c_1=m_1\oplus k\)};
+    \node[box] (c2) at (-4.8,-1.1) {\(c_2=m_2\oplus k\)};
+    \node[xor] (x) at (-1.7,0) {\(\oplus\)};
+    \node[box, draw=red!70!black, fill=red!8] (leak) at (1.1,0)
+        {\(c_1\oplus c_2=m_1\oplus m_2\)};
+
+    \node[inner sep=0pt] (attacker) at (5,0)
+        {\includegraphics[height=1.5cm]{06-kryptografie/images/hacker-icon.pdf}};
+    \node[below=1mm of attacker, align=center] {Záškodník získá\\vztah mezi zprávami};
+
+    \draw[flow] (c1.east) -- (x);
+    \draw[flow] (c2.east) -- (x);
+    \draw[flow] (x) -- (leak);
+    \draw[flow, draw=red!70!black] (leak) -- (attacker.west);
+
+    \node[text=blue!65!black] at (-1.7,-1.45)
+        {\(k\oplus k=0\)};
+\end{tikzpicture}

@@ -1,0 +1,25 @@
+\begin{tikzpicture}[
+    font=\small,
+    level 1/.style={sibling distance=6cm, level distance=1.4cm},
+    level 2/.style={sibling distance=2.7cm, level distance=1.4cm},
+    every node/.style={align=center},
+    result/.style={rounded corners=1mm, draw=blue!60!black, fill=blue!10,
+                   minimum width=1.2cm, minimum height=6mm},
+    edge from parent/.style={draw=black!70, -{Latex}}
+]
+    \node {\(\Omega\)}
+        child {node {\(0\)}
+            child {node[result] {\(00\)\\\(\frac14\)}
+                edge from parent node[left] {\(\frac12\)}}
+            child {node[result] {\(01\)\\\(\frac14\)}
+                edge from parent node[right] {\(\frac12\)}}
+            edge from parent node[left] {\(\frac12\)}
+        }
+        child {node {\(1\)}
+            child {node[result] {\(10\)\\\(\frac14\)}
+                edge from parent node[left] {\(\frac12\)}}
+            child {node[result] {\(11\)\\\(\frac14\)}
+                edge from parent node[right] {\(\frac12\)}}
+            edge from parent node[right] {\(\frac12\)}
+        };
+\end{tikzpicture}

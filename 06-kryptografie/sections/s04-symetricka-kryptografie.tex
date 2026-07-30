@@ -1,0 +1,128 @@
+\section{Symetrická kryptografie}\label{sec:krypto-symetricka}
+
+V~symetrické kryptografii používají Alice i~Bob tentýž tajný klíč
+\[
+    k\in\set{0,1}^{n}.
+\]
+Alice vytvoří šifrový text $c=\mathbf{E}(m,k)$ a~Bob obnoví zprávu výpočtem $m=\mathbf{D}(c,k)$. Klíč proto musí znát obě strany, ale nikdo další.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-symetricka.tex}
+    \caption{Základní schéma symetrického šifrování.}
+    \label{fig:krypto-symetricka}
+\end{figure}
+
+Symetrické algoritmy jsou obvykle velmi rychlé a~hodí se pro šifrování velkého množství dat. Hlavní organizační problém spočívá v~bezpečném předání klíče. Pokud Alice dokáže Bobovi tajně poslat dlouhý klíč, nabízí se otázka, proč stejným bezpečným kanálem neposlat přímo zprávu. Tento problém bude zvlášť dobře vidět u~jednorázové šifry.
+
+\subsection{Operace XOR}
+
+Jednorázová šifra používá operaci XOR, značenou symbolem $\oplus$. Pro jednotlivé bity platí
+\[
+\begin{array}{c|c|c}
+    a & b & a\oplus b\\
+    \hline
+    0 & 0 & 0\\
+    0 & 1 & 1\\
+    1 & 0 & 1\\
+    1 & 1 & 0
+\end{array}
+\]
+Operaci na stejně dlouhých bitových řetězcích provádíme po jednotlivých pozicích. Důležitá je rovnost
+\[
+    (a\oplus b)\oplus b=a,
+\]
+protože $b\oplus b=0$ a~$a\oplus 0=a$.
+
+\subsection{Jednorázová šifra}
+
+Alice a~Bob sdílejí rovnoměrně náhodný tajný klíč
+\[
+    k\in\set{0,1}^{n},
+\]
+který je stejně dlouhý jako zpráva $m\in\set{0,1}^{n}$. Alice šifruje
+\[
+    c=m\oplus k.
+\]
+Bob použije stejný klíč a~spočítá
+\[
+    c\oplus k=(m\oplus k)\oplus k=m.
+\]
+Anglicky se tato metoda nazývá \emph{one-time pad}; český název zdůrazňuje, že každý klíč smí být použit právě jednou.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-otp.tex}
+    \caption{Šifrování a~dešifrování jednorázovou šifrou.}
+    \label{fig:krypto-otp}
+\end{figure}
+
+\begin{proposition}
+    Nechť je $K$ rovnoměrně náhodný na $\set{0,1}^{n}$ a~nezávislý na náhodné veličině $M$. Položme $C=M\oplus K$. Potom pro každé $m,c\in\set{0,1}^{n}$ s~$\Pr(M=m)>0$ platí
+    \[
+        \Pr(M=m\mid C=c)=\Pr(M=m).
+    \]
+\end{proposition}
+
+\begin{proof}
+    Pro pevně zvolené hodnoty $m$ a~$c$ existuje právě jeden klíč, který zprávu $m$ převede na $c$, totiž
+    \[
+        k=m\oplus c.
+    \]
+    Protože je $K$ rovnoměrně náhodný a~nezávislý na $M$, dostáváme
+    \[
+        \Pr(M=m\ \text{a}\ C=c)
+        =
+        \Pr(M=m)\Pr(K=m\oplus c)
+        =
+        \frac{\Pr(M=m)}{2^n}.
+    \]
+    Dále sečteme přes všechny možné zprávy $m'$:
+    \[
+        \Pr(C=c)
+        =
+        \sum_{m'\in\set{0,1}^{n}}
+        \frac{\Pr(M=m')}{2^n}
+        =
+        \frac{1}{2^n}.
+    \]
+    Z~definice podmíněné pravděpodobnosti tedy plyne
+    \[
+        \Pr(M=m\mid C=c)
+        =
+        \frac{\Pr(M=m\ \text{a}\ C=c)}{\Pr(C=c)}
+        =
+        \Pr(M=m).
+    \]
+\end{proof}
+
+Zachycený šifrový text tedy nezmění pravděpodobnost žádné původní zprávy. Jednorázová šifra poskytuje \emph{perfektní utajení}: její bezpečnost není založena na omezeném výpočetním výkonu záškodníka. Platí dokonce proti protivníkovi s~libovolně výkonným počítačem.
+
+\importantbox{Perfektní utajení platí pouze tehdy, když je klíč skutečně náhodný, stejně dlouhý jako zpráva, nezávislý na zprávě, bezpečně sdílený a~použitý právě jednou.}
+
+\subsection{Proč se klíč nesmí opakovat?}
+
+Zašifruje-li Alice dvě zprávy týmž klíčem $k$, dostaneme
+\[
+    c_1=m_1\oplus k,
+    \qquad
+    c_2=m_2\oplus k.
+\]
+Záškodník může oba zachycené texty spojit:
+\[
+    c_1\oplus c_2
+    =
+    (m_1\oplus k)\oplus(m_2\oplus k)
+    =
+    m_1\oplus m_2.
+\]
+Klíč se vyruší. Záškodník sice nemusí okamžitě znát obě zprávy, získá však informaci o~jejich vzájemném vztahu. Pokud jednu z~nich zná nebo správně odhadne, dopočítá druhou.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-opakovany-klic.tex}
+    \caption{Opakované použití klíče odstraní z~výrazu neznámé $k$.}
+    \label{fig:krypto-opakovany-klic}
+\end{figure}
+
+Nevýhodou jednorázové šifry je nutnost bezpečně sdílet náhodný klíč délky celé zprávy. V~\smartref[sekci~][]{\showrefs}{sec:krypto-prg-owf}{dalším výkladu} uvidíme, jak lze perfektní bezpečnost nahradit bezpečností výpočetní a~dlouhý náhodný klíč krátkým seedem.

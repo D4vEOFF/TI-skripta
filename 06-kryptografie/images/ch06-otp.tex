@@ -1,0 +1,26 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    box/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                minimum width=2.5cm, minimum height=9mm, align=center},
+    xor/.style={circle, draw=orange!75!black, fill=orange!18,
+                minimum size=8mm, inner sep=0pt},
+    flow/.style={-{Latex}, draw=black!70, line width=.9pt}
+]
+    \node[box] (m) at (-5,1) {zpráva\\\(m=101101\)};
+    \node[box, draw=blue!65!black, fill=blue!12] (k1) at (-5,-1)
+        {náhodný klíč\\\(k=011010\)};
+    \node[xor] (x1) at (-2,0) {\(\oplus\)};
+    \node[box] (c) at (0,0) {šifrový text\\\(c=110111\)};
+    \node[xor] (x2) at (2.4,0) {\(\oplus\)};
+    \node[box, draw=blue!65!black, fill=blue!12] (k2) at (2.4,-1.5)
+        {stejný klíč\\\(k=011010\)};
+    \node[box] (out) at (5,0) {zpráva\\\(m=101101\)};
+
+    \draw[flow] (m.east) -- (x1);
+    \draw[flow] (k1.east) -- (x1);
+    \draw[flow] (x1) -- (c);
+    \draw[flow] (c) -- (x2);
+    \draw[flow] (k2) -- (x2);
+    \draw[flow] (x2) -- (out);
+\end{tikzpicture}

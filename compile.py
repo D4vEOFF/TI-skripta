@@ -33,13 +33,18 @@ def modify_tex_file(content):
 ''' % modified_content
     return new_content
 
-# Function to compile a .tex file twice using pdflatex
+# Function to compile a .tex file using pdflatex
 def compile_tex_file(file_path):
     try:
-        # First compilation
-        subprocess.run(['pdflatex', file_path], check=True)
-        # Second compilation to resolve references
-        subprocess.run(['pdflatex', file_path], check=True)
+        command = [
+            'pdflatex',
+            '-interaction=nonstopmode',
+            '-halt-on-error',
+            file_path,
+        ]
+        # Three passes reliably settle the table of contents and cross-references.
+        for _ in range(3):
+            subprocess.run(command, check=True)
         print(f"Compiled {file_path} successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error compiling {file_path}: {e}")
@@ -50,10 +55,22 @@ def process_and_copy_sep_tex_files(root_project_path):
 
     for root, dirs, files in os.walk(root_project_path):
         for file in files:
-            # Překládáme pouze vstupní soubory kapitol (např.
-            # ch01-grafove-algoritmy.tex), nikoli TikZ obrázky ch01_*.tex.
-            if re.fullmatch(r'ch\d{2}-.+\.tex', file):
-                original_path = os.path.join(root, file)
+            original_path = os.path.join(root, file)
+            relative_parts = os.path.relpath(
+                original_path, root_project_path
+            ).split(os.sep)
+
+            # Překládáme pouze hlavní vstupní soubory kapitol, které leží
+            # přímo v adresáři 01-..., 02-..., ... . Názvy TikZ obrázků
+            # mohou rovněž začínat chNN-, a proto nestačí kontrolovat jen
+            # název souboru.
+            is_chapter_entrypoint = (
+                len(relative_parts) == 2
+                and re.fullmatch(r'\d{2}-.+', relative_parts[0])
+                and re.fullmatch(r'ch\d{2}-.+\.tex', file)
+            )
+
+            if is_chapter_entrypoint:
 
                 # Read the content of the original .tex file
                 with open(original_path, 'r', encoding='utf-8') as f:

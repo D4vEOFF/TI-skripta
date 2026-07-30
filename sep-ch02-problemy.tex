@@ -1,0 +1,30 @@
+\documentclass[11pt,a4paper,oneside]{article} 
+
+\input{settings.tex}
+
+\ifcsname showrefs\endcsname
+\else
+    \NewDocumentCommand{\showrefs}{}{false}
+\fi
+
+\begin{document}
+
+\begin{center}
+    {\huge \textbf{\MakeUppercase{Algoritmicky těžké problémy}}}\\[1.2cm]
+\end{center}
+
+Mnoho problémů lze v~informatice řešit pomocí polynomiálních algoritmů,~tzn. algoritmů běžících v~čase $\bigO(n^k)$ pro nějaké pevné $k$. Například prvky v~poli můžeme řadit různými algoritmy; jednoduchý \emph{BubbleSort} má v~nejhorším případě časovou složitost $\bigO(n^2)$,~kde $n$ je počet prvků pole. Také nejkratší cesty v~grafu dokážeme hledat polynomiálně,~třeba Dijkstrovým algoritmem v~čase $\bigO(n^2+m)$ při použití pole,~kde $n$ je počet vrcholů a~$m$ počet hran.\footnote{U~jednoduchého neorientovaného grafu je $m\leqslant n(n-1)/2$,~u~jednoduchého orientovaného grafu $m\leqslant n(n-1)$. V~obou případech je tedy $m$ polynomiálně omezeno pomocí $n$.} S~jistou rezervou lze říci,~že polynomiální algoritmy bývají prakticky použitelné.
+
+Bohužel ne vždy je situace tak příznivá. Lze narazit na problémy,~pro které žádný polynomiální algoritmus neznáme,~a~u~některých dokonce umíme dokázat,~že je v~polynomiálním čase řešit nelze. Dobrým příkladem úlohy s~prokazatelně exponenciálně dlouhým řešením jsou \emph{Hanojské věže}: přesunutí $n$ disků vyžaduje nejméně $2^n-1$ tahů.
+
+Nás budou zajímat ty nejdůležitější problémy z~této oblasti,~protože mezi nimi lze nalézt zajímavé vztahy,~a~posléze si uděláme menší ochutnávku z~problematiky \ensuremath{\classP} a~\ensuremath{\classNP}.
+
+\input{02-problemy/sections/s01-obecny-sat}
+\input{02-problemy/sections/s02-sat}
+\input{02-problemy/sections/s03-3sat.tex}
+\input{02-problemy/sections/s04-nzmna.tex}
+\input{02-problemy/sections/s05-klika.tex}
+\input{02-problemy/sections/s06-p-np.tex}
+
+
+\end{document}

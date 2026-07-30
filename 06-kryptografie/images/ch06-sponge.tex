@@ -1,0 +1,53 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    block/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                  minimum width=1.8cm, minimum height=8mm, align=center},
+    state/.style={rounded corners=1mm, draw=blue!65!black, fill=blue!11,
+                  minimum width=1.7cm, minimum height=8mm, align=center},
+    func/.style={rounded corners=1mm, draw=orange!75!black, fill=orange!18,
+                 minimum width=9mm, minimum height=9mm},
+    xor/.style={circle, draw=black!55, fill=white, minimum size=6mm, inner sep=0pt},
+    flow/.style={-{Latex}, draw=black!70, line width=.75pt}
+]
+    \node[block] (m) at (-5.6,2) {zpráva \(m\)};
+    \node[block] (pad) at (-3.4,2) {padding};
+    \node[block] (parts) at (-1,2) {bloky \(p_1,\ldots,p_t\)};
+    \draw[flow] (m) -- (pad);
+    \draw[flow] (pad) -- (parts);
+
+    \node[state] (s0) at (-5.6,0) {\(S_0=0^b\)};
+    \node[xor] (x1) at (-3.8,0) {\(\oplus\)};
+    \node[func] (f1) at (-2.4,0) {\(f\)};
+    \node[state] (s1) at (-.9,0) {\(S_1\)};
+    \node at (.35,0) {\(\cdots\)};
+    \node[xor] (xt) at (1.55,0) {\(\oplus\)};
+    \node[func] (ft) at (2.9,0) {\(f\)};
+    \node[state] (st) at (4.35,0) {\(S_t\)};
+
+    \draw[flow] (s0) -- (x1);
+    \draw[flow] (x1) -- (f1);
+    \draw[flow] (f1) -- (s1);
+    \draw[flow] (s1) -- (.1,0);
+    \draw[flow] (.6,0) -- (xt);
+    \draw[flow] (xt) -- (ft);
+    \draw[flow] (ft) -- (st);
+
+    \node[block] (p1) at (-3.8,1) {\(p_1 0^c\)};
+    \node[block] (pt) at (1.55,1) {\(p_t 0^c\)};
+    \draw[flow] (parts.south west) -- (p1.north);
+    \draw[flow] (parts.south east) -- (pt.north);
+    \draw[flow] (p1) -- (x1);
+    \draw[flow] (pt) -- (xt);
+
+    \node[block, draw=green!55!black, fill=green!12] (rate) at (4.35,-1.45)
+        {čti část rate};
+    \node[state] (hash) at (4.35,-2.75) {otisk \(H_n(m)\)};
+    \draw[flow] (st) -- (rate);
+    \draw[flow] (rate) -- (hash);
+
+    \node[draw=blue!55!black, rounded corners=2mm, inner sep=4mm,
+          fit=(s0)(p1)(st)(pt), label={[text=blue!55!black]below left:absorbing}] {};
+    \node[draw=green!55!black, rounded corners=2mm, inner sep=3mm,
+          fit=(st)(rate)(hash), label={[text=green!45!black]below:squeezing}] {};
+\end{tikzpicture}

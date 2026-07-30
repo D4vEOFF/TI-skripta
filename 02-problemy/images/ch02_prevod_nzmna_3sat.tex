@@ -1,7 +1,7 @@
 \begin{tikzpicture}[node distance=20mm]
-    \node[task] (n) {NzMna};
-    \node[task,right=of n] (s) {SAT};
-    \node[task,right=of s] (t) {$3$-SAT};
+    \node[task] (n) {\ensuremath{\NZMNA}};
+    \node[task,right=of n] (s) {\ensuremath{\SAT}};
+    \node[task,right=of s] (t) {\ensuremath{\THREESAT}};
     \draw[diredge] (n)--(s);
     \draw[diredge] (s)--(t);
 \end{tikzpicture}

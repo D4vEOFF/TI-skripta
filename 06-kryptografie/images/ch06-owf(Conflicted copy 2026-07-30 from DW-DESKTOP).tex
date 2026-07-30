@@ -1,0 +1,25 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    >=Latex,
+    box/.style={rounded corners=1.2mm, draw=black!55, fill=black!4,
+                minimum width=2.2cm, minimum height=10mm, align=center},
+    function/.style={rounded corners=1.2mm, draw=orange!75!black,
+                     fill=orange!18, minimum width=1.5cm,
+                     minimum height=11mm, align=center},
+    easy/.style={-{Latex}, draw=green!50!black, line width=1pt},
+    hard/.style={-{Latex}, dashed, draw=red!75!black, line width=1pt}
+]
+    \node[box] (x) at (-4.5,1) {vstup \(x\)};
+    \node[function] (f) at (0,1) {\(f\)};
+    \node[box] (y) at (4.5,1) {výstup \(f(x)\)};
+    \draw[easy] (x) -- (f) node[midway, above] {snadno};
+    \draw[easy] (f) -- (y);
+
+    \node[inner sep=0pt] (attacker) at (4.5,-1.7)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/hacker-icon.pdf}};
+    \node[box] (xp) at (-3,-1.7) {hledaný \(x'\)};
+    \draw[hard] (attacker.west) to[bend right=12]
+        node[midway, above, align=center]
+        {těžké najít \(x'\)\\s~\(f(x')=f(x)\)}
+        (xp.east);
+\end{tikzpicture}

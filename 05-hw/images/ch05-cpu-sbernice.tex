@@ -1,0 +1,68 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    unit/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center
+    },
+    subunit/.style={
+        draw,
+        rounded corners,
+        fill=white,
+        minimum width=2.2cm,
+        minimum height=0.8cm,
+        align=center
+    },
+    databus/.style={<->, very thick, blue!70!black},
+    addrbus/.style={->, very thick, orange!85!black},
+    ctrlbus/.style={<->, very thick, red!70!black}
+]
+    \node[
+        unit,
+        fill=blue!10,
+        minimum width=6.0cm,
+        minimum height=4.4cm
+    ] (cpu) at (-3.1,1.1) {};
+    \node[font=\large\bfseries] at (-4.8,2.7) {CPU};
+
+    \node[subunit, fill=blue!18] (alu) at (-4.3,1.3) {\textbf{ALU}};
+    \node[subunit, fill=orange!20] (control) at (-4.3,0.1) {\textbf{Řadič}};
+    \node[
+        subunit,
+        fill=green!15,
+        minimum width=2.5cm,
+        minimum height=2.0cm
+    ] (registers) at (-1.8,0.7) {\textbf{Registry}\\[1mm] $R_0\quad R_1$\\ $R_2\quad R_3$};
+
+    \draw[->, thick] (registers.west) -- (alu.east);
+    \draw[->, thick] (control.east) -- (registers.west);
+    \draw[->, thick] (control.north) -- (alu.south);
+
+    \node[
+        unit,
+        fill=green!12,
+        minimum width=3.8cm,
+        minimum height=2.7cm
+    ] (memory) at (4.5,1.1) {\textbf{\large Paměť}\\[2mm] instrukce a~data};
+
+    \draw[databus] (-5.6,-2.0) -- (6.4,-2.0);
+    \draw[addrbus] (-5.6,-2.8) -- (6.4,-2.8);
+    \draw[ctrlbus] (-5.6,-3.6) -- (6.4,-3.6);
+
+    \node[anchor=east, text=blue!70!black] at (-5.8,-2.0) {datová};
+    \node[anchor=east, text=orange!85!black] at (-5.8,-2.8) {adresová};
+    \node[anchor=east, text=red!70!black] at (-5.8,-3.6) {řídicí};
+    \node[anchor=west, font=\small\bfseries] at (6.55,-2.8) {sběrnice};
+
+    \draw[databus] (-3.7,-1.1) -- (-3.7,-2.0);
+    \draw[addrbus] (-3.1,-1.1) -- (-3.1,-2.8);
+    \draw[ctrlbus] (-2.5,-1.1) -- (-2.5,-3.6);
+
+    \draw[databus] (3.8,-0.25) -- (3.8,-2.0);
+    \draw[addrbus] (4.5,-0.25) -- (4.5,-2.8);
+    \draw[ctrlbus] (5.2,-0.25) -- (5.2,-3.6);
+\end{tikzpicture}

@@ -1,0 +1,84 @@
+\section{Procesor}\label{sec:hw-procesor}
+
+Procesor vykonává strojové instrukce programu. Nejde však o~jedinou součástku provádějící všechny činnosti stejným způsobem. Uvnitř procesoru spolupracuje několik částí, z~nichž každá má jinou úlohu. Pro náš zjednodušený model budou nejdůležitější aritmeticko-logická jednotka, řadič a~registry.
+
+\begin{itemize}
+    \item \textbf{Aritmeticko-logická jednotka (ALU)} provádí aritmetické a~logické operace. Může například sčítat čísla, porovnávat hodnoty nebo provádět bitové operace.
+    \item \textbf{Řadič} organizuje činnost procesoru. Na základě právě načtené instrukce vytváří řídicí signály, kterými určuje, odkud se mají získat operandy, jakou operaci má provést ALU a~kam se má uložit výsledek.
+    \item \textbf{Registry} uchovávají malé množství právě používaných dat přímo uvnitř procesoru. Přístup k~nim je výrazně rychlejší než přístup do hlavní paměti.
+\end{itemize}
+
+Skutečný procesor obsahuje ještě řadu dalších částí, například jednotky pro práci s~desetinnými čísly, mechanismy pro předvídání větvení, několik úrovní cache nebo jednotky schopné provádět jednu operaci nad více hodnotami současně. Základní vztah mezi řadičem, výpočetními jednotkami, registry a~pamětí však zůstává užitečný i~při popisu podstatně složitějších procesorů.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-cpu-sbernice.tex}
+    \caption{Zjednodušená vnitřní struktura procesoru a~jeho spojení s~pamětí.}
+    \label{fig:hw-cpu-sbernice}
+\end{figure}
+
+\subsection{Sběrnice}\label{subsec:hw-sbernice}
+
+Procesor, paměť a~další zařízení potřebují přenášet různé druhy informací. Soubor vodičů a~pravidel, podle nichž se po nich informace přenášejí, nazýváme \emph{sběrnice}. Na obrázku~\ref{fig:hw-cpu-sbernice} rozlišujeme tři logické skupiny signálů:
+\begin{itemize}
+    \item \textbf{datová sběrnice} přenáší samotná data a~instrukce;
+    \item \textbf{adresová sběrnice} určuje paměťové místo nebo zařízení, s~nímž chce procesor komunikovat;
+    \item \textbf{řídicí sběrnice} přenáší signály určující například směr přenosu, požadavek na čtení či zápis nebo informaci o~dokončení operace.
+\end{itemize}
+
+Uvažujme například čtení hodnoty z~paměti. Procesor nejprve předá na adresovou sběrnici adresu požadovaného místa a~řídicím signálem oznámí, že chce číst. Paměť vyhledá odpovídající obsah a~předá jej po datové sběrnici zpět procesoru. Při zápisu je postup podobný, pouze procesor zároveň odešle hodnotu a~řídicím signálem určí, že se má obsah paměti změnit.
+
+\notebox{Rozdělení na datovou, adresovou a~řídicí sběrnici popisuje význam přenášených signálů. Ve skutečném zařízení nemusí každé skupině odpovídat samostatná sada vodičů; některé fyzické spoje mohou v~různých okamžicích přenášet různé druhy informací.}
+
+\subsection{Instrukční cyklus}\label{subsec:hw-instrukcni-cyklus}
+
+Program je pro procesor posloupností strojových instrukcí uložených v~paměti. Každá instrukce musí být načtena, rozpoznána a~provedena. Jednotlivé procesory se v~podrobnostech liší, ale základní průběh lze popsat následujícími kroky:
+\begin{enumerate}
+    \item \textbf{Čtení instrukce (\emph{fetch}).} Procesor získá z~paměti instrukci, na kterou ukazuje čítač instrukcí.
+    \item \textbf{Dekódování instrukce (\emph{decode}).} Řadič určí, jakou operaci instrukce požaduje a~kde se nacházejí její operandy.
+    \item \textbf{Čtení operandů (\emph{operand fetch}).} Potřebné hodnoty se získají z~registrů, případně z~paměti.
+    \item \textbf{Provedení instrukce (\emph{execute}).} Příslušná výpočetní jednotka provede požadovanou operaci.
+    \item \textbf{Uložení výsledku (\emph{write back}).} Výsledek se zapíše do registru nebo do paměti.
+\end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-instrukcni-cyklus.tex}
+    \caption{Zjednodušený instrukční cyklus procesoru.}
+    \label{fig:hw-instrukcni-cyklus}
+\end{figure}
+
+Představme si například instrukci, která má sečíst hodnoty registrů $R_0$ a~$R_1$ a~výsledek uložit do registru $R_2$. Procesor instrukci nejprve načte a~dekóduje. Poté přečte hodnoty obou zdrojových registrů, předá je ALU, nechá provést součet a~výsledek zapíše do cílového registru. Následně může pokračovat další instrukcí.
+
+Obrázek~\ref{fig:hw-instrukcni-cyklus} vytváří dojem, že procesor dokončí všechny kroky jedné instrukce a~teprve potom začne načítat další. Takový postup je možný, moderní procesory však jednotlivé fáze často překrývají. Zatímco jedna instrukce se provádí, další se může dekódovat a~ještě další načítat. Tento způsob zpracování se nazývá \emph{zřetězení} neboli \emph{pipeline}. Překrývání fází zvyšuje počet instrukcí, které lze zpracovat za určitou dobu, přestože doba průchodu jedné instrukce všemi fázemi se nemusí zkrátit.
+
+Činnost procesoru je řízena hodinovým signálem. Jeho frekvence udává počet taktů za sekundu, nikoli přímo počet dokončených instrukcí. Některá instrukce může vyžadovat více taktů, více instrukcí se může zpracovávat souběžně a~procesor může čekat na data z~paměti. Samotná hodnota frekvence proto nestačí k~porovnání výkonu různých procesorů.
+
+\subsection{Přerušení}
+
+Běžící program není jediným zdrojem událostí, na které musí procesor reagovat. Klávesnice může oznámit stisk klávesy, úložiště dokončení přenosu nebo časovač uplynutí stanoveného intervalu. K~takovým situacím slouží \emph{přerušení}. Procesor po dokončení vhodného kroku uloží informace potřebné pro pozdější pokračování programu a~přejde k~obsluze vzniklé události. Po jejím vyřízení se může k~původnímu programu vrátit.
+
+Přerušení umožňuje, aby procesor nemusel každé zařízení neustále kontrolovat. Zařízení jej samo upozorní ve chvíli, kdy potřebuje obsluhu. Operační systém pak rozhodne, jaká část programu má událost zpracovat a~kdy může pokračovat přerušený výpočet.
+
+\subsection{Registry}\label{subsec:hw-registry}
+
+Registry jsou velmi malé a~rychlé paměti přímo uvnitř procesoru. Uchovávají operandy právě prováděných instrukcí, adresy, mezivýsledky i~informace o~stavu výpočtu. Instrukce obvykle pracují s~registry přímo, zatímco hodnotu z~hlavní paměti je nejprve potřeba do registru načíst a~výsledek případně později zapsat zpět.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-registry.tex}
+    \caption{Pracovní a~vybrané speciální registry v~procesoru.}
+    \label{fig:hw-registry}
+\end{figure}
+
+Vedle pracovních registrů, jejichž význam určuje právě prováděný program, se setkáme také s~registry se zvláštní úlohou:
+\begin{itemize}
+    \item \textbf{PC (\emph{program counter})} obsahuje adresu následující instrukce, která se má načíst. Po běžné instrukci se posune vpřed, zatímco instrukce skoku do něj může uložit jinou adresu.
+    \item \textbf{IR (\emph{instruction register})} uchovává právě načtenou nebo prováděnou instrukci.
+    \item \textbf{SP (\emph{stack pointer})} ukazuje na vrchol zásobníku v~paměti. Zásobník se využívá například při volání funkcí.
+    \item \textbf{FLAGS} uchovává příznaky výsledku poslední operace, například zda byl výsledek nulový, záporný nebo zda došlo k~přetečení.
+\end{itemize}
+
+Konkrétní názvy, počty a~přesný význam registrů závisí na instrukční sadě procesoru. Obrázek~\ref{fig:hw-registry} proto nepředstavuje schéma jednoho konkrétního modelu, ale obecnou ilustraci rolí, které registry mohou zastávat.
+
+\importantbox{Registry nejsou určeny k~dlouhodobému uložení velkého množství dat. Jejich hlavní výhodou je rychlost a~přímá dostupnost pro instrukce procesoru; za tuto výhodu platíme velmi malou kapacitou.}

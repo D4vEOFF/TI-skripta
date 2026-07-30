@@ -1,0 +1,44 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center,
+        minimum height=1.0cm
+    },
+    arrow/.style={->, thick},
+    both/.style={<->, thick}
+]
+    \node[
+        block,
+        fill=blue!10,
+        minimum width=3.4cm
+    ] (cpu) at (0,1.1) {\textbf{Procesor}};
+
+    \node[
+        block,
+        fill=green!12,
+        minimum width=5.0cm,
+        minimum height=1.4cm
+    ] (memory) at (0,-1.4) {\textbf{Společná paměť}\\ instrukce i~data};
+
+    \node[
+        block,
+        fill=orange!15,
+        minimum width=2.3cm
+    ] (input) at (-5.0,1.1) {Vstup};
+
+    \node[
+        block,
+        fill=orange!15,
+        minimum width=2.3cm
+    ] (output) at (5.0,1.1) {Výstup};
+
+    \draw[arrow] (input.east) -- (cpu.west);
+    \draw[arrow] (cpu.east) -- (output.west);
+    \draw[both] (cpu.south) -- node[right, align=left] {data\\ instrukce} (memory.north);
+\end{tikzpicture}

@@ -5,11 +5,11 @@ U~deterministického automatu vede pro daný stav a~znak nejvýše jeden přecho
 \begin{definition}[Potenční množina]
     Nechť $M$ je množina. \emph{Potenční množinou} množiny $M$ nazveme množinu všech jejích podmnožin. Značíme ji
     \[
-        \powset{M}=\set{N:N\subseteq M}.
+        \powset(M)=\set{N:N\subseteq M}.
     \]
     Například pro $M=\set{q_0,q_1}$ dostaneme
     \[
-        \powset{M}=\set{\emptyset,\set{q_0},\set{q_1},\set{q_0,q_1}}.
+        \powset(M)=\set{\emptyset,\set{q_0},\set{q_1},\set{q_0,q_1}}.
     \]
 \end{definition}
 
@@ -17,7 +17,7 @@ U~deterministického automatu vede pro daný stav a~znak nejvýše jeden přecho
     \emph{Nedeterministický konečný automat} (zkráceně NFA) je pětice
     \[A=(Q,\Sigma,\delta,q_0,F),\]
     kde $Q$,~$\Sigma$,~$q_0$ a~$F$ mají stejný význam jako u~DFA a
-    \[\delta:Q\times\Sigma\to\powset{Q}\]
+    \[\mapping{\delta}{Q\times\Sigma}{\powset(Q)}\]
     přiřazuje dvojici stavu a~znaku množinu možných následujících stavů.
 \end{definition}
 
@@ -64,7 +64,7 @@ Nedeterminismus sice může výrazně zjednodušit zápis automatu,~ale nerozš�
 \end{theorem}
 \begin{proof}
     Mějme NFA $A=(Q,\Sigma,\delta,q_0,F)$. Jeden stav nového DFA bude popisovat celou množinu stavů,~v~nichž se NFA může po přečtení stejného začátku slova nacházet. Položíme tedy
-    \[B=(\powset{Q},\Sigma,\delta',\set{q_0},F'),\]
+    \[B=(\powset(Q),\Sigma,\delta',\set{q_0},F'),\]
     kde
     \[\delta'(S,a)=\bigcup_{q\in S}\delta(q,a)\]
     a~množina $S\subseteq Q$ je přijímajícím stavem právě tehdy,~když $S\cap F\neq\emptyset$.
@@ -81,7 +81,7 @@ Pro důkaz Kleeneho věty se nám bude hodit ještě drobné technické rozší�
 \begin{definition}[$\lambda$-NFA]
     \emph{$\lambda$-NFA} je NFA s~přechodovou funkcí
     \[
-        \delta:Q\times(\Sigma\cup\set{\lambda})\to\powset{Q},
+        \mapping{\delta}{Q\times(\Sigma\cup\set{\lambda})}{\powset(Q)},
     \]
     který smí navíc použít přechod označený $\lambda$. Při takovém přechodu změní stav,~aniž by přečetl znak vstupu.
 \end{definition}

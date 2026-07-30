@@ -1,0 +1,66 @@
+\section{Historické metody}\label{sec:krypto-historicke}
+
+Nejstarší šifry pracovaly přímo se znaky textu. Zprávu bylo možné šifrovat ručně bez počítače, jejich jednoduchost je však zároveň slabinou. Na historických metodách dobře uvidíme, proč velký počet klíčů sám o~sobě ještě nezaručuje bezpečnost.
+
+\subsection{Substituční šifra s~posunem}
+
+Mějme abecedu
+\[
+    \Sigma=\set{a_0,a_1,\ldots,a_{q-1}}
+\]
+a~tajný posun $k$, kde $0<k<q$. Každý znak nahradíme znakem posunutým o~$k$ míst:
+\[
+    a_i\longmapsto a_{(i+k)\bmod q}.
+\]
+Operace modulo $q$ způsobí, že se po dosažení konce abecedy vrátíme na její začátek. Dešifrování používá opačný posun:
+\[
+    a_j\longmapsto a_{(j-k)\bmod q}.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-caesar.tex}
+    \caption{Substituční šifra s~posunem $k=3$ na zkrácené abecedě.}
+    \label{fig:krypto-caesar}
+\end{figure}
+
+Pro standardní latinskou abecedu a~$k=3$ například dostaneme
+\[
+    \texttt{TAJNE}\longmapsto\texttt{WDMQH}.
+\]
+Jestliže záškodník nezná klíč, může jednoduše vyzkoušet všech $q-1$ nenulových posunů. Pro $q=26$ jde pouze o~25 možností. U~dostatečně dlouhé zprávy navíc snadno pozná, který výsledek připomíná smysluplný text.
+
+\subsection{Obecná substituční šifra}
+
+Místo jednoho posunu můžeme zvolit libovolnou permutaci abecedy
+\[
+    \mapping{\pi}{\Sigma}{\Sigma}.
+\]
+Permutace je bijekce, takže každý znak má právě jeden zašifrovaný obraz a~každý znak šifrové abecedy má právě jeden vzor. Šifrování nahradí každý znak $a$ znakem $\pi(a)$, zatímco dešifrování používá inverzní permutaci $\pi^{-1}$.
+
+Pro abecedu o~$q$ znacích existuje $q!$ různých permutací. U~26 písmen je to přibližně $4\cdot 10^{26}$ klíčů, takže prosté vyzkoušení všech možností už není praktické. Obecná substituce však stále zachovává strukturu původního textu: stejné znaky se vždy mění na stejné znaky, opakovaná slova vytvářejí stejné vzory a~četnosti písmen se pouze přejmenují.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-substituce.tex}
+    \caption{Obecná substituce a~zachování četností znaků.}
+    \label{fig:krypto-substituce}
+\end{figure}
+
+Uvažujme například klíč, jehož prvních několik přiřazení je
+\[
+    A\mapsto Q,\quad B\mapsto W,\quad C\mapsto E,\quad
+    D\mapsto R,\quad E\mapsto T,\quad\ldots
+\]
+Pro permutaci použitou na obrázku~\ref{fig:krypto-substituce} dostáváme
+\[
+    \texttt{TAJEMSTVI}\longmapsto\texttt{ZQPTDLZCO}.
+\]
+
+\warningbox{Velký počet klíčů neznamená automaticky bezpečnou šifru. Obecná substituce má obrovský prostor klíčů, ale frekvenční analýza využívá vlastnosti jazyka a~nemusí jednotlivé klíče zkoušet jeden po druhém.}
+
+\subsection{Frekvenční analýza}
+
+V~delším českém textu se některá písmena objevují výrazně častěji než jiná. Jestliže se v~šifrovém textu mimořádně často vyskytuje znak \texttt{Q}, může odpovídat některému běžnému písmenu otevřeného textu. Záškodník dále sleduje dvojice a~trojice znaků, délky slov nebo opakované vzory. Každý takový poznatek zmenšuje množinu možných permutací.
+
+Historické metody nám proto ukazují dvě důležité zásady. Bezpečnost nelze odvozovat jen z~toho, že klíčů je mnoho, a~šifra by neměla zbytečně zachovávat statistickou strukturu otevřeného textu. Moderní šifry se snaží, aby bez znalosti klíče vypadal šifrový text jako náhodná data.

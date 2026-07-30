@@ -1,0 +1,25 @@
+\begin{tikzpicture}[
+    font=\small,
+    dot/.style={circle, draw=black!55, fill=white, minimum size=7mm, inner sep=0pt}
+]
+    \draw[rounded corners=2mm, fill=black!2, draw=black!55]
+        (-4,-2) rectangle (4,2);
+    \node[anchor=south] at (0,2.05)
+        {\(\Omega=\set{1,2,3,4,5,6}\)};
+
+    \draw[fill=blue!12, draw=blue!65!black, line width=.8pt]
+        (-1.0,-.15) ellipse (2.1cm and 1.25cm);
+    \draw[fill=orange!18, fill opacity=.75, draw=orange!75!black,
+          draw opacity=1, line width=.8pt]
+        (1.25,-.15) ellipse (1.55cm and 1.25cm);
+
+    \node[text=blue!65!black] at (-2.15,1.35) {\(A=\set{2,4,6}\)};
+    \node[text=orange!75!black] at (2.1,1.35) {\(B=\set{5,6}\)};
+
+    \node[dot] at (-1.75,.35) {2};
+    \node[dot] at (-1.65,-.65) {4};
+    \node[dot] at (.15,-.1) {6};
+    \node[dot] at (1.75,.35) {5};
+    \node[dot] at (-3.25,-1.25) {1};
+    \node[dot] at (3.25,-1.25) {3};
+\end{tikzpicture}

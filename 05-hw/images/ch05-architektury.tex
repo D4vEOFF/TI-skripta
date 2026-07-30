@@ -1,0 +1,53 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    title/.style={font=\bfseries},
+    block/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center,
+        minimum height=0.9cm
+    },
+    both/.style={<->, thick}
+]
+    \node[title] at (-3.8,2.1) {Von Neumannova architektura};
+    \node[
+        block,
+        fill=blue!10,
+        minimum width=2.8cm
+    ] (cpua) at (-3.8,0.9) {Procesor};
+    \node[
+        block,
+        fill=green!12,
+        minimum width=4.2cm,
+        minimum height=1.25cm
+    ] (mema) at (-3.8,-1.2) {Společná paměť\\ instrukce i~data};
+    \draw[both] (cpua.south) -- node[right] {\scriptsize instrukce i~data} (mema.north);
+
+    \draw[gray!45, thick] (0,-2.1) -- (0,2.4);
+
+    \node[title] at (3.8,2.1) {Harvardská architektura};
+    \node[
+        block,
+        fill=blue!10,
+        minimum width=2.8cm
+    ] (cpub) at (3.8,0.9) {Procesor};
+    \node[
+        block,
+        fill=green!12,
+        minimum width=2.7cm,
+        minimum height=1.25cm
+    ] (imem) at (2.0,-1.2) {Paměť\\ instrukcí};
+    \node[
+        block,
+        fill=green!12,
+        minimum width=2.7cm,
+        minimum height=1.25cm
+    ] (dmem) at (5.6,-1.2) {Paměť\\ dat};
+
+    \draw[both] (cpub.south west) -- node[left, align=center] {\scriptsize instrukce} (imem.north);
+    \draw[both] (cpub.south east) -- node[right, align=center] {\scriptsize data} (dmem.north);
+\end{tikzpicture}

@@ -1,0 +1,45 @@
+\section{Uložení programu a~dat}\label{sec:hw-architektury}
+
+\subsection{Von Neumannova architektura}
+
+Základní představu o~uspořádání počítače poskytuje \emph{von Neumannova architektura}. Jejím podstatným rysem je, že program i~data jsou uloženy ve~společné paměti. Procesor z~ní načítá strojové instrukce a~stejným způsobem přistupuje také k~hodnotám, které mají být zpracovány. Instrukce určují, jaká operace se má provést, odkud se mají získat operandy a~kam se má uložit výsledek.
+
+Tato myšlenka se někdy označuje jako \emph{princip uloženého programu}. Program není pevně zabudován do zapojení počítače, ale je uložen v~paměti podobně jako ostatní data. Změnou obsahu paměti tak můžeme změnit činnost počítače, aniž bychom museli přestavět jeho hardware. Právě tato univerzálnost je jedním z~důvodů, proč se daný princip stal základem obecných počítačů.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-von-neumann.tex}
+    \caption{Základní uspořádání von Neumannovy architektury.}
+    \label{fig:hw-von-neumann}
+\end{figure}
+
+Paměť v~tomto modelu sama nerozlišuje, zda uložené bity představují data, nebo instrukce. Rozhoduje až způsob, jakým je procesor použije. Procesor opakovaně načte instrukci z~paměti, zjistí její význam a~provede ji. Pokud instrukce pracuje s~daty uloženými v~paměti, musí procesor obvykle provést další paměťové přenosy. Zjednodušeně tak dostáváme stále se opakující cyklus
+\[
+    \text{načtení instrukce}
+    \longrightarrow
+    \text{dekódování}
+    \longrightarrow
+    \text{provedení}.
+\]
+Jeho podrobnější podobu rozebereme v~podsekci~\ref{subsec:hw-instrukcni-cyklus}.
+
+Společná cesta pro instrukce i~data přináší jednoduché a~univerzální uspořádání, ale současně může omezovat rychlost. Procesor musí s~pamětí komunikovat při načítání instrukcí i~při čtení a~zápisu dat. Pokud je procesor schopen pracovat rychleji, než mu paměť dodává potřebné informace, část času pouze čeká. Toto omezení se označuje jako \emph{von Neumannovo úzké hrdlo}.
+
+\warningbox{Rychlost počítače neurčuje pouze počet operací, které dokáže procesor provést za sekundu. Stejně důležité je, zda procesor dostává instrukce a~data dostatečně rychle. Právě proto bude později tak významná cache a~celá paměťová hierarchie.}
+
+\subsection{Harvardská architektura}
+
+\emph{Harvardská architektura} používá oddělenou paměť pro instrukce a~oddělenou paměť pro data. Obě paměti mohou mít vlastní adresový prostor i~vlastní přenosové cesty. Procesor pak může současně načítat další instrukci a~přenášet data potřebná pro právě prováděný výpočet. Paměť instrukcí navíc může mít jiné vlastnosti než paměť dat, protože se od ní může očekávat jiný způsob používání.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-architektury.tex}
+    \caption{Porovnání von Neumannovy a~harvardské architektury.}
+    \label{fig:hw-architektury}
+\end{figure}
+
+Rozdíl obou přístupů zachycuje obrázek~\ref{fig:hw-architektury}. U~von Neumannovy architektury vede mezi procesorem a~společnou pamětí jedna logická cesta pro instrukce i~data. V~harvardském uspořádání má procesor k~dispozici dvě oddělené cesty. To však neznamená, že každý reálný počítač musí přesně odpovídat jednomu z~těchto dvou schémat.
+
+V~praxi se často používá \emph{modifikovaná harvardská architektura}. Z~pohledu programu může existovat jeden společný adresový prostor, zatímco uvnitř procesoru jsou oddělené například instrukční a~datová cache. Počítač se tedy navenek chová podobně jako von Neumannův, ale v~částech, kde je výhodné souběžné načítání, využívá prvky harvardského uspořádání.
+
+\notebox{Von Neumannova a~harvardská architektura jsou především užitečné modely. Skutečné procesory obsahují mnoho dalších mechanismů a~jejich vnitřní uspořádání bývá kombinací více myšlenek.}

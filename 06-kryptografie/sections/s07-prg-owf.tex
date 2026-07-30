@@ -1,0 +1,169 @@
+\section{Pseudonáhodné generátory a~jednosměrné funkce}\label{sec:krypto-prg-owf}
+
+Jednorázová šifra ukázala, že dlouhý rovnoměrně náhodný klíč dokáže skrýt zprávu dokonale. Zároveň jsme narazili na její zásadní omezení: pro zprávu délky $n$ potřebujeme předem sdílet $n$ náhodných bitů. Moderní kryptografie se proto vzdává absolutního požadavku, aby šifrový text neobsahoval vůbec žádnou informaci, a~nahrazuje jej požadavkem výpočetním. Připouštíme, že informace může být v~principu zjistitelná, ale žádný dostatečně rychlý algoritmus ji nemá umět prakticky využít.
+
+Tento posun je zásadní. Výpočetní složitost zde není překážkou, kterou se snažíme odstranit, nýbrž prostředkem ochrany. Oprávněný uživatel zná krátký klíč nebo zvláštní tajnou informaci a~výpočet provede rychle. Záškodník stejnou informaci nemá a~stojí před úlohou, pro kterou neznáme efektivní postup.
+
+Technické definice v~této sekci vyjadřují tři myšlenky:
+\begin{enumerate}
+    \item oprávněný výpočet musí probíhat v~polynomiálním čase;
+    \item záškodník smí používat libovolný pravděpodobnostní polynomiální algoritmus;
+    \item pravděpodobnost jeho úspěchu musí s~rostoucí délkou vstupu klesat rychleji než převrácená hodnota libovolného polynomu.
+\end{enumerate}
+Poslední bod zachytíme pojmem zanedbatelné funkce.
+
+\subsection{Zanedbatelná funkce}
+
+\begin{definition}\label{def:krypto-zanedbatelna}
+    Funkce $\mapping{\varepsilon}{\N}{\R}$ je \emph{zanedbatelná}, jestliže pro každé $k\in\N$ existuje $n_k\in\N$ takové, že pro každé $n>n_k$ platí
+    \[
+        \sizeof{\varepsilon(n)}<\frac{1}{n^k}.
+    \]
+\end{definition}
+
+Zanedbatelná funkce tedy nakonec klesne pod $\frac{1}{n}$, pod $\frac{1}{n^2}$, pod $\frac{1}{n^{100}}$ i~pod převrácenou hodnotu jakéhokoliv jiného pevně zvoleného polynomu. Typickým příkladem je $2^{-n}$. Naopak funkce $\frac{1}{n^{10}}$ zanedbatelná není, protože pro $k=11$ nikdy dlouhodobě neklesne pod $\frac{1}{n^{11}}$.
+
+Číslo $n$ zde hraje roli \emph{bezpečnostního parametru}. Jeho zvětšením prodlužujeme klíče a~zvyšujeme množství práce potřebné k~útoku. Tvrzení o~zanedbatelné pravděpodobnosti neznamená, že útok nemůže nikdy uspět; říká, že jeho šanci lze volbou dostatečně velkého parametru stlačit pod každou prakticky významnou inverzní polynomiální mez.
+
+\subsection{Pseudonáhodný generátor}
+
+Deterministický program nedokáže vytvořit skutečnou náhodnost z~ničeho. Jakmile známe jeho vstup, je výstup pevně určen. Může však z~krátkého náhodného vstupu vytvořit delší řetězec, který žádný efektivní algoritmus neumí od skutečně náhodného řetězce rozlišit.
+
+\begin{definition}\label{def:krypto-prg}
+    Funkce
+    \[
+        \mapping{G}{\set{0,1}^{n}}{\set{0,1}^{\ell(n)}}
+    \]
+    je \emph{pseudonáhodný generátor} (PRG), jestliže splňuje následující podmínky:
+    \begin{enumerate}
+        \item $G$ je vyčíslitelná deterministickým polynomiálním algoritmem;
+        \item $\ell(n)>n$ pro každé $n\in\N$;
+        \item pro každý pravděpodobnostní polynomiální algoritmus $\mathcal A$ existuje zanedbatelná funkce $\varepsilon(n)$ taková, že
+        \[
+            \left|
+            \Pr_{y\in\set{0,1}^{\ell(n)}}[\mathcal A(y)=1]
+            -
+            \Pr_{y\in\set{0,1}^{n}}[\mathcal A(G(y))=1]
+            \right|
+            \leqslant\varepsilon(n).
+        \]
+    \end{enumerate}
+\end{definition}
+
+Náhodný vstup $s\in\set{0,1}^{n}$ nazýváme \emph{seed}. Druhá podmínka zajišťuje \emph{prodloužení} (\emph{stretch}): výstup $G(s)$ obsahuje více bitů než seed. Nejdůležitější je třetí podmínka. Algoritmus $\mathcal A$ obdrží řetězec délky $\ell(n)$ a~má rozhodnout, zda byl vybrán rovnoměrně náhodně, nebo zda vznikl jako $G(s)$ z~náhodného seedu. Rozdíl jeho pravděpodobností přijetí v~obou případech se nazývá rozlišovací výhoda.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-prg.tex}
+    \caption{Experiment rozlišující skutečně náhodný řetězec od výstupu PRG.}
+    \label{fig:krypto-prg}
+\end{figure}
+
+Podmínka neříká, že jsou obě rozdělení stejná. Výstupů $G$ může být nejvýše $2^n$, zatímco všech řetězců délky $\ell(n)$ je $2^{\ell(n)}$. Většina dlouhých řetězců proto vůbec nemusí být výstupem generátoru. Rozdíl je informačně zjistitelný, avšak efektivní algoritmus nemá umět poznat, do které skupiny předložený řetězec patří.
+
+\tipbox{Pseudonáhodnost není vlastnost jediného konkrétního řetězce. Je to vlastnost způsobu generování a~říká, že celé rozdělení výstupů je pro efektivního pozorovatele nerozlišitelné od rovnoměrného rozdělení.}
+
+\subsection{Důsledek rovnosti tříd P a~NP}
+
+Pro pevný generátor $G$ uvažujme množinu jeho možných výstupů
+\[
+    L_G=
+    \set{
+        z\in\set{0,1}^{\ell(n)}
+        \mid
+        \text{existuje }s\in\set{0,1}^{n}\text{ takové, že }G(s)=z
+    }.
+\]
+Jazyk $L_G$ patří do $\classNP$: jako certifikát stačí předložit seed $s$ a~v~polynomiálním čase ověřit rovnost $G(s)=z$. Kdyby platilo $\classP=\classNP$, mohli bychom členství v~$L_G$ rozhodovat v~polynomiálním čase.
+
+Rozlišovač $\mathcal D$ by potom přijal právě řetězce z~$L_G$. Pro výstup $G(s)$ by přijímal vždy:
+\[
+    \Pr_{s\in\set{0,1}^{n}}[\mathcal D(G(s))=1]=1.
+\]
+Rovnoměrně náhodný řetězec délky $\ell(n)$ však patří do obrazu $G$ s~pravděpodobností nejvýše
+\[
+    \frac{2^n}{2^{\ell(n)}}=2^{n-\ell(n)}\leqslant\frac{1}{2}.
+\]
+Rozlišovací výhoda by proto byla alespoň $\frac{1}{2}$, což není zanedbatelná hodnota. Dostáváme tedy:
+\[
+    \text{existuje PRG}
+    \quad\Longrightarrow\quad
+    \classP\neq\classNP.
+\]
+Opačná implikace z~pouhé nerovnosti $\classP\neq\classNP$ neplyne.
+
+\subsection{Jednosměrná funkce}
+
+Pseudonáhodný generátor předpokládá existenci nějakého zdroje výpočetní obtížnosti. Tento zdroj formálně zachycují jednosměrné funkce: dopředný výpočet je snadný, ale návrat k~libovolnému vzoru typického výstupu je pro efektivního záškodníka neproveditelný.
+
+\begin{definition}\label{def:krypto-owf}
+    Zobrazení
+    \[
+        \mapping{f}{\set{0,1}^{*}}{\set{0,1}^{*}}
+    \]
+    je \emph{jednosměrná funkce} (OWF), jestliže:
+    \begin{enumerate}
+        \item hodnotu $f(x)$ lze pro každé $x\in\set{0,1}^{*}$ spočítat v~polynomiálním čase;
+        \item pro každý pravděpodobnostní polynomiální algoritmus $\mathcal A$ existuje zanedbatelná funkce $\varepsilon(n)$ taková, že pro každé $n\in\N$ platí
+        \[
+            \Pr_{x\in\set{0,1}^{n}}
+            \left[
+                f\bigl(\mathcal A(f(x))\bigr)=f(x)
+            \right]
+            \leqslant\varepsilon(n).
+        \]
+    \end{enumerate}
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-owf.tex}
+    \caption{Dopředný výpočet jednosměrné funkce a~obtížné hledání vzoru.}
+    \label{fig:krypto-owf}
+\end{figure}
+
+V~experimentu nejprve rovnoměrně vybereme $x\in\set{0,1}^{n}$, spočítáme $f(x)$ a~výsledek předáme algoritmu $\mathcal A$. Algoritmus nemusí nalézt původní $x$. Uspěje i~tehdy, když vrátí jiné $x'$ se stejným obrazem, tedy $f(x')=f(x)$. Definice proto skutečně měří schopnost nalézt libovolný vzor, nikoli schopnost uhodnout jednu předem určenou reprezentaci.
+
+První podmínka je nutná pro oprávněné použití: funkci musíme umět rychle vyčíslit. Druhá podmínka nepožaduje obtížnost pouze na jednom pečlivě vybraném vstupu. Vstup $x$ je náhodný a~úspěch musí být zanedbatelný v~průměru nad všemi takovými volbami i~nad náhodnými kroky algoritmu $\mathcal A$. To je pro kryptografii podstatné. Funkce, která je těžká pouze na několika výjimečných vstupech, by nechránila běžně generované klíče.
+
+\importantbox{Nejhorší případ známý z~teorie složitosti pro kryptografii nestačí. Systém není bezpečný, pokud záškodník snadno prolomí třeba polovinu náhodně generovaných klíčů, i~kdyby zbývající případy byly mimořádně obtížné.}
+
+\subsection{Kandidáti a~padací vrátka}
+
+Není dokázáno, že jednosměrné funkce existují. Známe však přirozené kandidáty:
+\begin{itemize}
+    \item násobení dvou velkých prvočísel $f(p,q)=pq$; dopředný výpočet je snadný, zatímco zpětný rozklad součinu je považován za obtížný;
+    \item varianty problému součtu podmnožiny;
+    \item modulární umocňování, jehož inverze souvisí s~problémem diskrétního logaritmu.
+\end{itemize}
+U~žádného z~těchto kandidátů dnes neumíme bez dalších předpokladů dokázat požadovanou průměrnou obtížnost.
+
+Pro asymetrickou kryptografii potřebujeme ještě něco navíc. Vlastník soukromého klíče musí mít tajnou informaci, která obtížnou inverzi zjednoduší. Takové informaci se říká \emph{padací vrátka} (\emph{trapdoor}). RSA lze didakticky chápat právě tímto způsobem: bez znalosti $p$ a~$q$ vypadá inverze modulárního umocňování obtížně, zatímco vlastník soukromého exponentu $s$ dešifruje efektivně.
+
+\subsection{Souvislost OWF, PRG a~šifrování}
+
+Mezi oběma technickými pojmy platí hluboká věta:
+\begin{theorem}
+    Jednosměrné funkce existují právě tehdy, když existují pseudonáhodné generátory.
+\end{theorem}
+Úplný důkaz je výrazně nad rámec tohoto textu. Důležitý je jeho význam: schopnost provést snadný dopředný, ale průměrně obtížně invertovatelný výpočet stačí k~postupné konstrukci bitů, které vypadají náhodně. Pseudonáhodné generátory tedy nejsou nezávislý zázrak; jejich existence je založena na témže druhu výpočetní obtížnosti jako velká část moderní kryptografie.
+
+V~praxi můžeme krátký tajný seed $s\in\set{0,1}^{n}$ rozvinout na dlouhý řetězec $G(s)\in\set{0,1}^{\ell(n)}$ a~šifrovat podobně jako jednorázovou šifrou:
+\[
+    c=m\oplus G(s).
+\]
+Bob se stejným seedem vygeneruje tentýž proud a~spočítá
+\[
+    c\oplus G(s)=m.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-prg-kryptografie.tex}
+    \caption{Použití krátkého seedu k~vytvoření dlouhého šifrovacího proudu.}
+    \label{fig:krypto-prg-kryptografie}
+\end{figure}
+
+Oproti jednorázové šifře už výstup $G(s)$ není skutečně náhodný, a~proto nezískáváme perfektní utajení. Pokud jej však žádný efektivní algoritmus nerozliší od náhodného řetězce, získáváme bezpečnost výpočetní. Tato výměna dramaticky zmenší množství tajných dat, která musí Alice a~Bob sdílet.
+
+\warningbox{Samotný deterministický proud $G(s)$ se nesmí bez dalšího opakovat pro více zpráv. Praktické proudové šifry kombinují klíč s~jedinečnou veřejnou hodnotou, například nonce, aby pro každé šifrování vznikl jiný proud bitů.}

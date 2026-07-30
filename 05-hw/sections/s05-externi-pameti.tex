@@ -1,0 +1,77 @@
+\section{Externí paměti a~úložiště}\label{sec:hw-externi-pameti}
+
+Hlavní paměť uchovává data pouze po dobu, kdy je počítač napájen. Programy, dokumenty a~další soubory proto potřebujeme ukládat do nevolatilní paměti, jejíž obsah zůstane zachován i~po vypnutí. Mezi nejběžnější dlouhodobá úložiště patří pevné disky HDD a~disky SSD. Obě zařízení poskytují operačnímu systému adresovatelný prostor rozdělený do bloků, ale fyzikální princip jejich fungování je odlišný.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-hdd-ssd.tex}
+    \caption{Základní konstrukční rozdíl mezi HDD a~SSD.}
+    \label{fig:hw-hdd-ssd}
+\end{figure}
+
+HDD ukládá data magneticky na rotující plotny a~používá pohyblivé čtecí a~zapisovací hlavy. SSD ukládá data elektronicky do buněk flash paměti a~neobsahuje části, které by se při běžném čtení mechanicky pohybovaly. Díky tomu má SSD zpravidla podstatně rychlejší náhodný přístup, je odolnější vůči otřesům a~pracuje tiše. HDD naopak často nabízí velkou kapacitu za nižší cenu.
+
+\subsection{Pevný disk HDD}\label{subsec:hw-hdd}
+
+Uvnitř HDD se nachází jedna nebo více kruhových ploten upevněných na společném vřetenu. Povrch každé plotny je pokryt magnetickou vrstvou. Plotny se při provozu otáčejí a~nad jejich povrchem se pohybují čtecí a~zapisovací hlavy umístěné na společném rameni. Hlava se povrchu za běžného provozu nedotýká; změny magnetizace povrchu používá ke čtení a~zápisu bitů.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-hdd-struktura.tex}
+    \caption{Zjednodušený pohled na vnitřní strukturu HDD shora a~ze strany.}
+    \label{fig:hw-hdd-struktura}
+\end{figure}
+
+Data jsou na povrchu plotny uspořádána do soustředných \emph{stop}. Každá stopa se dále dělí na \emph{sektory}. Stopy ve stejné vzdálenosti od středu na různých površích ploten tvoří \emph{cylindr}. V~moderním disku se operační systém nemusí zabývat přesnou fyzickou polohou dat; řadič disku převádí logická čísla bloků na konkrétní místa uvnitř zařízení. Geometrický model je však stále užitečný k~pochopení výkonu HDD.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-hdd-plotna.tex}
+    \caption{Stopy a~sektory na jedné plotně HDD.}
+    \label{fig:hw-hdd-plotna}
+\end{figure}
+
+Při čtení bloku musí disk nejprve přesunout rameno nad správnou stopu. Doba tohoto pohybu se označuje jako \emph{doba vystavení} neboli \emph{seek time}. Poté disk čeká, než se požadovaný sektor otočí pod hlavu; vzniká \emph{rotační zpoždění}. Teprve potom lze data skutečně přenést. Přesun hlavy a~čekání na natočení plotny jsou mechanické operace, a~proto jsou ve srovnání s~elektronickými operacemi pomalé.
+
+Sekvenční čtení velkého souboru je pro HDD výhodné, protože sousední sektory procházejí pod hlavou postupně a~rameno se nemusí často přesouvat. Naopak mnoho malých požadavků na vzdálená místa disku vede k~opakovanému pohybu hlav a~výkon výrazně klesá. Rozdíl mezi sekvenčním a~náhodným přístupem je proto u~HDD zvlášť výrazný.
+
+\warningbox{Při prudkém nárazu může dojít k~poškození mechanických částí HDD nebo povrchu plotny. Běžná záloha proto nemá být uložena pouze na druhém oddílu téhož fyzického disku; porucha zařízení by mohla zasáhnout původní data i~jejich „zálohu“.}
+
+\subsection{Disk SSD}\label{subsec:hw-ssd}
+
+SSD neukládá data magneticky, ale do buněk nevolatilní flash paměti. Kromě paměťových čipů obsahuje řadič, který přijímá požadavky počítače, vyhledává fyzické umístění dat, opravuje některé chyby a~rozděluje zápisy mezi paměťové buňky. Operační systém přitom stejně jako u~HDD pracuje s~logickými bloky a~nemusí znát konkrétní uspořádání buněk uvnitř zařízení.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-ssd-struktura.tex}
+    \caption{Zjednodušené části SSD a~organizace flash paměti.}
+    \label{fig:hw-ssd-struktura}
+\end{figure}
+
+Flash paměť čte a~zapisuje data po \emph{stránkách}, ale mazání probíhá po větších \emph{blocích} obsahujících více stránek. Již zapsanou stránku proto nelze libovolně přepsat stejným způsobem jako bajt v~RAM. Řadič obvykle zapíše novou verzi dat na jiné volné místo, změní svou převodní tabulku a~později uvolní bloky obsahující již neplatná data.
+
+Každá paměťová buňka snese pouze omezený počet mazacích cyklů. Řadič proto používá \emph{vyrovnávání opotřebení}, kterým se snaží rozložit zápisy mezi různé fyzické bloky. Současně může mít SSD část kapacity vyhrazenu jako náhradní prostor. Tyto mechanismy prodlužují životnost zařízení a~umožňují skrýt složitější vlastnosti flash paměti za jednoduché rozhraní logických bloků.
+
+\notebox{SSD nemá mechanické vyhledávání stopy ani rotační zpoždění, a~proto je jeho náhodný přístup podstatně rychlejší než u~HDD. Přesto ani SSD není stejně rychlé jako RAM a~při zápisu musí jeho řadič řešit omezení flash paměti.}
+
+\subsection{Porovnání HDD a~SSD}
+
+Volba úložiště závisí na požadované kapacitě, rychlosti, ceně i~způsobu použití. Pro systémový disk a~často spouštěné aplikace je obvykle výhodné SSD, protože zkracuje čekání při mnoha menších náhodných přístupech. HDD se může hodit pro velké archivy nebo zálohy, u~nichž je důležitá kapacita a~převládá sekvenční přenos.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Vlastnost} & \textbf{HDD} & \textbf{SSD} \\ \hline
+        Princip uložení & magnetický & elektronický \\ \hline
+        Pohyblivé části & ano & ne \\ \hline
+        Náhodný přístup & pomalejší & rychlejší \\ \hline
+        Hlučnost & slyšitelný pohyb & tiché \\ \hline
+        Typická přednost & kapacita a~cena & rychlost a~odolnost \\ \hline
+        Uchování bez napájení & ano & ano \\ \hline
+    \end{tabular}
+    \caption{Obecné porovnání vlastností HDD a~SSD.}
+    \label{tab:hw-hdd-ssd}
+\end{table}
+
+Tabulka~\ref{tab:hw-hdd-ssd} zachycuje obecné tendence, nikoliv záruku pro každý konkrétní model. Rychlé HDD může v~některé úloze překonat velmi pomalé SSD a~výsledný výkon ovlivňuje také použité rozhraní, řadič, velikost požadavků nebo zaplnění zařízení. Při praktickém porovnávání je proto potřeba sledovat parametry a~měření konkrétních výrobků.

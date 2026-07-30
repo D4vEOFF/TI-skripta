@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+    font=\small,
+    person/.style={inner sep=0pt},
+    pair/.style={draw=black!18, line width=.25pt}
+]
+    \foreach \i in {1,...,23}{
+        \node[person] (p\i) at ({90-360/23*(\i-1)}:2.6)
+            {\includegraphics[width=4.5mm]{06-kryptografie/images/avatar.pdf}};
+    }
+    \foreach \i in {1,...,23}{
+        \foreach \j in {\i,...,23}{
+            \ifnum\j>\i
+                \draw[pair] (p\i) -- (p\j);
+            \fi
+        }
+    }
+    \node[rounded corners=1.2mm, draw=orange!75!black, fill=orange!18,
+          inner xsep=4mm, inner ysep=2mm, align=center] at (0,-3.45)
+        {\(23\) lidí vytváří \(\binom{23}{2}=253\) dvojic};
+\end{tikzpicture}

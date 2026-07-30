@@ -1,0 +1,30 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    box/.style={rounded corners=1.2mm, draw=black!55, fill=black!4,
+                minimum width=2.5cm, minimum height=9mm, align=center},
+    public/.style={rounded corners=1.2mm, draw=blue!65!black, fill=blue!12,
+                   minimum width=2.5cm, minimum height=8mm, align=center},
+    private/.style={rounded corners=1.2mm, draw=red!70!black, fill=red!9,
+                    minimum width=2.5cm, minimum height=8mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.9pt},
+    keyflow/.style={-{Latex}, dashed, line width=.8pt}
+]
+    \node[inner sep=0pt] (alice) at (-6,0)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/woman-icon.pdf}};
+    \node[below=1mm of alice] {Alice};
+    \node[inner sep=0pt] (bob) at (6,0)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/man-icon.pdf}};
+    \node[below=1mm of bob] {Bob};
+
+    \node[box] (enc) at (-2.6,0) {\(\mathbf E(m,k_V)\)};
+    \node[box] (dec) at (2.6,0) {\(\mathbf D(c,k_S)\)};
+    \node[public] (pk) at (-2.6,1.65) {Bobův veřejný klíč \(k_V\)};
+    \node[private] (sk) at (2.6,1.65) {Bobův soukromý klíč \(k_S\)};
+
+    \draw[flow] (alice.east) -- (enc.west) node[midway, above] {\(m\)};
+    \draw[flow] (enc.east) -- (dec.west) node[midway, above] {\(c\)};
+    \draw[flow] (dec.east) -- (bob.west) node[midway, above] {\(m\)};
+    \draw[keyflow, draw=blue!65!black] (pk) -- (enc);
+    \draw[keyflow, draw=red!70!black] (sk) -- (dec);
+\end{tikzpicture}

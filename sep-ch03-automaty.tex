@@ -1,0 +1,27 @@
+\documentclass[11pt,a4paper,oneside]{article} 
+
+\input{settings.tex}
+
+\ifcsname showrefs\endcsname
+\else
+    \NewDocumentCommand{\showrefs}{}{false}
+\fi
+
+\begin{document}
+
+\begin{center}
+    {\huge \textbf{\MakeUppercase{Konečné automaty}}}\\[1.2cm]
+\end{center}
+V~této kapitole se budeme věnovat základům \emph{teorie automatů}. Konečné automaty jsou jednoduché abstraktní stroje,~které zpracovávají vstupní slovo znak po znaku a~na konci rozhodnou,~zda jej přijmou,~nebo odmítnou. Množiny přijímaných slov tvoří tzv. \emph{formální jazyky}.
+
+Nejdříve si zavedeme potřebné operace nad slovy a~jazyky. Poté se podíváme na deterministické a~nedeterministické konečné automaty,~regulární výrazy a~formální gramatiky. Ukáže se,~že konečné automaty,~regulární výrazy a~regulární gramatiky jsou tři různé způsoby popisu stejné třídy jazyků. Později tuto teorii využijeme při lexikální analýze v~kapitole \smartref{\showrefs}{chap:kompilatory}{o~kompilátorech}.
+
+\input{03-automaty/sections/s01-uvod.tex}
+\input{03-automaty/sections/s02-jazyky.tex}
+\input{03-automaty/sections/s03-det-automaty.tex}
+\input{03-automaty/sections/s04-nedet-automaty.tex}
+\input{03-automaty/sections/s05-regex.tex}
+\input{03-automaty/sections/s06-gramatiky.tex}
+
+
+\end{document}

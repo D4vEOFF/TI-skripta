@@ -1,0 +1,43 @@
+\section{Asymetrická kryptografie}\label{sec:krypto-asymetricka}
+
+Symetrické šifrování předpokládá, že Alice a~Bob už sdílejí tajný klíč. Asymetrická kryptografie tento požadavek mění. Každý uživatel si vytvoří dvojici vzájemně souvisejících klíčů:
+\[
+    \text{veřejný klíč }k_V
+    \qquad\text{a}\qquad
+    \text{soukromý klíč }k_S.
+\]
+Veřejný klíč smí znát kdokoliv, soukromý klíč si jeho vlastník musí ponechat pouze pro sebe.
+
+Chce-li Alice poslat zprávu Bobovi, získá Bobův veřejný klíč $k_V$ a~spočítá
+\[
+    c=\mathbf{E}(m,k_V).
+\]
+Bob použije svůj soukromý klíč:
+\[
+    m=\mathbf{D}(c,k_S).
+\]
+Korektnost požaduje
+\[
+    \mathbf{D}\bigl(\mathbf{E}(m,k_V),k_S\bigr)=m.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-asymetricka.tex}
+    \caption{Šifrování Bobovým veřejným klíčem a~dešifrování jeho soukromým klíčem.}
+    \label{fig:krypto-asymetricka}
+\end{figure}
+
+Znalost veřejného klíče umožňuje zprávy pro Boba šifrovat, nesmí však umožnit je efektivně dešifrovat ani odvodit $k_S$. Asymetrie tedy není v~tom, že by jedna operace byla matematicky nemožná, ale v~rozdílu výpočetní obtížnosti: s~tajnou informací je dešifrování snadné, bez ní má být prakticky neproveditelné.
+
+\warningbox{Veřejný klíč musí být spolehlivě spojen s~identitou svého vlastníka. Pokud záškodník podstrčí Alici svůj klíč a~vydává jej za Bobův, může zprávu přečíst a~teprve potom ji znovu zašifrovat skutečným Bobovým klíčem. K~ověřování vazby mezi identitou a~veřejným klíčem se používají certifikáty.}
+
+Asymetrické operace bývají výrazně pomalejší než symetrické. Reálné systémy proto často používají oba přístupy společně: asymetrická kryptografie bezpečně ustaví krátký dočasný klíč a~samotná data se potom šifrují rychlou symetrickou šifrou. V~této kapitole se soustředíme na princip; podrobnosti konkrétních síťových protokolů ponecháme stranou.
+
+\subsection{Výpočetní bezpečnost}
+
+U~jednorázové šifry jsme dokázali, že šifrový text neposkytuje žádnou informaci ani neomezeně silnému záškodníkovi. U~asymetrické kryptografie tak silný požadavek splnit nemůžeme: veřejný klíč i~algoritmus šifrování jsou dostupné, takže záškodník může kandidátní zprávy sám šifrovat a~porovnávat.
+
+Bezpečnost proto formulujeme vůči algoritmům s~omezenou dobou výpočtu. Pravděpodobnost úspěchu každého pravděpodobnostního polynomiálního útoku má být zanedbatelná. Tato myšlenka se naplno projeví v~\smartref[sekci~][]{\showrefs}{sec:krypto-prg-owf}{sekci o~pseudonáhodných generátorech a~jednosměrných funkcích}.
+
+\notebox{Jednoduchý zápis $c=\mathbf{E}(m,k_V)$ nezobrazuje všechny praktické podrobnosti. Bezpečné asymetrické šifrování obvykle používá také náhodnost a~předepsané kódování zprávy, aby stejné zprávy nevytvářely pokaždé stejný šifrový text.}

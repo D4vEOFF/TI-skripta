@@ -76,12 +76,73 @@
 \SetKwInput{KwOut}{Výstup}
 \SetKwProg{Function}{Funkce}{}{end}
 
-% Math
-\newcommand{\powset}[1]{\mathcal{P}(#1)}
-\newcommand{\solutions}[1]{\left[K=\left\{#1\right\}\right]}
+% Barvy a zvýraznění převzaté z TI-prezentace/assets/macros.tex
+\definecolor{lightblue}{HTML}{009AD4}
+\definecolor{lightgreen}{HTML}{68FF00}
+\definecolor{darkgreen}{HTML}{00B600}
+\definecolor{darkblue}{HTML}{0265B3}
+\definecolor{darkred}{HTML}{DA0707}
+\definecolor{lightred}{HTML}{FF5100}
+\definecolor{orange}{HTML}{FFE000}
+
+\newcommand{\markred}[1]{\textcolor{lightred}{#1}}
+\newcommand{\markdarkred}[1]{\textcolor{darkred}{#1}}
+\newcommand{\markgreen}[1]{\textcolor{lightgreen}{#1}}
+\newcommand{\markdarkgreen}[1]{\textcolor{darkgreen}{#1}}
+\newcommand{\markorange}[1]{\textcolor{orange}{#1}}
+\newcommand{\markblue}[1]{\textcolor{lightblue}{#1}}
+\newcommand{\markdarkblue}[1]{\textcolor{darkblue}{#1}}
+
+% Matematické značení sjednocené s TI-prezentace/assets/macros.tex
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\newcommand{\T}[1]{#1^\top}
+\newcommand{\compl}[1]{#1^\complement}
+\newcommand{\mapping}[3]{#1:#2 \rightarrow #3}
+\newcommand{\mapto}[3]{#1:#2 \mapsto #3}
 \newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\powset}{\mathcal{P}}
+\newcommand{\code}[1]{\langle#1\rangle}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\solutions}[1]{\left[K=\left\{#1\right\}\right]}
 \newcommand{\sizeof}[1]{\left| #1 \right|}
 \newcommand{\admid}{\;\middle\vert\;}
+\newcommand{\abs}[1]{\left|\,#1\,\right|}
+% Název \binary používá také balíček fmtcount, který může být v některých
+% instalacích TeXu načten nepřímo. Specifičtější název zabrání kolizi.
+\newcommand{\binarycode}[1]{\ensuremath{\left\langle #1\right\rangle}_B}
+
+% Statistika a AI
+\newcommand{\average}[1]{\overline{#1}}
+\DeclareMathOperator{\median}{med}
+\DeclareMathOperator{\Var}{var}
+\DeclareMathOperator{\Cov}{cov}
+\DeclareMathOperator{\MSE}{MSE}
+\DeclareMathOperator{\SSE}{SSE}
+
+\DeclareMathOperator{\TP}{TP}
+\DeclareMathOperator{\TN}{TN}
+\DeclareMathOperator{\FP}{FP}
+\DeclareMathOperator{\FN}{FN}
+\DeclareMathOperator{\Accuracy}{Acc}
+\DeclareMathOperator{\Precision}{Prec}
+\DeclareMathOperator{\Recall}{Rec}
+\DeclareMathOperator{\Fscore}{F}
+\DeclareMathOperator{\Gini}{Gini}
+
+\DeclareMathOperator{\mspan}{span}
+\DeclareMathOperator{\mrank}{rank}
+\DeclareMathOperator{\tg}{tg}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\rng}{rng}
+\renewcommand{\emptyset}{\varnothing}
 
 % Paths
 \newcommand{\chapterspath}[1]{ch#1/content.tex}
@@ -90,11 +151,34 @@
 % Info boxes
 \newcommand{\infobox}[1]{\awesomebox[gray]{2pt}{\faInfoCircle}{gray}{\textcolor{gray}{#1}}}
 
-% Complexity classes
-\def\P{\textsf{P}}
-\def\NP{\textsf{NP}}
-\def\NPC{\textsf{NPC}}
+% Seznamy používané v DFS a haldách
+\DeclareMathOperator{\inlist}{in}
+\DeclareMathOperator{\outlist}{out}
+\DeclareMathOperator{\key}{key}
+
+% A*
+\newcommand{\Astar}{\ensuremath{\textup{A}^{*}}}
+
+% Třídy složitosti a rozhodovací problémy
+\DeclareMathOperator{\classP}{P}
+\DeclareMathOperator{\classNP}{NP}
+\DeclareMathOperator{\classNPC}{NPC}
+\DeclareMathOperator{\classTime}{TIME}
+\DeclareMathOperator{\classNTime}{NTIME}
+\DeclareMathOperator{\classSpace}{SPACE}
+\DeclareMathOperator{\classNSpace}{NSPACE}
+
 \DeclareMathOperator{\SAT}{SAT}
+\DeclareMathOperator{\THREESAT}{3-SAT}
+\DeclareMathOperator{\UNSAT}{UNSAT}
+\DeclareMathOperator{\NZMNA}{NzMna}
+\DeclareMathOperator{\KLIKA}{Klika}
+\DeclareMathOperator{\ROZVRH}{Rozvrh}
+\DeclareMathOperator{\SUDOKU}{Sudoku}
+\newcommand{\HALT}{\ensuremath{\textsc{Halt}}}
+\newcommand{\FACTOR}{\ensuremath{\textsc{Factor}}}
+
+\DeclareMathOperator{\regex}{RegE}
 
 \setlength{\fboxsep}{3mm}
 \newcommand{\problem}[3]{
@@ -107,8 +191,8 @@
   }
 }
 
-% Time complexities
-\newcommand{\bigO}[1]{\mathcal{O}(#1)}
+% Asymptotické odhady
+\newcommand{\bigO}{\mathcal{O}}
 \newcommand{\bigOmega}[1]{\Omega\left(#1\right)}
 
 %hyperref
@@ -126,18 +210,7 @@
 % \renewcommand{\implies}{\Rightarrow}
 % \renewcommand{\iff}{\Leftrightarrow}
 
-\newcommand{\abs}[1]{\left|\,#1\,\right|}
-\DeclareMathOperator{\regex}{RegE}
-
-%%% Prostor reálných čísel, přirozených čísel, ...
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\Z}{\mathbb{Z}}
-
-% Goniometric functions
-\DeclareMathOperator{\tg}{tg}
+% Goniometrické funkce používané pouze ve skriptech
 \DeclareMathOperator{\cotg}{cotg}
 
 % Others
@@ -149,6 +222,14 @@
 
 % TikZ makra převzatá z prezentací. V knižní třídě nepotřebujeme
 % beamerovské parametry pro překryvy, názvy a vzhled však zůstávají stejné.
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=1.5cm,
+  minimum height=0.5cm, text centered, draw=black, fill=red!30]
+\tikzstyle{process} = [rectangle, minimum width=1.5cm,
+  minimum height=0.5cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, aspect=2, text centered,
+  draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
 \tikzstyle{vertex} = [thick, draw, circle, minimum size=4mm,
   inner sep=1pt, outer sep=1pt, align=center]
 \tikzstyle{vertexplain} = [minimum size=4mm, inner sep=1pt,

@@ -1,0 +1,52 @@
+\section{Paměťová hierarchie}\label{sec:hw-pametova-hierarchie}
+
+Žádný běžný druh paměti současně nenabízí nejvyšší rychlost, obrovskou kapacitu, nízkou cenu a~trvalé uložení dat. Počítač proto kombinuje několik paměťových úrovní. Blízko procesoru se nacházejí malé a~rychlé registry a~cache, pod nimi větší hlavní paměť a~ještě níže dlouhodobá úložiště. Pro zálohování a~archivaci lze přidat síťová úložiště, magnetické pásky nebo jiné systémy s~velkou kapacitou, u~nichž nevadí delší doba přístupu.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-pametova-hierarchie.tex}
+    \caption{Zjednodušená paměťová hierarchie počítače.}
+    \label{fig:hw-pametova-hierarchie}
+\end{figure}
+
+Směrem vzhůru v~hierarchii na obrázku~\ref{fig:hw-pametova-hierarchie} roste rychlost a~obvykle také cena za uložený bit, zatímco kapacita klesá. Směrem dolů získáváme větší a~levnější úložný prostor, ale na data čekáme déle. Jednotlivé úrovně proto plní rozdílné role:
+\begin{itemize}
+    \item \textbf{registry} uchovávají hodnoty, s~nimiž právě pracují instrukce;
+    \item \textbf{cache} uchovává kopie nedávno nebo blízce používaných částí paměti;
+    \item \textbf{RAM} obsahuje běžící programy a~jejich pracovní data;
+    \item \textbf{SSD a~HDD} dlouhodobě uchovávají programy a~soubory;
+    \item \textbf{archivní a~záložní systémy} upřednostňují kapacitu, cenu a~bezpečné uchování před okamžitým přístupem.
+\end{itemize}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Úroveň} & \textbf{Relativní rychlost} & \textbf{Relativní kapacita} & \textbf{Volatilní} \\ \hline
+        Registry & nejvyšší & nejmenší & ano \\ \hline
+        Cache & velmi vysoká & malá & ano \\ \hline
+        RAM & střední & větší & ano \\ \hline
+        SSD/HDD & nižší & velká & ne \\ \hline
+        Archiv/záloha & nejnižší & velmi velká & ne \\ \hline
+    \end{tabular}
+    \caption{Kvalitativní porovnání úrovní paměťové hierarchie.}
+    \label{tab:hw-pametova-hierarchie}
+\end{table}
+
+Paměťová hierarchie funguje dobře tehdy, když se na rychlejších úrovních nacházejí právě ta data, která budou brzy potřeba. Část přesunů zajišťuje hardware automaticky, jako v~případě cache. Jiné přesuny řídí operační systém, například když načítá program z~SSD do RAM. Další provádí přímo uživatel, když přesune starší data do archivu nebo vytvoří zálohu.
+
+Z~pohledu programu může být velká část těchto přesunů skrytá. Program pracuje s~adresami v~paměti a~procesor se pokouší obsloužit požadavky co nejrychleji. Pokud jsou data v~registru nebo cache, pokračuje výpočet rychle. Při výpadku cache je potřeba čekat na RAM; pokud se potřebná část programu nebo soubor teprve načítá z~úložiště, čekání je ještě delší. Rozdíl mezi jednotlivými úrovněmi vysvětluje, proč má způsob uspořádání dat významný vliv na skutečný výkon.
+
+\importantbox{Paměťová hierarchie vytváří dojem velké a~rychlé paměti tím, že kombinuje malou rychlou paměť s~většími pomalejšími úrovněmi. Tento dojem je nejpřesvědčivější tehdy, když program vykazuje dobrou časovou a~prostorovou lokalitu.}
+
+\subsection{Shrnutí kapitoly}
+
+\begin{itemize}
+    \item Procesor vykonává instrukce, ale při své činnosti neustále komunikuje s~pamětí, vstupními a~výstupními zařízeními.
+    \item Ve von Neumannově architektuře sdílejí instrukce a~data společnou paměť; harvardská architektura jejich paměti a~přenosové cesty odděluje.
+    \item Základními částmi procesoru jsou výpočetní jednotky, řadič a~registry. Instrukce procházejí fázemi načtení, dekódování, získání operandů, provedení a~uložení výsledku.
+    \item Cache zkracuje průměrnou dobu přístupu k~datům tím, že využívá časovou a~prostorovou lokalitu programů.
+    \item Hlavní paměť poskytuje programu lineární adresový prostor, přestože jsou fyzické buňky v~čipech uspořádány do matic.
+    \item HDD ukládá data magneticky na rotující plotny, zatímco SSD používá flash paměť bez pohyblivých částí.
+    \item Registry, cache, RAM, úložiště a~archivní systémy společně vytvářejí paměťovou hierarchii, která vyvažuje rychlost, kapacitu a~cenu.
+\end{itemize}

@@ -1,8 +1,8 @@
 \begin{tikzpicture}[node distance=17mm]
-    \node[task] (sat) {SAT};
-    \node[task,right=of sat] (tsat) {$3$-SAT};
-    \node[task,below=of tsat] (ind) {NzMna};
-    \node[task,left=of ind] (clq) {Klika};
+    \node[task] (sat) {\ensuremath{\SAT}};
+    \node[task,right=of sat] (tsat) {\ensuremath{\THREESAT}};
+    \node[task,below=of tsat] (ind) {\ensuremath{\NZMNA}};
+    \node[task,left=of ind] (clq) {\ensuremath{\KLIKA}};
     \draw[diredge] (sat)--(tsat);
     \draw[diredge] (tsat)--(ind);
     \draw[diredge,bend left=15] (ind) to (clq);

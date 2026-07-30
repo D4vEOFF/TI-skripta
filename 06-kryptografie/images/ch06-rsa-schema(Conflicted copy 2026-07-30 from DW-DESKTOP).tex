@@ -1,0 +1,34 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    >=Latex,
+    box/.style={rounded corners=1.2mm, draw=black!55, fill=black!4,
+                minimum width=3.1cm, minimum height=10mm, align=center},
+    public/.style={rounded corners=1.2mm, draw=blue!65!black, fill=blue!12,
+                   minimum width=3.1cm, minimum height=9mm, align=center},
+    private/.style={rounded corners=1.2mm, draw=red!70!black, fill=red!9,
+                    minimum width=3.1cm, minimum height=9mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.9pt},
+    keyflow/.style={-{Latex}, dashed, line width=.8pt}
+]
+    \node[inner sep=0pt] (alice) at (-6.2,0)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/woman-icon.pdf}};
+    \node[below=1mm of alice] {Alice};
+    \node[inner sep=0pt] (bob) at (6.2,0)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/man-icon.pdf}};
+    \node[below=1mm of bob] {Bob};
+
+    \node[box] (enc) at (-2.7,0) {\(y=x^v\bmod n\)};
+    \node[box] (dec) at (2.7,0) {\(x=y^s\bmod n\)};
+    \node[public] (pk) at (-2.7,1.75) {veřejný klíč\\\(k_V=(v,n)\)};
+    \node[private] (sk) at (2.7,1.75) {soukromý klíč\\\(k_S=(s,n)\)};
+
+    \draw[flow] (alice.east) -- (enc.west) node[midway, above] {\(x\)};
+    \draw[flow] (enc.east) -- (dec.west) node[midway, above] {\(y\)};
+    \draw[flow] (dec.east) -- (bob.west) node[midway, above] {\(x\)};
+    \draw[keyflow, draw=blue!65!black] (pk) -- (enc);
+    \draw[keyflow, draw=red!70!black] (sk) -- (dec);
+
+    \node[rounded corners=1mm, draw=orange!75!black, fill=orange!18,
+          align=center, inner xsep=3mm, inner ysep=2mm] at (0,-1.7)
+        {\(n=pq,\qquad vs\equiv 1\pmod{(p-1)(q-1)}\)};
+\end{tikzpicture}

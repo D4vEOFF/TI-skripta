@@ -46,24 +46,24 @@ BFS rozděluje vrcholy do vrstev podle toho,~v~jaké vzdálenosti od počátečn
 
 Zbývá prozkoumat časovou a~paměťovou složitost BFS. Označme si počet vrcholů grafu $G$ na vstupu $n$ a~počet jeho hran $m$. 
 \begin{theorem}[Složitost BFS]\label{thm:bfs_slozitost}
-    Algoritmus BFS doběhne v~čase $\bigO{n+m}$ a~spotřebuje paměť $\bigO{n+m}$.
+    Algoritmus BFS doběhne v~čase $\bigO(n+m)$ a~spotřebuje paměť $\bigO(n+m)$.
 \end{theorem}
 \begin{proof}
-    Inicializace potrvá $\bigO{n}$,~neboť cyklus iteruje přes všechny vrcholy. Vnější cyklus provede maximálně $n$ iterací,~protože každý z~vrcholů uzavřeme nejvýše jednou,~tj. $\bigO{n}$.
+    Inicializace potrvá $\bigO(n)$,~neboť cyklus iteruje přes všechny vrcholy. Vnější cyklus provede maximálně $n$ iterací,~protože každý z~vrcholů uzavřeme nejvýše jednou,~tj. $\bigO(n)$.
 
-    S~vnitřním cyklem je to trochu složitější,~protože jeho počet iterací závisí na tom,~který z~vrcholů otevíráme (resp. na počtu jeho sousedů). To znamená,~že pokud si označíme $d_i$ počet sousedů vrcholu $i$,~pak celkový počet iterací vnitřního cyklu přes všechny vrcholy bude $\sum_i{d_i}$. Lze si ovšem všimnout jedné užitečné věci. Pokaždé,~když prozkoumáváme sousední vrchol $w$ nějakého vrcholu $v$,~mohou nastat dva případy podle toho,~jestli je $G$ orientovaný graf,~nebo neorientovaný.
+    S~vnitřním cyklem je to trochu složitější,~protože jeho počet iterací závisí na tom,~který z~vrcholů otevíráme (resp. na počtu jeho sousedů). Označme vrcholy $v_1,\dots,v_n$. Celkový počet iterací vnitřního cyklu přes všechny vrcholy bude $\sum_{i=1}^{n}\deg(v_i)$. Lze si ovšem všimnout jedné užitečné věci. Pokaždé,~když prozkoumáváme sousední vrchol $w$ nějakého vrcholu $v$,~mohou nastat dva případy podle toho,~jestli je $G$ orientovaný graf,~nebo neorientovaný.
     \begin{enumerate}[label=(\roman*)]
         \item\label{bfs_slozitost_neor_graf} Graf $G$ je neorientovaný. Pak hranu,~která spojuje $v$ a~$w$ prozkoumáme právě \emph{dvakrát} (jednou z~vrcholu $v$ a~podruhé z~vrcholu $w$). Každá hrana se tak započítá dvakrát,~tzn. vnitřní cyklus se celkově provede max $2m$-krát (po všech iteracích vnějšího cyklu).
         \item\label{bfs_slozitost_or_graf} Graf $G$ je orientovaný. Pak se hrana započítá pouze jednou,~a~to z~vrcholu,~z~něhož vede. Celkově se vnitřní cyklus provede $m$-krát.
     \end{enumerate}
     V~prvním případě tak pro časovou složitost bude platit
-    \[\bigO{n+\sum_i{d_i}}=\bigO{n+2m}\stackrel{*}{=}\bigO{n+m}.\]
+    \[\bigO\left(n+\sum_{i=1}^{n}\deg(v_i)\right)=\bigO(n+2m)\stackrel{*}{=}\bigO(n+m).\]
     (V~kroku označeném \texttt{*} zanedbáváme konstantu,~neboť pracujeme s~$\mathcal{O}$-notací.)\par
     V~druhém případě dojdeme ke stejnému výsledku,~akorát zmíněná suma bude,~kvůli orientaci hran,~rovna přesně počtu hran,~tj.
-    \[\bigO{n+\sum_i{d_i}}=\bigO{n+m}.\]
+    \[\bigO\left(n+\sum_{i=1}^{n}\deg(v_i)\right)=\bigO(n+m).\]
 
-    Nyní k~prostorové složitosti algoritmu. Na reprezentaci grafu (např. pomocí seznamu sousedů) spotřebujeme paměť $\bigO{n+m}$ ($n$ vrcholů,~$m$ hran)\footnote{Resp. každá hrana je v~neorientovaných grafech započítána dvakrát,~protože každý vrchol obsahuje v~seznamu svých sousedů vždy "protější" vrchol (stejný argument jako u~odvozování časové složitosti BFS).}. Dále si uchováváme vrcholy ve frontě,~v~níž může být v~jednu chvíli maximálně $n$ vrcholů,~tj. $\bigO{n}$,~a~k~tomu máme seznamy $stav$ a~$D$,~oba s~$n$ položkami. Celkově spotřebujeme paměti
-    \[\bigO{n+m}+\bigO{n}+\bigO{n}+\bigO{n}=\bigO{n+m}.\]
+    Nyní k~prostorové složitosti algoritmu. Na reprezentaci grafu (např. pomocí seznamu sousedů) spotřebujeme paměť $\bigO(n+m)$ ($n$ vrcholů,~$m$ hran)\footnote{Resp. každá hrana je v~neorientovaných grafech započítána dvakrát,~protože každý vrchol obsahuje v~seznamu svých sousedů vždy "protější" vrchol (stejný argument jako u~odvozování časové složitosti BFS).}. Dále si uchováváme vrcholy ve frontě,~v~níž může být v~jednu chvíli maximálně $n$ vrcholů,~tj. $\bigO(n)$,~a~k~tomu máme seznamy $stav$ a~$D$,~oba s~$n$ položkami. Celkově spotřebujeme paměti
+    \[\bigO(n+m)+\bigO(n)+\bigO(n)+\bigO(n)=\bigO(n+m).\]
 \end{proof}
 \begin{figure}[h]
     \centering

@@ -1,0 +1,28 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    result/.style={rounded corners=1mm, draw=blue!60!black, fill=blue!10,
+                   minimum width=1.5cm, minimum height=10mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.8pt}
+]
+    \node (omega) at (0,2.5) {\(\Omega\)};
+    \node (zero) at (-3,1.15) {\(0\)};
+    \node (one) at (3,1.15) {\(1\)};
+
+    \node[result] (r00) at (-4.5,-.75) {\(00\)\\\(\frac14\)};
+    \node[result] (r01) at (-1.5,-.75) {\(01\)\\\(\frac14\)};
+    \node[result] (r10) at (1.5,-.75) {\(10\)\\\(\frac14\)};
+    \node[result] (r11) at (4.5,-.75) {\(11\)\\\(\frac14\)};
+
+    \draw[flow] (omega) -- (zero)
+        node[pos=.5, above left=1mm] {\(\frac12\)};
+    \draw[flow] (omega) -- (one)
+        node[pos=.5, above right=1mm] {\(\frac12\)};
+    \draw[flow] (zero) -- (r00)
+        node[pos=.55, left=1mm] {\(\frac12\)};
+    \draw[flow] (zero) -- (r01)
+        node[pos=.55, right=1mm] {\(\frac12\)};
+    \draw[flow] (one) -- (r10)
+        node[pos=.55, left=1mm] {\(\frac12\)};
+    \draw[flow] (one) -- (r11)
+        node[pos=.55, right=1mm] {\(\frac12\)};
+\end{tikzpicture}

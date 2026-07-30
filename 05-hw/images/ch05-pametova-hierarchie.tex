@@ -1,0 +1,39 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    level/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center,
+        minimum height=0.72cm
+    }
+]
+    \node[font=\small\bfseries] at (0,3.25) {nejblíže procesoru};
+
+    \node[level, fill=red!15, minimum width=3.0cm] (registers) at (0,2.45)
+        {\textbf{registry}};
+    \node[level, fill=orange!20, minimum width=4.4cm] (cache) at (0,1.45)
+        {\textbf{cache}};
+    \node[level, fill=yellow!24, minimum width=6.0cm] (ram) at (0,0.45)
+        {\textbf{RAM}};
+    \node[level, fill=green!17, minimum width=7.7cm] (storage) at (0,-0.55)
+        {\textbf{SSD / HDD}};
+    \node[level, fill=blue!12, minimum width=9.4cm] (archive) at (0,-1.55)
+        {\textbf{archiv / záloha / síťové úložiště}};
+
+    \draw[->, thick] (registers.south) -- (cache.north);
+    \draw[->, thick] (cache.south) -- (ram.north);
+    \draw[->, thick] (ram.south) -- (storage.north);
+    \draw[->, thick] (storage.south) -- (archive.north);
+
+    \draw[->, very thick] (-6.1,-2.0) -- (-6.1,2.9);
+    \node[align=center, anchor=east] at (-6.35,0.45)
+        {rychlost\\ cena za bit};
+
+    \draw[->, very thick] (6.1,2.9) -- (6.1,-2.0);
+    \node[align=center, anchor=west] at (6.35,0.45)
+        {kapacita\\ doba uchování};
+\end{tikzpicture}

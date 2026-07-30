@@ -1,0 +1,41 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center,
+        minimum height=1.1cm
+    },
+    arrow/.style={->, thick}
+]
+    \node[
+        block,
+        fill=blue!12,
+        minimum width=2.3cm
+    ] (cpu) at (-5.2,0) {\textbf{CPU}};
+    \node[
+        block,
+        fill=orange!18,
+        minimum width=2.8cm
+    ] (cache) at (0,0) {\textbf{Cache}};
+    \node[
+        block,
+        fill=green!14,
+        minimum width=2.5cm
+    ] (ram) at (5.2,0) {\textbf{RAM}};
+
+    \draw[arrow] (cpu.east) -- node[above] {požadavek na data} (cache.west);
+    \draw[arrow] (cache.east) -- node[above] {data nejsou v~cache} (ram.west);
+
+    \draw[arrow, green!65!black, bend right=32]
+        (cache.north) to node[above, font=\small\bfseries] {cache hit} (cpu.north);
+
+    \draw[arrow, red!70!black, bend left=28]
+        (ram.south) to node[below, font=\small\bfseries] {načtení při cache miss} (cache.south);
+    \draw[arrow, red!70!black, bend left=28]
+        (cache.south) to (cpu.south);
+\end{tikzpicture}

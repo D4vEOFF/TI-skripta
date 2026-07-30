@@ -1,0 +1,62 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    >=Latex,
+    block/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                  minimum width=2cm, minimum height=9mm, align=center},
+    state/.style={rounded corners=1mm, draw=blue!65!black, fill=blue!11,
+                  minimum width=1.8cm, minimum height=9mm, align=center},
+    func/.style={rounded corners=1mm, draw=orange!75!black, fill=orange!18,
+                 minimum width=10mm, minimum height=10mm},
+    xor/.style={circle, draw=black!55, fill=white, minimum size=7mm, inner sep=0pt},
+    flow/.style={-{Latex}, draw=black!70, line width=.75pt}
+]
+    \node[block] (m) at (-5.5,3) {zpráva \(m\)};
+    \node[block] (pad) at (-2.8,3) {padding};
+    \node[block, minimum width=3.2cm] (parts) at (.35,3)
+        {bloky \(p_1,\ldots,p_t\)};
+    \draw[flow] (m) -- (pad);
+    \draw[flow] (pad) -- (parts);
+
+    \node[state] (s0) at (-5.5,0) {\(S_0=0^b\)};
+    \node[xor] (x1) at (-3.65,0) {\(\oplus\)};
+    \node[func] (f1) at (-2.25,0) {\(f\)};
+    \node[state] (s1) at (-.75,0) {\(S_1\)};
+    \node at (.35,0) {\(\cdots\)};
+    \node[xor] (xt) at (1.45,0) {\(\oplus\)};
+    \node[func] (ft) at (2.85,0) {\(f\)};
+    \node[state] (st) at (4.35,0) {\(S_t\)};
+
+    \draw[flow] (s0) -- (x1);
+    \draw[flow] (x1) -- (f1);
+    \draw[flow] (f1) -- (s1);
+    \draw[flow] (s1) -- (.05,0);
+    \draw[flow] (.65,0) -- (xt);
+    \draw[flow] (xt) -- (ft);
+    \draw[flow] (ft) -- (st);
+
+    \node[block] (p1) at (-3.65,1.25) {\(p_1 0^c\)};
+    \node[block] (pt) at (1.45,1.25) {\(p_t 0^c\)};
+    \draw[flow] (parts.south west) to[bend right=8] (p1.north);
+    \draw[flow] (parts.south east) to[bend left=8] (pt.north);
+    \draw[flow] (p1) -- (x1);
+    \draw[flow] (pt) -- (xt);
+
+    \node[block, draw=green!55!black, fill=green!12] (rate) at (4.35,-1.7)
+        {čti část rate};
+    \node[state, minimum width=2.6cm] (hash) at (4.35,-3.15)
+        {otisk \(\mathcal{H}_n(m)\)};
+    \draw[flow] (st) -- (rate);
+    \draw[flow] (rate) -- (hash);
+
+    \node[draw=blue!55!black, rounded corners=2mm, inner sep=4mm,
+          fit=(s0)(p1)(st)(pt)] (absorbing) {};
+    \node[font=\bfseries, text=blue!55!black, fill=white,
+          inner xsep=2mm, inner ysep=.5mm]
+        at ([xshift=1.8cm]absorbing.north west) {absorbing};
+
+    \node[draw=green!55!black, rounded corners=2mm, inner sep=3mm,
+          fit=(rate)(hash)] (squeezing) {};
+    \node[font=\bfseries, text=green!45!black, fill=white,
+          inner xsep=2mm, inner ysep=.5mm]
+        at ([xshift=.9cm]squeezing.north west) {squeezing};
+\end{tikzpicture}

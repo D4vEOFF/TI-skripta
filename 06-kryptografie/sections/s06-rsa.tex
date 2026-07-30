@@ -1,0 +1,176 @@
+\section{Algoritmus RSA}\label{sec:krypto-rsa}
+
+RSA je nejznámější příklad asymetrického kryptografického systému. Jeho název vznikl z~příjmení autorů Rona \textbf{R}ivesta, Adiho \textbf{S}hamira a~Leonarda \textbf{A}dlemana. Základní operací je umocňování modulo součin dvou velkých prvočísel.
+
+\subsection{Vytvoření klíčů}
+
+Bob postupuje následovně:
+\begin{enumerate}
+    \item zvolí dvě různá velká prvočísla $p$ a~$q$ a~spočítá
+    \[
+        n=pq;
+    \]
+    \item spočítá
+    \[
+        \varphi(n)=(p-1)(q-1);
+    \]
+    \item zvolí číslo $s$ nesoudělné s~$\varphi(n)$;
+    \item nalezne číslo $v$ takové, že
+    \[
+        vs\bmod\varphi(n)=1;
+    \]
+    \item zveřejní klíč $k_V=(v,n)$ a~uchová v~tajnosti klíč $k_S=(s,n)$.
+\end{enumerate}
+
+Číslo $v$ je multiplikativní inverze čísla $s$ modulo $\varphi(n)$. Existuje právě proto, že $\operatorname{gcd}(s,\varphi(n))=1$, a~lze je efektivně nalézt rozšířeným Eukleidovým algoritmem.
+
+\warningbox{Číslo $s$ je soukromý exponent, nikoli třetí prvočíslo. Musí být nesoudělné s~$(p-1)(q-1)$, ale samo prvočíslem být nemusí.}
+
+\subsection{Šifrování a~dešifrování}
+
+Zprávu reprezentujeme číslem $x$ splňujícím $0\leqslant x<n$. Alice zašifruje
+\[
+    y=\mathbf{E}(x,k_V)=x^v\bmod n.
+\]
+Bob dešifruje
+\[
+    \mathbf{D}(y,k_S)=y^s\bmod n.
+\]
+Mocniny mohou být obrovské, v~programu je však nepočítáme nejprve jako běžná celá čísla. Opakovaným umocňováním a~průběžným výpočtem zbytku lze modulární mocninu určit v~čase polynomiálním vzhledem k~počtu bitů vstupu.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-rsa-schema.tex}
+    \caption{Schéma šifrování a~dešifrování v~RSA.}
+    \label{fig:krypto-rsa-schema}
+\end{figure}
+
+\subsection{Malá Fermatova věta a~čínská věta o~zbytcích}
+
+Korektnost RSA odvodíme ze dvou vět elementární teorie čísel.
+
+\begin{theorem}[Malá Fermatova věta]\label{thm:krypto-fermat}
+    Nechť $p$ je prvočíslo a~$a\in\Z$ není dělitelné číslem $p$. Potom
+    \[
+        a^{p-1}\bmod p=1.
+    \]
+    Ekvivalentně pro každé $a\in\Z$ platí $a^p\bmod p=a\bmod p$.
+\end{theorem}
+
+\begin{theorem}[Čínská věta o~zbytcích]\label{thm:krypto-cinska}
+    Nechť $m_1,\ldots,m_k\in\N$ jsou po dvou nesoudělná. Pro libovolná $a_1,\ldots,a_k\in\Z$ existuje řešení soustavy
+    \[
+        x\equiv a_i\pmod{m_i},
+        \qquad i=1,\ldots,k,
+    \]
+    a~všechna její řešení jsou navzájem shodná modulo $M=m_1\cdots m_k$.
+\end{theorem}
+
+\begin{corollary}\label{cor:krypto-cinska-dve}
+    Jsou-li $p$ a~$q$ různá prvočísla a~platí
+    \[
+        a\equiv b\pmod p
+        \qquad\text{a}\qquad
+        a\equiv b\pmod q,
+    \]
+    potom $a\equiv b\pmod{pq}$.
+\end{corollary}
+
+\subsection{Korektnost RSA}
+
+\begin{theorem}\label{thm:krypto-rsa-korektnost}
+    Pro klíče vytvořené uvedeným postupem a~každé celé číslo $x$ splňující $0\leqslant x<n$ platí
+    \[
+        \mathbf{D}\bigl(\mathbf{E}(x,k_V),k_S\bigr)=x.
+    \]
+\end{theorem}
+
+\begin{proof}
+    Z~rovnosti $vs\bmod(p-1)(q-1)=1$ plyne, že pro nějaké $t\in\N_0$ platí
+    \[
+        vs=1+t(p-1)(q-1).
+    \]
+    Nejprve ukážeme $x^{vs}\equiv x\pmod p$. Pokud $p$ dělí $x$, jsou obě strany kongruence nulové modulo $p$. Pokud $p$ číslo $x$ nedělí, použijeme \smartref[větu~][]{\showrefs}{thm:krypto-fermat}{malou Fermatovu větu}:
+    \begin{align*}
+        x^{vs}
+        &=
+        x^{1+t(p-1)(q-1)}\\
+        &=
+        x\left(x^{p-1}\right)^{t(q-1)}
+        \equiv
+        x\cdot 1^{t(q-1)}
+        \equiv x
+        \pmod p.
+    \end{align*}
+    Stejným rozlišením případů dostaneme
+    \[
+        x^{vs}\equiv x\pmod q.
+    \]
+    Podle \smartref[důsledku~][]{\showrefs}{cor:krypto-cinska-dve}{důsledku čínské věty o~zbytcích} tedy
+    \[
+        x^{vs}\equiv x\pmod{pq}.
+    \]
+    Protože $n=pq$ a~$0\leqslant x<n$, uzavíráme
+    \[
+        \mathbf{D}\bigl(\mathbf{E}(x,k_V),k_S\bigr)
+        =
+        \left(x^v\bmod n\right)^s\bmod n
+        =
+        x^{vs}\bmod n
+        =
+        x.
+    \]
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-rsa-korektnost.tex}
+    \caption{Myšlenka důkazu korektnosti RSA přes moduly $p$, $q$ a~$pq$.}
+    \label{fig:krypto-rsa-korektnost}
+\end{figure}
+
+\subsection{Příklad s~malými čísly}
+
+\begin{example}
+    Zvolme $p=5$, $q=11$ a~$s=27$. Potom
+    \[
+        n=55,
+        \qquad
+        \varphi(n)=(5-1)(11-1)=40.
+    \]
+    Protože $\operatorname{gcd}(27,40)=1$, můžeme nalézt $v$ splňující
+    \[
+        27v\bmod 40=1.
+    \]
+    Vyhovuje $v=3$, neboť $27\cdot 3=81\equiv 1\pmod{40}$. Veřejný klíč je $k_V=(3,55)$ a~soukromý klíč $k_S=(27,55)$.
+
+    Alice zašifruje $x=7$:
+    \[
+        y=7^3\bmod 55=343\bmod 55=13.
+    \]
+    Bob poté získá
+    \[
+        13^{27}\bmod 55=7.
+    \]
+\end{example}
+
+Malá čísla slouží pouze k~ručnímu ověření postupu. V~reálné kryptografii by tak malý modul záškodník rozložil okamžitě.
+
+\subsection{Bezpečnost a~faktorizace}
+
+Veřejný klíč obsahuje $n=pq$, ale nikoli samotná prvočísla $p$ a~$q$. Pokud záškodník rozklad zjistí, spočítá $\varphi(n)=(p-1)(q-1)$ a~z~veřejného exponentu $v$ odvodí soukromý exponent $s$. Efektivní faktorizace by tedy RSA prolomila.
+
+Rozhodovací verzi problému můžeme zapsat takto:
+\[
+    \FACTOR:
+    \quad
+    \text{pro daná }n,b\in\N\text{ rozhodni, zda existuje }d
+    \text{ takové, že }1<d<b\text{ a }d\mid n.
+\]
+Jak jsme viděli v~\smartref[sekci~][]{\showrefs}{sec:p_np}{dřívějším výkladu tříd P a~NP}, kladnou odpověď stačí doložit dělitelem $d$. Ověření nerovností i~rovnosti $n\bmod d=0$ proběhne v~polynomiálním čase, a~proto $\FACTOR\in\classNP$.
+
+Naivní zkoušení dělitelů je vzhledem k~bitové délce $\sizeof{\binarycode{n}}$ exponenciální. Jsou známy podstatně rychlejší klasické algoritmy, žádný obecný polynomiální klasický algoritmus pro faktorizaci však znám není.
+
+\importantbox{Znalost efektivní faktorizace stačí k~prolomení popsaného RSA. Není však dokázáno, že každý způsob, jak invertovat RSA, musí zároveň faktorizovat $n$. Bezpečnost RSA proto nelze jednoduše ztotožnit s~větou „faktorizace je těžká“.}
+
+\warningbox{Uvedené „učebnicové RSA“ je deterministické a~bez doplňujícího kódování není bezpečným praktickým šifrovacím schématem. Skutečné systémy používají standardizované náhodné vycpávání a~oddělené postupy, například OAEP pro šifrování a~PSS pro podpis.}

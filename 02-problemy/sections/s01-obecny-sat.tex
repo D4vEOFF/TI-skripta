@@ -1,6 +1,6 @@
 \section{Problém splnitelnosti}\label{sec:general_sat}
 
-Začneme zdánlivě možná jednoduchým problémem,~který však na poli informatiky hraje dosti důležitou roli. Předpokládejme,~že máme zadanou nějakou logickou formuli $\varphi$ o~libovolném počtu logických proměnných,~označme např. $x_1,x_2,\dots,x_n$. Naší otázkou je,~jestli je možné hodnoty proměnných $x_1,x_2,\dots,x_n$ nastavit tak (tj. dosadit hodnoty 0~a~1),~aby byla formule splněna\footnote{Může se na první pohled zdát,~že se jedná o~dosti teoretickou záležitost,~nicméně později uvidíme,~že mnoho jiných problémů má se SAT silnou spojitost.},~tj. $\varphi(\dots)=1$. Takovému ohodnocení budeme říkat \emph{splňující}.
+Začneme zdánlivě možná jednoduchým problémem,~který však na poli informatiky hraje dosti důležitou roli. Předpokládejme,~že máme zadanou nějakou logickou formuli $\varphi$ o~libovolném počtu logických proměnných,~označme např. $x_1,x_2,\dots,x_n$. Naší otázkou je,~jestli je možné hodnoty proměnných $x_1,x_2,\dots,x_n$ nastavit tak (tj. dosadit hodnoty 0~a~1),~aby byla formule splněna\footnote{Může se na první pohled zdát,~že se jedná o~dosti teoretickou záležitost,~nicméně později uvidíme,~že mnoho jiných problémů má se \ensuremath{\SAT} silnou spojitost.},~tj. $\varphi(\dots)=1$. Takovému ohodnocení budeme říkat \emph{splňující}.
 
 \problem{Splnitelnost obecné logické formule}{Logická formule $\varphi$.}{1,~pokud je $\varphi$ splnitelná,~jinak 0.}
 
@@ -33,7 +33,7 @@ Zde konstatujme,~že ve všech příkladech bude mít negace $\neg$ vždy \emph{
 \end{example}
 V~příkladu \ref{ex:sat_formule} výše se jedná o~poměrně jednoduché instance,~kdy jsme schopni vidět hned,~zda je formule splnitelná. Pokud bychom však uvážili nějakou složitější formuli,~problém se již značně zkomplikuje.
 \importantbox{Naivní postup pro formuli o~$n$ proměnných prozkoumá až $2^n$ možných ohodnocení. Algoritmus zkoušející všechny možnosti je tak \emph{exponenciální}.}
-Pro SAT není dodnes známý žádný algoritmus,~který by jej uměl řešit pro libovolnou logickou formuli v~polynomiálním čase.
+Pro \ensuremath{\SAT} není dodnes známý žádný algoritmus,~který by jej uměl řešit pro libovolnou logickou formuli v~polynomiálním čase.
 
 \subsection{Konjunktivní normální forma}\label{subsec:cnf}
 

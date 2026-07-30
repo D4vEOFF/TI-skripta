@@ -1,0 +1,73 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center
+    },
+    cell/.style={
+        draw,
+        minimum width=0.48cm,
+        minimum height=0.48cm,
+        fill=white
+    },
+    arrow/.style={->, thick}
+]
+    \node[
+        block,
+        fill=orange!18,
+        minimum width=2.1cm,
+        minimum height=0.9cm
+    ] (address) at (-5.7,1.5) {\textbf{Adresa}};
+
+    \node[
+        block,
+        fill=blue!12,
+        minimum width=2.2cm,
+        minimum height=1.0cm
+    ] (rowdec) at (-5.7,-1.1) {\textbf{Řádkový}\\ dekodér};
+
+    \node[
+        block,
+        fill=blue!12,
+        minimum width=2.3cm,
+        minimum height=1.0cm
+    ] (coldec) at (0.9,3.0) {\textbf{Sloupcový}\\ dekodér};
+
+    \node[
+        block,
+        fill=green!14,
+        minimum width=2.1cm,
+        minimum height=0.9cm
+    ] (data) at (5.7,1.5) {\textbf{Data}};
+
+    \draw[thick, fill=gray!5] (-3.15,-2.05) rectangle (3.15,2.05);
+
+    \foreach \row in {0,...,6}{
+        \foreach \col in {0,...,9}{
+            \pgfmathsetmacro{\x}{-2.7 + 0.60*\col}
+            \pgfmathsetmacro{\y}{1.55 - 0.52*\row}
+            \ifnum\row=5
+                \ifnum\col=6
+                    \node[cell, fill=yellow!55] at (\x,\y) {};
+                \else
+                    \node[cell] at (\x,\y) {};
+                \fi
+            \else
+                \node[cell] at (\x,\y) {};
+            \fi
+        }
+    }
+
+    \draw[arrow] (address.south) -- (rowdec.north);
+    \draw[arrow] (address.east) -- (-4.1,1.5) -- (-4.1,3.0) -- (coldec.west);
+    \draw[arrow] (rowdec.east) -- (-3.15,-1.05);
+    \draw[very thick, red!65] (-3.05,-1.05) -- (3.05,-1.05);
+    \draw[arrow] (coldec.south) -- (0.9,2.05);
+    \draw[very thick, red!65] (0.9,1.95) -- (0.9,-1.95);
+    \draw[arrow] (3.15,-1.05) -| (data.south);
+\end{tikzpicture}

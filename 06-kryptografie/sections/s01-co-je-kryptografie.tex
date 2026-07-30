@@ -1,0 +1,46 @@
+\section{Co je to kryptografie?}\label{sec:krypto-uvod}
+
+Název \emph{kryptologie} vznikl spojením řeckých slov označujících něco skrytého a~nauku. Kryptologie je zastřešující obor zabývající se ochranou informací i~překonáváním této ochrany. \emph{Kryptografie} zkoumá návrh a~vlastnosti metod, které mají informace chránit, zatímco \emph{kryptanalýza} hledá způsoby, jak takové metody prolomit. Tyto dvě oblasti se navzájem doplňují: šifru nelze považovat za bezpečnou jen proto, že její autor zatím žádný útok nenašel.
+
+Základní situaci budeme popisovat pomocí tradičních postav Alice a~Boba. Alice chce Bobovi poslat zprávu
+\[
+    m\in\set{0,1}^{n}.
+\]
+Komunikační kanál však sleduje záškodník. Ten může přenášená data odposlechnout, pozměnit, zadržet nebo nahradit vlastní zprávou. Předpokládáme přitom, že záškodník zná používané algoritmy. Tajemstvím nemá být způsob šifrování, ale pouze vhodně zvolený klíč.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-komunikace.tex}
+    \caption{Alice posílá Bobovi zprávu přes kanál sledovaný záškodníkem.}
+    \label{fig:krypto-komunikace}
+\end{figure}
+
+Kryptografie neřeší pouze utajení obsahu. V~praxi se obvykle snažíme dosáhnout několika odlišných cílů:
+\begin{itemize}
+    \item \textbf{důvěrnost} -- obsah zprávy má být čitelný pouze oprávněným příjemcům;
+    \item \textbf{integrita} -- příjemce má poznat, zda byla zpráva změněna;
+    \item \textbf{autenticita} -- příjemce má umět ověřit, od koho zpráva pochází;
+    \item \textbf{doložitelnost původu} -- odesílatel nemá moci snadno popřít, že zprávu vytvořil; přesný právní význam však závisí na použitém typu podpisu a~okolnostech.
+\end{itemize}
+
+Šifrování se zaměřuje především na důvěrnost, samo o~sobě však automaticky nezaručuje integritu ani autenticitu. Hešovací funkce pomáhají odhalit změnu dat, ale neříkají, kdo otisk vytvořil. Elektronický podpis propojí obsah zprávy se soukromým klíčem podepisující osoby. Jednotlivé nástroje proto budeme posuzovat podle toho, jaký bezpečnostní problém skutečně řeší.
+
+\importantbox{Bezpečnost moderního kryptografického systému nemá stát na utajení algoritmu. Algoritmus může být veřejný a~podrobně zkoumaný; tajný zůstává klíč. Díky tomu lze systém analyzovat a~případné slabiny odhalit dříve, než budou zneužity.}
+
+\subsection{Šifrování a~dešifrování}
+
+Zprávu před zašifrováním nazýváme \emph{otevřený text}. Šifrovací algoritmus $\mathbf{E}$ ji spolu s~klíčem převede na \emph{šifrový text} $c$. Dešifrovací algoritmus $\mathbf{D}$ má oprávněnému příjemci umožnit získat původní zprávu:
+\[
+    c=\mathbf{E}(m,k),
+    \qquad
+    m=\mathbf{D}(c,k).
+\]
+Podle toho, zda se pro obě operace používá tentýž tajný klíč, nebo dvojice veřejného a~soukromého klíče, budeme později rozlišovat symetrickou a~asymetrickou kryptografii.
+
+Požadavek na správné dešifrování nazýváme \emph{korektnost}. V~nejjednodušším symetrickém případě má pro každou dovolenou zprávu $m$ a~klíč $k$ platit
+\[
+    \mathbf{D}\bigl(\mathbf{E}(m,k),k\bigr)=m.
+\]
+Korektnost ale ještě neznamená bezpečnost. I~velmi snadno prolomitelná historická šifra může být korektní, pokud Bob se správným klíčem vždy získá původní zprávu.
+
+\notebox{V~této kapitole pracujeme převážně s~bitovými řetězci. Text, obrázek i~jiný soubor lze před šifrováním převést na posloupnost bitů, takže model $m\in\set{0,1}^{n}$ není omezen pouze na krátké textové zprávy.}

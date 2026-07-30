@@ -1,0 +1,24 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    box/.style={rounded corners=1.2mm, draw=black!55, fill=black!4,
+                minimum width=3.3cm, minimum height=9mm, align=center},
+    residue/.style={rounded corners=1.2mm, draw=blue!65!black, fill=blue!11,
+                    minimum width=4.1cm, minimum height=10mm, align=center},
+    result/.style={rounded corners=1.2mm, draw=green!55!black, fill=green!12,
+                   minimum width=5cm, minimum height=10mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.9pt}
+]
+    \node[box] (power) at (0,2.2) {\(x^{vs}\), kde \(vs=1+t(p-1)(q-1)\)};
+    \node[residue] (p) at (-3.3,.25)
+        {\(x^{vs}\equiv x\pmod p\)\\malá Fermatova věta};
+    \node[residue] (q) at (3.3,.25)
+        {\(x^{vs}\equiv x\pmod q\)\\malá Fermatova věta};
+    \node[result] (pq) at (0,-2)
+        {\(x^{vs}\equiv x\pmod{pq}\)\\čínská věta o~zbytcích};
+
+    \draw[flow] (power.south west) -- (p.north);
+    \draw[flow] (power.south east) -- (q.north);
+    \draw[flow] (p.south) -- (pq.north west);
+    \draw[flow] (q.south) -- (pq.north east);
+\end{tikzpicture}

@@ -12,6 +12,8 @@ Pro kladné celočíselné váhy se nabízí převést ohodnocený graf na neoho
 
 Jedním z~nejznámějších algoritmů pro tuto úlohu je \emph{Dijkstrův algoritmus},~který popsal v~roce 1959 nizozemský informatik \emph{Edsger W. Dijkstra}.\footnote{Dijkstrův stručný článek vyšel roku 1959; samotný algoritmus Dijkstra navrhl již roku 1956. Jeho příjmení se přibližně vyslovuje \uv{dajkstra}.} Podobně jako u~BFS a~DFS budeme postupně otevírat a~uzavírat vrcholy,~přičemž každý uzavřeme nejvýše jednou.
 \importantbox{První nalezená cesta do libovolného vrcholu již nemusí být nutně nejkratší. Cestu do daného vrcholu bude třeba postupně vylepšovat.}
+Ohodnocený graf budeme v~souladu s~prezentacemi zapisovat jako $G=(V,E,w)$,~kde $\mapping{w}{E}{\R}$ je váhová funkce. Je-li hrana určena koncovými vrcholy $u,v$,~píšeme pro stručnost $w(u,v)$.
+
 Zaměřme se na grafy,~jejichž váhy hran jsou nezáporné. Dijkstrův algoritmus pro graf se zápornou hranou obecně nefunguje,~a~to ani tehdy,~když graf neobsahuje záporný cyklus. Pokud navíc na cestě k~cíli leží dosažitelný cyklus se zápornou celkovou vahou,~nejkratší cesta konečné délky vůbec neexistuje. Na obrázku \ref{fig:zapor_ohod_graf} lze cyklus $(a,b,a)$ projít libovolněkrát a~každým průchodem cenu cesty snížit o~$1$. Infimum cen cest z~$s$ do $t$ je proto $-\infty$.
 \begin{figure}[h]
     \centering
@@ -21,10 +23,9 @@ Zaměřme se na grafy,~jejichž váhy hran jsou nezáporné. Dijkstrův algoritm
 \end{figure}
 Podobným grafům se tak chceme vyhnout,~neboť by naše úvahy pak již nemusely fungovat (cestu mezi vrcholy bychom mohli potenciálně do nekonečně vylepšovat a~algoritmus by se tak nikdy nezastavil).
 
-V~dalších odstavcích budeme váhu hrany vedoucí z~vrcholu $u$ do vrcholu $v$ značit $\ell(u,v)$.
 \begin{algorithm}
     \caption{\textsc{Dijkstra}}
-    \KwIn{Nezáporně ohodnocený graf $G=(V,E)$ a~počáteční vrchol $v_0\in V$}
+    \KwIn{Nezáporně ohodnocený graf $G=(V,E,w)$ a~počáteční vrchol $v_0\in V$}
     \tcp{Inicializace}
     \ForEach{\textup{vrchol $v\in V$}}{
         $stav(v)\gets$ \textit{nenalezený}\\
@@ -36,11 +37,11 @@ V~dalších odstavcích budeme váhu hrany vedoucí z~vrcholu $u$ do vrcholu $v$
         \tcp{Kandidát na nejkratší cestu do sousedních vrcholů}
         $v\gets$ otevřený vrchol s~nejmenším $D$\\
         
-        \ForEach{\textup{soused $w\in V$ vrcholu $v$}}{
+        \ForEach{\textup{soused $s\in V$ vrcholu $v$}}{
             \tcp{Našli jsme lepší cestu}
-            \If{$stav(w)\neq\textit{uzavřený}$ a~$D(v)+\ell(v,w)<D(w)$}{
-                $D(w)\gets D(v)+\ell(v,w)$\\
-                $stav(w)\gets$ \textit{otevřený}
+            \If{$stav(s)\neq\textit{uzavřený}$ a~$D(v)+w(v,s)<D(s)$}{
+                $D(s)\gets D(v)+w(v,s)$\\
+                $stav(s)\gets$ \textit{otevřený}
             }
         }
         $stav(v)\gets$ \textit{uzavřený}
@@ -59,8 +60,8 @@ V~dalších odstavcích budeme váhu hrany vedoucí z~vrcholu $u$ do vrcholu $v$
 
 Nejprve je dobré si uvědomit,~proč algoritmus funguje. Hodnota $D(v)$ je vždy cenou nějaké již nalezené cesty z~$v_0$ do $v$,~a~proto nemůže být menší než skutečná nejkratší vzdálenost. Zbývá ukázat opačnou nerovnost ve chvíli,~kdy vrchol uzavíráme.
 
-Označme skutečnou nejkratší vzdálenost vrcholu $x$ symbolem $d(x)$. Důkaz vedeme indukcí podle pořadí uzavíraných vrcholů. Předpokládejme pro spor,~že $v$ je první uzavíraný vrchol,~pro který $D(v)>d(v)$. Vezměme jednu nejkratší cestu z~$v_0$ do $v$. Na této cestě musí existovat první dosud neuzavřený vrchol $x$; jeho předchůdce $y$ už uzavřený je. Podle indukčního předpokladu platilo při uzavření $y$ rovnost $D(y)=d(y)$. Algoritmus tehdy zkontroloval hranu $(y,x)$,~a~proto nastavil
-\[D(x)\leqslant d(y)+\ell(y,x)=d(x)\leqslant d(v)<D(v).\]
+Nejkratší vzdálenost mezi vrcholy $u$ a~$v$ označme $d(u,v)$. Důkaz vedeme indukcí podle pořadí uzavíraných vrcholů. Předpokládejme pro spor,~že $v$ je první uzavíraný vrchol,~pro který $D(v)>d(v_0,v)$. Vezměme jednu nejkratší cestu z~$v_0$ do $v$. Na této cestě musí existovat první dosud neuzavřený vrchol $x$; jeho předchůdce $y$ už uzavřený je. Podle indukčního předpokladu platilo při uzavření $y$ rovnost $D(y)=d(v_0,y)$. Algoritmus tehdy zkontroloval hranu $(y,x)$,~a~proto nastavil
+\[D(x)\leqslant d(v_0,y)+w(y,x)=d(v_0,x)\leqslant d(v_0,v)<D(v).\]
 Využili jsme zde nezápornost hran: vzdálenost podél nejkratší cesty se směrem k~vrcholu $v$ nemůže zmenšovat. Vrchol $x$ je tedy otevřený a~má menší hodnotu $D$ než $v$. Algoritmus by proto vybral $x$,~nikoli $v$,~což je spor.
 \begin{figure}[h]
     \centering
@@ -73,35 +74,35 @@ Využili jsme zde nezápornost hran: vzdálenost podél nejkratší cesty se sm�
 
 Zbývá nám ještě analyzovat časovou složitost. Pokud se zpětně podíváme na pseudokód algoritmu,~lze si všimnout,~že podstatnou roli bude hrát vybírání vrcholu s~minimální hodnotou $D(v)$. Nabízí se tak otázka,~jak danou operaci implementovat. První variantou je hodnoty $D$ realizovat jako prostý \emph{seznam (popř. pole)}.
 \begin{theorem}[Dijkstra se seznamem]
-    Dijkstrův algoritmus,~kde hodnoty $D$ ukládáme do seznamu (pole),~doběhne v~čase $\bigO{n^2+m}$.
+    Dijkstrův algoritmus,~kde hodnoty $D$ ukládáme do seznamu (pole),~doběhne v~čase $\bigO(n^2+m)$.
 \end{theorem}
 \begin{proof}
     \begin{itemize}
-        \item Inicializace zabere $\bigO{n}$ (máme $n$ vrcholů).
-        \item Každý vrchol uzavřeme opět nejvýše jednou,~tzn. vnější cyklus se provede $\bigO{n}$-krát.
-        \item Hledání minimálního $D$ zabere v~rámci každé iterace čas $\bigO{n}$.
-        \item Stejně jako u~BFS a~DFS,~i~zde každou hranu zkontroluji nejvýše dvakrát (záleží,~zda graf $G$ je orientovaný),~tzn. $\bigO{2m}=\bigO{m}$.
+        \item Inicializace zabere $\bigO(n)$ (máme $n$ vrcholů).
+        \item Každý vrchol uzavřeme opět nejvýše jednou,~tzn. vnější cyklus se provede $\bigO(n)$-krát.
+        \item Hledání minimálního $D$ zabere v~rámci každé iterace čas $\bigO(n)$.
+        \item Stejně jako u~BFS a~DFS,~i~zde každou hranu zkontroluji nejvýše dvakrát (záleží,~zda graf $G$ je orientovaný),~tzn. $\bigO(2m)=\bigO(m)$.
     \end{itemize}
     Celkově tedy máme
-    \[\overbrace{\bigO{n}}^{\text{Init}}+\underbrace{\bigO{n}\cdot\bigO{n}}_{\text{Výběr minima}}+\bigO{m}=\bigO{n^2+n+m}=\bigO{n^2+m}.\]
+    \[\overbrace{\bigO(n)}^{\text{Init}}+\underbrace{\bigO(n)\cdot\bigO(n)}_{\text{Výběr minima}}+\bigO(m)=\bigO(n^2+n+m)=\bigO(n^2+m).\]
 \end{proof}
 Kvadratická časová složitost není úplně zlá,~ale můžeme si ještě trochu přilepšit. Pokud si vzpomeneme na binární haldu z~oddílu \ref{sec:halda},~všimneme si v~konečném důsledku,~že při použití v~Dijkstrově algoritmu se některé operace zrychlí.
 \begin{theorem}[Dijkstra s~haldou]
-    Dijkstrův algoritmus,~kde hodnoty $D$ ukládáme do binární haldy,~doběhne v~čase $\bigO{(n+m)\cdot\log{n}}$.
+    Dijkstrův algoritmus,~kde hodnoty $D$ ukládáme do binární haldy,~doběhne v~čase $\bigO((n+m)\cdot\log{n})$.
 \end{theorem}
 \begin{proof}
-    Inicializace trvá zase $\bigO{n}$. U~operací s~binární haldou víme,~jak dlouho potrvají (viz tabulka \ref{tab:halda_pole_operace}). Musíme si jen rozmyslet,~kdy se která operace provádí.
+    Inicializace trvá zase $\bigO(n)$. U~operací s~binární haldou víme,~jak dlouho potrvají (viz tabulka \ref{tab:halda_pole_operace}). Musíme si jen rozmyslet,~kdy se která operace provádí.
     \begin{itemize}
-        \item Při prvním \emph{otevření} vrcholu provedeme v~haldě operaci \textsc{Insert}. Celkově vložíme nejvýše všech $n$ vrcholů,~což potrvá $\bigO{n\log n}$.
-        \item Při \emph{uzavírání} vrcholu provádíme operaci \textsc{ExtractMin} (opět max. $n$-krát),~tj. $n\cdot\bigO{\log{n}}=\bigO{n\log{n}}$.
-        \item Při každé další \emph{aktualizaci vzdálenosti} $D(v)$ provádíme \textsc{Decrease} (tato hodnota se nikdy nemůže zvýšit). Aktualizací je nejvýše tolik,~kolik kontrol hran,~tedy $\bigO{m}$. Dostáváme nejvýše $m\cdot\bigO{\log n}=\bigO{m\log n}$.
+        \item Při prvním \emph{otevření} vrcholu provedeme v~haldě operaci \textsc{Insert}. Celkově vložíme nejvýše všech $n$ vrcholů,~což potrvá $\bigO(n\log n)$.
+        \item Při \emph{uzavírání} vrcholu provádíme operaci \textsc{ExtractMin} (opět max. $n$-krát),~tj. $n\cdot\bigO(\log{n})=\bigO(n\log{n})$.
+        \item Při každé další \emph{aktualizaci vzdálenosti} $D(v)$ provádíme \textsc{Decrease} (tato hodnota se nikdy nemůže zvýšit). Aktualizací je nejvýše tolik,~kolik kontrol hran,~tedy $\bigO(m)$. Dostáváme nejvýše $m\cdot\bigO(\log n)=\bigO(m\log n)$.
     \end{itemize}
     Po sečtení dostaneme
     \begin{align*}
-        \bigO{n+n\log{n}+n\log{n}+m\log{n}}&=\bigO{n+2n\log{n}+m\log{n}}\\
-        &=\bigO{n+n\log{n}+m\log{n}}\\
-        &=\bigO{n\log{n}+m\log{n}}\\
-        &=\bigO{(n+m)\cdot\log{n}}.
+        \bigO(n+n\log{n}+n\log{n}+m\log{n})&=\bigO(n+2n\log{n}+m\log{n})\\
+        &=\bigO(n+n\log{n}+m\log{n})\\
+        &=\bigO(n\log{n}+m\log{n})\\
+        &=\bigO((n+m)\cdot\log{n}).
     \end{align*}
 \end{proof}
 Ačkoliv to není úplně zjevné,~výraz $(n+m)\cdot\log{n}$ roste o~dost pomaleji oproti $n^2+m$,~tedy binární haldou si skutečně pomůžeme oproti seznamu.

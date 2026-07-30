@@ -1,1 +1,12 @@
 \chapter{Hardware}\label{chap:hw}
+
+V~předchozí kapitole~\smartref[][]{\showrefs}{chap:kompilatory}{o~kompilátorech} jsme sledovali, jak se zdrojový program postupně převádí do podoby, kterou lze vykonat. Tím však příběh programu nekončí. Výsledné strojové instrukce musí načíst procesor, určit jejich význam, získat potřebná data a~provést požadované operace. K~tomu procesor potřebuje registry, různé druhy paměti a~cesty, po nichž se mezi jednotlivými částmi počítače přenášejí data, adresy a~řídicí signály.
+
+V~této kapitole se proto podíváme na základní části počítače z~pohledu vykonávání programu. Nejde nám o~podrobný elektrotechnický popis jednotlivých součástek. Chceme především pochopit, proč nestačí říci, že program „běží v~procesoru“, proč počítač používá několik různých druhů paměti a~jak konstrukce paměťového subsystému ovlivňuje rychlost programu. Začneme obecným schématem počítače, poté rozebereme procesor a~nakonec se budeme věnovat pamětem od registrů až po dlouhodobá úložiště.
+
+\input{05-hw/sections/s01-zakladni-casti.tex}
+\input{05-hw/sections/s02-architektury.tex}
+\input{05-hw/sections/s03-procesor.tex}
+\input{05-hw/sections/s04-vnitrni-pameti.tex}
+\input{05-hw/sections/s05-externi-pameti.tex}
+\input{05-hw/sections/s06-pametova-hierarchie.tex}

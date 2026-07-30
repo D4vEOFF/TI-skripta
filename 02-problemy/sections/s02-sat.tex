@@ -1,10 +1,10 @@
-\section{Problém SAT}\label{sec:sat}
+\section{Problém \ensuremath{\SAT}}\label{sec:sat}
 
-V~podsekci \ref{subsec:cnf} jsme viděli,~že převod obecné formule do CNF \uv{hrubou silou} je problematický. Nová formule se totiž může až exponenciálně prodloužit. V~podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci,~která pomocí nových proměnných sestrojí stejně splnitelnou CNF efektivně. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní,~že formule na vstupu jsou již v~CNF. Tento problém je v~informatice velmi význačný a~označuje se zkratkou SAT (z~angl. \emph{satisfiability},~neboli splnitelnost).
+V~podsekci \ref{subsec:cnf} jsme viděli,~že převod obecné formule do CNF \uv{hrubou silou} je problematický. Nová formule se totiž může až exponenciálně prodloužit. V~podsekci \ref{subsec:cnf_tseitin} jsme si proto ukázali Tseitinovu transformaci,~která pomocí nových proměnných sestrojí stejně splnitelnou CNF efektivně. Zkusme si tedy původní problém zjednodušit. Předpokládejme nyní,~že formule na vstupu jsou již v~CNF. Tento problém je v~informatice velmi význačný a~označuje se zkratkou \ensuremath{\SAT} (z~angl. \emph{satisfiability},~neboli splnitelnost).
 
-\problem{Splnitelnost logické formule v~CNF (SAT)}{Logická formule $\varphi$ v~CNF.}{1,~pokud je $\varphi$ splnitelná,~jinak 0.}
+\problem{Splnitelnost logické formule v~CNF (\ensuremath{\SAT})}{Logická formule $\varphi$ v~CNF.}{1,~pokud je $\varphi$ splnitelná,~jinak 0.}
 
-Nyní se zaměříme na samotnou splnitelnost vstupní formule. V~praxi se používají tzv. \emph{SAT solvery},~které rozhodují,~zda je formule v~CNF splnitelná. Ukážeme si klasický algoritmus \emph{DPLL},~jehož název připomíná příjmení Martina Davise,~Hilaryho Putnama,~George Logemanna a~Donalda Lovelanda. Jeho základní podoba pochází z~počátku 60.~let 20.~století.
+Nyní se zaměříme na samotnou splnitelnost vstupní formule. V~praxi se používají tzv. \emph{\ensuremath{\SAT} solvery},~které rozhodují,~zda je formule v~CNF splnitelná. Ukážeme si klasický algoritmus \emph{DPLL},~jehož název připomíná příjmení Martina Davise,~Hilaryho Putnama,~George Logemanna a~Donalda Lovelanda. Jeho základní podoba pochází z~počátku 60.~let 20.~století.
 
 \subsection{Algoritmus DPLL}\label{subsec:dpll}
 
@@ -122,14 +122,14 @@ Ukažme si ještě jeden jednodušší příklad.
 
 Poslední otázka,~která se nabízí,~je (jako obvykle) časová složitost algoritmu. Vezmeme-li v~potaz nejhorší případ,~časová složitost bohužel nevychází úplně příznivě.
 \begin{theorem}[Složitost DPLL]
-    Nechť formule $\varphi$ obsahuje $v$ proměnných a~její délka je $s$. Jednoduchá implementace DPLL doběhne v~čase $\bigO{s2^v}$. Při kopírování formule v~každé úrovni rekurze spotřebuje nejvýše $\bigO{sv}$ pomocné paměti.
+    Nechť formule $\varphi$ obsahuje $v$ proměnných a~její délka je $s$. Jednoduchá implementace DPLL doběhne v~čase $\bigO(s2^v)$. Při kopírování formule v~každé úrovni rekurze spotřebuje nejvýše $\bigO(sv)$ pomocné paměti.
 \end{theorem}
 \begin{proof}
     V~nejhorším případě nepomůže ani jednotková propagace,~ani eliminace čistých literálů. Algoritmus pak zvolí proměnnou a~vytvoří dvě větve,~jednu pro hodnotu $0$ a~druhou pro hodnotu $1$. Hloubka stromu je nejvýše $v$ a~počet jeho uzlů nejvýše
-    \[1+2+4+\dots+2^v=2^{v+1}-1=\bigO{2^v}.\]
-    V~každém uzlu lze naivně projít celou formuli v~čase $\bigO{s}$,~odkud plyne čas $\bigO{s2^v}$. Rekurze probíhá do hloubky,~takže současně uchováváme nejvýše $v$ kopií formule délky nejvýše $s$; to dává $\bigO{sv}$ pomocné paměti.
+    \[1+2+4+\dots+2^v=2^{v+1}-1=\bigO(2^v).\]
+    V~každém uzlu lze naivně projít celou formuli v~čase $\bigO(s)$,~odkud plyne čas $\bigO(s2^v)$. Rekurze probíhá do hloubky,~takže současně uchováváme nejvýše $v$ kopií formule délky nejvýše $s$; to dává $\bigO(sv)$ pomocné paměti.
 \end{proof}
-\notebox{Praktické SAT solvery formuli při každém volání celou nekopírují. Změny zapisují do pomocných struktur a~při návratu je vracejí zpět,~takže paměťový odhad lze podstatně zlepšit.}
+\notebox{Praktické \ensuremath{\SAT} solvery formuli při každém volání celou nekopírují. Změny zapisují do pomocných struktur a~při návratu je vracejí zpět,~takže paměťový odhad lze podstatně zlepšit.}
 
 S~exponenciální časovou složitostí se sotva spokojíme,~avšak v~tomto případě je dobré si říci,~že zkoumáme složitost v~nejhorším případě a~v~praxi bývají zkoumané logické formule poměrně rychle řešitelné pomocí DPLL.
-\importantbox{Problém je však dodnes ten,~že na rozhodnutí splnitelnosti logické formule (i~těch v~CNF) není známý žádný algoritmus,~který by běžel v~polynomiálním čase,~tj. $\bigO{n^k}$,~pro nějaké $k$. K~tomuto tématu se ještě vrátíme v~sekci \ref{sec:p_np}.}
+\importantbox{Problém je však dodnes ten,~že na rozhodnutí splnitelnosti logické formule (i~těch v~CNF) není známý žádný algoritmus,~který by běžel v~polynomiálním čase,~tj. $\bigO(n^k)$,~pro nějaké $k$. K~tomuto tématu se ještě vrátíme v~sekci \ref{sec:p_np}.}

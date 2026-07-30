@@ -1,14 +1,14 @@
-\section{Problém 3-SAT}\label{sec:3sat}
+\section{Problém \ensuremath{\THREESAT}}\label{sec:3sat}
 
-Zkusme nyní původní problém ještě omezit. Přidáme podmínku,~že každá klauzule může obsahovat nejvýše tři literály. Tím dostáváme variantu problému SAT známou jako \emph{3-SAT}. O~formuli,~která splňuje uvedenou podmínku,~budeme říkat,~že je v~3-CNF.
+Zkusme nyní původní problém ještě omezit. Přidáme podmínku,~že každá klauzule může obsahovat nejvýše tři literály. Tím dostáváme variantu problému \ensuremath{\SAT} známou jako \emph{\ensuremath{\THREESAT}}. O~formuli,~která splňuje uvedenou podmínku,~budeme říkat,~že je v~3-CNF.
 
-\problem{Splnitelnost logické formule v~3-CNF (3-SAT)}{Formule $\varphi$ v~3-CNF}{1,~je-li $\varphi$ splnitelná,~jinak $0$.}
+\problem{Splnitelnost logické formule v~3-CNF (\ensuremath{\THREESAT})}{Formule $\varphi$ v~3-CNF}{1,~je-li $\varphi$ splnitelná,~jinak $0$.}
 
-Nabízí se otázka,~zda jsme si skutečně pomohli. Zdánlivě ano,~protože máme kratší klauzule. Překvapivě však 3-SAT zůstává stejně obtížný v~tom smyslu,~že SAT lze na 3-SAT převést v~polynomiálním čase. Pro libovolnou instanci SAT sestrojíme instanci 3-SAT,~která je splnitelná právě tehdy,~když byla splnitelná původní formule.
+Nabízí se otázka,~zda jsme si skutečně pomohli. Zdánlivě ano,~protože máme kratší klauzule. Překvapivě však \ensuremath{\THREESAT} zůstává stejně obtížný v~tom smyslu,~že \ensuremath{\SAT} lze na \ensuremath{\THREESAT} převést v~polynomiálním čase. Pro libovolnou instanci \ensuremath{\SAT} sestrojíme instanci \ensuremath{\THREESAT},~která je splnitelná právě tehdy,~když byla splnitelná původní formule.
 
-\subsection{Převod SAT na 3-SAT}\label{subsec:prevod_sat_3sat}
+\subsection{Převod \ensuremath{\SAT} na \ensuremath{\THREESAT}}\label{subsec:prevod_sat_3sat}
 
-Popíšeme si nyní obecný způsob,~jak převést libovolnou formuli v~CNF (instance problému SAT) na formuli v~3-CNF (instance problému 3-SAT). Předpokládejme,~že máme zadanou nějakou formuli $\varphi$ v~CNF a~chceme pro ni sestrojit formuli $\psi$ v~3-CNF,~takovou,~aby byla splnitelná právě tehdy,~když je splnitelná i~původní formule $\varphi$. Pro formuli $\varphi$ mohou nastat 2~případy:
+Popíšeme si nyní obecný způsob,~jak převést libovolnou formuli v~CNF (instance problému \ensuremath{\SAT}) na formuli v~3-CNF (instance problému \ensuremath{\THREESAT}). Předpokládejme,~že máme zadanou nějakou formuli $\varphi$ v~CNF a~chceme pro ni sestrojit formuli $\psi$ v~3-CNF,~takovou,~aby byla splnitelná právě tehdy,~když je splnitelná i~původní formule $\varphi$. Pro formuli $\varphi$ mohou nastat 2~případy:
 \begin{enumerate}
     \item formule obsahuje klauzule délky $3$ a~kratší,
     \item nebo ve formuli existuje klauzule délky $k>3$.
@@ -90,11 +90,11 @@ Tím jsme dostali obecný postup pro převod formule z~CNF do 3-CNF.
     \end{align*}
 \end{example}
 
-Tímto způsobem jsme ukázali,~že problém SAT lze ``převést'' na $3$-SAT. Opačný směr je triviální,~protože každá formule v~$3$-CNF už je i~v~CNF,~takže nic převádět nemusíme.
+Tímto způsobem jsme ukázali,~že problém \ensuremath{\SAT} lze ``převést'' na \ensuremath{\THREESAT}. Opačný směr je triviální,~protože každá formule v~$3$-CNF už je i~v~CNF,~takže nic převádět nemusíme.
 
 Zkusme se zamyslet nad rychlostí převodu. Klauzuli o~$k>3$ literálech nahradíme $k-2$ klauzulemi a~použijeme $k-3$ nových proměnných. Celkový počet vytvořených symbolů je tedy lineární v~délce původní formule.
 
-Z~toho plyne,~že kdybychom uměli řešit 3-SAT v~polynomiálním čase,~uměli bychom polynomiálně řešit i~SAT: nejprve bychom lineárně sestrojili formuli v~3-CNF a~poté na ni spustili předpokládaný polynomiální algoritmus pro 3-SAT. Samotný převod je lineární; \emph{to však neznamená,~že lineárně umíme rozhodnout splnitelnost výsledné formule}.
+Z~toho plyne,~že kdybychom uměli řešit \ensuremath{\THREESAT} v~polynomiálním čase,~uměli bychom polynomiálně řešit i~\ensuremath{\SAT}: nejprve bychom lineárně sestrojili formuli v~3-CNF a~poté na ni spustili předpokládaný polynomiální algoritmus pro \ensuremath{\THREESAT}. Samotný převod je lineární; \emph{to však neznamená,~že lineárně umíme rozhodnout splnitelnost výsledné formule}.
 
 Toto byla ukázka tzv. \textbf{polynomiálního převodu} mezi problémy. Pojďme si toto trochu rigorózněji definovat.
 \begin{definition}[Polynomiální převoditelnost]\label{def:pol_prev}
@@ -103,7 +103,7 @@ Toto byla ukázka tzv. \textbf{polynomiálního převodu} mezi problémy. Pojďm
 Co tato definice říká? Pokud platí $A\rightarrow B$,~pak odpověď na vstup $x^\prime$ je zároveň i~odpovědí na původní vstup $x$. V~našem případě je formule v~CNF $\varphi$ splnitelná (to je naše $x$),~právě když je nová formule v~3-CNF $\psi$ (to je $x^\prime$) splnitelná.
 
 Zároveň $A\rightarrow B$ znamená,~že problém $B$ je alespoň tak těžký jako problém $A$.\footnote{Mnemotechnická pomůcka: "Obtížnost teče ve směru šipky."}
-\warningbox{Ze směru převodu plyne následující podmíněné tvrzení: pokud $A\rightarrow B$ a~problém $B$ lze řešit polynomiálně,~pak lze polynomiálně řešit i~$A$. Obrácený závěr obecně neplatí. Pokud by navíc bylo dokázáno,~že $A$ polynomiálně řešit nelze,~pak by z~$A\rightarrow B$ plynulo,~že polynomiálně nelze řešit ani $B$. U~SAT však takový dolní odhad zatím dokázán není.}
+\warningbox{Ze směru převodu plyne následující podmíněné tvrzení: pokud $A\rightarrow B$ a~problém $B$ lze řešit polynomiálně,~pak lze polynomiálně řešit i~$A$. Obrácený závěr obecně neplatí. Pokud by navíc bylo dokázáno,~že $A$ polynomiálně řešit nelze,~pak by z~$A\rightarrow B$ plynulo,~že polynomiálně nelze řešit ani $B$. U~\ensuremath{\SAT} však takový dolní odhad zatím dokázán není.}
 \begin{figure}[h]
     \centering
     \input{02-problemy/images/ch02_pol_prevod.tex}

@@ -1,0 +1,69 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center
+    },
+    page/.style={
+        draw,
+        thick,
+        minimum width=1.05cm,
+        minimum height=0.72cm,
+        align=center,
+        font=\scriptsize
+    },
+    arrow/.style={->, thick}
+]
+    \node[
+        block,
+        fill=blue!10,
+        minimum width=2.7cm,
+        minimum height=1.0cm
+    ] (computer) at (-6.0,0.8) {Počítač\\ \scriptsize logické bloky};
+
+    \node[
+        block,
+        fill=orange!18,
+        minimum width=3.0cm,
+        minimum height=2.4cm
+    ] (controller) at (-2.3,0.8) {\textbf{Řadič SSD}\\[1mm]\scriptsize převod adres\\ oprava chyb\\ vyrovnávání opotřebení};
+
+    \node[
+        block,
+        fill=green!8,
+        minimum width=6.2cm,
+        minimum height=4.4cm
+    ] (flash) at (4.0,0.8) {};
+    \node[font=\bfseries] at (4.0,2.45) {Flash paměť};
+
+    \node[
+        draw,
+        thick,
+        rounded corners,
+        fill=green!16,
+        minimum width=5.1cm,
+        minimum height=2.4cm
+    ] at (4.0,0.55) {};
+    \node[font=\small\bfseries] at (4.0,1.45) {mazací blok};
+
+    \node[page, fill=white] at (2.15,0.35) {stránka 0};
+    \node[page, fill=white] at (3.4,0.35) {stránka 1};
+    \node[page, fill=yellow!50] at (4.65,0.35) {stránka 2};
+    \node[page, fill=white] at (5.9,0.35) {stránka 3};
+
+    \node[
+        block,
+        fill=gray!10,
+        minimum width=5.1cm,
+        minimum height=0.65cm,
+        font=\scriptsize
+    ] at (4.0,-0.85) {další bloky a~náhradní prostor};
+
+    \draw[arrow] (computer.east) -- (controller.west);
+    \draw[arrow] (controller.east) -- node[above, align=center] {\scriptsize fyzické\\ adresy} (flash.west);
+\end{tikzpicture}

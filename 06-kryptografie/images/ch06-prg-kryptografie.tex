@@ -1,0 +1,35 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    box/.style={rounded corners=1.2mm, draw=black!55, fill=black!4,
+                minimum width=2.5cm, minimum height=9mm, align=center},
+    seed/.style={rounded corners=1.2mm, draw=blue!65!black, fill=blue!12,
+                 minimum width=2.5cm, minimum height=9mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.85pt},
+    keyflow/.style={-{Latex}, dashed, draw=blue!65!black, line width=.8pt}
+]
+    \node[inner sep=0pt] (alice) at (-6.2,0)
+        {\includegraphics[height=1.25cm]{06-kryptografie/images/woman-icon.pdf}};
+    \node[below=1mm of alice] {Alice};
+    \node[inner sep=0pt] (bob) at (6.2,0)
+        {\includegraphics[height=1.25cm]{06-kryptografie/images/man-icon.pdf}};
+    \node[below=1mm of bob] {Bob};
+
+    \node[seed] (sa) at (-4.3,1.65) {tajný seed \(s\)};
+    \node[seed] (sb) at (4.3,1.65) {tajný seed \(s\)};
+    \node[box] (ga) at (-1.9,1.65) {\(G(s)\)};
+    \node[box] (gb) at (1.9,1.65) {\(G(s)\)};
+    \node[box] (enc) at (-1.9,0) {\(c=m\oplus G(s)\)};
+    \node[box] (dec) at (1.9,0) {\(m=c\oplus G(s)\)};
+
+    \draw[flow] (sa) -- (ga);
+    \draw[flow] (sb) -- (gb);
+    \draw[flow] (ga) -- (enc);
+    \draw[flow] (gb) -- (dec);
+    \draw[flow] (alice.east) -- (enc.west) node[midway, above] {\(m\)};
+    \draw[flow] (enc) -- (dec) node[midway, above] {\(c\)};
+    \draw[flow] (dec.east) -- (bob.west) node[midway, above] {\(m\)};
+    \draw[keyflow] (sa.north east) to[bend left=18]
+        node[midway, above] {bezpečně sdílený krátký seed}
+        (sb.north west);
+\end{tikzpicture}

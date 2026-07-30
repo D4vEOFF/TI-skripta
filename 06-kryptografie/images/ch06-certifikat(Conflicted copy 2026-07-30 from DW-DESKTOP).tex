@@ -1,0 +1,31 @@
+\begin{tikzpicture}[
+    font=\normalsize,
+    >=Latex,
+    box/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                minimum width=3.2cm, minimum height=10mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.8pt}
+]
+    \node[inner sep=0pt] (alice) at (-6.2,.75)
+        {\includegraphics[height=1.4cm]{06-kryptografie/images/woman-icon.pdf}};
+    \node[below=1mm of alice] {Alice};
+    \node[box] (identity) at (-3.55,1.5) {identita Alice};
+    \node[box, draw=blue!65!black, fill=blue!11] (key) at (-3.55,0)
+        {veřejný klíč \(k_V^A\)};
+
+    \node[inner sep=0pt] (cert) at (.65,.75)
+        {\includegraphics[height=1.65cm]{06-kryptografie/images/certificate.pdf}};
+    \node[below=3mm of cert, align=center] (certlabel)
+        {certifikát podepsaný\\důvěryhodnou autoritou};
+
+    \node[inner sep=0pt] (bob) at (5.65,.75)
+        {\includegraphics[height=1.4cm]{06-kryptografie/images/man-icon.pdf}};
+    \node[below=1mm of bob] {Bob};
+    \node[box, draw=green!55!black, fill=green!12] (verified) at (5.65,-1.15)
+        {ověřená vazba\\Alice \(\leftrightarrow k_V^A\)};
+
+    \draw[flow] (alice.east) -- (identity.west);
+    \draw[flow] (identity.east) -- (cert.north west);
+    \draw[flow] (key.east) -- (cert.west);
+    \draw[flow] (cert.east) -- (bob.west);
+    \draw[flow] (bob.south east) to[out=-75,in=75] (verified.north east);
+\end{tikzpicture}

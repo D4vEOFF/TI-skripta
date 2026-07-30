@@ -1,0 +1,33 @@
+\section{Základní části počítače}\label{sec:hw-zakladni-casti}
+
+Slovem \emph{hardware} označujeme fyzické součásti počítače: procesor, paměťové čipy, základní desku, úložiště, klávesnici, displej a~další zařízení. Samotný hardware však neurčuje, jakou konkrétní úlohu má počítač řešit. Potřebný postup popisuje \emph{software}, tedy programy a~data, s~nimiž tyto programy pracují. Stejný počítač proto může chvíli zobrazovat webovou stránku, poté překládat program a~nakonec přehrávat video. Hardware zůstává stejný, mění se pouze instrukce, které právě vykonává.
+
+Při velmi hrubém pohledu můžeme činnost počítače rozdělit mezi následující části:
+\begin{itemize}
+    \item \textbf{datová část} provádí výpočty a~zpracovává data;
+    \item \textbf{řídicí část} určuje, co a~v~jakém pořadí se má stát;
+    \item \textbf{paměť} uchovává programy, jejich instrukce, vstupní data a~mezivýsledky;
+    \item \textbf{vstupní zařízení} předávají počítači data z~okolí;
+    \item \textbf{výstupní zařízení} předávají výsledky uživateli nebo jinému zařízení.
+\end{itemize}
+
+Datová a~řídicí část jsou v~běžném počítači součástí \emph{procesoru}, často označovaného zkratkou CPU z~anglického \emph{Central Processing Unit}. Procesor je sice místem, kde se instrukce skutečně provádějí, bez paměti a~vstupně/výstupních zařízení by však neměl odkud instrukce ani data získat a~kam uložit výsledky. Jednotlivé části proto nelze chápat jako izolované krabičky; při vykonávání programu spolu neustále komunikují.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-zakladni-casti.tex}
+    \caption{Zjednodušené schéma základních částí počítače.}
+    \label{fig:hw-zakladni-casti}
+\end{figure}
+
+Na obrázku~\ref{fig:hw-zakladni-casti} je zachycen typický tok informací. Vstupní zařízení dodá data, procesor je podle instrukcí programu zpracuje a~výsledek může předat výstupnímu zařízení. Během tohoto procesu se instrukce i~data přesouvají mezi procesorem a~pamětí. Rozdělení na vstup a~výstup přitom není vždy absolutní. Například síťová karta data přijímá i~odesílá a~dotyková obrazovka současně zobrazuje výstup a~zaznamenává vstup uživatele.
+
+\notebox{V~této kapitole se zaměříme hlavně na procesor a~paměťový subsystém, tedy na části, které přímo souvisejí s~vykonáváním programu. Vstupně/výstupní zařízení budeme uvažovat pouze na úrovni potřebné k~pochopení celkového schématu.}
+
+\subsection{Data, instrukce a~jejich význam}
+
+Uvnitř počítače jsou informace reprezentovány pomocí bitů. Samotná posloupnost bitů však ještě neříká, co představuje. Stejný vzor může být podle okolností interpretován jako celé číslo, část obrázku, znak textu, adresa v~paměti nebo strojová instrukce. Význam tedy nevychází pouze z~uložených bitů, ale také z~toho, jak s~nimi právě pracuje procesor a~jaký formát programu očekává.
+
+Tento princip je důležitý i~pro programování. Proměnná určitého datového typu určuje, jak má program uloženou hodnotu chápat, zatímco instrukce určuje, jaká operace se má s~hodnotou provést. Na úrovni hardware jsou však obě informace stále reprezentovány bity a~pro jejich přenos se používají stejné základní fyzikální prostředky.
+
+\tipbox{Při hledání chyby v~programu je užitečné rozlišovat mezi uloženou hodnotou a~její interpretací. Bity mohou být přeneseny nebo uloženy správně, ale program je může vyložit v~nesprávném formátu.}

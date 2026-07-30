@@ -9,11 +9,11 @@ Lexer už zdrojový text rozdělil na tokeny. Nyní potřebujeme rozhodnout,~zda
 Obecná gramatika zavedená v~sekci \smartref{\showrefs}{sec:gramatiky}{o~gramatikách} dovoluje mít na levé straně pravidla celý řetězec. Syntaxi programovacích jazyků však obvykle popisujeme jednodušším druhem gramatik.
 
 \begin{definition}[Bezkontextová gramatika]
-    Gramatika $G=(N,T,P,S)$ je \emph{bezkontextová},~pokud má každé pravidlo tvar
+    Gramatika $G=(V,T,P,S)$ je \emph{bezkontextová},~pokud má každé pravidlo tvar
     \[
         A\to\alpha,
     \]
-    kde $A\in N$ je jediný neterminál a~$\alpha\in(N\cup T)^*$.
+    kde $A\in V$ je jediný neterminál a~$\alpha\in(V\cup T)^*$.
 \end{definition}
 
 Název vyjadřuje,~že neterminál $A$ smíme přepsat bez ohledu na symboly stojící kolem něj. Regulární gramatiky jsou zvláštním případem bezkontextových gramatik,~ale opačná inkluze neplatí. Například pravidlo $S\to aSb$ je bezkontextové,~nikoliv však regulární.

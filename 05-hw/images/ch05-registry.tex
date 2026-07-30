@@ -1,0 +1,73 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    block/.style={
+        draw,
+        thick,
+        rounded corners,
+        align=center
+    },
+    reg/.style={
+        draw,
+        thick,
+        rounded corners,
+        fill=green!14,
+        minimum width=1.0cm,
+        minimum height=0.65cm
+    },
+    special/.style={
+        draw,
+        thick,
+        rounded corners,
+        fill=orange!20,
+        minimum width=1.65cm,
+        minimum height=0.65cm,
+        font=\small\bfseries
+    }
+]
+    \node[
+        block,
+        fill=blue!8,
+        minimum width=13.5cm,
+        minimum height=5.1cm
+    ] (cpu) at (0,0) {};
+    \node[font=\large\bfseries] at (-5.2,1.85) {Procesor};
+
+    \node[
+        block,
+        fill=blue!18,
+        minimum width=2.4cm,
+        minimum height=0.95cm
+    ] (alu) at (-4.7,0.55) {\textbf{ALU}};
+    \node[
+        block,
+        fill=orange!22,
+        minimum width=2.4cm,
+        minimum height=0.95cm
+    ] (control) at (-4.7,-0.75) {\textbf{řadič}};
+
+    \node[
+        block,
+        fill=green!7,
+        minimum width=5.1cm,
+        minimum height=3.3cm
+    ] (regfile) at (0,0) {};
+    \node[font=\bfseries] at (0,1.15) {pracovní registry};
+    \node[reg] at (-1.45,0.35) {$R_0$};
+    \node[reg] at (0,0.35) {$R_1$};
+    \node[reg] at (1.45,0.35) {$R_2$};
+    \node[reg] at (-1.45,-0.65) {$R_3$};
+    \node[reg] at (0,-0.65) {$R_4$};
+    \node[reg] at (1.45,-0.65) {$R_5$};
+
+    \node[special] (pc) at (4.8,1.35) {PC};
+    \node[special] (ir) at (4.8,0.45) {IR};
+    \node[special] (sp) at (4.8,-0.45) {SP};
+    \node[special] (flags) at (4.8,-1.35) {FLAGS};
+
+    \draw[->, thick] (alu.east) -- (regfile.west |- alu.east);
+    \draw[->, thick] (control.east) -- (regfile.west |- control.east);
+    \draw[->, thick] (ir.west) -- (regfile.east |- ir.west);
+\end{tikzpicture}

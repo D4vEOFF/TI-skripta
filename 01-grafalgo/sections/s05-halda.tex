@@ -14,12 +14,12 @@ Uveďme na úvod motivační příklad. Mějme seznam čísel,~z~něhož chceme 
     \KwOut{Maximální hodnota seznamu \textit{m}}
 \end{algorithm}
 
-Časová složitost bude zjevně $\bigO{n}$,~neboť algoritmus prochází všech $n$ prvků. Pokud ale se seznamem pracujeme opakovaně a~průběžně jej udržujeme vhodně uspořádaný,~můžeme minimum či maximum získat rychleji. K~tomu můžeme použít tzv. \emph{haldu}.
+Časová složitost bude zjevně $\bigO(n)$,~neboť algoritmus prochází všech $n$ prvků. Pokud ale se seznamem pracujeme opakovaně a~průběžně jej udržujeme vhodně uspořádaný,~můžeme minimum či maximum získat rychleji. K~tomu můžeme použít tzv. \emph{haldu}.
 \begin{definition}[Minimová binární halda]\label{def:binarni_halda}
-    Minimová binární halda je datová struktura tvaru binárního stromu,~kde v~každém vrcholu je uložena \emph{právě jedna} hodnota (tzv. \emph{klíč},~pro vrchol $v$ budeme značit jeho klíč $k(v)$) a~navíc platí:
+    Minimová binární halda je datová struktura tvaru binárního stromu s~množinou vrcholů $V$ a~klíčovou funkcí $\mapping{\key}{V}{\Z}$,~kde je v~každém vrcholu uložena \emph{právě jedna} hodnota $\key(v)$ (tzv. \emph{klíč}) a~navíc platí:
     \begin{enumerate}[label=(\roman*)]
         \item\label{binhalda_podminka_1} každá hladina je \emph{plně obsazena},~kromě poslední,~přičemž vrcholy poslední hladiny jsou zaplněny \emph{zleva},
-        \item\label{binhalda_podminka_2} a~je-li $v$ libovolný vrchol a~$s$ jeho syn,~pak $k(v)\leqslant k(s)$.
+        \item\label{binhalda_podminka_2} a~je-li $v$ libovolný vrchol a~$s$ jeho syn,~pak $\key(v)\leqslant\key(s)$.
     \end{enumerate}
 \end{definition}
 
@@ -49,8 +49,8 @@ Uveďme na úvod motivační příklad. Mějme seznam čísel,~z~něhož chceme 
     \label{fig:halda_modely}
 \end{figure}
 
-Zde se na chvíli pozastavme. Podmínka \ref{binhalda_podminka_2} v~definici binární haldy \ref{def:binarni_halda} má velmi příjemný důsledek. Pokud se budeme pohybovat od kořene směrem dolů,~hodnoty klíčů se nemohou zmenšovat. Minimum se proto vždy nachází \emph{v~kořeni stromu},~takže jeho zjištění zvládneme v~\emph{konstantním čase} $\bigO{1}$.
-\notebox{Pokud bychom chtěli naopak \emph{maximovou binární haldu},~bude definice \ref{def:binarni_halda} vypadat obdobně,~akorát v~podmínce \ref{binhalda_podminka_2} bude obrácená nerovnost,~tj. $k(v)\geqslant k(s)$ (klíč v~rodiči má vždy stejnou nebo vyšší hodnotu než klíče v~jeho synech). Maximum se bude opět nacházet v~kořeni haldy.}
+Zde se na chvíli pozastavme. Podmínka \ref{binhalda_podminka_2} v~definici binární haldy \ref{def:binarni_halda} má velmi příjemný důsledek. Pokud se budeme pohybovat od kořene směrem dolů,~hodnoty klíčů se nemohou zmenšovat. Minimum se proto vždy nachází \emph{v~kořeni stromu},~takže jeho zjištění zvládneme v~\emph{konstantním čase} $\bigO(1)$.
+\notebox{Pokud bychom chtěli naopak \emph{maximovou binární haldu},~bude definice \ref{def:binarni_halda} vypadat obdobně,~akorát v~podmínce \ref{binhalda_podminka_2} bude obrácená nerovnost,~tj. $\key(v)\geqslant\key(s)$ (klíč v~rodiči má vždy stejnou nebo vyšší hodnotu než klíče v~jeho synech). Maximum se bude opět nacházet v~kořeni haldy.}
 Je však více operací,~které bychom rádi s~haldou prováděli. Vypišme si všechny,~které nás budou zajímat.
 \begin{itemize}
     \item \textsc{Insert}($x$) -- \emph{vložení} nového vrcholu s~klíčem $x$ do haldy.
@@ -118,7 +118,7 @@ Operace,~při nichž vrchol během vkládání \uv{probublává} nahoru nebo bě
 
 \subsection{Zvýšení a~snížení hodnoty klíče ve vrcholu}
 
-Poslední dvojicí operací,~která se nám bude hodit,~je zvýšení (\textsc{Increase}) a~snížení (\textsc{Decrease}) klíče ve vybraném vrcholu. Předpokládáme přitom,~že umíme daný vrchol v~haldě přímo najít. Pokud v~haldě uchováváme složitější objekty,~můžeme si například vést pomocný slovník,~který každému objektu přiřadí jeho současnou pozici v~haldě. Při každém prohození pak aktualizujeme i~slovník. Ten spotřebuje navíc $\bigO{n}$ paměti.
+Poslední dvojicí operací,~která se nám bude hodit,~je zvýšení (\textsc{Increase}) a~snížení (\textsc{Decrease}) klíče ve vybraném vrcholu. Předpokládáme přitom,~že umíme daný vrchol v~haldě přímo najít. Pokud v~haldě uchováváme složitější objekty,~můžeme si například vést pomocný slovník,~který každému objektu přiřadí jeho současnou pozici v~haldě. Při každém prohození pak aktualizujeme i~slovník. Ten spotřebuje navíc $\bigO(n)$ paměti.
 
 Realizace samotných operací je již jednoduchá. Pokud provedeme \textsc{Increase} klíče v~určitém vrcholu,~může se halda pokazit pouze směrem dolů. Provedeme tedy \textsc{BubbleDown},~stejně jako při odebírání kořene.
 
@@ -150,13 +150,13 @@ Dejme tomu,~že naše halda má $n$ vrcholů v~celkově $h$ hladinách. Halda s~
 \end{figure}
 Je-li všech $h$ hladin plných,~platí $n=2^h-1$. V~obecné haldě jsou první $h-1$ hladiny plné a~poslední obsahuje alespoň jeden vrchol. Proto
 \[2^{h-1}\leqslant n\leqslant 2^h-1.\]
-Z~levé nerovnosti dostáváme $h\leqslant\log_2 n+1$,~tedy počet hladin je $\bigO{\log n}$. Tím máme vše připravené k~odvození složitosti operací.
+Z~levé nerovnosti dostáváme $h\leqslant\log_2 n+1$,~tedy počet hladin je $\bigO(\log n)$. Tím máme vše připravené k~odvození složitosti operací.
 \begin{theorem}[Složitost operací v~binární haldě]
-    Operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} mají časovou složitost $\bigO{\log{n}}$. Operace \textsc{Min} má časovou složitost $\bigO{1}$.
+    Operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} mají časovou složitost $\bigO(\log{n})$. Operace \textsc{Min} má časovou složitost $\bigO(1)$.
 \end{theorem}
 \begin{proof}
-    V~případě \textsc{Min} jen přečteme klíč v~kořeni,~což potrvá $\bigO{1}$. U~zbývajících operací opravujeme haldu pomocí \textsc{BubbleUp} nebo \textsc{BubbleDown}. Při každém prohození se zpracovávaný klíč posune o~jednu hladinu. Provede se tedy nejvýše $h-1$ prohození. Protože $h\leqslant\log_2 n+1$,~dostáváme
-    \[\bigO{h}=\bigO{\log n}.\]
+    V~případě \textsc{Min} jen přečteme klíč v~kořeni,~což potrvá $\bigO(1)$. U~zbývajících operací opravujeme haldu pomocí \textsc{BubbleUp} nebo \textsc{BubbleDown}. Při každém prohození se zpracovávaný klíč posune o~jednu hladinu. Provede se tedy nejvýše $h-1$ prohození. Protože $h\leqslant\log_2 n+1$,~dostáváme
+    \[\bigO(h)=\bigO(\log n).\]
     Operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} proto mají logaritmickou časovou složitost.
 \end{proof}
 Zkusme si na závěr udělat menší porovnání oproti poli,~se kterým jsme začínali (viz tabulka \ref{tab:halda_pole_operace}).
@@ -164,8 +164,8 @@ Zkusme si na závěr udělat menší porovnání oproti poli,~se kterým jsme za
     \centering
     \begin{tabular}{l|ccccc}
                   & \textsc{Insert} & \textsc{Min} & \textsc{ExtractMin} & \textsc{Increase} & \textsc{Decrease} \\\hline
-    Pole (seznam) & $\bigO{1}$                       & $\bigO{n}$                    & $\bigO{n}$                           & $\bigO{1}$                         & $\bigO{1}$                         \\
-    Binární halda & $\bigO{\log{n}}$                 & $\bigO{1}$                    & $\bigO{\log{n}}$                     & $\bigO{\log{n}}$                   & $\bigO{\log{n}}$                  
+    Pole (seznam) & $\bigO(1)$                       & $\bigO(n)$                    & $\bigO(n)$                           & $\bigO(1)$                         & $\bigO(1)$                         \\
+    Binární halda & $\bigO(\log{n})$                 & $\bigO(1)$                    & $\bigO(\log{n})$                     & $\bigO(\log{n})$                   & $\bigO(\log{n})$                  
     \end{tabular}
     \caption{Porovnání časových složitostí operací v~haldě a~v~poli.}
     \label{tab:halda_pole_operace}

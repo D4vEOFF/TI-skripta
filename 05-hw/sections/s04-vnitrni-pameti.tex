@@ -1,0 +1,78 @@
+\section{Vnitřní paměti}\label{sec:hw-vnitrni-pameti}
+
+Procesor dokáže provádět operace velmi rychle, ale pro většinu instrukcí potřebuje data. Kdyby musel při každé operaci čekat na hlavní paměť, zůstala by velká část jeho výkonu nevyužita. Počítač proto nepoužívá jediný druh paměti. Mezi procesorem a~hlavní pamětí se nachází cache a~přímo uvnitř procesoru registry, které jsme již popsali v~podsekci~\ref{subsec:hw-registry}.
+
+\subsection{Cache}\label{subsec:hw-cache}
+
+Cache je malá a~velmi rychlá paměť, která uchovává kopie vybraných dat a~instrukcí z~pomalejší paměti. Když procesor požaduje určitou hodnotu, nejprve se ověří, zda její kopie není v~cache. Pokud se hledaná informace v~cache nachází, nastane \emph{cache hit} a~procesor ji získá rychle. Pokud se v~cache nenachází, nastane \emph{cache miss}; data je potřeba načíst z~nižší, pomalejší úrovně paměti a~současně se obvykle uloží do cache pro případ dalšího použití.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-cache.tex}
+    \caption{Obsluha požadavku procesoru pomocí cache.}
+    \label{fig:hw-cache}
+\end{figure}
+
+Cache není pouhým seznamem jednotlivých naposledy použitých hodnot. Data se mezi paměťovými úrovněmi přenášejí po blocích, kterým se říká \emph{cache line}. Jestliže procesor požádá o~jeden bajt nebo jedno číslo, do cache se spolu s~ním načte také okolní část paměti. Tento postup je výhodný díky dvěma často pozorovaným vlastnostem programů:
+\begin{itemize}
+    \item \textbf{časová lokalita} znamená, že nedávno použitá data nebo instrukce budou pravděpodobně brzy použity znovu;
+    \item \textbf{prostorová lokalita} znamená, že po přístupu k~určitému místu budou pravděpodobně brzy potřeba také okolní místa.
+\end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-lokalita.tex}
+    \caption{Příklad prostorové a~časové lokality při práci s~pamětí.}
+    \label{fig:hw-lokalita}
+\end{figure}
+
+Sekvenční průchod polem obvykle vykazuje dobrou prostorovou lokalitu, protože program postupně čte sousední paměťová místa. Opakované používání stejné proměnné uvnitř cyklu zase vykazuje časovou lokalitu. Naopak přístupy k~velkému množství vzdálených adres v~nepravidelném pořadí mohou vést k~častým výpadkům cache a~výpočet se zpomalí, i~když počet provedených aritmetických operací zůstane stejný.
+
+Procesory obvykle používají několik úrovní cache. Cache L1 je nejmenší a~nejblíže výpočetním jednotkám, další úrovně L2 a~L3 bývají postupně větší, ale také pomalejší. Některé úrovně mohou být rozděleny na instrukční a~datovou cache, jiné mohou být sdíleny několika jádry procesoru. Smyslem všech úrovní je zachytit co největší část požadavků dříve, než bude nutné přistoupit do výrazně pomalejší hlavní paměti.
+
+\tipbox{Dva programy se stejnou časovou složitostí mohou na skutečném počítači běžet různě rychle. Jedním z~důvodů je odlišný způsob přístupu k~paměti: algoritmus s~lepší lokalitou dokáže využít cache účinněji.}
+
+\subsection{Hlavní paměť RAM}\label{subsec:hw-ram}
+
+RAM z~anglického \emph{Random Access Memory} je hlavní pracovní paměť počítače. Ukládají se do ní právě běžící programy, jejich data a~mezivýsledky výpočtů. Je rychlejší než dlouhodobá úložiště, ale pomalejší než cache a~registry. RAM je současně \emph{volatilní}: bez napájení se její obsah ztratí.
+
+Označení \emph{random access} neznamená, že by paměť vracela náhodná data. Vyjadřuje, že k~paměťovým místům lze přistupovat přímo podle jejich adresy a~není potřeba postupně procházet všechna předchozí místa. Z~pohledu programu se hlavní paměť chová jako dlouhá lineární posloupnost adresovatelných míst. V~běžném počítači adresa obvykle označuje jeden bajt.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-ram-linearni.tex}
+    \caption{Lineární pohled programu na adresovanou paměť.}
+    \label{fig:hw-ram-linearni}
+\end{figure}
+
+Na obrázku~\ref{fig:hw-ram-linearni} jsou na adresách $0$ až $7$ uloženy osmibitové hodnoty zapsané v~šestnáctkové soustavě. Chce-li procesor přečíst hodnotu z~adresy $3$, předá tuto adresu paměti a~obdrží uloženou hodnotu \texttt{00}. Větší datový objekt, například 32bitové celé číslo, obvykle zabírá několik sousedních bajtů. Instrukční sada a~program pak určují, jak se mají tyto bajty společně interpretovat.
+
+\subsection{Fyzické uspořádání RAM}
+
+Lineární posloupnost adres je rozhraním určeným pro procesor a~program. Uvnitř paměťového čipu nejsou buňky nutně uspořádány v~jediné řadě, ale tvoří matice řádků a~sloupců. Část adresy se použije k~výběru řádku a~další část k~výběru sloupce. Řádkový a~sloupcový dekodér tak určí buňku nebo skupinu buněk, s~nimiž se má pracovat.
+
+\begin{figure}[ht]
+    \centering
+    \input{05-hw/images/ch05-ram-matice.tex}
+    \caption{Zjednodušené fyzické uspořádání paměťových buněk do matice.}
+    \label{fig:hw-ram-matice}
+\end{figure}
+
+Hlavní paměť počítače je obvykle tvořena pamětí DRAM. Jedna její buňka uchovává bit pomocí elektrického náboje, který postupně slábne, a~proto se musí pravidelně obnovovat. Cache se naproti tomu obvykle vytváří z~paměti SRAM. Ta nepotřebuje pravidelné obnovování a~je rychlejší, ale jedna buňka zabírá více místa a~její výroba je dražší. Proto se SRAM hodí pro malé rychlé cache, zatímco DRAM umožňuje vyrobit hlavní paměť s~mnohem větší kapacitou.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Vlastnost} & \textbf{SRAM} & \textbf{DRAM} \\ \hline
+        Typické použití & cache & hlavní paměť \\ \hline
+        Rychlost & vyšší & nižší \\ \hline
+        Hustota buněk & nižší & vyšší \\ \hline
+        Potřeba obnovování & ne & ano \\ \hline
+        Uchování bez napájení & ne & ne \\ \hline
+    \end{tabular}
+    \caption{Základní porovnání pamětí SRAM a~DRAM.}
+    \label{tab:hw-sram-dram}
+\end{table}
+
+\notebox{SRAM i~DRAM jsou volatilní. Rozdíl v~potřebě obnovování neznamená, že by SRAM udržela data po vypnutí počítače; pouze za běžného napájení nepotřebuje periodicky obnovovat náboj paměťových buněk.}

@@ -1,0 +1,116 @@
+\section{Odbočka k~pravděpodobnosti}\label{sec:krypto-pravdepodobnost}
+
+V~historických šifrách se často ptáme, kolik klíčů musí záškodník vyzkoušet. Moderní kryptografie však používá také náhodně generované klíče a~algoritmy, které při běhu provádějí náhodné volby. Bezpečnost potom nepopisujeme pouze větou „útok je těžký“, ale pravděpodobností, s~jakou může uspět. Proto si nejprve vyložíme základní pojmy potřebné v~dalších sekcích.
+
+\subsection{Náhodný pokus, výsledky a~jevy}
+
+Náhodný pokus je postup, jehož konkrétní výsledek předem neznáme, přestože známe množinu všech možných výsledků. Příkladem je hod hrací kostkou, hod mincí nebo rovnoměrný výběr bitového řetězce.
+
+\begin{definition}
+    \emph{Výběrový prostor} $\Omega$ je množina všech možných výsledků náhodného pokusu. \emph{Náhodný jev} je libovolná podmnožina $A\subseteq\Omega$. Jev nastane právě tehdy, když výsledek pokusu patří do množiny $A$.
+\end{definition}
+
+Při hodu šestistěnnou kostkou máme
+\[
+    \Omega=\set{1,2,3,4,5,6}.
+\]
+Jev „padne sudé číslo“ odpovídá množině $A=\set{2,4,6}$ a~jev „padne číslo větší než čtyři“ množině $B=\set{5,6}$. Průnik $A\cap B=\set{6}$ nastane, když nastanou oba jevy současně. Sjednocení $A\cup B=\set{2,4,5,6}$ nastane, když nastane alespoň jeden z~nich.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-pravdepodobnost-prostor.tex}
+    \caption{Výběrový prostor hodu kostkou a~dva náhodné jevy.}
+    \label{fig:krypto-pravdepodobnost-prostor}
+\end{figure}
+
+\begin{definition}
+    Jsou-li všechny výsledky konečného výběrového prostoru $\Omega$ stejně pravděpodobné, definujeme pravděpodobnost jevu $A\subseteq\Omega$ vztahem
+    \[
+        \Pr(A)=\frac{\sizeof{A}}{\sizeof{\Omega}}.
+    \]
+\end{definition}
+
+Pro sudé číslo na kostce tedy dostáváme
+\[
+    \Pr(A)=\frac{3}{6}=\frac{1}{2}.
+\]
+Pravděpodobnost nemožného jevu je $\Pr(\varnothing)=0$ a~pravděpodobnost jistého jevu je $\Pr(\Omega)=1$. Často ji zapisujeme také v~procentech, například $\frac{1}{2}=50\,\%$.
+
+Jev, že $A$ nenastane, značíme $A^\complement=\Omega\setminus A$. Platí
+\[
+    \Pr(A^\complement)=1-\Pr(A).
+\]
+Tento jednoduchý vztah bude později velmi užitečný u~narozeninového paradoxu: místo přímého počítání pravděpodobnosti, že vznikne alespoň jedna shoda, nejprve spočítáme pravděpodobnost, že nevznikne žádná.
+
+\subsection{Více kroků náhodného pokusu}
+
+Při dvou hodech mincí je potřeba rozlišovat pořadí výsledků:
+\[
+    \Omega=\set{00,01,10,11},
+\]
+kde například $01$ znamená, že v~prvním hodu padla nula a~ve druhém jednička. Jsou-li oba hody nezávislé a~obě hodnoty stejně pravděpodobné, má každý výsledek pravděpodobnost $\frac{1}{4}$.
+
+Obecně existuje právě $2^n$ bitových řetězců délky $n$. Vybereme-li řetězec $x$ rovnoměrně náhodně z~$\set{0,1}^{n}$, potom pro každý předem zvolený řetězec $a\in\set{0,1}^{n}$ platí
+\[
+    \Pr_{x\in\set{0,1}^{n}}[x=a]=\frac{1}{2^n}.
+\]
+Dolní index zde říká, odkud a~jak náhodnou hodnotu vybíráme; výraz v~hranatých závorkách popisuje jev, jehož pravděpodobnost měříme.
+
+\begin{example}
+    Vyberme rovnoměrně náhodně $x\in\set{0,1}^{4}$. Celkem existuje $2^4=16$ možností. Jev, že $x$ začíná jedničkou, obsahuje osm řetězců, a~proto má pravděpodobnost $\frac{8}{16}=\frac{1}{2}$. Jev $x=1011$ obsahuje jediný výsledek a~má pravděpodobnost $\frac{1}{16}$.
+\end{example}
+
+\subsection{Podmíněná pravděpodobnost a~nezávislost}
+
+Někdy už o~výsledku něco víme a~ptáme se, jak tato informace změní pravděpodobnost jiného jevu. Jestliže například víme, že na kostce padlo sudé číslo, zůstávají možné jen výsledky $\set{2,4,6}$.
+
+\begin{definition}
+    Nechť $A,B\subseteq\Omega$ a~$\Pr(B)>0$. \emph{Podmíněnou pravděpodobnost} jevu $A$ za podmínky $B$ definujeme jako
+    \[
+        \Pr(A\mid B)=\frac{\Pr(A\cap B)}{\Pr(B)}.
+    \]
+\end{definition}
+
+Pro jevy $A=\set{2,4,6}$ a~$B=\set{4,5,6}$ při hodu kostkou je $A\cap B=\set{4,6}$. Proto
+\[
+    \Pr(A\mid B)
+    =
+    \frac{\Pr(\set{4,6})}{\Pr(\set{4,5,6})}
+    =
+    \frac{2/6}{3/6}
+    =
+    \frac{2}{3}.
+\]
+
+\begin{definition}
+    Jevy $A$ a~$B$ jsou \emph{nezávislé}, jestliže informace o~nastání jednoho nemění pravděpodobnost druhého, tedy
+    \[
+        \Pr(A\mid B)=\Pr(A).
+    \]
+    Je-li $\Pr(B)>0$, je tato podmínka ekvivalentní rovnosti
+    \[
+        \Pr(A\cap B)=\Pr(A)\Pr(B).
+    \]
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-pravdepodobnost-strom.tex}
+    \caption{Dva nezávislé hody mincí a~pravděpodobnosti výsledných řetězců.}
+    \label{fig:krypto-pravdepodobnost-strom}
+\end{figure}
+
+V~kryptografii je nezávislost klíče na zprávě zásadní. Pokud by volba klíče závisela na obsahu zprávy, mohl by způsob jeho generování sám prozrazovat informace. U~jednorázové šifry budeme dokonce požadovat, aby znalost šifrového textu nezměnila pravděpodobnost žádné původní zprávy:
+\[
+    \Pr(M=m\mid C=c)=\Pr(M=m).
+\]
+
+\subsection{Náhodné veličiny}
+
+\begin{definition}
+    \emph{Náhodná veličina} přiřazuje každému výsledku náhodného pokusu nějakou hodnotu. Formálně jde o~zobrazení $\mapping{X}{\Omega}{S}$, kde $S$ je množina možných hodnot veličiny.
+\end{definition}
+
+Písmena $M$, $K$ a~$C$ budeme používat pro náhodné veličiny představující postupně zprávu, klíč a~šifrový text. Zápis $M=m$ označuje jev, že náhodná veličina $M$ nabyla konkrétní hodnoty $m$. Rozdíl mezi $M$ a~$m$ je tedy podobný rozdílu mezi proměnnou a~její právě zvolenou hodnotou.
+
+\notebox{Pravděpodobnostní algoritmus může při běhu používat vlastní náhodné bity. Pokud píšeme pravděpodobnost jeho úspěchu, počítáme nejen s~náhodným vstupem, ale také s~těmito vnitřními volbami. Stejný algoritmus proto může na stejném vstupu v~různých bězích postupovat odlišně.}

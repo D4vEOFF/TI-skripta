@@ -1,0 +1,104 @@
+\section{Elektronický podpis}\label{sec:krypto-podpis}
+
+Šifrování chrání důvěrnost, ale samo o~sobě nemusí prokazovat původ zprávy. Bob může obdržet šifrový text, který dokáže otevřít svým soukromým klíčem, a~přesto neví, zda jej skutečně vytvořila Alice. Elektronický podpis má propojit konkrétní obsah zprávy se soukromým klíčem podepisující osoby.
+
+\subsection{Proč nestačí připsat jméno?}
+
+Představme si, že Alice pošle
+\[
+    \mathbf{E}(x,k_V^B)
+\]
+a~vedle šifrového textu pouze připojí značku „Alice“. Záškodník $P$ může zprávu zachytit, značku nahradit a~odeslat dál
+\[
+    \mathbf{E}(x,k_V^B)\,;\,P.
+\]
+Bob zprávu správně dešifruje, ale mylně ji přisoudí záškodníkovi. Obyčejný textový popisek není se zprávou kryptograficky svázán.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-podpis-utok.tex}
+    \caption{Záškodník změní nepodepsanou značku odesílatele.}
+    \label{fig:krypto-podpis-utok}
+\end{figure}
+
+Podpis musí záviset na obsahu zprávy i~na tajné informaci podepisující osoby. Změní-li se zpráva, starý podpis už nesmí projít ověřením. Zároveň jej nesmí umět vytvořit nikdo, kdo nezná Alicin soukromý klíč $k_S^A$.
+
+\subsection{Komutativita klíčů jako didaktická představa}
+
+U~učebnicového RSA platí nejen
+\[
+    \mathbf{D}\left(\mathbf{E}(x,k_V),k_S\right)=x,
+\]
+ale díky násobení exponentů také obrácené pořadí
+\[
+    \mathbf{E}\left(\mathbf{D}(x,k_S),k_V\right)=x.
+\]
+To nabízí jednoduchou představu podpisu. Alice použije na hodnotu $x$ svůj soukromý klíč:
+\[
+    \sigma=\mathbf{D}(x,k_S^A).
+\]
+Bob použije Alicin veřejný klíč a~zkontroluje
+\[
+    \mathbf{E}(\sigma,k_V^A)\stackrel{?}{=}x.
+\]
+Protože $k_V^A$ je veřejný, podpis může ověřit kdokoliv. Vytvořit odpovídající $\sigma$ však má umět pouze Alice se svým $k_S^A$.
+
+\warningbox{Obecný elektronický podpis není „dešifrování soukromým klíčem“. Jde pouze o~názornou intuici založenou na algebraické vlastnosti učebnicového RSA. Praktické podpisové schéma má samostatný algoritmus podepsání, algoritmus ověření a~bezpečné kódování dat.}
+
+\subsection{Podpis otisku}
+
+Podepisovat přímo dlouhou zprávu by bylo pomalé a~nepraktické. Proto použijeme hešovací funkci
+\[
+    \mapping{H_n}{\set{0,1}^{*}}{\set{0,1}^{n}}.
+\]
+Alice nejprve spočítá krátký otisk $h=H_n(m)$ a~podepíše až jej:
+\[
+    \sigma=\mathbf{D}\left(H_n(m),k_S^A\right).
+\]
+Bob z~přijaté zprávy sám vypočítá $H_n(m)$ a~ověří
+\[
+    \mathbf{E}\left(\sigma,k_V^A\right)
+    \stackrel{?}{=}
+    H_n(m).
+\]
+Pokud někdo zprávu pozmění, její nový otisk se s~hodnotou získanou z~podpisu neshoduje.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-podpis.tex}
+    \caption{Podepsání otisku zprávy a~následné ověření podpisu.}
+    \label{fig:krypto-podpis}
+\end{figure}
+
+Odolnost hešovací funkce vůči kolizím je zde zásadní. Pokud by záškodník dokázal najít dvě různé zprávy $m\neq m'$ se stejným otiskem, mohl by se pokusit získat podpis neškodné zprávy $m$ a~později jej připojit k~nebezpečné zprávě $m'$.
+
+\subsection{Certifikát a~ověření veřejného klíče}
+
+Bob potřebuje vědět, že klíč $k_V^A$ opravdu patří Alici. \emph{Digitální certifikát} spojuje identitu držitele s~jeho veřejným klíčem a~toto spojení potvrzuje další důvěryhodná autorita svým podpisem. Ověření certifikátu proto není pouhým přečtením jména v~souboru; příjemce kontroluje podpis vydavatele a~navazující řetězec důvěry.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-certifikat.tex}
+    \caption{Certifikát kryptograficky spojuje identitu Alice s~jejím veřejným klíčem.}
+    \label{fig:krypto-certifikat}
+\end{figure}
+
+Certifikát neukládá Alicin soukromý klíč. Ten musí zůstat pod její kontrolou. Obsahuje zejména identifikační údaje, veřejný klíč, dobu platnosti a~podpis vydavatele. Při ověřování je dále potřeba zkontrolovat, zda certifikát nevypršel nebo nebyl zneplatněn.
+
+\importantbox{Platný podpis dokládá, že podpis vytvořil někdo s~přístupem k~odpovídajícímu soukromému klíči a~že se podepsaná data nezměnila. Pokud byl soukromý klíč odcizen nebo s~ním bylo neoprávněně nakládáno, samotná matematická kontrola tuto okolnost neodhalí.}
+
+\subsection{Elektronický podpis v~právním rámci}
+
+Technický pojem elektronického podpisu je potřeba odlišovat od jeho právních kategorií. V~Evropské unii oblast upravuje zejména \href{https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:02014R0910-20241018}{nařízení eIDAS č.~910/2014 v~aktuálním konsolidovaném znění}. Rozlišuje elektronický podpis, zaručený elektronický podpis a~kvalifikovaný elektronický podpis. Kvalifikovanému elektronickému podpisu přiznává právní účinek rovnocenný vlastnoručnímu podpisu; jinému elektronickému podpisu nelze právní účinek a~přípustnost jako důkazu odmítnout jen proto, že má elektronickou podobu nebo nesplňuje požadavky kvalifikovaného podpisu.
+
+V~České republice na evropskou úpravu navazuje zejména \href{https://www.e-sbirka.cz/sb/2016/297}{zákon č.~297/2016 Sb., o~službách vytvářejících důvěru pro elektronické transakce}. Informace o~kvalifikovaných poskytovatelích a~službách zveřejňuje \href{https://www.dia.gov.cz/cs/legislativa/eidas-sluzby-vytvarejici-duveru-a-elektronicka-identifikace/povinne-zverejnovane-informace/seznam-kvalifikovanych-poskytovatelu-sluzeb-vytvarejicich-duveru-a-poskytovanych-kvalifikovanych-sluzeb-vytvarejicich-duveru}{Digitální a~informační agentura}.
+
+\notebox{Právní předpisy a~seznamy poskytovatelů se mohou měnit. Při skutečném právním jednání je proto potřeba ověřit aktuální znění předpisů, požadovaný druh podpisu a~platnost použitého certifikátu.}
+
+\subsection{Co podpis zajišťuje a~co nikoli}
+
+Správně navržený a~ověřený elektronický podpis pomáhá prokázat integritu dat a~vazbu na soukromý klíč podepisující osoby. Nezajišťuje však důvěrnost: podepsaná zpráva může zůstat veřejně čitelná. Potřebujeme-li obsah zároveň utajit, kombinujeme podpis se šifrováním.
+
+Pořadí a~konkrétní způsob této kombinace musí určovat bezpečný protokol. Nestačí libovolně spojit dvě samostatně bezpečné operace. Moderní knihovny proto nabízejí hotová standardizovaná podpisová a~šifrovací schémata; vytvářet vlastní kryptografický protokol bez odborné analýzy je velmi riskantní.
+
+\tipbox{Při ověřování podpisu kontrolujeme současně tři vazby: otisk odpovídá přijatým datům, podpis odpovídá veřejnému klíči a~certifikát důvěryhodně spojuje tento veřejný klíč s~identitou podepisující osoby.}

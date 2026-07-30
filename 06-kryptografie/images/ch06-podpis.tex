@@ -1,0 +1,45 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    box/.style={rounded corners=1mm, draw=black!55, fill=black!4,
+                minimum width=2.1cm, minimum height=8mm, align=center},
+    hash/.style={rounded corners=1mm, draw=blue!65!black, fill=blue!11,
+                 minimum width=2.1cm, minimum height=8mm, align=center},
+    sign/.style={rounded corners=1mm, draw=orange!75!black, fill=orange!18,
+                 minimum width=2.4cm, minimum height=9mm, align=center},
+    flow/.style={-{Latex}, draw=black!70, line width=.75pt}
+]
+    \node[font=\small\bfseries] at (-3.8,3) {Podepsání};
+    \node[inner sep=0pt] (alice) at (-6,1.5)
+        {\includegraphics[height=1.25cm]{06-kryptografie/images/woman-icon.pdf}};
+    \node[below=1mm of alice] {Alice};
+    \node[box] (m) at (-3.8,1.5) {zpráva \(m\)};
+    \node[hash] (h) at (-1.2,1.5) {\(H_n(m)\)};
+    \node[sign] (sig) at (-1.2,-.2)
+        {\(\sigma=\mathbf D(H_n(m),k_S^A)\)};
+    \node[right=1mm of sig]
+        {\includegraphics[height=4.5mm]{06-kryptografie/images/lock.pdf}};
+    \node[box] (bundle) at (-4,-.8) {odešli \((m,\sigma)\)};
+    \draw[flow] (alice) -- (m);
+    \draw[flow] (m) -- (h) node[midway, above] {\(H_n\)};
+    \draw[flow] (h) -- (sig);
+    \draw[flow] (sig.west) -- (bundle.east);
+    \draw[flow] (m.south) -- (bundle.north);
+
+    \draw[draw=black!35] (0,-2.2) -- (0,3.3);
+
+    \node[font=\small\bfseries] at (3.8,3) {Ověření};
+    \node[box] (received) at (1.4,1.5) {přijato \((m,\sigma)\)};
+    \node[hash] (hm) at (3.8,1.5) {\(H_n(m)\)};
+    \node[hash] (hs) at (3.8,-.2) {\(\mathbf E(\sigma,k_V^A)\)};
+    \node[sign, draw=green!55!black, fill=green!12] (check) at (6.3,.65)
+        {porovnej\\\(\stackrel{?}{=}\)};
+    \node[inner sep=0pt] (bob) at (6.3,-1.4)
+        {\includegraphics[height=1.25cm]{06-kryptografie/images/man-icon.pdf}};
+    \node[below=1mm of bob] {Bob};
+    \draw[flow] (received) -- (hm);
+    \draw[flow] (received.south) |- (hs.west);
+    \draw[flow] (hm) -- (check);
+    \draw[flow] (hs) -- (check);
+    \draw[flow] (check) -- (bob);
+\end{tikzpicture}

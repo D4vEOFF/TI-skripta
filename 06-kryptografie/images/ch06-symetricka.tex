@@ -1,0 +1,33 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    box/.style={rounded corners=1.2mm, draw=black!55, fill=black!4,
+                minimum width=2.2cm, minimum height=9mm, align=center},
+    key/.style={rounded corners=1.2mm, draw=blue!65!black, fill=blue!12,
+                minimum width=2cm, minimum height=8mm, align=center},
+    flow/.style={-{Latex}, line width=.9pt, draw=black!70},
+    keyflow/.style={-{Latex}, dashed, line width=.8pt, draw=blue!65!black}
+]
+    \node[inner sep=0pt] (alice) at (-6,0)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/woman-icon.pdf}};
+    \node[below=1mm of alice] {Alice};
+    \node[inner sep=0pt] (bob) at (6,0)
+        {\includegraphics[height=1.35cm]{06-kryptografie/images/man-icon.pdf}};
+    \node[below=1mm of bob] {Bob};
+
+    \node[box] (enc) at (-2.7,0) {\(\mathbf E(m,k)\)};
+    \node[box] (dec) at (2.7,0) {\(\mathbf D(c,k)\)};
+    \node[key] (key) at (0,1.65) {sdílený tajný klíč \(k\)};
+
+    \draw[flow] (alice.east) -- (enc.west) node[midway, above] {\(m\)};
+    \draw[flow] (enc.east) -- (dec.west) node[midway, above] {\(c\)};
+    \draw[flow] (dec.east) -- (bob.west) node[midway, above] {\(m\)};
+    \draw[keyflow] (key.south west) -- (enc.north);
+    \draw[keyflow] (key.south east) -- (dec.north);
+
+    \node[inner sep=0pt] (attacker) at (0,-2)
+        {\includegraphics[height=1.1cm]{06-kryptografie/images/hacker-icon.pdf}};
+    \draw[->, red!75!black, line width=.8pt] (attacker.north)
+        -- (0,-.15);
+    \node[below=1mm of attacker] {zachytí pouze \(c\)};
+\end{tikzpicture}

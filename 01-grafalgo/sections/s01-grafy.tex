@@ -31,14 +31,14 @@ Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při prog
 \begin{itemize}
     \item \textbf{Matice sousednosti.} První způsob,~jak graf reprezentovat,~je pomocí matice. V~tomto případě graf $G$ popisuje matice $n\times n$,~kde na pozici $ij$ je $1$,~pokud z~vrcholu $i$ do vrcholu $j$ vede hrana,~jinak $0$.
     \begin{example}[Prásátkový graf]
-        Orientovaný graf $G$ (viz obrázek \ref{fig:graf_prasatko}) a~jeho matice sousednosti $A$.
+        Orientovaný graf $G$ (viz obrázek \ref{fig:graf_prasatko}) a~jeho matice sousednosti $\mathbf{A}$.
         \begin{figure}[h]
             \centering
             \input{01-grafalgo/images/ch01_graf_prasatko.tex}
             \caption{Prasátkový graf.}
             \label{fig:graf_prasatko}
         \end{figure}
-        \[A=\left(\begin{matrix}
+        \[\mathbf{A}=\left(\begin{matrix}
             0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1\\
             0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
             0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
@@ -53,14 +53,14 @@ Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při prog
     \end{example}
     \item \textbf{Matice incidence.} Řádky jsou indexovány vrcholy a~sloupce jednotlivými hranami. Na místě $ij$ je $1$,~pokud hrana vede \emph{do} vrcholu $i$,~nebo $-1$,~pokud z~něj vychází,~jinak $0$. Pro neorientované grafy píšeme vždy $1$,~pokud daná hrana vede \emph{do/z} vrcholu.
     \begin{example}[Úplný graf $K_4$]
-        Graf $G$ má $4$ vrcholy a~celkem $6$ hran (viz obrázek \ref{fig:graf_k4}); jeho matici incidence označíme $I$. Řádky představují (shora dolů) vrcholy $0,1,2,3$ a~sloupce (zleva doprava) jednotlivé hrany $e_1,\dots,e_6$.
+        Graf $G$ má $4$ vrcholy a~celkem $6$ hran (viz obrázek \ref{fig:graf_k4}); jeho matici incidence označíme $\mathbf{I}$. Řádky představují (shora dolů) vrcholy $0,1,2,3$ a~sloupce (zleva doprava) jednotlivé hrany $e_1,\dots,e_6$.
         \begin{figure}[h]
             \centering
             \input{01-grafalgo/images/ch01_graf_k4.tex}
             \caption{Úplný graf $K_4$.}
             \label{fig:graf_k4}
         \end{figure}
-        \[I=\left(\begin{matrix}
+        \[\mathbf{I}=\left(\begin{matrix}
             1 & 0 & 0 & 1 & 1 & 0\\
             1 & 1 & 0 & 0 & 0 & 1\\
             0 & 1 & 1 & 0 & 1 & 0\\
@@ -93,7 +93,7 @@ Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při prog
 
 Tím jsme si ukázali základní možnosti reprezentace grafů,~avšak zatím jsme si je mezi sebou nijak neporovnali. Pojďme se tedy podívat na paměťové nároky daných variant. Označme si počet vrcholů grafu $\abs{V}=n$ a~celkový počet hran $\abs{E}=m$.
 \begin{itemize}
-    \item \textit{Matice sousednosti} spotřebuje paměť $\bigO{n^2}$,~neboť potřebujeme uložit matici velikosti $n\times n$. Je tak vhodná především pro husté grafy,~tedy grafy s~velkým počtem hran.
-    \item \textit{Matice incidence} využije $\bigO{nm}$ paměťových buněk. Tento způsob reprezentace je vhodný především pro matematickou práci s~grafy,~avšak při programování se moc nevyužívá,~neboť obsahuje spoustu nadbytečných informací.
-    \item \textit{Reprezentace pomocí seznamů sousedů} je obecně hodně využívaná. Spotřebuje $\bigO{n+m}$ paměti.\footnote{U~orientovaného grafu uložíme každou hranu jednou,~u~neorientovaného dvakrát,~jednou u~každého koncového vrcholu. Konstantní násobek však v~$\mathcal{O}$-notaci nehraje roli. Blíže se na tento argument podíváme v~odvození časové složitosti algoritmu BFS\smartref[,~viz ]{\showrefs}{thm:bfs_slozitost}{}.} Je proto vhodná zejména pro řídké grafy,~které neobsahují příliš mnoho hran (např. stromy).
+    \item \textit{Matice sousednosti} spotřebuje paměť $\bigO(n^2)$,~neboť potřebujeme uložit matici velikosti $n\times n$. Je tak vhodná především pro husté grafy,~tedy grafy s~velkým počtem hran.
+    \item \textit{Matice incidence} využije $\bigO(nm)$ paměťových buněk. Tento způsob reprezentace je vhodný především pro matematickou práci s~grafy,~avšak při programování se moc nevyužívá,~neboť obsahuje spoustu nadbytečných informací.
+    \item \textit{Reprezentace pomocí seznamů sousedů} je obecně hodně využívaná. Spotřebuje $\bigO(n+m)$ paměti.\footnote{U~orientovaného grafu uložíme každou hranu jednou,~u~neorientovaného dvakrát,~jednou u~každého koncového vrcholu. Konstantní násobek však v~$\mathcal{O}$-notaci nehraje roli. Blíže se na tento argument podíváme v~odvození časové složitosti algoritmu BFS\smartref[,~viz ]{\showrefs}{thm:bfs_slozitost}{}.} Je proto vhodná zejména pro řídké grafy,~které neobsahují příliš mnoho hran (např. stromy).
 \end{itemize}

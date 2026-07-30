@@ -1,0 +1,19 @@
+\begin{tikzpicture}[
+    font=\small,
+    cell/.style={draw=black!55, rounded corners=.6mm,
+                 minimum width=8mm, minimum height=8mm, inner sep=0pt},
+    arrow/.style={-{Latex}, draw=black!65, line width=.7pt}
+]
+    \foreach \x/\letter in {0/A,1/B,2/C,3/D,4/E,5/F,6/G,7/H}{
+        \node[cell, fill=black!4] (u\x) at (\x,0) {\letter};
+    }
+    \foreach \x/\letter in {0/D,1/E,2/F,3/G,4/H,5/A,6/B,7/C}{
+        \node[cell, fill=green!15] (d\x) at (\x,-1.4) {\letter};
+    }
+    \foreach \x in {0,...,7}{
+        \draw[arrow] (u\x) -- (d\x);
+    }
+    \node[anchor=east] at (-.65,0) {původní znak};
+    \node[anchor=east] at (-.65,-1.4) {šifrový znak};
+    \node[font=\small\bfseries] at (3.5,.8) {posun \(k=3\)};
+\end{tikzpicture}

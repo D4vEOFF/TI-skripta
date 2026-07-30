@@ -1,6 +1,6 @@
-\section{Algoritmus A*}\label{sec:astar}
+\section{Algoritmus \Astar}\label{sec:astar}
 
-Nyní se omezíme na případy,~kdy hledáme cestu pouze do konkrétního cílového vrcholu\footnote{Písmeno $G$ od anglického \emph{goal}.} $v_G\in V$. Stále pracujeme s~grafy,~jejichž hrany mají nezáporné ohodnocení. Dijkstrův algoritmus by samozřejmě fungoval i~zde: skončili bychom ve chvíli,~kdy cílový vrchol vybereme jako minimum. Nabízí se však otázka,~zda nemůžeme znalost cíle nějak využít. Pokud bychom například hledali nejkratší cestu v~mřížce s~překážkami,~dávalo by smysl upřednostňovat políčka,~která vypadají být cíli blíž.
+Nyní se omezíme na případy,~kdy hledáme cestu pouze do konkrétního cílového vrcholu $g\in V$\footnote{Písmeno $g$ od anglického \emph{goal}.}. Stále pracujeme s~grafy,~jejichž hrany mají nezáporné ohodnocení. Dijkstrův algoritmus by samozřejmě fungoval i~zde: skončili bychom ve chvíli,~kdy cílový vrchol vybereme jako minimum. Nabízí se však otázka,~zda nemůžeme znalost cíle nějak využít. Pokud bychom například hledali nejkratší cestu v~mřížce s~překážkami,~dávalo by smysl upřednostňovat políčka,~která vypadají být cíli blíž.
 
 Mějme bludiště,~v~němž se hráč může pohybovat o~jedno pole vodorovně nebo svisle; na některá pole vstoupit nesmí. Cíl se nachází vpravo dole. Situaci na obrázku \ref{fig:mrizka} můžeme znázornit grafem,~v~němž každá přípustná dvojice sousedních polí tvoří hranu s~vahou $1$.
 \begin{figure}[h]
@@ -9,9 +9,9 @@ Mějme bludiště,~v~němž se hráč může pohybovat o~jedno pole vodorovně n
     \caption{Mřížka a~optimální směr pohybu hráče.}
     \label{fig:mrizka}
 \end{figure}
-Pokud bychom použili BFS nebo Dijkstrův algoritmus,~prozkoumávali bychom okolí startu rovnoměrně do všech směrů. Algoritmus A*,~který roku 1968 popsali Peter Hart,~Nils Nilsson a~Bertram Raphael,~se snaží hledání směrovat k~cíli.
+Pokud bychom použili BFS nebo Dijkstrův algoritmus,~prozkoumávali bychom okolí startu rovnoměrně do všech směrů. Algoritmus \Astar,~který roku 1968 popsali Peter Hart,~Nils Nilsson a~Bertram Raphael,~se snaží hledání směrovat k~cíli.
 
-Myšlenka je stále podobná,~avšak vrcholy budeme vybírat podle hodnoty $D(v)+\psi(v)$ místo samotného $D(v)$. Funkce $\psi$ se nazývá \emph{heuristická funkce} nebo zkráceně \emph{heuristika} a~odhaduje zbývající vzdálenost z~vrcholu $v$ do cíle (viz obrázek \ref{fig:astar_heuristika}).
+Myšlenka je stále podobná,~avšak vrcholy budeme vybírat podle hodnoty $D(v)+\psi(v)$ místo samotného $D(v)$. Zobrazení $\mapping{\psi}{V}{\R_0^{+}}$ se nazývá \emph{heuristická funkce} nebo zkráceně \emph{heuristika} a~odhaduje zbývající vzdálenost z~vrcholu $v$ do cíle (viz obrázek \ref{fig:astar_heuristika}).
 \begin{figure}[h]
     \centering
     \input{01-grafalgo/images/ch01_astar_heuristika.tex}
@@ -21,14 +21,14 @@ Myšlenka je stále podobná,~avšak vrcholy budeme vybírat podle hodnoty $D(v)
 Součtu $D(v)+\psi(v)$ budeme říkat \emph{$f$-skóre}\footnote{V~anglických textech se pro dosud nalezenou vzdálenost často používá označení $g$ a~pro heuristiku $h$,~tedy $f(v)=g(v)+h(v)$.},~značíme jej $f(v)$. V~každé iteraci vybereme otevřený vrchol s~nejnižším $f$-skóre.
 
 Ne každá heuristika zachová správnost této strategie. Budeme požadovat
-\[\psi(v_G)=0\qquad\text{a}\qquad
-\psi(u)\leqslant \ell(u,v)+\psi(v)\]
+\[\psi(g)=0\qquad\text{a}\qquad
+\psi(u)\leqslant w(u,v)+\psi(v)\]
 pro každou orientovanou hranu $(u,v)\in E$. Takové heuristice říkáme \emph{konzistentní}. Druhá podmínka je obdobou trojúhelníkové nerovnosti: odhad z~$u$ nesmí být větší než cena jednoho kroku do $v$ a~odhad z~$v$. Opakovaným použitím podél libovolné cesty z~$u$ do cíle dostaneme,~že $\psi(u)$ nikdy nepřeceňuje skutečnou nejkratší vzdálenost do cíle.
 
 Oproti Dijkstrovu algoritmu tedy nenastává mnoho změn,~jen si navíc uchováváme hodnoty $f$-skóre.
 \begin{algorithm}\label{alg:astar}
-    \caption{A*}
-    \KwIn{Nezáporně ohodnocený graf $G=(V,E)$,~vrcholy $v_0,v_G\in V$ a~konzistentní heuristika $\psi$}
+    \caption{\Astar}
+    \KwIn{Nezáporně ohodnocený graf $G=(V,E,w)$,~vrcholy $v_0,g\in V$ a~konzistentní heuristika $\psi$}
     \tcp{Inicializace}
     \ForEach{\textup{vrchol $v\in V$}}{
         $stav(v)\gets$ \textit{nenalezený}\\
@@ -38,28 +38,28 @@ Oproti Dijkstrovu algoritmu tedy nenastává mnoho změn,~jen si navíc uchováv
     $D(v_0)\gets 0,\,f(v_0)\gets\psi(v_0)$\\
     \While{\textup{existují otevřené vrcholy}}{
         $v\gets$ otevřený vrchol s~nejmenším $f$-skóre\\
-        \If{$v=v_G$}{
-            \Return{$D(v_G)$}
+        \If{$v=g$}{
+            \Return{$D(g)$}
         }
-        \ForEach{\textup{soused $w$ vrcholu $v$}}{
+        \ForEach{\textup{soused $s$ vrcholu $v$}}{
             \tcp{Našli jsme lepší cestu}
-            \If{$stav(w)\neq\textit{uzavřený}$ a~$D(v)+\ell(v,w)<D(w)$}{
-                $D(w)\gets D(v)+\ell(v,w)$\\
-                $f(w)\gets D(v)+\ell(v,w)+\psi(w)$\\
-                $stav(w)\gets$ \textit{otevřený}
+            \If{$stav(s)\neq\textit{uzavřený}$ a~$D(v)+w(v,s)<D(s)$}{
+                $D(s)\gets D(v)+w(v,s)$\\
+                $f(s)\gets D(v)+w(v,s)+\psi(s)$\\
+                $stav(s)\gets$ \textit{otevřený}
             }
         }
         $stav(v)\gets$ \textit{uzavřený}
     }
     \Return{$\infty$}\\
-    \KwOut{Vzdálenost $v_0$ od $v_G$}
+    \KwOut{Vzdálenost $v_0$ od $g$}
 \end{algorithm}
 
-\subsection{Správnost algoritmu A*}
+\subsection{Správnost algoritmu \Astar}
 
 Podobně jako u~Dijkstrova algoritmu platí,~že při výběru vrcholu $v$ odpovídá $D(v)$ délce nejkratší cesty z~$v_0$ do $v$. Důkaz provedeme indukcí podle pořadí uzavíraných vrcholů.
 
-Předpokládejme pro spor,~že vybíráme první vrchol $v$,~pro který je $D(v)>d(v)$,~kde $d(v)$ značí skutečnou nejkratší vzdálenost z~$v_0$ do $v$. Na jedné nejkratší cestě do $v$ vezměme první dosud neuzavřený vrchol $x$ a~jeho již uzavřeného předchůdce $y$. Podle indukčního předpokladu bylo $D(y)=d(y)$,~takže po zpracování hrany $(y,x)$ platí $D(x)=d(x)$.
+Předpokládejme pro spor,~že vybíráme první vrchol $v$,~pro který je $D(v)>d(v_0,v)$. Na jedné nejkratší cestě do $v$ vezměme první dosud neuzavřený vrchol $x$ a~jeho již uzavřeného předchůdce $y$. Podle indukčního předpokladu bylo $D(y)=d(v_0,y)$,~takže po zpracování hrany $(y,x)$ platí $D(x)=d(v_0,x)$.
 \begin{figure}[h]
     \centering
     \input{01-grafalgo/images/ch01_astar_kratsi_cesta.tex}
@@ -67,26 +67,26 @@ Předpokládejme pro spor,~že vybíráme první vrchol $v$,~pro který je $D(v)
     \label{fig:astar_kratsi_cesta}
 \end{figure}
 Konzistenci můžeme opakovaně použít na část této cesty od $x$ do $v$. Dostaneme
-\[\psi(x)\leqslant d(v)-d(x)+\psi(v).\]
+\[\psi(x)\leqslant d(v_0,v)-d(v_0,x)+\psi(v).\]
 Proto
 \[
 f(x)=D(x)+\psi(x)
-\leqslant d(x)+d(v)-d(x)+\psi(v)
-=d(v)+\psi(v)
+\leqslant d(v_0,x)+d(v_0,v)-d(v_0,x)+\psi(v)
+=d(v_0,v)+\psi(v)
 <D(v)+\psi(v)=f(v).
 \]
-Vrchol $x$ je otevřený a~má menší $f$-skóre než $v$,~takže algoritmus měl vybrat $x$. To je spor. Každý uzavřený vrchol tedy dostane správnou vzdálenost; zvlášť to platí pro cílový vrchol $v_G$.
+Vrchol $x$ je otevřený a~má menší $f$-skóre než $v$,~takže algoritmus měl vybrat $x$. To je spor. Každý uzavřený vrchol tedy dostane správnou vzdálenost; zvlášť to platí pro cílový vrchol $g$.
 
 \warningbox{Konzistence heuristiky je pro uvedenou variantu algoritmu důležitá. Pokud by odhad tuto podmínku porušoval a~algoritmus uzavřené vrcholy znovu neotevíral,~mohl by některý vrchol uzavřít předčasně a~vrátit neoptimální cestu.}
 
 \begin{remark}
     \begin{itemize}
-        \item Dijkstrův algoritmus je speciálním případem A*. Stačí pro všechny vrcholy $v$ položit $\psi(v)=0$.
-        \item Heuristiku bychom měli být schopni pro každý vrchol spočítat rychle. Ideální je konstantní čas $\bigO{1}$.
+        \item Dijkstrův algoritmus je speciálním případem \Astar. Stačí pro všechny vrcholy $v$ položit $\psi(v)=0$.
+        \item Heuristiku bychom měli být schopni pro každý vrchol spočítat rychle. Ideální je konstantní čas $\bigO(1)$.
     \end{itemize}
 \end{remark}
 
-V~nejhorším případě může A* prozkoumat celý graf,~takže při použití binární haldy má stejný asymptotický horní odhad jako Dijkstrův algoritmus,~tedy $\bigO{(n+m)\log n}$. Dobrá heuristika však obvykle výrazně sníží počet skutečně zpracovaných vrcholů. Volba $\psi=0$ neposkytne žádné směrování a~dostaneme přesně Dijkstrův algoritmus.
+V~nejhorším případě může \Astar{} prozkoumat celý graf,~takže při použití binární haldy má stejný asymptotický horní odhad jako Dijkstrův algoritmus,~tedy $\bigO((n+m)\log n)$. Dobrá heuristika však obvykle výrazně sníží počet skutečně zpracovaných vrcholů. Volba $\psi=0$ neposkytne žádné směrování a~dostaneme přesně Dijkstrův algoritmus.
 
 \subsection{Ukázky heuristických funkcí}
 

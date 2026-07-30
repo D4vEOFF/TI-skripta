@@ -1,0 +1,51 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    panel/.style={
+        draw,
+        thick,
+        rounded corners,
+        minimum width=6.0cm,
+        minimum height=3.8cm,
+        align=center
+    }
+]
+    \node[panel, fill=blue!8] (hdd) at (-3.6,0) {};
+    \node[font=\large\bfseries] at (-3.6,1.35) {HDD};
+    \draw[thick, fill=gray!18] (-4.2,0.25) circle (0.85);
+    \draw[thick, fill=white] (-4.2,0.25) circle (0.17);
+    \draw[thick] (-4.2,0.25) circle (0.52);
+    \draw[thick, fill=gray!40] (-2.55,0.85) circle (0.14);
+    \draw[very thick] (-2.55,0.85) -- (-3.85,0.45);
+    \draw[thick, fill=black] (-3.85,0.45) circle (0.06);
+    \node[align=center, font=\scriptsize] at (-3.6,-1.15)
+        {magnetické plotny\\ mechanický pohyb};
+
+    \node[panel, fill=green!9] (ssd) at (3.6,0) {};
+    \node[font=\large\bfseries] at (3.6,1.35) {SSD};
+    \draw[thick, rounded corners=3pt, fill=green!35]
+        (1.9,-0.25) rectangle (5.1,0.65);
+    \foreach \x in {2.45,3.25,4.05}{
+        \draw[thick, rounded corners=2pt, fill=black!72]
+            (\x-0.30,-0.02) rectangle (\x+0.30,0.40);
+    }
+    \draw[thick, rounded corners=2pt, fill=blue!40]
+        (4.55,-0.02) rectangle (4.95,0.40);
+    \draw[thick, fill=yellow!65]
+        (5.1,-0.10) rectangle (5.42,0.50);
+    \node[align=center, font=\scriptsize] at (3.6,-1.15)
+        {flash paměť\\ bez pohyblivých částí};
+
+    \node[
+        draw,
+        thick,
+        rounded corners,
+        fill=yellow!16,
+        minimum width=9.6cm,
+        minimum height=0.75cm,
+        align=center
+    ] at (0,-2.75)
+        {Obě zařízení uchovávají data i~po vypnutí napájení.};
+\end{tikzpicture}

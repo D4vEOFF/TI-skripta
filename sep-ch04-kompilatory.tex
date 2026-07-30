@@ -1,0 +1,28 @@
+\documentclass[11pt,a4paper,oneside]{article} 
+
+\input{settings.tex}
+
+\ifcsname showrefs\endcsname
+\else
+    \NewDocumentCommand{\showrefs}{}{false}
+\fi
+
+\begin{document}
+
+\begin{center}
+    {\huge \textbf{\MakeUppercase{Kompilátory}}}\\[1.2cm]
+\end{center}
+
+V~kapitole \smartref{\showrefs}{chap:automaty}{o~automatech} jsme se naučili popisovat jazyky pomocí konečných automatů,~regulárních výrazů a~gramatik. Zatím šlo hlavně o~abstraktní modely. Nyní uvidíme jednu z~jejich nejdůležitějších praktických aplikací: překlad programovacích jazyků. Regulární výrazy a~konečné automaty nám pomohou rozdělit zdrojový kód na jednotlivé symboly,~gramatiky potom popíší,~jak z~nich lze sestavit příkazy a~výrazy.
+
+Překladač ovšem nekončí u~ověření správného zápisu. Musí také zjistit,~zda program dává smysl,~převést jej do vhodné vnitřní reprezentace,~případně jej optimalizovat a~nakonec vytvořit kód,~který lze vykonat. V~této kapitole si celý postup ukážeme na malém jazyce implementovaném v~Pythonu.
+
+\input{04-kompilatory/sections/s01-uvodem.tex}
+\input{04-kompilatory/sections/s02-lexikalni-analyza.tex}
+\input{04-kompilatory/sections/s03-syntakticka-analyza.tex}
+\input{04-kompilatory/sections/s04-semanticka-analyza.tex}
+\input{04-kompilatory/sections/s05-optimalizace.tex}
+\input{04-kompilatory/sections/s06-interpretovane-jazyky.tex}
+
+
+\end{document}

@@ -1,0 +1,32 @@
+\documentclass[11pt,a4paper,oneside]{article} 
+
+\input{settings.tex}
+
+\ifcsname showrefs\endcsname
+\else
+    \NewDocumentCommand{\showrefs}{}{false}
+\fi
+
+\begin{document}
+
+\begin{center}
+    {\huge \textbf{\MakeUppercase{Kryptografie}}}\\[1.2cm]
+\end{center}
+
+V~\smartref[kapitole~][]{\showrefs}{chap:hw}{předchozí kapitole o~hardwaru} jsme sledovali, jak počítač ukládá a~zpracovává bity. Samotná bitová reprezentace však neříká nic o~tom, kdo smí uložená data přečíst, zda je někdo cestou změnil ani od koho skutečně pocházejí. Jakmile zprávu posíláme přes síť nebo ji ukládáme na zařízení, ke kterému mohou získat přístup další lidé, potřebujeme tyto otázky řešit výpočetními prostředky.
+
+Právě zde nastupuje kryptografie. Nejprve si ujasníme její cíle a~doplníme základy pravděpodobnosti, bez nichž nelze moderní pojem bezpečnosti přesně formulovat. Poté začneme historickými substitučními šiframi a~přejdeme k~symetrickému a~asymetrickému šifrování. Na algoritmu RSA uvidíme, jak lze bezpečnost spojit s~obtížností matematického problému. Závěr kapitoly bude patřit pseudonáhodným generátorům, jednosměrným a~hešovacím funkcím, standardu SHA a~elektronickému podpisu.
+
+\input{06-kryptografie/sections/s01-co-je-kryptografie.tex}
+\input{06-kryptografie/sections/s02-pravdepodobnost.tex}
+\input{06-kryptografie/sections/s03-historicke-metody.tex}
+\input{06-kryptografie/sections/s04-symetricka-kryptografie.tex}
+\input{06-kryptografie/sections/s05-asymetricka-kryptografie.tex}
+\input{06-kryptografie/sections/s06-rsa.tex}
+\input{06-kryptografie/sections/s07-prg-owf.tex}
+\input{06-kryptografie/sections/s08-hesovaci-funkce.tex}
+\input{06-kryptografie/sections/s09-sha.tex}
+\input{06-kryptografie/sections/s10-elektronicky-podpis.tex}
+
+
+\end{document}

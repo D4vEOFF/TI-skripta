@@ -1,0 +1,86 @@
+\section{Secure Hash Algorithm}\label{sec:krypto-sha}
+
+Zkratka SHA pochází z~anglického názvu \emph{Secure Hash Algorithm}. Neoznačuje jedinou funkci, ale několik rodin standardizovaných kryptografických hešovacích funkcí.
+
+\begin{itemize}
+    \item \textbf{SHA-0} byl zveřejněn v~roce 1993 jako původní Secure Hash Standard.
+    \item \textbf{SHA-1} jej v~roce 1995 nahradil. Později byly nalezeny praktické kolize, a~proto se pro nové bezpečnostní použití nepoužívá.
+    \item \textbf{SHA-2} je rodina funkcí zahrnující například SHA-224, SHA-256, SHA-384 a~SHA-512.
+    \item \textbf{SHA-3} byl standardizován v~roce 2015 a~vychází z~algoritmu Keccak. Má odlišnou vnitřní konstrukci než SHA-2.
+\end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-sha-casova-osa.tex}
+    \caption{Zjednodušená časová osa rodin SHA.}
+    \label{fig:krypto-sha-casova-osa}
+\end{figure}
+
+Pro nové aplikace se podle konkrétního standardu a~protokolu používají zejména funkce z~rodin SHA-2 a~SHA-3. Skutečnost, že obě rodiny zůstávají v~použití, není rozpor: mají jinou konstrukci a~mohou představovat nezávislé možnosti pro různé systémy.
+
+\subsection{Sponge function}
+
+SHA-3 používá konstrukci nazývanou \emph{sponge function}, doslova „houbová funkce“. Název připomíná dvě fáze: v~první funkce postupně „nasává“ bloky zprávy a~ve druhé ze svého vnitřního stavu „vymačkává“ výstupní bity.
+
+Vnitřní stav má délku
+\[
+    b=r+c.
+\]
+Prvních $r$ bitů tvoří část \emph{rate}, která komunikuje se vstupem a~výstupem. Zbývajících $c$ bitů tvoří \emph{capacity}; nejsou přímo vydávány jako výstup a~významně ovlivňují bezpečnost konstrukce. Celý stav zpracovává veřejná kryptografická permutace
+\[
+    \mapping{f}{\set{0,1}^{b}}{\set{0,1}^{b}}.
+\]
+
+\subsection{Fáze absorbing}
+
+Zprávu $m$ nejprve jednoznačně doplníme předepsaným paddingem a~rozdělíme na $r$-bitové bloky
+\[
+    p_1,p_2,\ldots,p_t.
+\]
+Začneme nulovým stavem $S_0=0^b$. Každý blok prodloužíme o~$c$ nulových bitů, zkombinujeme s~předchozím stavem operací XOR a~na výsledek použijeme permutaci $f$:
+\[
+    S_i
+    =
+    f\left(S_{i-1}\oplus(p_i0^c)\right),
+    \qquad i=1,\ldots,t.
+\]
+Řetězec $p_i0^c$ má délku $r+c=b$, takže jej lze XORovat s~celým stavem. Vstupní blok ovlivní po aplikaci permutace obě části stavu.
+
+\subsection{Fáze squeezing}
+
+Po zpracování všech bloků čteme bity z~části rate výsledného stavu $S_t$. Potřebujeme-li více než $r$ výstupních bitů, znovu použijeme permutaci $f$ a~z~nového stavu odebereme další část rate. Proces opakujeme, dokud nemáme požadovanou délku otisku.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-sponge.tex}
+    \caption{Fáze absorbing a~squeezing konstrukce sponge function.}
+    \label{fig:krypto-sponge}
+\end{figure}
+
+\notebox{Permutace $f$ není tajný klíč. Je veřejnou a~pevně určenou součástí algoritmu. Bezpečnost má vycházet z~její konstrukce a~ze způsobu, jakým se celý vnitřní stav používá, nikoli z~utajení postupu.}
+
+\subsection{SHA-3 jako konkrétní sponge function}
+
+SHA-3 používá stav délky
+\[
+    b=1600.
+\]
+Pro variantu SHA3-$d$ s~$d$-bitovým otiskem se volí
+\[
+    c=2d,
+    \qquad
+    r=1600-c.
+\]
+Například SHA3-256 má
+\[
+    d=256,
+    \qquad
+    c=512,
+    \qquad
+    r=1088.
+\]
+Další běžné varianty jsou SHA3-224, SHA3-384 a~SHA3-512. Liší se délkou otisku, a~tím i~rozdělením stavu na rate a~capacity.
+
+SHA-3 je navržen jako bezpečná kryptografická hešovací funkce, formální důkaz, že konkrétní SHA3-$d$ splňuje definici jednosměrné funkce z~\smartref[definice~][]{\showrefs}{def:krypto-owf}{předchozího výkladu}, však znám není. To není u~praktických kryptografických funkcí neobvyklé: bezpečnost se opírá o~rozsáhlou veřejnou analýzu, známé útoky a~přesně popsané bezpečnostní předpoklady.
+
+\importantbox{Délka otisku a~vnitřní konstrukce řeší různé otázky. Delší otisk zvětšuje prostor možných hodnot, ale bezpečnost stále závisí také na tom, zda ve funkci neexistuje strukturální zkratka rychlejší než obecný útok hrubou silou.}

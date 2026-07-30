@@ -1,0 +1,55 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    cell/.style={
+        draw,
+        thick,
+        minimum width=0.92cm,
+        minimum height=0.85cm,
+        align=center
+    },
+    arrow/.style={->, thick}
+]
+    \foreach \addr in {0,...,11}{
+        \pgfmathsetmacro{\x}{-5.05 + 0.92*\addr}
+        \ifnum\addr<4
+            \node[cell, fill=gray!8] (c\addr) at (\x,0) {};
+        \else
+            \ifnum\addr<8
+                \node[cell, fill=yellow!28] (c\addr) at (\x,0) {};
+            \else
+                \node[cell, fill=gray!8] (c\addr) at (\x,0) {};
+            \fi
+        \fi
+        \node[font=\scriptsize] at (\x,-0.72) {\addr};
+    }
+
+    \node[fill=orange!55, draw, thick, minimum width=0.68cm, minimum height=0.60cm]
+        at (c6.center) {\textbf{X}};
+
+    \draw[decorate, decoration={brace, amplitude=5pt}]
+        (c4.north west) -- node[above=6pt, align=center] {\textbf{načtený blok}\\ (cache line)} (c7.north east);
+
+    \node[
+        draw,
+        rounded corners,
+        fill=blue!10,
+        align=center,
+        minimum width=3.7cm,
+        minimum height=0.85cm
+    ] (temporal) at (-3.5,-2.0) {opakovaný přístup k~\textbf{X}\\ \textit{časová lokalita}};
+
+    \node[
+        draw,
+        rounded corners,
+        fill=green!12,
+        align=center,
+        minimum width=4.3cm,
+        minimum height=0.85cm
+    ] (spatial) at (3.3,-2.0) {přístup k~okolním adresám\\ \textit{prostorová lokalita}};
+
+    \draw[arrow, blue!70!black] (temporal.north) to[bend left=18] (c6.south);
+    \draw[arrow, green!60!black] (spatial.north) to[bend right=15] (c7.south);
+\end{tikzpicture}

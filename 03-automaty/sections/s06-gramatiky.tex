@@ -5,14 +5,14 @@ Automat dostane hotové slovo a~rozhodne,~zda do jazyka patří. Gramatika jde o
 \begin{definition}[Gramatika]
     \emph{Gramatika} je čtveřice
     \[
-        G=(N,T,P,S),
+        G=(V,T,P,S),
     \]
     kde
     \begin{itemize}
-        \item $N$ je konečná množina \emph{neterminálů},
-        \item $T$ je konečná množina \emph{terminálů},~přičemž $N\cap T=\emptyset$,
+        \item $V$ je konečná množina \emph{neterminálů},
+        \item $T$ je konečná množina \emph{terminálů},~přičemž $V\cap T=\emptyset$,
         \item $P$ je konečná množina \emph{přepisovacích pravidel}. Pravidlo zapisujeme ve tvaru $\alpha\to\beta$: na levé straně stojí řetězec terminálů a~neterminálů obsahující alespoň jeden neterminál,~na pravé straně může stát libovolný řetězec terminálů a~neterminálů,~případně prázdné slovo $\lambda$,
-        \item $S\in N$ je \emph{počáteční neterminál}.
+        \item $S\in V$ je \emph{počáteční neterminál}.
     \end{itemize}
 \end{definition}
 
@@ -21,17 +21,17 @@ Levá strana pravidla tedy musí obsahovat alespoň jeden neterminál,~pravá st
 \begin{definition}[Odvození a~jazyk gramatiky]
     Řekneme,~že se slovo $u\alpha v$ \emph{přímo odvodí} na $u\beta v$,~a~píšeme
     \[
-        u\alpha v\Rightarrow u\beta v,
+        u\alpha v\Rightarrow_G u\beta v,
     \]
     jestliže $\alpha\to\beta$ je pravidlo gramatiky. Zápis
     \[
-        x\Rightarrow^*y
+        x\Rightarrow_G^*y
     \]
     znamená,~že z~$x$ lze dostat $y$ pomocí nula nebo více přímých odvození.
 
     Jazyk generovaný gramatikou $G$ je
     \[
-        L(G)=\set{w\in T^*:S\Rightarrow^*w}.
+        L(G)=\set{w\in T^*:S\Rightarrow_G^*w}.
     \]
 \end{definition}
 
@@ -121,13 +121,13 @@ Vygeneruje například větu \uv{ten algoritmus zkoumá jeden automat}. Jde samo
 \subsection{Regulární gramatiky}
 
 \begin{definition}[Regulární gramatika]
-    Gramatika $G=(N,T,P,S)$ je \emph{regulární},~pokud má každé její pravidlo jeden z~tvarů
+    Gramatika $G=(V,T,P,S)$ je \emph{regulární},~pokud má každé její pravidlo jeden z~tvarů
     \[
         A\to wB
         \qquad\text{nebo}\qquad
         A\to w,
     \]
-    kde $A,B\in N$ a~$w\in T^*$.
+    kde $A,B\in V$ a~$w\in T^*$.
 \end{definition}
 
 Na pravé straně je tedy nejvýše jeden neterminál a~ten navíc stojí až na konci. Gramatika pro $0^n1^n$ regulární není: pravidlo $S\to0S1$ má terminál také za neterminálem. Naproti tomu gramatika pro $a^nb^m$ z~předchozího příkladu regulární je.
@@ -149,7 +149,7 @@ Na pravé straně je tedy nejvýše jeden neterminál a~ten navíc stojí až na
     Každý krok automatu po znaku $a$ odpovídá použití jednoho pravidla $q\to ar$. Slovo lze dovést z~$q_0$ do přijímajícího stavu právě tehdy,~když jej gramatika může vypsat a~zbývající přijímající neterminál nakonec odstranit pravidlem $f\to\lambda$. Jazyky automatu a~gramatiky jsou proto stejné.
 
     \emph{Z~gramatiky na automat.}
-    Mějme regulární gramatiku $G=(N,T,P,S)$. Neterminály použijeme jako stavy $\lambda$-NFA,~stav $S$ bude počáteční a~přidáme jediný nový přijímající stav $f$.
+    Mějme regulární gramatiku $G=(V,T,P,S)$. Neterminály použijeme jako stavy $\lambda$-NFA,~stav $S$ bude počáteční a~přidáme jediný nový přijímající stav $f$.
 
     Pro pravidlo
     \[

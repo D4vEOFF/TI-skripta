@@ -1,0 +1,52 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    label/.style={font=\scriptsize, fill=white, inner sep=1.5pt},
+    callout/.style={->, thick}
+]
+    \node[font=\bfseries] at (-3.8,2.95) {Pohled shora};
+    \draw[thick, rounded corners=5pt, fill=blue!5]
+        (-7.0,-2.4) rectangle (-0.6,2.55);
+    \draw[thick, fill=gray!18] (-4.65,0.05) circle (1.75);
+    \foreach \r in {0.55,0.95,1.35}{
+        \draw[gray!55] (-4.65,0.05) circle (\r);
+    }
+    \draw[thick, fill=white] (-4.65,0.05) circle (0.30);
+    \draw[thick, fill=gray!45] (-1.65,0.85) circle (0.24);
+    \draw[very thick] (-1.65,0.85) -- (-3.85,0.32);
+    \draw[thick, fill=black] (-3.85,0.32) rectangle (-3.65,0.46);
+
+    \node[label, anchor=east] (platterlabel) at (-6.3,2.05) {plotna};
+    \draw[callout] (platterlabel.east) -- (-5.65,1.42);
+    \node[label] (armlabel) at (-2.0,2.05) {rameno};
+    \draw[callout] (armlabel.south) -- (-2.45,0.67);
+    \node[label] (headlabel) at (-2.9,-1.85) {čtecí/zapisovací hlava};
+    \draw[callout] (headlabel.north) -- (-3.72,0.38);
+
+    \draw[gray!45, thick] (0,-2.6) -- (0,2.8);
+
+    \node[font=\bfseries] at (3.9,2.95) {Pohled ze strany};
+    \draw[thick, rounded corners=5pt, fill=blue!5]
+        (0.7,-2.4) rectangle (7.1,2.55);
+
+    \foreach \y in {-1.2,0,1.2}{
+        \draw[thick, fill=gray!18] (3.3,\y) ellipse (2.0 and 0.33);
+        \draw[gray!55] (3.3,\y) ellipse (1.1 and 0.18);
+    }
+    \draw[very thick, blue!65!black] (3.3,-1.75) -- (3.3,1.75);
+
+    \draw[thick, fill=gray!45] (6.35,-1.75) rectangle (6.7,1.75);
+    \foreach \y in {-1.2,0,1.2}{
+        \draw[very thick] (6.35,\y+0.18) -- (4.25,\y+0.05);
+        \draw[thick, fill=black] (4.15,\y-0.02) rectangle (4.35,\y+0.12);
+    }
+
+    \node[label, anchor=west] (spindlelabel) at (0.95,2.0) {vřeteno};
+    \draw[callout] (spindlelabel.east) -- (3.15,1.55);
+    \node[label, anchor=west] (stacklabel) at (0.95,-2.0) {soubor ploten};
+    \draw[callout] (stacklabel.east) -- (2.2,-1.2);
+    \node[label] (assemblylabel) at (5.7,2.05) {mechanismus ramen};
+    \draw[callout] (assemblylabel.south) -- (6.5,1.4);
+\end{tikzpicture}

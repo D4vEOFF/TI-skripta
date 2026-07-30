@@ -1,0 +1,134 @@
+\section{Hešovací funkce}\label{sec:krypto-hash}
+
+Šifrování převádí zprávu na šifrový text, který má oprávněný příjemce znovu dešifrovat. Hešovací funkce má jiný účel. Z~libovolně dlouhých dat vytvoří krátký otisk pevné délky. Z~otisku se původní data běžně neobnovují; používá se především k~rychlému porovnání dat, kontrole integrity a~jako součást dalších kryptografických konstrukcí.
+
+\begin{definition}\label{def:krypto-hash}
+    \emph{Hešovací funkce} je zobrazení
+    \[
+        \mapping{H_n}{\set{0,1}^{*}}{\set{0,1}^{n}}.
+    \]
+    Pro $x\in\set{0,1}^{*}$ nazýváme hodnotu $H_n(x)$ \emph{hash} nebo \emph{otisk} řetězce $x$.
+\end{definition}
+
+Index $n$ připomíná délku výstupu. Ať je vstupem krátké heslo, rozsáhlý dokument nebo obraz disku, výsledkem je vždy právě $n$ bitů. Kryptografická hešovací funkce má být rychle vyčíslitelná a~malá změna vstupu má typicky změnit velkou část výstupních bitů. Tato citlivost se často označuje jako lavinový efekt.
+
+\notebox{Lavinový efekt je užitečná konstrukční vlastnost, sám o~sobě však nedokazuje bezpečnost. Funkce může na pohled měnit výstup chaoticky a~přesto umožňovat efektivní hledání vzorů nebo kolizí.}
+
+\subsection{Kolize jsou nevyhnutelné}
+
+Množina $\set{0,1}^{*}$ je nekonečná, zatímco množina $\set{0,1}^{n}$ obsahuje pouze $2^n$ prvků. Z~Dirichletova principu proto plyne, že existují různá data $x\neq y$ se stejným otiskem:
+\[
+    H_n(x)=H_n(y).
+\]
+Takovou dvojici nazýváme \emph{kolize}.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-hash-kolize.tex}
+    \caption{Více vstupů se musí zobrazit na tentýž $n$-bitový otisk.}
+    \label{fig:krypto-hash-kolize}
+\end{figure}
+
+Kolizím tedy nelze zabránit matematicky. Bezpečnostní požadavek musí znít jinak: kolize existují, ale žádný efektivní algoritmus je nemá umět nalézt s~nezanedbatelnou pravděpodobností.
+
+\subsection{Narozeninový paradox}
+
+Nejprve uvažujme skupinu $k$ lidí a~zjednodušující předpoklad, že každý z~365 dnů narození je stejně pravděpodobný a~výběry jsou nezávislé. Pravděpodobnost, že všech $k$ narozenin připadne na různé dny, je
+\[
+    \Pr(C=0)
+    =
+    \frac{365}{365}
+    \cdot
+    \frac{364}{365}
+    \cdots
+    \frac{365-k+1}{365}.
+\]
+Pravděpodobnost alespoň jedné shody proto získáme doplňkem:
+\[
+    \Pr(C>0)
+    =
+    1-\prod_{i=0}^{k-1}\frac{365-i}{365}.
+\]
+Už pro $k=23$ vychází přibližně $50{,}7\,\%$. Důvodem je počet dvojic: ve skupině 23 lidí jich existuje
+\[
+    \binom{23}{2}=253.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-narozeniny.tex}
+    \caption{U~23 lidí porovnáváme 253 různých dvojic.}
+    \label{fig:krypto-narozeniny}
+\end{figure}
+
+Stejný výpočet použijeme na $r$-bitové otisky. Předpokládejme pro hrubý odhad, že se otisky chovají jako nezávislé rovnoměrně náhodné hodnoty z~množiny o~$2^r$ prvcích. Pro $k$ různých zpráv je pravděpodobnost alespoň jedné kolize
+\begin{align*}
+    \Pr(C>0)
+    &=
+    1-\prod_{j=1}^{k-1}\left(1-\frac{j}{2^r}\right)\\
+    &\approx
+    1-\exp\left(-\frac{k(k-1)}{2^{r+1}}\right).
+\end{align*}
+Použili jsme přibližnou rovnost $1-x\approx e^{-x}$ pro malé $x$ a~součet
+\[
+    \sum_{j=1}^{k-1}j=\frac{k(k-1)}{2}.
+\]
+
+Pro $k\approx 2^{r/2}$ dostáváme
+\[
+    \Pr(C>0)
+    \approx
+    1-e^{-1/2}
+    \approx
+    0{,}3935.
+\]
+K~pravděpodobnosti blízké jedné polovině stačí jen o~konstantní faktor více pokusů. Hrubou silou lze proto kolizi $r$-bitové hešovací funkce hledat řádově v~čase $2^{r/2}$, nikoli až $2^r$.
+
+\importantbox{Výstup délky $r$ bitů poskytuje proti obecnému hledání kolizí přibližně jen $r/2$ bitů bezpečnosti. Právě proto kryptografické hešovací funkce používají poměrně dlouhé otisky.}
+
+\subsection{Bezpečnostní vlastnosti}
+
+Uvažujme rodinu hešovacích funkcí
+\[
+    \mapping{H_n}{\set{0,1}^{*}}{\set{0,1}^{n}}
+\]
+a~pravděpodobnostní polynomiální algoritmus $\mathcal A$, který představuje záškodníka.
+
+\paragraph{Odolnost vůči nalezení vzoru.}
+Záškodník dostane otisk náhodně zvoleného vstupu a~snaží se najít libovolná data se stejným otiskem. Formálně požadujeme, aby pro nějakou zanedbatelnou funkci $\varepsilon$ platilo
+\[
+    \Pr_{x\in\set{0,1}^{n}}
+    \left[
+        H_n\bigl(\mathcal A(H_n(x))\bigr)=H_n(x)
+    \right]
+    \leqslant\varepsilon(n).
+\]
+Algoritmus nemusí vrátit původní $x$; úspěchem je jakýkoliv vzor daného otisku.
+
+\paragraph{Odolnost vůči kolizím.}
+Záškodník se snaží vytvořit libovolné dva různé vstupy se stejným otiskem. Požadujeme
+\[
+    \Pr\left[
+        \begin{array}{c}
+            \mathcal A\text{ vypíše }(x,y),\\
+            x\neq y\ \text{a}\ H_n(x)=H_n(y)
+        \end{array}
+    \right]
+    \leqslant\varepsilon(n),
+\]
+kde pravděpodobnost počítáme přes náhodné volby algoritmu $\mathcal A$.
+
+\begin{figure}[ht]
+    \centering
+    \input{06-kryptografie/images/ch06-hash-vlastnosti.tex}
+    \caption{Rozdíl mezi hledáním vzoru daného otisku a~hledáním libovolné kolize.}
+    \label{fig:krypto-hash-vlastnosti}
+\end{figure}
+
+Tyto požadavky nelze zaměňovat s~pouhou malou pravděpodobností, že se srazí dva náhodně vybrané vstupy. Odolnost vůči kolizím se ptá na aktivního záškodníka, který vstupy volí záměrně a~může využít strukturu algoritmu $H_n$.
+
+\subsection{Vztah k~jednosměrným funkcím}
+
+Odolnost vůči nalezení vzoru připomíná definici jednosměrné funkce: dopředný výpočet $H_n(x)$ je rychlý, ale z~výstupu má být těžké získat libovolný odpovídající vstup. Bezpečná hešovací funkce navíc požaduje obtížné hledání kolizí. Ne každá jednosměrná funkce proto musí být vhodnou hešovací funkcí a~ne každá rychlá funkce s~krátkým výstupem splňuje kryptografické požadavky.
+
+\tipbox{Hešovací funkce není šifrování bez klíče. Šifrování je navrženo tak, aby oprávněný příjemce mohl data obnovit. U~hešování se žádná dešifrovací operace nepředpokládá a~ztráta informace je záměrná.}

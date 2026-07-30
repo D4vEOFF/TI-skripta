@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+    font=\small,
+    >=Latex,
+    point/.style={circle, draw=blue!65!black, fill=blue!18,
+                  minimum size=6mm, inner sep=0pt},
+    label/.style={rounded corners=1mm, draw=black!45, fill=black!3,
+                  minimum width=2.6cm, minimum height=10mm, align=center}
+]
+    \draw[-{Latex}, line width=1pt, draw=black!65] (-6,0) -- (6.4,0);
+    \foreach \x/\year/\name/\desc in {
+        -5/1993/SHA-0/původní standard,
+        -2/1995/SHA-1/dnes nevhodný,
+        1.5/2002/SHA-2/rodina funkcí,
+        5/2015/SHA-3/Keccak
+    }{
+        \node[point] (p\x) at (\x,0) {};
+        \node[above=2mm of p\x, font=\small\bfseries] {\year};
+        \node[label, below=5mm of p\x] {\name\\\desc};
+    }
+\end{tikzpicture}

@@ -46,7 +46,17 @@
 \usepackage{amsthm}						% Věta, lemma, důsledek, důkaz
 \usepackage{listings}                   % Zdrojové kódy
 \usepackage{tikz}						% Schémata automatů
-\usetikzlibrary{arrows.meta,babel,calc,positioning,patterns,shapes.geometric}
+\usetikzlibrary{
+    arrows,
+    arrows.meta,
+    babel,
+    calc,
+    decorations.pathreplacing,
+    fit,
+    positioning,
+    patterns,
+    shapes.geometric
+}
 \IfFileExists{fontawesome5.sty}{%
     \usepackage{awesomebox}%            % infoboxíky
 }{%
@@ -63,7 +73,6 @@
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.15}
 \usepackage{mathrsfs}
-\usetikzlibrary{arrows}
 
 % Font
 \IfFileExists{newtxtext.sty}{%

@@ -1,6 +1,6 @@
 \section{Problém nezávislé množiny v~grafu}\label{sec:nzmna}
 
-Od problému SAT,~resp. 3-SAT se na chvíli přesuneme ke zdánlivě odlišnému problému z~teorie grafů. Později si ukážeme i~jeho praktické použití v~podsekci \ref{subsec:int_graf}. Nejdříve však bude dobré začít definicí.
+Od problému \ensuremath{\SAT},~resp. \ensuremath{\THREESAT} se na chvíli přesuneme ke zdánlivě odlišnému problému z~teorie grafů. Později si ukážeme i~jeho praktické použití v~podsekci \ref{subsec:int_graf}. Nejdříve však bude dobré začít definicí.
 \begin{definition}[Nezávislá množina]\label{def:nzmna}
     Mějme libovolný neorientovaný graf $G=(V,E)$. Množina $N\subseteq V$ je \emph{nezávislá},~pokud žádné dva různé vrcholy z~$N$ nejsou spojeny hranou.
 \end{definition}
@@ -27,12 +27,12 @@ Definice \ref{def:nzmna} jednoduše říká,~že jakákoliv vybraná množina vr
 
 Zde poznamenejme,~že na pouhou existenci neprázdné nezávislé množiny nemá smysl se ptát,~neboť v~libovolném neprázdném grafu existuje nezávislá množina: libovolná jednovrcholová množina je z~definice nezávislá. Zajímavější otázkou je spíše,~zda v~zadaném grafu existuje nezávislá množina,~která má alespoň určitou velikost (tzn. počet vrcholů).
 
-\problem{Nezávislá množina v~grafu (NzMna)}{Graf $G=(V,E)$ a~číslo $k\in\N$.}{$1$,~pokud v~grafu $G$ existuje nezávislá množina velikosti alespoň $k$,~jinak $0$.}
+\problem{Nezávislá množina v~grafu (\ensuremath{\NZMNA})}{Graf $G=(V,E)$ a~číslo $k\in\N$.}{$1$,~pokud v~grafu $G$ existuje nezávislá množina velikosti alespoň $k$,~jinak $0$.}
 
 Jak později uvidíme,~otázka existence nezávislé má i~své aplikace při řešení praktických problémů (opět viz podsekce \ref{subsec:int_graf}),~avšak ještě než tak učiníme,~zkusme se podívat na souvislosti s~problémy,~které již známe.
 
-\subsection{Převod 3-SAT na NzMna}\label{subsec:prevod_3sat_nzmna}
-Mezi dvojicí problémů NzMna a~$3$-SAT existuje přímá souvislost oběma směry. Problém $3$-SAT lze tedy převést na problém nezávislé množiny a~naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem,~ten druhý je již podstatně složitější\footnote{Pro zájemce viz kniha \emph{Průvodce labyrintem algoritmů (2. vydání),~str. 471}}.
+\subsection{Převod \ensuremath{\THREESAT} na \ensuremath{\NZMNA}}\label{subsec:prevod_3sat_nzmna}
+Mezi dvojicí problémů \ensuremath{\NZMNA} a~\ensuremath{\THREESAT} existuje přímá souvislost oběma směry. Problém \ensuremath{\THREESAT} lze tedy převést na problém nezávislé množiny a~naopak. Pro účely tohoto textu si však ukážeme pouze převod jedním směrem,~ten druhý je již podstatně složitější\footnote{Pro zájemce viz kniha \emph{Průvodce labyrintem algoritmů (2. vydání),~str. 471}}.
 
 Začínáme s~formulí $\varphi$,~která je ve formě $3$-CNF. Uvažujme,~že obsahuje obecně $k$ klauzulí,~kde každá obsahuje maximálně $3$ literály. Chceme pro tuto formuli sestrojit graf $G$ a~číslo $n$ takové,~že v~něm existuje nezávislá množina velikosti alespoň $n$.
 \[\varphi=\underbrace{(\dots)}_{\text{max. 3~literály}}\land(\dots)\land\dots\land(\dots)\]
@@ -62,15 +62,15 @@ Pro již zmíněnou formuli $\psi$,~která je splnitelná např. pomocí ohodnoc
 
 Jako poslední musíme určit cílové číslo $n$. Protože formule obsahuje $k$ klauzulí a~z~každé vybíráme právě jeden literál,~položíme $n=k$.
 
-K~převodu NzMna na $3$-SAT přidáme jen krátký komentář. Idea převodu je využití klasického SATu. Zadaný graf $G$ a~číslo $k$ se převede na formuli v~CNF a~ta se následně převede do $3$-CNF. Problém SAT tak využijeme v~jistém smyslu jako ``prostředníka'' (viz obrázek \ref{fig:prevod_nzmna_3sat}).
+K~převodu \ensuremath{\NZMNA} na \ensuremath{\THREESAT} přidáme jen krátký komentář. Idea převodu je využití klasického \ensuremath{\SAT}. Zadaný graf $G$ a~číslo $k$ se převede na formuli v~CNF a~ta se následně převede do $3$-CNF. Problém \ensuremath{\SAT} tak využijeme v~jistém smyslu jako ``prostředníka'' (viz obrázek \ref{fig:prevod_nzmna_3sat}).
 \begin{figure}[h]
     \centering
     \input{02-problemy/images/ch02_prevod_nzmna_3sat.tex}
-    \caption{Idea převodu NzMna $\rightarrow$ $3$-SAT.}
+    \caption{Idea převodu \ensuremath{\NZMNA} $\rightarrow$ \ensuremath{\THREESAT}.}
     \label{fig:prevod_nzmna_3sat}
 \end{figure}
 
-\subsection{Aplikace NzMna -- barvení intervalového grafu}\label{subsec:int_graf}
+\subsection{Aplikace \ensuremath{\NZMNA} -- barvení intervalového grafu}\label{subsec:int_graf}
 
 Nyní se podíváme na jednu z~aplikací nezávislé množiny v~praktických problémech.
 

@@ -25,7 +25,7 @@ Jako poslední si ukážeme ještě jeden typ problému,~který (jak uvidíme) p
 \end{example}
 Podobně jako u~nezávislé množiny,~i~zde platí,~že každý neprázdný graf jistě obsahuje kliku (např. samostatný vrchol je z~definice klika). Bude nás tedy opět zajímat,~zda v~zadaném grafu existuje klika určité velikosti.
 
-\problem{Problém kliky v~grafu (Klika)}{Graf $G=(V,E)$ a~číslo $k\in\N$.}{$1$,~pokud v~$G$ existuje klika velikosti alespoň $k$,~jinak $0$.}
+\problem{Problém kliky v~grafu (\ensuremath{\KLIKA})}{Graf $G=(V,E)$ a~číslo $k\in\N$.}{$1$,~pokud v~$G$ existuje klika velikosti alespoň $k$,~jinak $0$.}
 
 Nyní si ukážeme,~že ve skutečnosti problém kliky je ekvivalentní s~problémem nezávislé množiny. K~tomu si však definujeme ještě jeden termín.
 \begin{definition}[Doplněk grafu]
@@ -49,7 +49,7 @@ Co tato definice vlastně říká? Jednoduše to,~že doplněk grafu $G$ obsahuj
     \end{figure}
 \end{example}
 
-\subsection{Převod Klika na NzMna}\label{subsec:prevod_klika_nzmna}
+\subsection{Převod \ensuremath{\KLIKA} na \ensuremath{\NZMNA}}\label{subsec:prevod_klika_nzmna}
 
 Jako poslední se zamyslíme,~jaká je tedy souvislost mezi problémem nezávislé množiny a~kliky v~grafu. Předpokládejme,~že máme zadaný graf $G$ a~číslo $k\in\N$. Chceme sestrojit graf $G^\prime$ a~číslo $k^\prime$ takové,~že v~$G$ existuje klika velikosti alespoň $k$ právě tehdy,~když v~novém grafu $G^\prime$ existuje nezávislá množina velikosti alespoň $k^\prime$. To zařídíme velice jednoduše.
 

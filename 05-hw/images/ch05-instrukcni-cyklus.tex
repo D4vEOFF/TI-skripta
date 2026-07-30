@@ -1,0 +1,42 @@
+\begin{tikzpicture}[
+    x=1cm,
+    y=1cm,
+    >=Stealth,
+    every node/.style={font=\small},
+    stagebox/.style={
+        draw,
+        thick,
+        rounded corners,
+        fill=blue!12,
+        align=center,
+        text width=2.25cm,
+        minimum height=1.25cm
+    },
+    arrow/.style={->, thick}
+]
+    \node[stagebox] (fetch) at (-5.6,0.8) {\textbf{Čtení}\\ instrukce\\[-1mm]\scriptsize fetch};
+    \node[stagebox] (decode) at (-2.8,0.8) {\textbf{Dekódování}\\ instrukce\\[-1mm]\scriptsize decode};
+    \node[stagebox] (operands) at (0,0.8) {\textbf{Čtení}\\ operandů\\[-1mm]\scriptsize operand fetch};
+    \node[stagebox] (execute) at (2.8,0.8) {\textbf{Provedení}\\ instrukce\\[-1mm]\scriptsize execute};
+    \node[stagebox] (writeback) at (5.6,0.8) {\textbf{Uložení}\\ výsledku\\[-1mm]\scriptsize write back};
+
+    \draw[arrow] (fetch.east) -- (decode.west);
+    \draw[arrow] (decode.east) -- (operands.west);
+    \draw[arrow] (operands.east) -- (execute.west);
+    \draw[arrow] (execute.east) -- (writeback.west);
+
+    \node[
+        draw,
+        thick,
+        rounded corners,
+        fill=orange!18,
+        align=center,
+        minimum width=2.4cm,
+        minimum height=0.9cm
+    ] (interrupt) at (5.6,-1.6) {kontrola\\ přerušení};
+
+    \draw[arrow] (writeback.south) -- (interrupt.north);
+    \draw[arrow]
+        (interrupt.west) -- (3.8,-1.6) -- (3.8,-2.5) --
+        (-5.6,-2.5) -- (fetch.south);
+\end{tikzpicture}
