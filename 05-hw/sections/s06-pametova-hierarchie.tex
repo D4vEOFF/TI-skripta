@@ -38,15 +38,3 @@ Paměťová hierarchie funguje dobře tehdy, když se na rychlejších úrovníc
 Z~pohledu programu může být velká část těchto přesunů skrytá. Program pracuje s~adresami v~paměti a~procesor se pokouší obsloužit požadavky co nejrychleji. Pokud jsou data v~registru nebo cache, pokračuje výpočet rychle. Při výpadku cache je potřeba čekat na RAM; pokud se potřebná část programu nebo soubor teprve načítá z~úložiště, čekání je ještě delší. Rozdíl mezi jednotlivými úrovněmi vysvětluje, proč má způsob uspořádání dat významný vliv na skutečný výkon.
 
 \importantbox{Paměťová hierarchie vytváří dojem velké a~rychlé paměti tím, že kombinuje malou rychlou paměť s~většími pomalejšími úrovněmi. Tento dojem je nejpřesvědčivější tehdy, když program vykazuje dobrou časovou a~prostorovou lokalitu.}
-
-\paragraph{Shrnutí kapitoly.}
-
-\begin{itemize}
-    \item Procesor vykonává instrukce, ale při své činnosti neustále komunikuje s~pamětí, vstupními a~výstupními zařízeními.
-    \item Ve von Neumannově architektuře sdílejí instrukce a~data společnou paměť; harvardská architektura jejich paměti a~přenosové cesty odděluje.
-    \item Základními částmi procesoru jsou výpočetní jednotky, řadič a~registry. Instrukce procházejí fázemi načtení, dekódování, získání operandů, provedení a~uložení výsledku.
-    \item Cache zkracuje průměrnou dobu přístupu k~datům tím, že využívá časovou a~prostorovou lokalitu programů.
-    \item Hlavní paměť poskytuje programu lineární adresový prostor, přestože jsou fyzické buňky v~čipech uspořádány do matic.
-    \item HDD ukládá data magneticky na rotující plotny, zatímco SSD používá flash paměť bez pohyblivých částí.
-    \item Registry, cache, RAM, úložiště a~archivní systémy společně vytvářejí paměťovou hierarchii, která vyvažuje rychlost, kapacitu a~cenu.
-\end{itemize}
