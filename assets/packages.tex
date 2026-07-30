@@ -29,9 +29,23 @@
 \usepackage{amssymb}
 \usepackage{amsthm}						% Věta, lemma, důsledek, důkaz
 \usepackage{tikz}						% Schémata automatů
-\usepackage{awesomebox}                 % infoboxíky
+\IfFileExists{fontawesome5.sty}{%
+    \usepackage{awesomebox}%            % infoboxíky
+}{%
+    % Jednoduchá náhrada pro minimální instalace TeX Live.
+    \newcommand{\faInfoCircle}{\ensuremath{\mathrm{i}}}
+    \newcommand{\awesomebox}[5][]{\fbox{\parbox{0.9\linewidth}{##5}}}
+}
 
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.15}
 \usepackage{mathrsfs}
 \usetikzlibrary{arrows}
+
+% Font
+\IfFileExists{newtxtext.sty}{%
+    \IfFileExists{mtpro2.sty}{%
+        \usepackage{newtxtext}
+        \usepackage[lite,subscriptcorrection,slantedGreek,nofontinfo,amsbb,eucal]{mtpro2}
+    }{}%
+}{}% V minimální instalaci zůstane výše načtený Latin Modern.
