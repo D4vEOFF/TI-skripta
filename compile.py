@@ -113,11 +113,11 @@ def main():
     root_project_path = os.getcwd()
 
     # Compile 'ti-skripta-3-rocnik.tex' (instead of 'ti-tretak.tex')
-    ti_skripta_path = os.path.join(root_project_path, 'ti-skripta-3-rocnik.tex')
+    ti_skripta_path = os.path.join(root_project_path, 'ti-3-rocnik.tex')
     if os.path.exists(ti_skripta_path):
         compile_tex_file(ti_skripta_path)
     else:
-        print("'ti-skripta-3-rocnik.tex' not found in the project root.")
+        print("'ti-3-rocnik.tex' not found in the project root.")
 
     # If the '--all' argument is provided, process and copy 'sep-*.tex' files, then compile them all
     if args.all:
