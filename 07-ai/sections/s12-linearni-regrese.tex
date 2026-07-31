@@ -1,0 +1,271 @@
+\section{Lineární regrese}\label{sec:ai-linearni-regrese}
+
+Lineární regrese hledá funkci
+\[
+    f(x)=ax+b,
+\]
+která co nejlépe popisuje vztah mezi statistickými soubory
+\[
+    \mathbf{X}=(x_1,\ldots,x_n),
+    \qquad
+    \mathbf{Y}=(y_1,\ldots,y_n).
+\]
+Hodnota
+\[
+    \hat y_i=f(x_i)
+\]
+je předpověď modelu pro vstup \(x_i\), zatímco
+\[
+    e_i=y_i-\hat y_i
+\]
+nazýváme \emph{reziduum}. Kladné reziduum znamená, že bod leží nad regresní přímkou, záporné reziduum že leží pod ní.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-regrese-rezidua.tex}
+    \caption{Předpovědi regresní přímky a~svislá rezidua.}
+    \label{fig:ai-regrese-rezidua}
+\end{figure}
+
+\begin{definition}\label{def:ai-sse-mse}
+    Nechť \(\mapping{f}{\R}{\R}\). \emph{Součet čtvercových chyb} a~\emph{střední kvadratickou chybu} funkce \(f\) definujeme jako
+    \[
+        \SSE_{\mathbf{X},\mathbf{Y}}(f)
+        =
+        \sum_{i=1}^{n}
+        \bigl(y_i-f(x_i)\bigr)^2
+    \]
+    a
+    \[
+        \MSE_{\mathbf{X},\mathbf{Y}}(f)
+        =
+        \frac1n
+        \SSE_{\mathbf{X},\mathbf{Y}}(f).
+    \]
+\end{definition}
+
+Pouhý součet reziduí není vhodný, protože kladné a~záporné chyby se mohou vyrušit. Čtverce jsou vždy nezáporné a~větší chyby navíc zvýrazní. Minimalizace \(\SSE\) a~\(\MSE\) vede ke stejné přímce, protože se obě veličiny liší pouze kladným násobkem \(1/n\).
+
+\subsection{Metoda nejmenších čtverců}
+
+Pro model \(f_{a,b}(x)=ax+b\) hledáme
+\[
+    (a,b)
+    =
+    \argmin_{(a,b)\in\R^2}
+    \sum_{i=1}^{n}(y_i-ax_i-b)^2.
+\]
+Nejprve zvolme pevné \(a\). Výraz lze chápat jako součet čtvercových odchylek hodnot statistického souboru
+\[
+    \mathbf{Y}-a\mathbf{X}
+    =
+    (y_1-ax_1,\ldots,y_n-ax_n)
+\]
+od konstanty \(b\). Podle
+\smartref[tvrzení~][]{\showrefs}{prop:ai-prumer-vlastnosti}{minimalizační vlastnosti průměru} je nejlepší volbou
+\[
+    b
+    =
+    \average{\mathbf{Y}-a\mathbf{X}}
+    =
+    \average{\mathbf{Y}}
+    -
+    a\average{\mathbf{X}}.
+\]
+Každý zbývající kandidát proto prochází bodem
+\[
+    \bigl(\average{\mathbf{X}},\average{\mathbf{Y}}\bigr)
+\]
+a~má tvar
+\[
+    f(x)
+    =
+    \average{\mathbf{Y}}
+    +
+    a(x-\average{\mathbf{X}}).
+\]
+
+\begin{proposition}\label{prop:ai-regresni-primka}
+    Nechť \(\Var(\mathbf{X})>0\). Potom existuje právě jedna lineární funkce
+    \(f(x)=ax+b\), která minimalizuje
+    \(\SSE_{\mathbf{X},\mathbf{Y}}\), a~její koeficienty jsou
+    \[
+        a
+        =
+        \frac{\Cov(\mathbf{X},\mathbf{Y})}
+        {\Var(\mathbf{X})},
+        \qquad
+        b
+        =
+        \average{\mathbf{Y}}
+        -
+        a\average{\mathbf{X}}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    Z~předchozí úvahy stačí minimalizovat chybu přímek procházejících bodem průměrů. Položme
+    \[
+        u_i=x_i-\average{\mathbf{X}},
+        \qquad
+        v_i=y_i-\average{\mathbf{Y}}.
+    \]
+    Po dosazení \(b=\average{\mathbf{Y}}-a\average{\mathbf{X}}\) dostaneme
+    \begin{align*}
+        \SSE_{\mathbf{X},\mathbf{Y}}(f)
+        &=
+        \sum_{i=1}^{n}(v_i-au_i)^2\\
+        &=
+        \sum_{i=1}^{n}v_i^2
+        -2a\sum_{i=1}^{n}u_iv_i
+        +a^2\sum_{i=1}^{n}u_i^2.
+    \end{align*}
+    Označme
+    \[
+        a^\ast
+        =
+        \frac{\sum_{i=1}^{n}u_iv_i}
+        {\sum_{i=1}^{n}u_i^2}.
+    \]
+    Jmenovatel je kladný, protože \(\Var(\mathbf{X})>0\). Doplněním na čtverec získáme
+    \begin{align*}
+        \SSE_{\mathbf{X},\mathbf{Y}}(f)
+        &=
+        \sum_{i=1}^{n}v_i^2
+        -
+        \frac{\left(\sum_{i=1}^{n}u_iv_i\right)^2}
+        {\sum_{i=1}^{n}u_i^2}\\
+        &\quad+
+        \left(\sum_{i=1}^{n}u_i^2\right)
+        (a-a^\ast)^2.
+    \end{align*}
+    Poslední člen je nezáporný a~je nulový právě pro \(a=a^\ast\). Minimum je proto jediné a
+    \[
+        a^\ast
+        =
+        \frac{
+            \frac1n\sum_{i=1}^{n}
+            (x_i-\average{\mathbf{X}})
+            (y_i-\average{\mathbf{Y}})
+        }{
+            \frac1n\sum_{i=1}^{n}
+            (x_i-\average{\mathbf{X}})^2
+        }
+        =
+        \frac{\Cov(\mathbf{X},\mathbf{Y})}
+        {\Var(\mathbf{X})}.
+    \]
+    Jednoznačnost \(b\) pak plyne ze vztahu
+    \(b=\average{\mathbf{Y}}-a\average{\mathbf{X}}\).
+\end{proof}
+
+Pomocí korelace lze směrnici zapsat také
+\[
+    a
+    =
+    \rho_{\mathbf{X}\mathbf{Y}}
+    \frac{\sigma_{\mathbf{Y}}}{\sigma_{\mathbf{X}}},
+\]
+a~regresní přímku ve tvaru
+\[
+    f(x)
+    =
+    \average{\mathbf{Y}}
+    +
+    \rho_{\mathbf{X}\mathbf{Y}}
+    \frac{\sigma_{\mathbf{Y}}}{\sigma_{\mathbf{X}}}
+    (x-\average{\mathbf{X}}).
+\]
+Znaménko směrnice je tedy stejné jako znaménko korelace.
+
+\subsection{Minimální MSE regresní přímky}
+
+\begin{proposition}\label{prop:ai-regrese-min-mse}
+    Nechť \(\sigma_{\mathbf{X}}>0\), \(\sigma_{\mathbf{Y}}>0\) a~\(f\) je regresní přímka souborů \(\mathbf{X},\mathbf{Y}\). Potom
+    \[
+        \MSE_{\mathbf{X},\mathbf{Y}}^{\min}
+        =
+        \min_{\ell\ \text{lineární}}
+        \MSE_{\mathbf{X},\mathbf{Y}}(\ell)
+        =
+        \MSE_{\mathbf{X},\mathbf{Y}}(f)
+        =
+        \sigma_{\mathbf{Y}}^2
+        \left(1-\rho_{\mathbf{X}\mathbf{Y}}^2\right).
+    \]
+\end{proposition}
+
+\begin{proof}
+    Použijeme označení \(u_i,v_i\) z~předchozího důkazu. Pro optimální směrnici
+    \[
+        a=
+        \frac{\sum_{i=1}^{n}u_iv_i}
+        {\sum_{i=1}^{n}u_i^2}
+    \]
+    platí
+    \begin{align*}
+        \SSE_{\mathbf{X},\mathbf{Y}}(f)
+        &=
+        \sum_{i=1}^{n}(v_i-au_i)^2\\
+        &=
+        \sum_{i=1}^{n}v_i^2
+        -2a\sum_{i=1}^{n}u_iv_i
+        +a^2\sum_{i=1}^{n}u_i^2\\
+        &=
+        \sum_{i=1}^{n}v_i^2
+        -
+        \frac{
+            \left(\sum_{i=1}^{n}u_iv_i\right)^2
+        }{
+            \sum_{i=1}^{n}u_i^2
+        }.
+    \end{align*}
+    Z~definice korelace máme
+    \[
+        \rho_{\mathbf{X}\mathbf{Y}}^2
+        =
+        \frac{
+            \left(\sum_{i=1}^{n}u_iv_i\right)^2
+        }{
+            \left(\sum_{i=1}^{n}u_i^2\right)
+            \left(\sum_{i=1}^{n}v_i^2\right)
+        }.
+    \]
+    Druhý člen předchozího výrazu je proto
+    \[
+        \frac{
+            \left(\sum_{i=1}^{n}u_iv_i\right)^2
+        }{
+            \sum_{i=1}^{n}u_i^2
+        }
+        =
+        \rho_{\mathbf{X}\mathbf{Y}}^2
+        \sum_{i=1}^{n}v_i^2.
+    \]
+    Dostáváme
+    \[
+        \SSE_{\mathbf{X},\mathbf{Y}}(f)
+        =
+        \left(1-\rho_{\mathbf{X}\mathbf{Y}}^2\right)
+        \sum_{i=1}^{n}v_i^2.
+    \]
+    Po vydělení \(n\) a~použití
+    \[
+        \frac1n\sum_{i=1}^{n}v_i^2
+        =
+        \Var(\mathbf{Y})
+        =
+        \sigma_{\mathbf{Y}}^2
+    \]
+    získáme požadovaný vztah.
+\end{proof}
+
+\subsection{Implementace v~Pythonu}
+
+Program~\ref{lst:ai-linear-regression} nejprve spočítá průměry, rozptyl a~kovarianci a~potom přímo použije vzorce z~
+\smartref[tvrzení~][]{\showrefs}{prop:ai-regresni-primka}{tvrzení o~regresní přímce}.
+
+\lstinputlisting[
+    caption={Jednoduchá lineární regrese metodou nejmenších čtverců.},
+    label={lst:ai-linear-regression}
+]{07-ai/code/linear_regression.py}

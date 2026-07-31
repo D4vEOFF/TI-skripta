@@ -1,0 +1,69 @@
+\section{Algoritmus SVM}\label{sec:ai-svm}
+
+Metoda podpůrných vektorů (anglicky \emph{support vector machine}, SVM) hledá rozhodovací hranici, která nejen oddělí třídy, ale ponechá mezi nimi co nejširší volný prostor. Nejprve budeme uvažovat lineárně oddělitelná data.
+
+\subsection{Oddělující nadrovina a~maximální okraj}
+
+Pro nový vektor parametrů
+\[
+    \mathbf{w}=(w_1,\ldots,w_p)\in\R^p
+\]
+a~\(\theta\in\R\) zavedeme lineární skóre
+\[
+    g(\mathbf{x})
+    =
+    \sum_{j=1}^{p}w_jx_j+\theta.
+\]
+Rozhodovací hranici tvoří nadrovina
+\[
+    g(\mathbf{x})=0.
+\]
+V~rovině jde o~přímku, ve třech rozměrech o~rovinu. Klasifikátor přiřadí třídu \(1\) bodům s~\(g(\mathbf{x})\geqslant0\) a~třídu \(0\) bodům s~\(g(\mathbf{x})<0\).
+
+Vzdálenost bodu \(\mathbf{x}\) od této nadroviny je
+\[
+    \frac{\abs{g(\mathbf{x})}}{\norm{\mathbf{w}}},
+    \qquad
+    \norm{\mathbf{w}}
+    =
+    \sqrt{\sum_{j=1}^{p}w_j^2}.
+\]
+Samotných oddělujících nadrovin může existovat mnoho. SVM volí takovou, jejíž nejbližší body z~obou tříd jsou od hranice co nejdále. Tento nejmenší odstup nazýváme \emph{okraj} (anglicky \emph{margin}).
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-svm.tex}
+    \caption{Oddělující přímka, maximální okraj a~podpůrné vektory.}
+    \label{fig:ai-svm}
+\end{figure}
+
+Po vhodném přenásobení \(\mathbf{w}\) a~\(\theta\) můžeme hraniční přímky okraje zapsat
+\[
+    g(\mathbf{x})=1
+    \qquad\text{a}\qquad
+    g(\mathbf{x})=-1.
+\]
+Jejich vzájemná vzdálenost je
+\[
+    \frac{2}{\norm{\mathbf{w}}}.
+\]
+Body ležící na hranicích okraje nazýváme \emph{podpůrné vektory}. Právě ony polohu optimální hranice přímo určují. Posun bodu ležícího daleko od okraje ji obvykle nezmění, zatímco posun podpůrného vektoru ano.
+
+\subsection{Neoddělitelná data a~měkký okraj}
+
+Reálná data často nelze bez chyby oddělit jedinou nadrovinou. SVM proto může použít \emph{měkký okraj}: připustí některé body uvnitř okraje nebo dokonce na chybné straně hranice. Nastavení modelu pak představuje kompromis mezi dvěma cíli:
+\begin{itemize}
+    \item mít okraj co nejširší;
+    \item mít co nejméně závažných porušení a~chybných klasifikací.
+\end{itemize}
+Parametr \(C>0\) určuje cenu porušení. Velké \(C\) chyby silně trestá a~obvykle vede k~užšímu okraji. Menší \(C\) dovolí více porušení, ale může vytvořit stabilnější širší hranici. Hodnotu \(C\) volíme pomocí validačních dat.
+
+Lineární hranice nemusí stačit ani po povolení chyb. Jednou možností je převést objekty do prostoru s~dalšími znaky, v~němž je lze oddělit nadrovinou. Jádrový trik (anglicky \emph{kernel trick}) umožňuje některé takové výpočty provést bez explicitního vytváření všech nových souřadnic. Výsledná hranice v~původním prostoru pak může být nelineární.
+
+\subsection{Vlastnosti a~použití}
+
+Mezi výhody SVM patří jasná geometrická interpretace, možnost nelineárních hranic a~skutečnost, že hranici přímo určuje jen část trénovacích objektů. Metoda může dobře fungovat i~při větším počtu znaků.
+
+Nevýhodou je citlivost na měřítko dat a~na volbu \(C\) a~jádra. U~velkých datových souborů může být trénování náročné a~výstup modelu nemá bez další úpravy přímou pravděpodobnostní interpretaci jako výstup logistické regrese. Typicky se SVM používá pro klasifikaci textu, obrazových znaků nebo biologických dat, zejména není-li počet trénovacích objektů extrémně velký.
+
+\warningbox{Stejně jako u~\(k\)-NN je před trénováním SVM obvykle nutné standardizovat nebo normalizovat vstupní znaky. Jinak geometrický okraj odráží především rozdílné jednotky a~měřítko.}

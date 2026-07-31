@@ -1,0 +1,83 @@
+\section{Učení neuronové sítě}\label{sec:ai-uceni-neuronove-site}
+
+Při učení s~učitelem máme trénovací data
+\[
+    D
+    =
+    \set{
+        (\mathbf{x}_1,y_1),\ldots,(\mathbf{x}_n,y_n)
+    }.
+\]
+Síť pro každý vstup provede dopředný průchod a~vytvoří výstup \(\hat y_i\). Ztrátová funkce porovná \(\hat y_i\) se správnou hodnotou \(y_i\). Pro regresi může jít o~MSE, pro binární klasifikaci o~křížovou entropii. Cílem je upravit všechny váhy a~prahy tak, aby byla průměrná ztráta co nejmenší.
+
+\subsection{Zpětné šíření chyby}
+
+Derivaci jsme v~\smartref[podsekci~][]{\showrefs}{subsec:ai-derivace}{předchozím výkladu} popsali jako citlivost výstupu na malou změnu vstupu. Ve vícevrstvé síti potřebujeme určit citlivost ztráty na každou váhu. Změna váhy v~první vrstvě nejprve změní aktivaci příslušného neuronu, ta ovlivní další vrstvu a~teprve nakonec výstup a~ztrátu.
+
+Algoritmus \emph{zpětného šíření chyby} (anglicky \emph{backpropagation}) tyto závislosti počítá odzadu. Nejprve určí, jak změna výstupu ovlivní ztrátu. Potom postupuje od výstupní vrstvy ke vstupní a~pro každý spoj násobí lokální citlivosti na navazující části výpočtu. Tím získá derivaci ztráty podle každé váhy a~prahu.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-backprop.tex}
+    \caption{Dopředný průchod počítá výstup; zpětný průchod přenáší informaci o~chybě.}
+    \label{fig:ai-backprop}
+\end{figure}
+
+Například pro jediný neuron
+\[
+    z=\sum_{j=1}^{p}w_jx_j+\theta,
+    \qquad
+    \hat y=f(z),
+    \qquad
+    E=\ell(y,\hat y)
+\]
+se citlivost ztráty na váhu \(w_j\) rozloží na tři navazující změny:
+\[
+    \frac{\partial E}{\partial w_j}
+    =
+    \frac{\partial E}{\partial\hat y}
+    \cdot
+    \frac{\partial\hat y}{\partial z}
+    \cdot
+    \frac{\partial z}{\partial w_j}
+    =
+    \frac{\partial E}{\partial\hat y}
+    \cdot
+    f'(z)
+    \cdot
+    x_j.
+\]
+Toto pravidlo se nazývá \emph{řetězové pravidlo}. Není zde důležitá technika jeho důkazu, ale význam: celkový vliv získáme vynásobením vlivů jednotlivých navazujících kroků.
+
+Při rychlosti učení \(\eta>0\) následně pro každou váhu provedeme aktualizaci
+\[
+    w
+    \gets
+    w-\eta\frac{\partial E}{\partial w}
+\]
+a~obdobně upravíme prahy. Jeden úplný průchod trénovacími daty nazýváme \emph{epocha}. V~praxi data často rozdělíme na malé dávky a~parametry aktualizujeme po každé dávce.
+
+\subsection{Trénování a~zobecnění}
+
+Malá trénovací ztráta sama o~sobě nestačí. Síť se může naučit zvláštnosti konkrétních trénovacích dat a~na nových objektech selhat. Tomuto jevu říkáme přeučení. Průběh proto sledujeme na validačních datech, která se nepoužívají k~přímé aktualizaci vah.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-preuceni.tex}
+    \caption{Při přeučení trénovací ztráta dále klesá, ale validační ztráta začne růst.}
+    \label{fig:ai-preuceni}
+\end{figure}
+
+Přeučení omezujeme například menší sítí, větším množstvím trénovacích dat, penalizací příliš velkých vah nebo předčasným zastavením ve chvíli, kdy se validační ztráta přestane zlepšovat. Testovací data použijeme až na konci pro nezávislý odhad chování hotového modelu.
+
+\newpage
+\subsection{Jednoduchá implementace}
+
+Program~\ref{lst:ai-neural-network} implementuje síť se dvěma vstupy, jednou skrytou vrstvou a~jedním sigmoidálním výstupem. Dopředný průchod si ukládá aktivace potřebné pro výpočet gradientů. Metoda \texttt{fit} potom provede zpětné šíření a~gradientní sestup. Příklad učí logickou funkci XOR, kterou jediný perceptron kvůli nelineární oddělitelnosti nezvládne.
+
+\lstinputlisting[
+    caption={Dopředný průchod a~zpětné šíření v~malé neuronové síti.},
+    label={lst:ai-neural-network}
+]{07-ai/code/neural_network.py}
+
+\warningbox{Ukázka vysvětluje princip, není však náhradou knihoven určených pro velké sítě. Ty používají maticové výpočty, automatické derivování, specializovaný hardware a~další metody stabilizace učení.}

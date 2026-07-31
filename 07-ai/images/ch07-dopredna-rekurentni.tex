@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+    neuron/.style={circle, draw=darkblue, fill=darkblue!10, minimum size=9mm},
+    conn/.style={-Latex, thick, draw=darkblue}
+]
+    \node[neuron] (f1) at (0,0) {};
+    \node[neuron] (f2) at (1.6,0) {};
+    \node[neuron] (f3) at (3.2,0) {};
+    \draw[conn] (f1) -- (f2);
+    \draw[conn] (f2) -- (f3);
+    \node[above=7mm of f2] {dopředná síť};
+
+    \node[neuron] (r1) at (5.5,0) {};
+    \node[neuron] (r2) at (7.1,0) {};
+    \node[neuron] (r3) at (8.7,0) {};
+    \draw[conn] (r1) -- (r2);
+    \draw[conn] (r2) -- (r3);
+    \draw[conn] (r3) to[bend left=55] node[above] {zpětný spoj} (r1);
+    \node[above=13mm of r2] {rekurentní síť};
+\end{tikzpicture}
+

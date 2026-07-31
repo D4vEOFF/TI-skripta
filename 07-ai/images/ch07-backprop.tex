@@ -1,0 +1,19 @@
+\begin{tikzpicture}[
+    block/.style={draw=darkblue, rounded corners, fill=darkblue!8, minimum width=23mm, minimum height=11mm, align=center},
+    fwd/.style={-Latex, very thick, draw=darkblue},
+    back/.style={-Latex, very thick, dashed, draw=red!75!black}
+]
+    \node[block] (input) at (0,0) {vstup\\\(\mathbf{x}_i\)};
+    \node[block] (hidden) at (3.0,0) {skrytá\\vrstva};
+    \node[block] (output) at (6.0,0) {výstup\\\(\hat y_i\)};
+    \node[block] (loss) at (9.0,0) {chyba\\\(E_i\)};
+
+    \draw[fwd] (input) -- node[above] {aktivace} (hidden);
+    \draw[fwd] (hidden) -- node[above] {aktivace} (output);
+    \draw[fwd] (output) -- (loss);
+
+    \draw[back] ([yshift=-3mm]loss.south west) to[bend left=18]
+        node[below] {gradienty} ([yshift=-3mm]hidden.south east);
+    \draw[back] ([yshift=-3mm]hidden.south west) to[bend left=18]
+        ([yshift=-3mm]input.south east);
+\end{tikzpicture}

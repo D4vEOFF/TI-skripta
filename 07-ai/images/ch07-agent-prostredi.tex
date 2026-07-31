@@ -1,0 +1,10 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=blue!10,minimum width=34mm,minimum height=13mm]
+        (agent) at (0,0) {\textbf{agent}\\pozoruje a~rozhoduje};
+    \node[task,fill=orange!15,minimum width=38mm,minimum height=13mm]
+        (env) at (7,0) {\textbf{prostředí}\\mění se a~reaguje};
+    \draw[diredge,bend left=18] (agent.north east) to
+        node[above]{akce} (env.north west);
+    \draw[diredge,bend left=18] (env.south west) to
+        node[below]{pozorování} (agent.south east);
+\end{tikzpicture}

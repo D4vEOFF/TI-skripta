@@ -1,0 +1,31 @@
+\begin{tikzpicture}[
+    neuron/.style={circle, draw=darkblue, fill=darkblue!9, minimum size=8mm},
+    conn/.style={draw=darkblue!65, thin}
+]
+    \foreach \y/\name in {1.6/x1,0/x2,-1.6/xp}
+        \node[neuron] (\name) at (0,\y) {};
+    \node at (0,-0.75) {\(\vdots\)};
+    \node[left=3mm of x1] {\(x_{i1}\)};
+    \node[left=3mm of x2] {\(x_{i2}\)};
+    \node[left=3mm of xp] {\(x_{ip}\)};
+
+    \foreach \y/\name in {2.0/h1,0.7/h2,-0.7/h3,-2.0/h4}
+        \node[neuron] (\name) at (3.1,\y) {};
+
+    \foreach \y/\name in {0.8/o1,-0.8/o2}
+        \node[neuron] (\name) at (6.2,\y) {};
+
+    \foreach \a in {x1,x2,xp}
+        \foreach \b in {h1,h2,h3,h4}
+            \draw[conn] (\a) -- (\b);
+    \foreach \a in {h1,h2,h3,h4}
+        \foreach \b in {o1,o2}
+            \draw[conn] (\a) -- (\b);
+
+    \node[above=4mm of x1] {vstupní vrstva};
+    \node[above=4mm of h1] {skrytá vrstva};
+    \node[above=4mm of o1] {výstupní vrstva};
+    \node[right=3mm of o1] {\(\hat y_{i1}\)};
+    \node[right=3mm of o2] {\(\hat y_{i2}\)};
+\end{tikzpicture}
+

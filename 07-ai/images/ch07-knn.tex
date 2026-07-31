@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=10cm,height=8cm,
+        xmin=0,xmax=8,ymin=0,ymax=6,
+        axis lines=left,xlabel={$x_1$},ylabel={$x_2$},
+        xtick=\empty,ytick=\empty,
+        label style={font=\normalsize},
+        every node/.style={font=\normalsize},
+        clip=false
+    ]
+        \addplot[only marks,mark=*,mark size=2.5pt,blue!75!black]
+            coordinates{(1,1)(1.8,2)(2.7,1.4)(3.4,2.4)(4,1.7)};
+        \addplot[only marks,mark=square*,mark size=2.7pt,orange!85!black]
+            coordinates{(4.8,3.3)(5.5,2.8)(5.8,4.2)(6.7,3.5)(7.2,4.8)(6.1,1.9)};
+        \addplot[only marks,mark=diamond*,mark size=4pt,red!75!black]
+            coordinates{(4.6,2.5)};
+        \addplot[only marks,mark=o,mark size=6pt,black]
+            coordinates{(4,1.7)(3.4,2.4)(4.8,3.3)(5.5,2.8)(6.1,1.9)};
+        \draw[dashed,gray] (axis cs:4.6,2.5)--(axis cs:4,1.7);
+        \draw[dashed,gray] (axis cs:4.6,2.5)--(axis cs:3.4,2.4);
+        \draw[dashed,gray] (axis cs:4.6,2.5)--(axis cs:4.8,3.3);
+        \draw[dashed,gray] (axis cs:4.6,2.5)--(axis cs:5.5,2.8);
+        \draw[dashed,gray] (axis cs:4.6,2.5)--(axis cs:6.1,1.9);
+        \node[red!75!black,anchor=west] at (axis cs:4.75,2.35){\(\mathbf{x}\)};
+    \end{axis}
+\end{tikzpicture}

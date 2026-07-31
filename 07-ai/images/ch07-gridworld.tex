@@ -1,0 +1,13 @@
+\begin{tikzpicture}[x=1.05cm,y=1.05cm,every node/.style={font=\normalsize}]
+    \draw[step=1,black!50] (0,0) grid (5,4);
+    \fill[black!25] (2,1) rectangle (3,3);
+    \node[align=center] at (2.5,2) {zeď};
+    \fill[blue!65] (0.5,0.5) circle (3pt);
+    \node[below] at (0.5,0.28) {agent};
+    \fill[green!55!black] (4,3) rectangle (5,4);
+    \node[text=white] at (4.5,3.5) {cíl};
+    \fill[red!65] (4,0) rectangle (5,1);
+    \node[text=white] at (4.5,0.5) {past};
+    \draw[diredge] (0.7,0.5) -- (1.5,0.5);
+    \draw[diredge] (0.5,0.7) -- (0.5,1.5);
+\end{tikzpicture}

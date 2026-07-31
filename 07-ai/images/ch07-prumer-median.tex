@@ -1,0 +1,18 @@
+\begin{tikzpicture}[x=1.05cm,y=1cm,every node/.style={font=\normalsize}]
+    \draw[diredge] (0,0) -- (10.4,0) node[right] {\(x\)};
+    \foreach \x in {2,3,4,5,10}{
+        \fill[blue!75!black] (\x,0) circle (2.4pt);
+    }
+    \node[above] at (2,0.12) {\(2\)};
+    \node[above] at (3,0.12) {\(3\)};
+    \node[above] at (4,0.12) {\(4\)};
+    \node[above] at (5,0.12) {\(5\)};
+    \node[above] at (10,0.12) {\(100\)};
+    \draw[green!60!black,very thick] (4,-0.45) -- (4,0.45);
+    \node[green!50!black,below] at (4,-0.48) {\(\median(\mathbf{X})\)};
+    \draw[red!75!black,very thick] (6.1,-0.45) -- (6.1,0.45);
+    \node[red!75!black,below] at (6.1,-0.48) {\(\average{\mathbf{X}}\)};
+    \draw[decorate,decoration={brace,amplitude=5pt},thick]
+        (5.15,0.75) -- (9.9,0.75)
+        node[midway,above=5pt]{odlehlá hodnota posouvá průměr};
+\end{tikzpicture}

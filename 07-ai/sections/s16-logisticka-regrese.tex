@@ -1,0 +1,181 @@
+\section{Logistická regrese}\label{sec:ai-logisticka-regrese}
+
+Při binární klasifikaci používáme třídy \(0\) a~\(1\). Přímé použití lineární regrese je problematické, protože funkce \(ax+b\) může nabývat libovolných reálných hodnot a~čtvercová chyba není přizpůsobena vyhodnocování jistoty klasifikační odpovědi. Logistická regrese proto lineární skóre převádí do intervalu \((0,1)\).
+
+\begin{definition}\label{def:ai-sigmoida}
+    \emph{Logistická funkce} neboli \emph{sigmoida} je funkce
+    \[
+        \sigma(z)
+        =
+        \frac{1}{1+e^{-z}},
+        \qquad z\in\R.
+    \]
+\end{definition}
+
+Funkce je rostoucí, platí \(\sigma(0)=0{,}5\) a~její hodnoty se pro velmi záporná, respektive velmi kladná \(z\), blíží \(0\), respektive \(1\).
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-sigmoida.tex}
+    \caption{Logistická funkce převádí reálné skóre do intervalu \((0,1)\).}
+    \label{fig:ai-sigmoida}
+\end{figure}
+
+Pro jeden vstupní statistický soubor
+\[
+    \mathbf{X}=(x_1,\ldots,x_n)
+\]
+logistický model nejprve vypočítá lineární skóre \(z_i=ax_i+b\) a~potom
+\[
+    \hat p_i
+    =
+    \sigma(z_i)
+    =
+    \frac{1}{1+e^{-(ax_i+b)}}.
+\]
+Statistický soubor výstupů označíme
+\[
+    \hat{\mathbf{P}}
+    =
+    (\hat p_1,\ldots,\hat p_n).
+\]
+Hodnotu \(\hat p_i\) chápeme jako míru podpory modelu pro třídu \(1\).
+
+Pro rozhodovací práh \(t\in(0,1)\) definujeme
+\[
+    h^{(t)}(x)
+    =
+    \begin{cases}
+        1, & \hat p(x)\geqslant t,\\
+        0, & \hat p(x)<t.
+    \end{cases}
+\]
+Protože je sigmoida rostoucí,
+\[
+    \hat p(x)\geqslant t
+    \quad\Longleftrightarrow\quad
+    ax+b\geqslant
+    \ln\left(\frac{t}{1-t}\right).
+\]
+Pro obvyklý práh \(t=0{,}5\) rozhoduje znaménko výrazu \(ax+b\).
+
+\subsection{Křížová entropie}
+
+\begin{definition}\label{def:ai-bce}
+    Pro skutečnou třídu \(y_i\in\set{0,1}\) a~výstup
+    \(\hat p_i\in(0,1)\) definujeme \emph{binární křížovou entropii}
+    \[
+        \ell(y_i,\hat p_i)
+        =
+        -
+        \left(
+            y_i\ln\hat p_i
+            +(1-y_i)\ln(1-\hat p_i)
+        \right).
+    \]
+    Průměrná křížová entropie na celém souboru je
+    \[
+        L(\mathbf{Y},\hat{\mathbf{P}})
+        =
+        \frac1n\sum_{i=1}^{n}\ell(y_i,\hat p_i).
+    \]
+\end{definition}
+
+Je-li \(y_i=1\), ztráta má tvar \(-\ln\hat p_i\); je-li \(y_i=0\), má tvar \(-\ln(1-\hat p_i)\). Správná a~jistá předpověď má malou ztrátu, zatímco jistá chybná předpověď je potrestána velmi vysokou hodnotou.
+
+Parametry logistické regrese hledáme tak, aby
+\[
+    (a^\ast,b^\ast)
+    =
+    \argmin_{(a,b)\in\R^2}L(a,b),
+\]
+kde
+\[
+    L(a,b)
+    =
+    -\frac1n\sum_{i=1}^{n}
+    \left(
+        y_i\ln\hat p_i(a,b)
+        +(1-y_i)\ln(1-\hat p_i(a,b))
+    \right).
+\]
+
+\subsection{Odbočka: co vyjadřuje derivace}\label{subsec:ai-derivace}
+
+K~hledání minima potřebujeme vědět, jak se hodnota funkce změní při malé změně jejího vstupu. Pro funkci jedné proměnné \(g\) porovnáváme hodnoty \(g(c)\) a~\(g(c+h)\). Podíl
+\[
+    \frac{g(c+h)-g(c)}{h}
+\]
+je směrnice sečny vedené dvěma blízkými body grafu. Necháme-li nenulové \(h\) přibližovat k~nule a~směrnice se ustálí, získáme \emph{derivaci} \(g'(c)\). Derivace tedy popisuje okamžitý směr a~rychlost změny:
+\begin{itemize}
+    \item \(g'(c)>0\): funkce v~okolí \(c\) roste;
+    \item \(g'(c)<0\): funkce v~okolí \(c\) klesá;
+    \item \(g'(c)=0\): graf má v~daném bodě vodorovnou tečnu; může zde ležet minimum nebo maximum.
+\end{itemize}
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-derivace.tex}
+    \caption{Sečna se při zmenšování \(h\) blíží tečně; její směrnice je derivací.}
+    \label{fig:ai-derivace}
+\end{figure}
+
+Závisí-li ztráta \(L(a,b)\) na dvou parametrech, můžeme měnit vždy jen jeden z~nich. Symboly
+\[
+    \frac{\partial L}{\partial a},
+    \qquad
+    \frac{\partial L}{\partial b}
+\]
+označují derivace podle \(a\), respektive podle \(b\), při pevném druhém parametru. Vektor
+\[
+    \nabla L(a,b)
+    =
+    \left(
+        \frac{\partial L}{\partial a},
+        \frac{\partial L}{\partial b}
+    \right)
+\]
+nazýváme \emph{gradient}. Ukazuje směrem nejrychlejšího růstu ztráty, a~proto se při minimalizaci pohybujeme opačným směrem.
+
+\subsection{Gradientní sestup}
+
+Pro logistickou regresi lze odvodit
+\[
+    \frac{\partial L}{\partial a}
+    =
+    \frac1n\sum_{i=1}^{n}
+    (\hat p_i-y_i)x_i,
+    \qquad
+    \frac{\partial L}{\partial b}
+    =
+    \frac1n\sum_{i=1}^{n}
+    (\hat p_i-y_i).
+\]
+Při rychlosti učení \(\eta>0\) opakujeme aktualizace
+\[
+    a
+    \gets
+    a-\eta\frac{\partial L}{\partial a},
+    \qquad
+    b
+    \gets
+    b-\eta\frac{\partial L}{\partial b}.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-gradientni-sestup.tex}
+    \caption{Gradientní sestup postupně snižuje hodnotu ztrátové funkce.}
+    \label{fig:ai-gradientni-sestup}
+\end{figure}
+
+Příliš malá \(\eta\) vede k~pomalému postupu. Příliš velká hodnota může minimum přeskakovat nebo výpočet rozkmitat. Zastavujeme například po pevném počtu iterací nebo ve chvíli, kdy se ztráta a~parametry mění už jen nepatrně.
+
+\subsection{Implementace v~Pythonu}
+
+Program~\ref{lst:ai-logistic-regression} používá přesně uvedené dva gradienty. Metoda \texttt{fit} opakovaně vypočítá všechny hodnoty \(\hat p_i\) a~upraví parametry \(a,b\); metoda \texttt{predict} převede výstupy na třídy pomocí zvoleného prahu.
+
+\lstinputlisting[
+    caption={Logistická regrese pro jeden vstupní statistický znak.},
+    label={lst:ai-logistic-regression}
+]{07-ai/code/logistic_regression.py}

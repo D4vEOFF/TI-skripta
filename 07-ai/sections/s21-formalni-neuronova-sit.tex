@@ -1,0 +1,101 @@
+\section{Formální neuronová síť}\label{sec:ai-formalni-neuronova-sit}
+
+\subsection{Formální neuron}
+
+Uvažujme objekt \(\mathbf{x}_i=(x_{i1},\ldots,x_{ip})\in\R^p\). Formální neuron má pro každý vstup váhu \(w_j\in\R\), práh \(\theta\in\R\) a~aktivační funkci \(f\). Nejprve vypočítá lineární kombinaci
+\[
+    z_i
+    =
+    \sum_{j=1}^{p}w_jx_{ij}+\theta
+\]
+a~potom výstup
+\[
+    \hat y_i=f(z_i).
+\]
+Práh \(\theta\) lze chápat jako váhu dodatečného stálého vstupu \(1\). V~některých zdrojích se proto nazývá posunutí (anglicky \emph{bias}).
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-formalni-neuron.tex}
+    \caption{Formální neuron: vážený součet vstupů následovaný aktivační funkcí.}
+    \label{fig:ai-formalni-neuron}
+\end{figure}
+
+Volbou schodové aktivační funkce
+\[
+    f(z)
+    =
+    \begin{cases}
+        1, & z\geqslant0,\\
+        0, & z<0
+    \end{cases}
+\]
+získáme \emph{perceptron}. Jeho rozhodovací hranice
+\[
+    \sum_{j=1}^{p}w_jx_j+\theta=0
+\]
+je nadrovina. Jeden perceptron tedy dokáže oddělit pouze lineárně oddělitelné třídy.
+
+V~hlubších sítích potřebujeme aktivační funkce, které dovolují postupně upravovat váhy pomocí derivací. Často používáme sigmoidální funkci zavedenou v~\smartref[definici~][]{\showrefs}{def:ai-sigmoida}{definici sigmoidy} nebo funkci
+\[
+    \ReLU(z)=\max\set{0,z}.
+\]
+Funkce \(\ReLU\) ponechá kladný vstup beze změny a~záporný nahradí nulou. Pro rozdělení výstupu mezi \(k\) tříd se používá funkce \emph{softmax}. Pro vektor skóre
+\(\mathbf{z}=(z_1,\ldots,z_k)\in\R^k\) vrací
+\[
+    \sigma_i(\mathbf{z})
+    =
+    \frac{e^{z_i}}{\sum_{j=1}^{k}e^{z_j}},
+    \qquad i\in\set{1,\ldots,k}.
+\]
+Všechny hodnoty \(\sigma_i(\mathbf{z})\) jsou kladné a~jejich součet je \(1\).
+
+\subsection{Síť a~vrstvy}
+
+\begin{definition}\label{def:ai-formalni-sit}
+    \emph{Formální neuronová síť} je uspořádaná sedmice
+    \[
+        \mathcal N=(V,E,I,O,w,\theta,f),
+    \]
+    kde \(V\) je konečná množina neuronů, \(E\subseteq V\times V\) je množina orientovaných spojů, \(I\subseteq V\) je množina vstupních neuronů, \(O\subseteq V\) je množina výstupních neuronů, \(w\colon E\to\R\) přiřazuje spojům váhy, \(\theta\colon V\setminus I\to\R\) přiřazuje nevstupním neuronům prahy a~\(f\colon\R\to\R\) je aktivační funkce.
+\end{definition}
+
+Je-li graf \((V,E)\) acyklický a~spoje vedou pouze od dřívější vrstvy k~pozdější, hovoříme o~\emph{dopředné neuronové síti}. Neurony rozdělíme do vstupní vrstvy, jedné nebo více skrytých vrstev a~výstupní vrstvy.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-mlp.tex}
+    \caption{Vícevrstvý perceptron se vstupní, skrytou a~výstupní vrstvou.}
+    \label{fig:ai-mlp}
+\end{figure}
+
+Počet skrytých vrstev označíme \(L-1\). Aktivace vstupní vrstvy pro objekt \(\mathbf{x}_i\) tvoří vektor
+\[
+    \mathbf{a}^{(0)}=\mathbf{x}_i.
+\]
+Má-li vrstva \(\ell\) celkem \(n_\ell\) neuronů, označíme její aktivace
+\[
+    \mathbf{a}^{(\ell)}
+    =
+    \left(
+        a_1^{(\ell)},\ldots,a_{n_\ell}^{(\ell)}
+    \right).
+\]
+Váhu spoje z~\(j\)-tého neuronu vrstvy \(\ell\) do \(r\)-tého neuronu vrstvy \(\ell+1\) označíme
+\[
+    w_{jr}^{(\ell+1)}
+\]
+a~práh cílového neuronu \(\theta_r^{(\ell+1)}\). Přenosovou funkci této vrstvy označíme \(f^{(\ell+1)}\). Potom
+\[
+    a_r^{(\ell+1)}
+    =
+    f^{(\ell+1)}\left(
+        \sum_{j=1}^{n_\ell}
+        w_{jr}^{(\ell+1)}a_j^{(\ell)}
+        +
+        \theta_r^{(\ell+1)}
+    \right).
+\]
+Výpočet opakujeme od \(\ell=0\) až k~výstupní vrstvě \(L\). Tento postup nazýváme \emph{dopředný průchod}.
+
+\tipbox{Kdyby ve všech vrstvách byla aktivační funkce \(f(z)=z\), celá síť by byla pouze složením lineárních funkcí, a~tedy opět jedinou lineární funkcí. Nelineární aktivační funkce jsou proto nezbytné pro modelování složitějších hranic.}

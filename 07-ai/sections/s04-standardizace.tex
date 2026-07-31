@@ -1,0 +1,70 @@
+\section{Standardizace dat}\label{sec:ai-standardizace}
+
+Různé statistické znaky mohou používat odlišné jednotky a~měřítka. Věk člověka se může pohybovat v~desítkách let, zatímco jeho roční příjem ve statisících korun. Metoda založená na vzdálenosti nebo velikosti koeficientů pak může bez úpravy dat přikládat příjmu nepřiměřeně velký význam.
+
+\begin{definition}\label{def:ai-standardizace}
+    Nechť \(\mathbf{X}=(x_1,\ldots,x_n)\) a~\(\sigma_{\mathbf{X}}>0\).
+    \emph{Standardizovanou hodnotou} \(x_i\) rozumíme číslo
+    \[
+        z_i
+        =
+        \frac{x_i-\average{\mathbf{X}}}{\sigma_{\mathbf{X}}}.
+    \]
+    Standardizovaný statistický soubor značíme
+    \[
+        \mathbf{Z}=(z_1,\ldots,z_n).
+    \]
+\end{definition}
+
+Hodnota \(z_i\) udává, o~kolik směrodatných odchylek leží \(x_i\) nad nebo pod průměrem. Kladné hodnoty leží nad průměrem, záporné pod ním a~hodnota \(0\) odpovídá přímo průměru.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-standardizace.tex}
+    \caption{Standardizace posune průměr do nuly a~změní měřítko.}
+    \label{fig:ai-standardizace}
+\end{figure}
+
+\begin{proposition}\label{prop:ai-standardizace}
+    Pro standardizovaný soubor \(\mathbf{Z}\) platí
+    \[
+        \average{\mathbf{Z}}=0,
+        \qquad
+        \Var(\mathbf{Z})=1,
+        \qquad
+        \sigma_{\mathbf{Z}}=1.
+    \]
+\end{proposition}
+
+\begin{proof}
+    Z~\smartref[tvrzení~][]{\showrefs}{prop:ai-prumer-vlastnosti}{vlastností aritmetického průměru} dostáváme
+    \[
+        \average{\mathbf{Z}}
+        =
+        \frac1n\sum_{i=1}^{n}
+        \frac{x_i-\average{\mathbf{X}}}{\sigma_{\mathbf{X}}}
+        =
+        \frac{1}{n\sigma_{\mathbf{X}}}
+        \sum_{i=1}^{n}(x_i-\average{\mathbf{X}})
+        =
+        0.
+    \]
+    Proto
+    \begin{align*}
+        \Var(\mathbf{Z})
+        &=
+        \frac1n\sum_{i=1}^{n}z_i^2
+        =
+        \frac1n\sum_{i=1}^{n}
+        \left(
+            \frac{x_i-\average{\mathbf{X}}}{\sigma_{\mathbf{X}}}
+        \right)^2\\
+        &=
+        \frac{\Var(\mathbf{X})}{\sigma_{\mathbf{X}}^2}
+        =
+        1.
+    \end{align*}
+    Odtud \(\sigma_{\mathbf{Z}}=\sqrt{\Var(\mathbf{Z})}=1\).
+\end{proof}
+
+\warningbox{Průměr a~směrodatnou odchylku je nutné vypočítat pouze z~trénovacích dat. Stejné dvě hodnoty potom použijeme i~pro validaci, testování a~nové objekty. Kdybychom do výpočtu zahrnuli testovací data, předali bychom modelu informaci, kterou při skutečném nasazení nemá mít.}

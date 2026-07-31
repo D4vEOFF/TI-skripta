@@ -1,0 +1,19 @@
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\normalsize}]
+    \draw[diredge] (0,1.8) -- (10,1.8);
+    \node[left] at (0,1.8) {\(\mathbf{X}\)};
+    \foreach \x/\lab in {1/\(x_1\),3/\(x_2\),5/\(x_3\),7/\(x_4\),9/\(x_5\)}{
+        \fill[blue!75!black] (\x,1.8) circle (2.3pt);
+        \node[above] at (\x,1.92) {\lab};
+    }
+    \draw[red!75!black,very thick] (5,1.45) -- (5,2.15);
+    \node[red!75!black,below] at (5,1.42) {\(\average{\mathbf{X}}\)};
+    \draw[diredge] (5,1.05) -- node[right]
+        {\(z_i=(x_i-\average{\mathbf{X}})/\sigma_{\mathbf{X}}\)} (5,0.35);
+    \draw[diredge] (0,-0.2) -- (10,-0.2);
+    \node[left] at (0,-0.2) {\(\mathbf{Z}\)};
+    \foreach \x/\lab in {2/\(-1{,}4\),3.5/\(-0{,}7\),5/\(0\),6.5/\(0{,}7\),8/\(1{,}4\)}{
+        \fill[green!55!black] (\x,-0.2) circle (2.3pt);
+        \node[below] at (\x,-0.32) {\lab};
+    }
+    \draw[red!75!black,very thick] (5,-0.55) -- (5,0.15);
+\end{tikzpicture}

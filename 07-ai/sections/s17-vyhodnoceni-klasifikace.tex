@@ -1,0 +1,99 @@
+\section{Vyhodnocení klasifikace}\label{sec:ai-vyhodnoceni-klasifikace}
+
+U~binární klasifikace porovnáváme skutečnou třídu \(y_i\in\set{0,1}\) s~předpovědí \(\hat y_i^{(t)}=h^{(t)}(\mathbf{x}_i)\). Mohou nastat čtyři výsledky:
+\begin{itemize}
+    \item správně pozitivní: \(y_i=1\) a~\(\hat y_i^{(t)}=1\);
+    \item správně negativní: \(y_i=0\) a~\(\hat y_i^{(t)}=0\);
+    \item falešně pozitivní: \(y_i=0\), ale \(\hat y_i^{(t)}=1\);
+    \item falešně negativní: \(y_i=1\), ale \(\hat y_i^{(t)}=0\).
+\end{itemize}
+
+Jejich počty značíme
+\[
+    \TP_{\mathbf{X},\mathbf{Y}}^{(t)},
+    \quad
+    \TN_{\mathbf{X},\mathbf{Y}}^{(t)},
+    \quad
+    \FP_{\mathbf{X},\mathbf{Y}}^{(t)},
+    \quad
+    \FN_{\mathbf{X},\mathbf{Y}}^{(t)}.
+\]
+Například
+\[
+    \TP_{\mathbf{X},\mathbf{Y}}^{(t)}
+    =
+    \sizeof{
+        \set{
+            i:y_i=1,\ h^{(t)}(\mathbf{x}_i)=1
+        }
+    }.
+\]
+Ostatní tři počty definujeme analogicky. Je-li z~kontextu jasný soubor i~práh, budeme jejich dolní a~horní indexy někdy vynechávat.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-matice-zamen.tex}
+    \caption{Matice záměn pro binární klasifikaci.}
+    \label{fig:ai-matice-zamen}
+\end{figure}
+
+\subsection{Správnost, přesnost, pokrytí a~\(F_1\)-míra}
+
+\begin{definition}\label{def:ai-klasifikacni-metriky}
+    Jsou-li příslušné jmenovatele nenulové, definujeme
+    \begin{align*}
+        \Accuracy_{\mathbf{X},\mathbf{Y}}^{(t)}
+        &=
+        \frac{\TP+\TN}{\TP+\TN+\FP+\FN},\\
+        \Precision_{\mathbf{X},\mathbf{Y}}^{(t)}
+        &=
+        \frac{\TP}{\TP+\FP},\\
+        \Recall_{\mathbf{X},\mathbf{Y}}^{(t)}
+        &=
+        \frac{\TP}{\TP+\FN},\\
+        \Fscore_{1,\mathbf{X},\mathbf{Y}}^{(t)}
+        &=
+        \frac{2}{
+            (\Precision_{\mathbf{X},\mathbf{Y}}^{(t)})^{-1}
+            +
+            (\Recall_{\mathbf{X},\mathbf{Y}}^{(t)})^{-1}
+        }.
+    \end{align*}
+\end{definition}
+
+\emph{Správnost} (anglicky \emph{accuracy}) odpovídá podílu všech správných odpovědí. \emph{Přesnost} (anglicky \emph{precision}) se ptá, kolika pozitivním předpovědím můžeme věřit. \emph{Pokrytí} (anglicky \emph{recall}) se ptá, jakou část skutečně pozitivních objektů jsme nalezli. \(F_1\)-míra je harmonický průměr přesnosti a~pokrytí a~je vysoká pouze tehdy, jsou-li vysoké obě hodnoty.
+
+Dosazením definic dostaneme užitečný tvar
+\[
+    \Fscore_{1,\mathbf{X},\mathbf{Y}}^{(t)}
+    =
+    \frac{2\TP}{2\TP+\FP+\FN}.
+\]
+
+\begin{example}
+    Pro
+    \[
+        \TP=36,\qquad
+        \TN=44,\qquad
+        \FP=8,\qquad
+        \FN=12
+    \]
+    vychází
+    \[
+        \Accuracy=0{,}80,
+        \quad
+        \Precision\doteq0{,}82,
+        \quad
+        \Recall=0{,}75,
+        \quad
+        \Fscore_1\doteq0{,}78.
+    \]
+\end{example}
+
+Správnost může být zavádějící u~nevyvážených tříd. Jestliže je mezi tisícem zpráv pouze deset podvodných, klasifikátor označující vždy běžnou zprávu dosáhne správnosti \(0{,}99\), ale jeho pokrytí podvodných zpráv je nulové.
+
+\subsection{Vliv prahu a~neznámá data}
+
+Snížení rozhodovacího prahu obvykle zvýší počet pozitivních předpovědí. Tím může růst pokrytí, ale zároveň přibývají falešně pozitivní výsledky a~klesá přesnost. Vhodný práh proto volíme podle důsledků obou typů chyb a~podle výsledků na validačních datech.
+
+\warningbox{Metriky uváděné po dokončení vývoje modelu počítáme na testovacích datech, která nebyla použita ani k~trénování, ani k~volbě prahu či jiných nastavení. Jinak získáme příliš optimistický odhad kvality.}

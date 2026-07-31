@@ -1,0 +1,12 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=blue!10,minimum width=34mm] (start) at (0,0)
+        {počáteční středy\\\(\boldsymbol{\mu}_1,\ldots,\boldsymbol{\mu}_k\)};
+    \node[task,fill=orange!15,minimum width=38mm] (assign) at (5,0)
+        {přiřazení bodů\\k~nejbližšímu středu};
+    \node[task,fill=green!12,minimum width=38mm] (update) at (10,0)
+        {nové středy\\jako průměry};
+    \draw[diredge] (start) -- (assign);
+    \draw[diredge] (assign) -- (update);
+    \draw[diredge,rounded corners=5mm]
+        (update.south) -- ++(0,-1) -- node[below]{opakování} ++(-5,0) -- (assign.south);
+\end{tikzpicture}

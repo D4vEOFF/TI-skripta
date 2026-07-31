@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=12cm,height=6.5cm,
+        xmin=-0.3,xmax=4.8,ymin=-0.3,ymax=5.2,
+        axis lines=left,xlabel={$x$},ylabel={$g(x)$},
+        xtick={1.5,3},xticklabels={$c$,$c+h$},
+        ytick=\empty,
+        label style={font=\normalsize},
+        tick label style={font=\normalsize},
+        every node/.style={font=\normalsize},
+        clip=false
+    ]
+        \addplot[blue!75!black,very thick,domain=0:4.4,samples=100]
+            {0.3*(x-1)^2+0.6};
+        \addplot[orange!85!black,thick,domain=0.6:4]
+            {0.95*x-0.15};
+        \addplot[red!75!black,very thick,domain=0.5:3.5]
+            {0.3*x+0.825};
+        \addplot[only marks,mark=*,blue!75!black]
+            coordinates{(1.5,0.675)(3,1.8)};
+        \node[orange!85!black] at (axis cs:3.7,3.5){sečna};
+        \node[red!75!black] at (axis cs:3.7,2){tečna};
+    \end{axis}
+\end{tikzpicture}

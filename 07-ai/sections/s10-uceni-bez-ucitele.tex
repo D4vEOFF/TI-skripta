@@ -1,0 +1,57 @@
+\section{Učení bez učitele}\label{sec:ai-unsupervised}
+
+Při učení bez učitele známe pouze vstupní objekty
+\[
+    \mathbf{x}_1,\ldots,\mathbf{x}_n\in\R^p,
+\]
+ale nemáme k~nim připojený výstupní soubor \(\mathbf{Y}\). Cílem proto není napodobit známé správné odpovědi, nýbrž objevit užitečnou strukturu dat. Může jít o~shluky podobných objektů, odlehlá pozorování, menší počet skrytých znaků nebo často se opakující vztahy.
+
+\subsection{Shlukování a~algoritmus \(k\)-means}
+
+Shlukování rozděluje objekty do skupin tak, aby si objekty uvnitř stejného shluku byly podobné a~objekty z~různých shluků odlišné. Podobnost obvykle vyjadřujeme vzdáleností. Výsledek proto vždy závisí na zvoleném popisu objektů, jejich měřítku a~konkrétní vzdálenosti.
+
+Algoritmus \(k\)-means hledá \(k\) shluků
+\[
+    C_1,\ldots,C_k
+\]
+a~jejich středy
+\[
+    \boldsymbol{\mu}_1,\ldots,\boldsymbol{\mu}_k.
+\]
+Pro eukleidovskou vzdálenost probíhá opakování dvou kroků:
+\begin{enumerate}
+    \item každý objekt přiřadíme k~nejbližšímu středu;
+    \item každý střed nahradíme aritmetickým průměrem objektů přiřazeného shluku.
+\end{enumerate}
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-kmeans.tex}
+    \caption{Jedna iterace algoritmu \(k\)-means.}
+    \label{fig:ai-kmeans}
+\end{figure}
+
+Přiřazení objektu \(\mathbf{x}_i\) budeme značit \(c(i)\in\set{1,\ldots,k}\). Algoritmus se snaží zmenšovat součet čtvercových vzdáleností
+\[
+    J
+    =
+    \sum_{j=1}^{k}
+    \sum_{\mathbf{x}_i\in C_j}
+    \norm{\mathbf{x}_i-\boldsymbol{\mu}_j}^{2}.
+\]
+Pro pevně zvolené shluky je nejlepším středem jejich aritmetický průměr; jde o~vícerozměrnou obdobu
+\smartref[tvrzení~][]{\showrefs}{prop:ai-prumer-vlastnosti}{minimalizační vlastnosti průměru}.
+Přiřazovací krok zase pro pevné středy volí pro každý objekt nejmenší možný příspěvek do \(J\). Hodnota \(J\) se tedy v~každém kroku nezvětší. Protože existuje jen konečně mnoho přiřazení \(n\) objektů do \(k\) shluků, algoritmus se po konečném počtu změn zastaví.
+
+\warningbox{Výsledné rozdělení nemusí být nejlepší ze všech možností. Závisí na počátečních středech, předem zvoleném počtu \(k\) a~na měřítku znaků. Algoritmus je vhodný hlavně pro přibližně kulové a~podobně velké shluky.}
+
+\subsection{Jednoduchá implementace}
+
+Program~\ref{lst:ai-kmeans} zachycuje přímo oba kroky algoritmu. Pro jednoduchost pracuje s~dvourozměrnými body, výpočet vzdálenosti je však možné stejným způsobem rozšířit na libovolné \(p\).
+
+\lstinputlisting[
+    caption={Jednoduchá implementace algoritmu \(k\)-means.},
+    label={lst:ai-kmeans}
+]{07-ai/code/kmeans.py}
+
+Funkce \texttt{assign} vyhledá nejbližší střed, zatímco \texttt{update} z~přiřazených bodů vytvoří nové průměry. Iterace skončí, jakmile se středy nezmění více než o~zadanou toleranci.

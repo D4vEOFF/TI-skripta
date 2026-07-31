@@ -1,0 +1,19 @@
+\section{Úvod do neuronových sítí}\label{sec:ai-uvod-neuronove-site}
+
+Lineární a~logistická regrese skládají výstup z~jediného lineárního skóre. Takový model vytváří lineární rozhodovací hranici a~nemůže sám zachytit složitější vztahy. Neuronová síť spojuje větší počet jednoduchých výpočetních jednotek do vrstev. Výstup jedné vrstvy se stává vstupem vrstvy následující, takže síť může postupně vytvářet stále složitější reprezentace dat.
+
+Název vznikl volnou inspirací biologickými neurony. Biologický neuron přijímá signály dendrity, zpracovává je v~těle buňky a~při dostatečném podráždění vysílá signál axonem. Formální neuron tento proces výrazně zjednodušuje: vstupy vynásobí vahami, sečte je, přidá práh a~na výsledek použije aktivační funkci.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-biologicky-formalni.tex}
+    \caption{Biologická inspirace a~její zjednodušení na formální neuron.}
+    \label{fig:ai-biologicky-formalni}
+\end{figure}
+
+\warningbox{Neuronová síť není přesným modelem lidského mozku. Podobnost spočívá především v~propojení mnoha jednoduchých jednotek. Způsob výpočtu i~učení běžných sítí je matematickou konstrukcí navrženou pro zpracování dat.}
+
+Váha spoje určuje, jak silně daný vstup ovlivní výsledek. Kladná váha vliv podporuje, záporná jej potlačuje a~váha blízká nule jej téměř ignoruje. Učení sítě spočívá v~hledání takových vah a~prahů, při nichž budou její výstupy na trénovacích datech co nejméně chybné.
+
+Neuronové sítě se používají například pro rozpoznávání obrazu a~řeči, zpracování textu, předpovídání časových řad nebo řízení. Jejich výhodou je schopnost modelovat složité nelineární vztahy. Cenou za tuto obecnost je větší množství dat a~výpočtů potřebných k~učení a~také obtížnější vysvětlitelnost výsledku.
+

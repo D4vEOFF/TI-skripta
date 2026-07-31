@@ -1,0 +1,25 @@
+\section{Úvod do strojového učení}\label{sec:ai-uvod-ai}
+
+Pojem umělá inteligence nemá jedinou všeobecně přijímanou definici. V~literatuře se setkáme se čtyřmi základními pohledy: systém může napodobovat lidské myšlení, napodobovat lidské jednání, usilovat o~správné racionální uvažování nebo jednat jako racionální agent. Každý pohled klade důraz na jinou otázku.
+
+Napodobování lidského jednání zachycuje Turingův test. Člověk písemně komunikuje se dvěma skrytými účastníky, z~nichž jeden je člověk a~druhý počítač. Jestliže je podle odpovědí nedokáže spolehlivě rozlišit, počítač v~testu uspěl. Takový výsledek však přímo neříká, že počítač přemýšlí stejným způsobem jako člověk; hodnotí pouze pozorované chování.
+
+Pro technický návrh systémů je užitečný pohled inteligentního agenta. \emph{Agent} pozoruje své prostředí, volí akce a~jejich prostřednictvím prostředí ovlivňuje. Za racionální považujeme takového agenta, který s~ohledem na dostupné informace volí akce vedoucí k~co nejlepšímu výsledku. Racionalita neznamená neomylnost: agent před rozhodnutím nemusí znát budoucnost a~může mít omezený čas i~výpočetní prostředky.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-agent-prostredi.tex}
+    \caption{Agent pozoruje prostředí a~ovlivňuje je svými akcemi.}
+    \label{fig:ai-agent-prostredi}
+\end{figure}
+
+Strojové učení je pouze jednou částí umělé inteligence. Vedle něj sem patří například plánování, reprezentace znalostí, logické usuzování, zpracování přirozeného jazyka, počítačové vidění nebo robotika. Učení je však důležité proto, že agentovi umožňuje přizpůsobovat chování novým datům a~zkušenostem, aniž by programátor musel předem zapsat pravidlo pro každou možnou situaci.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-data-model-rozhodnuti.tex}
+    \caption{Data se prostřednictvím modelu mění v~předpověď nebo rozhodnutí.}
+    \label{fig:ai-data-model-rozhodnuti}
+\end{figure}
+
+\importantbox{Umělá inteligence není synonymem neuronových sítí ani strojového učení. Strojové učení je skupina metod, které vytvářejí nebo upravují model na základě dat či zkušeností.}

@@ -1,0 +1,16 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=blue!10,minimum width=34mm] (data) at (0,0)
+        {\(D=\set{(\mathbf{x}_i,y_i)}\)};
+    \node[task,fill=orange!15,minimum width=30mm] (learn) at (4,0)
+        {učení modelu};
+    \node[task,fill=green!12,minimum width=25mm] (model) at (8,0)
+        {\(h\)};
+    \node[task,fill=blue!10,minimum width=25mm] (new) at (4,-1.8)
+        {\(\mathbf{x}\)};
+    \node[task,fill=green!12,minimum width=31mm] (pred) at (8,-1.8)
+        {\(h(\mathbf{x})\)};
+    \draw[diredge] (data) -- (learn);
+    \draw[diredge] (learn) -- (model);
+    \draw[diredge] (new) -- (pred);
+    \draw[diredge] (model) -- (pred);
+\end{tikzpicture}

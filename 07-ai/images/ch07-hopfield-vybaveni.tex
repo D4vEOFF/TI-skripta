@@ -1,0 +1,11 @@
+\begin{tikzpicture}[
+    state/.style={draw=darkblue, rounded corners, fill=darkblue!8, minimum width=29mm, minimum height=15mm, align=center},
+    conn/.style={-Latex, very thick, draw=darkblue}
+]
+    \node[state] (damaged) at (0,0) {poškozený stav\\\(\mathbf{s}^{(0)}\)};
+    \node[state] (middle) at (4.7,0) {opakované\\aktualizace};
+    \node[state] (stored) at (9.4,0) {uložený vzor\\\(\mathbf{x}_r\)};
+    \draw[conn] (damaged) -- node[above] {doplnění} (middle);
+    \draw[conn] (middle) -- node[above] {ustálení} (stored);
+    \node[below=7mm of middle] {nejbližší energetické minimum};
+\end{tikzpicture}

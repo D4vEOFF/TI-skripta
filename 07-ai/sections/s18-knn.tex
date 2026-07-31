@@ -1,0 +1,83 @@
+\section{Algoritmus \(k\)-NN}\label{sec:ai-knn}
+
+Metoda \(k\) nejbližších sousedů (anglicky \emph{\(k\)-nearest neighbors}, \(k\)-NN) vychází z~intuice, že podobné objekty mívají stejnou třídu. Nevytváří předem parametrický vzorec. Při klasifikaci nového objektu přímo vyhledá nejbližší trénovací objekty a~nechá je hlasovat.
+
+\begin{definition}\label{def:ai-eukleidovska-vzdalenost}
+    Pro vektory
+    \[
+        \mathbf{u}=(u_1,\ldots,u_p),
+        \qquad
+        \mathbf{v}=(v_1,\ldots,v_p)
+    \]
+    definujeme \emph{eukleidovskou vzdálenost}
+    \[
+        d_E(\mathbf{u},\mathbf{v})
+        =
+        \sqrt{
+            \sum_{j=1}^{p}(u_j-v_j)^2
+        }.
+    \]
+\end{definition}
+
+Obecně budeme vzdálenost značit \(d(\mathbf{u},\mathbf{v})\). Seřaďme indexy trénovacích objektů tak, aby
+\[
+    d(\mathbf{x},\mathbf{x}_{\pi(1)})
+    \leqslant
+    \cdots
+    \leqslant
+    d(\mathbf{x},\mathbf{x}_{\pi(n)}).
+\]
+Množina indexů \(k\) nejbližších sousedů je
+\[
+    N_k(\mathbf{x})
+    =
+    \set{\pi(1),\ldots,\pi(k)}.
+\]
+
+\begin{definition}\label{def:ai-knn}
+    Klasifikátor \(k\)-NN je funkce
+    \[
+        h^{(k)}(\mathbf{x})
+        =
+        \argmax_{c\in\mathcal{Y}}
+        \sizeof{
+            \set{
+                i\in N_k(\mathbf{x}):y_i=c
+            }
+        }.
+    \]
+\end{definition}
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-knn.tex}
+    \caption{Klasifikace nového objektu podle pěti nejbližších sousedů.}
+    \label{fig:ai-knn}
+\end{figure}
+
+Při shodě hlasů potřebujeme předem stanovené pravidlo. U~binární klasifikace se proto často volí liché \(k\). Malé \(k\) vytváří pružnou hranici citlivou na jednotlivé body a~šum. Velké \(k\) rozhodování vyhlazuje, ale může přehlédnout malé místní skupiny. Hodnotu \(k\) proto volíme podle výsledku na validační množině.
+
+Vedle eukleidovské vzdálenosti lze použít například Minkowského vzdálenost
+\[
+    d_q(\mathbf{u},\mathbf{v})
+    =
+    \left(
+        \sum_{j=1}^{p}
+        \abs{u_j-v_j}^q
+    \right)^{1/q},
+    \qquad q\geqslant1.
+\]
+Pro \(q=1\) jde o~manhattanskou vzdálenost, pro \(q=2\) o~eukleidovskou. Smysl výsledku vždy závisí na tom, zda zvolená vzdálenost skutečně vystihuje podobnost objektů dané úlohy.
+
+\importantbox{Před použitím \(k\)-NN je obvykle nutné standardizovat nebo normalizovat jednotlivé vstupní znaky. Jinak může znak s~větším číselným měřítkem zcela ovládnout výpočet vzdálenosti.}
+
+\subsection{Implementace v~Pythonu}
+
+Program~\ref{lst:ai-knn} uchovává trénovací objekty a~jejich třídy. Při predikci spočítá všechny vzdálenosti, vybere \(k\) nejmenších a~vrátí nejčastější třídu. V~případě shody rozhodne menší hodnota třídy, aby byl výsledek jednoznačný.
+
+\lstinputlisting[
+    caption={Klasifikátor \(k\)-NN s~eukleidovskou vzdáleností.},
+    label={lst:ai-knn}
+]{07-ai/code/knn.py}
+
+Trénování je téměř okamžité, ale klasifikace nového objektu vyžaduje porovnání s~celou trénovací množinou. Metoda proto přesouvá většinu výpočetní práce do okamžiku použití modelu.

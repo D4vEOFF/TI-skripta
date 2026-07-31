@@ -1,0 +1,128 @@
+\section{Charakteristiky polohy}\label{sec:ai-charakteristiky-polohy}
+
+Charakteristiky polohy nahrazují celý statistický soubor jedním číslem, které popisuje jeho typickou nebo střední hodnotu. Nejčastěji budeme používat aritmetický průměr a~medián. Každá z~těchto charakteristik zdůrazňuje jinou vlastnost dat.
+
+\subsection{Aritmetický a~vážený průměr}
+
+\begin{definition}\label{def:ai-prumer}
+    \emph{Aritmetický průměr} statistického souboru
+    \(\mathbf{X}=(x_1,\ldots,x_n)\) je číslo
+    \[
+        \average{\mathbf{X}}
+        =
+        \frac{1}{n}\sum_{i=1}^{n}x_i.
+    \]
+\end{definition}
+
+Průměr zohledňuje všechny hodnoty a~každé přisuzuje stejný význam. Nemusí být jednou z~naměřených hodnot. Je také citlivý na odlehlá pozorování: jediná mimořádně vysoká nebo nízká hodnota jej může výrazně posunout.
+
+\begin{proposition}\label{prop:ai-prumer-vlastnosti}
+    Pro statistické soubory \(\mathbf{X},\mathbf{Y}\) délky \(n\) a~čísla \(a,b\in\R\) platí
+    \[
+        \sum_{i=1}^{n}(x_i-\average{\mathbf{X}})=0
+        \qquad\text{a}\qquad
+        \average{a\mathbf{X}+b\mathbf{Y}}
+        =
+        a\average{\mathbf{X}}+b\average{\mathbf{Y}}.
+    \]
+    Aritmetický průměr navíc minimalizuje součet čtvercových odchylek:
+    \[
+        \average{\mathbf{X}}
+        =
+        \argmin_{c\in\R}
+        \sum_{i=1}^{n}(x_i-c)^2.
+    \]
+\end{proposition}
+
+\begin{proof}
+    První dvě rovnosti získáme přímým dosazením definice:
+    \[
+        \sum_{i=1}^{n}(x_i-\average{\mathbf{X}})
+        =
+        \sum_{i=1}^{n}x_i-n\average{\mathbf{X}}
+        =
+        0
+    \]
+    a
+    \[
+        \average{a\mathbf{X}+b\mathbf{Y}}
+        =
+        \frac1n\sum_{i=1}^{n}(ax_i+by_i)
+        =
+        a\average{\mathbf{X}}+b\average{\mathbf{Y}}.
+    \]
+    Pro libovolné \(c\in\R\) dále platí
+    \begin{align*}
+        \sum_{i=1}^{n}(x_i-c)^2
+        &=
+        \sum_{i=1}^{n}
+        \bigl((x_i-\average{\mathbf{X}})
+        +(\average{\mathbf{X}}-c)\bigr)^2\\
+        &=
+        \sum_{i=1}^{n}(x_i-\average{\mathbf{X}})^2
+        +2(\average{\mathbf{X}}-c)
+        \underbrace{\sum_{i=1}^{n}(x_i-\average{\mathbf{X}})}_{0}
+        +n(\average{\mathbf{X}}-c)^2.
+    \end{align*}
+    První člen nezávisí na \(c\) a~poslední člen je nejmenší právě pro
+    \(c=\average{\mathbf{X}}\).
+\end{proof}
+
+Ne vždy mají všechny hodnoty stejný význam. Máme-li vektor kladných vah
+\(\mathbf{w}=(w_1,\ldots,w_n)\), definujeme vážený průměr vztahem
+\[
+    \average{\mathbf{X}}_{\mathbf{w}}
+    =
+    \frac{\sum_{i=1}^{n}w_ix_i}{\sum_{i=1}^{n}w_i}.
+\]
+Po zavedení normalizovaných vah
+\[
+    \omega_i=\frac{w_i}{\sum_{j=1}^{n}w_j}
+\]
+platí \(\omega_i>0\), \(\sum_{i=1}^{n}\omega_i=1\) a
+\[
+    \average{\mathbf{X}}_{\mathbf{w}}
+    =
+    \sum_{i=1}^{n}\omega_ix_i.
+\]
+Vážený průměr proto vždy leží mezi nejmenší a~největší hodnotou souboru.
+
+\subsection{Medián}
+
+Seřazené hodnoty souboru budeme označovat
+\[
+    x_{(1)}\leqslant x_{(2)}\leqslant\cdots\leqslant x_{(n)}.
+\]
+
+\begin{definition}\label{def:ai-median}
+    \emph{Medián} statistického souboru \(\mathbf{X}\) je číslo
+    \[
+        \median(\mathbf{X})
+        =
+        \begin{cases}
+            x_{((n+1)/2)}, & \text{je-li \(n\) liché},\\[1mm]
+            \dfrac{x_{(n/2)}+x_{(n/2+1)}}{2},
+            & \text{je-li \(n\) sudé}.
+        \end{cases}
+    \]
+\end{definition}
+
+Medián dělí uspořádaná data na dolní a~horní polovinu. Na rozdíl od průměru jej jednotlivá odlehlá hodnota obvykle ovlivní jen málo. Pro soubor
+\[
+    \mathbf{X}=(2,3,4,5,100)
+\]
+například dostáváme
+\[
+    \median(\mathbf{X})=4,
+    \qquad
+    \average{\mathbf{X}}=22{,}8.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-prumer-median.tex}
+    \caption{Odlehlá hodnota posune průměr podstatně více než medián.}
+    \label{fig:ai-prumer-median}
+\end{figure}
+
+\tipbox{Průměr je přirozený pro algebraické výpočty a~pro metodu nejmenších čtverců. Medián je odolnější vůči odlehlým hodnotám. Volba charakteristiky proto závisí na povaze dat a~na otázce, kterou chceme zodpovědět.}

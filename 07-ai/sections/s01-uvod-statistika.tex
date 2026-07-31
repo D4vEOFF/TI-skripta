@@ -1,0 +1,47 @@
+\section{Úvod do statistiky}\label{sec:ai-uvod-statistika}
+
+Data sama o~sobě nejsou hotovou informací. Číslo \(45\,000\) například získá význam až ve chvíli, kdy víme, že jde o~měsíční mzdu v~korunách, známe období a~skupinu lidí, ke které se vztahuje, a~rozumíme způsobu jeho výpočtu. Statistika poskytuje jazyk a~metody, jimiž lze větší množství dat uspořádat, shrnout a~porovnat. Ve strojovém učení je tato role zásadní: model se učí právě z~dat a~jejich nevhodná interpretace se proto promítne i~do jeho výsledků.
+
+\begin{definition}\label{def:ai-statisticky-soubor}
+    \emph{Statistický znak} je sledovaná vlastnost objektů. Statistický soubor s~\(n\) objekty a~\(p\) sledovanými znaky budeme zapisovat jako matici
+    \[
+        \mathbf{X}
+        =
+        \begin{pmatrix}
+            x_{11} & x_{12} & \cdots & x_{1p}\\
+            x_{21} & x_{22} & \cdots & x_{2p}\\
+            \vdots & \vdots & \ddots & \vdots\\
+            x_{n1} & x_{n2} & \cdots & x_{np}
+        \end{pmatrix}.
+    \]
+    Hodnota \(x_{ij}\) je hodnota \(j\)-tého znaku u~\(i\)-tého objektu.
+\end{definition}
+
+Řádky matice tedy představují objekty a~sloupce jednotlivé statistické znaky. Pokud sledujeme pouze jeden znak, zapisujeme statistický soubor jako vektor
+\[
+    \mathbf{X}=(x_1,x_2,\ldots,x_n).
+\]
+Tučné písmo je důležité: symbol \(\mathbf{X}\) označuje celý statistický soubor, zatímco \(x_i\) označuje jednu jeho hodnotu.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-statisticky-soubor.tex}
+    \caption{Dva rovnocenné pohledy na statistický soubor.}
+    \label{fig:ai-statisticky-soubor}
+\end{figure}
+
+Pro stejně dlouhé statistické soubory
+\[
+    \mathbf{X}=(x_1,\ldots,x_n),
+    \qquad
+    \mathbf{Y}=(y_1,\ldots,y_n)
+\]
+a~čísla \(a,b\in\R\) budeme používat po složkách definované operace
+\[
+    a\mathbf{X}+b\mathbf{Y}
+    =
+    (ax_1+by_1,\ldots,ax_n+by_n).
+\]
+Tento zápis využijeme například při posouvání, změně měřítka a~standardizaci dat.
+
+\warningbox{Souhrnná charakteristika nikdy nepopisuje každý objekt zvlášť. Průměrná mzda není mzdou „běžného“ člověka, nižší inflace neznamená pokles cen a~výsledek za celou skupinu nemusí platit pro každou její část. Při interpretaci je vždy nutné znát kontext dat.}

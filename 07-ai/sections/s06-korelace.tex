@@ -1,0 +1,120 @@
+\section{Korelace}\label{sec:ai-korelace}
+
+Mějme dva stejně dlouhé statistické soubory
+\[
+    \mathbf{X}=(x_1,\ldots,x_n),
+    \qquad
+    \mathbf{Y}=(y_1,\ldots,y_n).
+\]
+Dvojice \((x_i,y_i)\) popisuje dva znaky téhož \(i\)-tého objektu. Bodový graf těchto dvojic často naznačí, zda se s~růstem jednoho znaku mění také druhý.
+
+\begin{definition}\label{def:ai-kovariance}
+    \emph{Kovariance} souborů \(\mathbf{X}\) a~\(\mathbf{Y}\) je číslo
+    \[
+        \Cov(\mathbf{X},\mathbf{Y})
+        =
+        \frac1n\sum_{i=1}^{n}
+        (x_i-\average{\mathbf{X}})
+        (y_i-\average{\mathbf{Y}}).
+    \]
+\end{definition}
+
+Kladná kovariance obvykle znamená, že nadprůměrné hodnoty \(\mathbf{X}\) doprovázejí nadprůměrné hodnoty \(\mathbf{Y}\). Záporná kovariance odpovídá opačnému směru. Její velikost však závisí na jednotkách obou znaků, a~proto ji nelze přímo porovnávat mezi různými dvojicemi dat.
+
+\begin{definition}\label{def:ai-korelace}
+    Nechť \(\sigma_{\mathbf{X}}>0\) a~\(\sigma_{\mathbf{Y}}>0\).
+    \emph{Korelační koeficient} souborů \(\mathbf{X},\mathbf{Y}\) definujeme vztahem
+    \[
+        \rho_{\mathbf{X}\mathbf{Y}}
+        =
+        \frac{\Cov(\mathbf{X},\mathbf{Y})}
+        {\sigma_{\mathbf{X}}\sigma_{\mathbf{Y}}}.
+    \]
+\end{definition}
+
+Ekvivalentně lze psát
+\[
+    \rho_{\mathbf{X}\mathbf{Y}}
+    =
+    \frac{
+        \sum_{i=1}^{n}
+        (x_i-\average{\mathbf{X}})
+        (y_i-\average{\mathbf{Y}})
+    }{
+        \sqrt{\sum_{i=1}^{n}(x_i-\average{\mathbf{X}})^2}
+        \sqrt{\sum_{i=1}^{n}(y_i-\average{\mathbf{Y}})^2}
+    }.
+\]
+Korelace je tedy kovariance po odstranění měřítka obou znaků.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-korelace.tex}
+    \caption{Kladná, záporná a~nulová lineární korelace.}
+    \label{fig:ai-korelace}
+\end{figure}
+
+\begin{proposition}\label{prop:ai-korelace-vlastnosti}
+    Pro korelační koeficient souborů \(\mathbf{X},\mathbf{Y}\) platí:
+    \begin{enumerate}
+        \item \(-1\leqslant\rho_{\mathbf{X}\mathbf{Y}}\leqslant1\);
+        \item \(\abs{\rho_{\mathbf{X}\mathbf{Y}}}=1\) právě tehdy, když
+        \[
+            \mathbf{Y}=\alpha\mathbf{X}+\beta
+        \]
+        pro vhodná \(\alpha,\beta\in\R\) s~\(\alpha\neq0\).
+        Přitom \(\rho_{\mathbf{X}\mathbf{Y}}=1\) pro \(\alpha>0\) a
+        \(\rho_{\mathbf{X}\mathbf{Y}}=-1\) pro \(\alpha<0\).
+    \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    Položme
+    \[
+        a_i=x_i-\average{\mathbf{X}},
+        \qquad
+        b_i=y_i-\average{\mathbf{Y}}.
+    \]
+    Podle Cauchyovy--Schwarzovy nerovnosti platí
+    \[
+        \abs{\sum_{i=1}^{n}a_ib_i}
+        \leqslant
+        \sqrt{\sum_{i=1}^{n}a_i^2}
+        \sqrt{\sum_{i=1}^{n}b_i^2}.
+    \]
+    Protože oba výrazy pod odmocninou jsou kladné, můžeme jimi nerovnost vydělit a~dostaneme
+    \[
+        \abs{\rho_{\mathbf{X}\mathbf{Y}}}\leqslant1.
+    \]
+
+    Rovnost nastane právě tehdy, když jsou vektory odchylek lineárně závislé, tedy když existuje \(\alpha\neq0\) takové, že
+    \[
+        y_i-\average{\mathbf{Y}}
+        =
+        \alpha(x_i-\average{\mathbf{X}})
+    \]
+    pro všechna \(i\). Po úpravě
+    \[
+        y_i
+        =
+        \alpha x_i+
+        \underbrace{
+            \average{\mathbf{Y}}
+            -\alpha\average{\mathbf{X}}
+        }_{\beta},
+    \]
+    a~tedy \(\mathbf{Y}=\alpha\mathbf{X}+\beta\).
+    Obráceně, z~této rovnosti ihned plyne lineární závislost obou vektorů odchylek, a~tedy rovnost v~Cauchyově--Schwarzově nerovnosti.
+
+    Nakonec
+    \[
+        \Cov(\mathbf{X},\mathbf{Y})
+        =
+        \Cov(\mathbf{X},\alpha\mathbf{X}+\beta)
+        =
+        \alpha\Var(\mathbf{X}),
+    \]
+    takže znaménko korelace je znaménkem \(\alpha\).
+\end{proof}
+
+\warningbox{Korelace měří pouze lineární vztah. Hodnota \(\rho_{\mathbf{X}\mathbf{Y}}=0\) nevylučuje nelineární závislost. Korelace také sama o~sobě nedokazuje příčinnou souvislost; společný pohyb obou znaků může být způsoben třetí proměnnou nebo náhodou.}

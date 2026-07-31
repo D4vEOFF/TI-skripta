@@ -1,0 +1,88 @@
+\section{Koeficient determinace}\label{sec:ai-r2}
+
+Samotná hodnota \(\MSE\) závisí na měřítku výstupního souboru. Abychom chybu regresní přímky zasadili do kontextu, porovnáme ji s~nejlepším konstantním modelem
+\[
+    c(x)=\average{\mathbf{Y}}.
+\]
+Podle vlastností průměru platí
+\[
+    \MSE_{\mathbf{X},\mathbf{Y}}(c)
+    =
+    \frac1n\sum_{i=1}^{n}
+    (y_i-\average{\mathbf{Y}})^2
+    =
+    \Var(\mathbf{Y}).
+\]
+
+\begin{definition}\label{def:ai-r2}
+    Nechť \(\sigma_{\mathbf{Y}}>0\) a~\(f\) je regresní přímka souborů
+    \(\mathbf{X},\mathbf{Y}\). \emph{Koeficient determinace} definujeme jako
+    \[
+        R^2
+        =
+        1-
+        \frac{
+            \MSE_{\mathbf{X},\mathbf{Y}}(f)
+        }{
+            \MSE_{\mathbf{X},\mathbf{Y}}
+            (x\mapsto\average{\mathbf{Y}})
+        }
+        =
+        1-
+        \frac{
+            \MSE_{\mathbf{X},\mathbf{Y}}(f)
+        }{
+            \Var(\mathbf{Y})
+        }.
+    \]
+\end{definition}
+
+Pro jednoduchou lineární regresi dosadíme vztah z~
+\smartref[tvrzení~][]{\showrefs}{prop:ai-regrese-min-mse}{tvrzení o~minimální MSE}:
+\[
+    R^2
+    =
+    1-
+    \frac{
+        \sigma_{\mathbf{Y}}^2
+        (1-\rho_{\mathbf{X}\mathbf{Y}}^2)
+    }{
+        \sigma_{\mathbf{Y}}^2
+    }
+    =
+    \rho_{\mathbf{X}\mathbf{Y}}^2.
+\]
+Proto \(0\leqslant R^2\leqslant1\). Hodnota blízká jedné znamená, že regresní přímka odstranila velkou část čtvercové chyby konstantního modelu. Hodnota blízká nule znamená, že lineární závislost přinesla jen malé zlepšení.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-r2.tex}
+    \caption{Stejný trend může být daty zachycen s~různou přesností.}
+    \label{fig:ai-r2}
+\end{figure}
+
+\begin{example}
+    Pro
+    \[
+        \mathbf{X}=(1,2,3,4,5),
+        \qquad
+        \mathbf{Y}=(2,3,5,4,6)
+    \]
+    dostaneme
+    \[
+        f(x)=0{,}9x+1{,}3,
+        \qquad
+        \MSE_{\mathbf{X},\mathbf{Y}}(f)=0{,}38.
+    \]
+    Konstantní model má chybu
+    \[
+        \Var(\mathbf{Y})=2,
+    \]
+    a~tedy
+    \[
+        R^2=1-\frac{0{,}38}{2}=0{,}81.
+    \]
+    Regresní přímka odstranila \(81\,\%\) střední kvadratické chyby nejlepšího konstantního modelu.
+\end{example}
+
+\warningbox{Vysoké \(R^2\) nedokazuje příčinný vztah ani správnost modelu mimo rozsah dat. V~obecnějších regresních úlohách se navíc vztah \(R^2=\rho_{\mathbf{X}\mathbf{Y}}^2\) nemusí použít v~této jednoduché podobě.}

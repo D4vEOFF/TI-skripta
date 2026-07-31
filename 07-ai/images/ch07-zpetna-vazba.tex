@@ -1,0 +1,12 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=blue!10,minimum width=34mm,minimum height=14mm]
+        (agent) at (0,0) {agent};
+    \node[task,fill=orange!15,minimum width=34mm,minimum height=14mm]
+        (env) at (7,0) {prostředí};
+    \draw[diredge,bend left=18] (agent.north east) to
+        node[above]{akce \(a_t\)} (env.north west);
+    \draw[diredge,bend left=18] (env.south west) to
+        node[below,align=center]{odměna \(r_{t+1}\)\\stav \(s_{t+1}\)}
+        (agent.south east);
+    \node[above=3mm of agent] {stav \(s_t\)};
+\end{tikzpicture}

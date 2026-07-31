@@ -1,0 +1,10 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=blue!10,minimum width=25mm] (objects) at (0,0)
+        {objekty\\\(\mathbf{x}_1,\ldots,\mathbf{x}_n\)};
+    \node[task,fill=orange!15,minimum width=25mm] (matrix) at (4,0)
+        {\(\mathbf{X}=(x_{ij})\)};
+    \node[task,fill=green!12,minimum width=28mm] (features) at (8,0)
+        {statistické znaky\\\(\mathbf{X}_1,\ldots,\mathbf{X}_p\)};
+    \draw[diredge] (objects) -- node[above]{řádky} (matrix);
+    \draw[diredge] (matrix) -- node[above]{sloupce} (features);
+\end{tikzpicture}

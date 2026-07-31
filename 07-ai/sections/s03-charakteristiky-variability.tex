@@ -1,0 +1,117 @@
+\section{Charakteristiky variability}\label{sec:ai-charakteristiky-variability}
+
+Dva statistické soubory mohou mít stejný průměr i~medián, ale přesto se výrazně lišit. Hodnoty prvního mohou být soustředěny těsně kolem středu, zatímco hodnoty druhého mohou být rozptýleny po širokém intervalu. Charakteristiky variability popisují právě tuto rozptýlenost.
+
+\begin{definition}\label{def:ai-rozptyl}
+    \emph{Rozptyl} statistického souboru
+    \(\mathbf{X}=(x_1,\ldots,x_n)\) definujeme vztahem
+    \[
+        \Var(\mathbf{X})
+        =
+        \sigma_{\mathbf{X}}^2
+        =
+        \frac1n\sum_{i=1}^{n}
+        (x_i-\average{\mathbf{X}})^2.
+    \]
+    \emph{Směrodatná odchylka} tohoto souboru je číslo
+    \[
+        \sigma_{\mathbf{X}}
+        =
+        \sqrt{\Var(\mathbf{X})}.
+    \]
+\end{definition}
+
+Rozptyl je vždy nezáporný a~je nulový právě tehdy, když jsou všechny hodnoty stejné. Protože pracuje se čtverci odchylek, jeho jednotka je druhou mocninou původní jednotky. Směrodatná odchylka tento problém odstraňuje a~vyjadřuje typickou velikost odchylky ve stejné jednotce jako původní data.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-variabilita.tex}
+    \caption{Soubory se stejným průměrem a~různou variabilitou.}
+    \label{fig:ai-variabilita}
+\end{figure}
+
+\subsection{Cauchyova--Schwarzova nerovnost}
+
+Při práci s~rozptylem a~korelací budeme potřebovat následující základní nerovnost.
+
+\begin{theorem}[Cauchyova--Schwarzova nerovnost]\label{thm:ai-cauchy-schwarz}
+    Pro libovolná reálná čísla
+    \(a_1,\ldots,a_n,b_1,\ldots,b_n\) platí
+    \[
+        \left|
+            \sum_{i=1}^{n}a_ib_i
+        \right|
+        \leqslant
+        \sqrt{\sum_{i=1}^{n}a_i^2}
+        \sqrt{\sum_{i=1}^{n}b_i^2}.
+    \]
+    Rovnost nastává právě tehdy, když existuje \(\lambda\in\R\) takové, že
+    \(b_i=\lambda a_i\) pro všechna \(i\), nebo když jsou všechna \(a_i\) nulová.
+\end{theorem}
+
+Důkaz věty zde nebudeme uvádět. Geometricky jde o~zobecnění skutečnosti, že absolutní hodnota skalárního součinu dvou vektorů nepřekročí součin jejich délek.
+
+\subsection{Vztah průměru, mediánu a~směrodatné odchylky}
+
+\begin{proposition}\label{prop:ai-prumer-median-sigma}
+    Pro každý statistický soubor
+    \(\mathbf{X}=(x_1,\ldots,x_n)\) platí
+    \[
+        \abs{\average{\mathbf{X}}-\median(\mathbf{X})}
+        \leqslant
+        \sigma_{\mathbf{X}}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    Označme \(\mu=\average{\mathbf{X}}\) a~\(m=\median(\mathbf{X})\).
+    Stačí vyřešit případ \(\mu\geqslant m\); případ \(\mu<m\) dostaneme stejným postupem po změně znamének.
+
+    Položme
+    \[
+        A=\set{i:x_i\leqslant m},
+        \qquad
+        k=\sizeof{A}.
+    \]
+    Z~definice mediánu plyne \(k\geqslant n/2\). Pro \(i\in A\) definujme
+    \(a_i=\mu-x_i\). Potom \(a_i\geqslant\mu-m\). Označíme-li
+    \[
+        S=\sum_{i\in A}a_i,
+    \]
+    dostáváme \(S\geqslant k(\mu-m)\). Součet všech odchylek od průměru je nulový, a~proto
+    \[
+        \sum_{i\notin A}(x_i-\mu)=S.
+    \]
+
+    Z~Cauchyovy--Schwarzovy nerovnosti použité zvlášť na obě skupiny plyne
+    \[
+        \sum_{i\in A}(x_i-\mu)^2
+        \geqslant
+        \frac{S^2}{k}
+        \quad\text{a}\quad
+        \sum_{i\notin A}(x_i-\mu)^2
+        \geqslant
+        \frac{S^2}{n-k}.
+    \]
+    Je-li \(k=n\), jsou všechny hodnoty nejvýše \(\mu\), a~nulový součet odchylek vynutí \(x_i=\mu=m\); tvrzení je okamžité. Pro \(k<n\) sečtením nerovností získáme
+    \begin{align*}
+        \sigma_{\mathbf{X}}^2
+        &=
+        \frac1n\sum_{i=1}^{n}(x_i-\mu)^2\\
+        &\geqslant
+        \frac1n
+        \left(
+            \frac{S^2}{k}+\frac{S^2}{n-k}
+        \right)
+        =
+        \frac{S^2}{k(n-k)}\\
+        &\geqslant
+        \frac{k}{n-k}(\mu-m)^2
+        \geqslant
+        (\mu-m)^2.
+    \end{align*}
+    Poslední nerovnost plyne z~\(k\geqslant n/2\). Po odmocnění tedy
+    \(\mu-m\leqslant\sigma_{\mathbf{X}}\).
+\end{proof}
+
+\importantbox{Tvrzení neříká, že průměr a~medián musí být blízko v~absolutním měřítku. Říká, že jejich vzdálenost nemůže překročit směrodatnou odchylku daného souboru.}

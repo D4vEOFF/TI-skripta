@@ -1,0 +1,69 @@
+\section{Zpětnovazební učení}\label{sec:ai-reinforcement}
+
+Při zpětnovazebním učení agent nedostává pro každý stav předem předepsanou správnou akci. Musí jednat, sledovat následky a~postupně zjišťovat, které volby vedou k~dobrému dlouhodobému výsledku.
+
+Mějme množinu stavů \(\mathcal{S}\) a~pro každý stav \(s\in\mathcal{S}\) množinu přípustných akcí \(\mathcal{A}(s)\). V~čase \(t\) se agent nachází ve stavu \(s_t\), zvolí akci \(a_t\in\mathcal{A}(s_t)\) a~prostředí mu vrátí odměnu \(r_{t+1}\in\R\) a~nový stav \(s_{t+1}\). Jednu zkušenost tedy popisuje čtveřice
+\[
+    (s_t,a_t,r_{t+1},s_{t+1}).
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-zpetna-vazba.tex}
+    \caption{Cyklus interakce agenta s~prostředím.}
+    \label{fig:ai-zpetna-vazba}
+\end{figure}
+
+Agent obvykle nechce získat pouze nejvyšší okamžitou odměnu. Zajímá ho diskontovaný součet budoucích odměn
+\[
+    G(t)
+    =
+    \sum_{i=0}^{\infty}
+    \gamma^i r_{t+i+1},
+    \qquad
+    0\leqslant\gamma<1.
+\]
+Parametr \(\gamma\) určuje význam budoucnosti. Pro \(\gamma\) blízké nule převažuje okamžitý zisk; pro \(\gamma\) blízké jedné agent více zohledňuje vzdálenější následky.
+
+\emph{Politika} \(\pi\) přiřazuje stavům akce, tedy \(\pi(s)=a\). Cílem je naučit se politiku, která vede k~co nejvyššímu dlouhodobému zisku. Agent přitom řeší dilema mezi využíváním dosud nejlepší známé akce a~průzkumem jiných možností, které se mohou ukázat jako výhodnější.
+
+\subsection{Q-learning}
+
+Algoritmus Q-learning uchovává pro každou přípustnou dvojici \((s,a)\) hodnotu \(Q(s,a)\), která vyjadřuje, jak výhodné se zatím jeví provést akci \(a\) ve stavu \(s\). Po zkušenosti
+\((s_t,a_t,r_{t+1},s_{t+1})\) provede aktualizaci
+\[
+    Q(s_t,a_t)
+    \gets
+    Q(s_t,a_t)
+    +
+    \alpha
+    \left[
+        r_{t+1}
+        +
+        \gamma\max_a Q(s_{t+1},a)
+        -
+        Q(s_t,a_t)
+    \right],
+\]
+kde \(\alpha\in(0,1]\) je rychlost učení. Výraz v~hranaté závorce porovnává dosavadní odhad s~novou informací: okamžitou odměnou a~odhadovanou hodnotou nejlepšího pokračování.
+
+Po učení získáme politiku
+\[
+    \pi(s)=\argmax_{a\in\mathcal{A}(s)}Q(s,a).
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-gridworld.tex}
+    \caption{Jednoduché prostředí pro zpětnovazební učení.}
+    \label{fig:ai-gridworld}
+\end{figure}
+
+Program~\ref{lst:ai-qlearning} implementuje Q-learning v~malém mřížkovém světě. Agent dostává za běžný krok odměnu \(-1\), za dosažení cíle \(10\) a~za vstup do pasti \(-10\). S~pravděpodobností \(\varepsilon\) zvolí náhodnou akci, a~tím prostředí prozkoumává.
+
+\lstinputlisting[
+    caption={Q-learning v~jednoduchém mřížkovém světě.},
+    label={lst:ai-qlearning}
+]{07-ai/code/q_learning.py}
+
+\notebox{Q-learning nepotřebuje předem znát pravidla přechodu prostředí. Hodnoty \(Q\) upravuje pouze podle skutečně získaných zkušeností. Pro velké nebo spojité množiny stavů však tabulka nestačí a~hodnotu \(Q(s,a)\) je nutné aproximovat modelem.}

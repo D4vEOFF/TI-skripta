@@ -1,0 +1,41 @@
+\section{Učení s~učitelem}\label{sec:ai-supervised}
+
+Při učení s~učitelem máme pro každý trénovací objekt k~dispozici jak vstupní znaky, tak správný výstup. Nechť
+\[
+    \mathbf{X}_1,\ldots,\mathbf{X}_p
+\]
+jsou vstupní statistické soubory a
+\[
+    \mathbf{Y}=(y_1,\ldots,y_n)
+\]
+je výstupní statistický soubor. \(i\)-tý objekt popisuje vektor
+\[
+    \mathbf{x}_i=(x_{i1},\ldots,x_{ip}),
+\]
+a~trénovací množinu tedy můžeme zapsat
+\[
+    D=
+    \set{
+        (\mathbf{x}_1,y_1),\ldots,
+        (\mathbf{x}_n,y_n)
+    }.
+\]
+
+Model \(h\) vytváří pro nový objekt \(\mathbf{x}\) předpověď \(h(\mathbf{x})\). Při trénování porovnáváme předpovědi na trénovacích objektech se známými hodnotami \(y_i\) a~upravujeme model tak, aby se zvolená chyba zmenšovala.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-supervised.tex}
+    \caption{Základní postup učení s~učitelem.}
+    \label{fig:ai-supervised}
+\end{figure}
+
+Podle povahy výstupu rozlišujeme zejména dvě úlohy:
+\begin{itemize}
+    \item \textbf{regrese} předpovídá číselnou hodnotu, například cenu bytu, spotřebu energie nebo dobu jízdy;
+    \item \textbf{klasifikace} vybírá z~konečné množiny tříd, například spam a~běžnou zprávu nebo jednu z~několika kategorií obrazu.
+\end{itemize}
+
+Dobře fungující model musí zachytit obecný vztah mezi vstupy a~výstupem. Příliš jednoduchý model důležitou strukturu nevystihne; příliš složitý model může místo ní zachytit šum. Volba třídy modelů proto určuje kompromis mezi schopností přizpůsobit se datům a~schopností zobecnit.
+
+\notebox{Slovo „učitel“ neznamená, že model vede člověk krok za krokem. Učitelem je zde známý výstup \(y_i\), s~nímž lze porovnat předpověď modelu.}

@@ -1,0 +1,16 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=blue!10,minimum width=28mm] (train) at (0,1.2)
+        {trénovací data};
+    \node[task,fill=orange!15,minimum width=28mm] (learn) at (4,1.2)
+        {trénování};
+    \node[task,fill=green!12,minimum width=28mm] (model) at (8,1.2)
+        {hotový model};
+    \node[task,fill=blue!10,minimum width=28mm] (new) at (4,-1.1)
+        {nový vstup};
+    \node[task,fill=green!12,minimum width=28mm] (pred) at (8,-1.1)
+        {předpověď};
+    \draw[diredge] (train) -- (learn);
+    \draw[diredge] (learn) -- node[above]{parametry} (model);
+    \draw[diredge] (new) -- (pred);
+    \draw[diredge] (model) -- (pred);
+\end{tikzpicture}

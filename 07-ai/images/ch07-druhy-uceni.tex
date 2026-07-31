@@ -1,0 +1,13 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=orange!15,minimum width=33mm] (ml) at (5,1.6)
+        {strojové učení};
+    \node[task,fill=blue!10,minimum width=37mm] (sup) at (0,-0.6)
+        {učení s~učitelem\\známé výstupy};
+    \node[task,fill=green!12,minimum width=37mm] (unsup) at (5,-0.6)
+        {učení bez učitele\\pouze vstupy};
+    \node[task,fill=red!10,minimum width=37mm] (rl) at (10,-0.6)
+        {zpětnovazební učení\\odměny};
+    \draw[diredge] (ml) -- (sup);
+    \draw[diredge] (ml) -- (unsup);
+    \draw[diredge] (ml) -- (rl);
+\end{tikzpicture}

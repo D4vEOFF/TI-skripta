@@ -1,0 +1,47 @@
+\section{Bližší vymezení strojového učení}\label{sec:ai-vymezeni-ml}
+
+U~běžného algoritmu stanoví programátor přesný postup výpočtu. U~strojového učení místo toho určíme třídu modelů, způsob měření chyby a~postup, kterým se parametry modelu upravují podle dat. Výsledné konkrétní pravidlo tedy nevzniká pouze přímým zápisem programu, ale také trénováním.
+
+Učení lze popsat pomocí tří složek:
+\begin{itemize}
+    \item \textbf{úloha} říká, co má model provádět, například předpovídat cenu nebo rozpoznávat spam;
+    \item \textbf{zkušenost} představuje data nebo interakce, z~nichž model čerpá;
+    \item \textbf{měřítko úspěchu} určuje, podle čeho poznáme zlepšení modelu.
+\end{itemize}
+O~učení hovoříme tehdy, když se s~rostoucí zkušeností zlepšuje výkon modelu v~dané úloze podle zvoleného měřítka.
+
+\subsection{Trénování a~použití modelu}
+
+\emph{Trénováním} rozumíme hledání parametrů modelu na základě dat. Při následném \emph{použití} jsou parametry pevné a~model vypočítává výstupy pro nové vstupy. Tyto dvě fáze je nutné odlišovat: náročné hledání parametrů může probíhat jednou, zatímco hotový model potom používáme mnohokrát.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-trenovani-pouziti.tex}
+    \caption{Odlišení trénování modelu od jeho následného použití.}
+    \label{fig:ai-trenovani-pouziti}
+\end{figure}
+
+Pro kontrolu schopnosti zobecnit rozdělujeme dostupná data na tři části:
+\begin{itemize}
+    \item \textbf{trénovací data} slouží k~určení parametrů modelu;
+    \item \textbf{validační data} slouží k~volbě nastavení, například hodnoty \(k\), rozhodovacího prahu nebo počtu epoch;
+    \item \textbf{testovací data} použijeme až na konci pro nezávislé závěrečné vyhodnocení.
+\end{itemize}
+Testovací data nesmějí ovlivnit trénování ani ladění. Opakované rozhodování podle výsledku na testovací množině by z~ní postupně udělalo další validační množinu.
+
+\subsection{Základní členění}
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-druhy-uceni.tex}
+    \caption{Tři základní druhy strojového učení.}
+    \label{fig:ai-druhy-uceni}
+\end{figure}
+
+\begin{itemize}
+    \item Při \textbf{učení s~učitelem} známe u~trénovacích objektů požadované výstupy.
+    \item Při \textbf{učení bez učitele} výstupy nebo třídy předem dány nejsou a~hledáme strukturu ve vstupních datech.
+    \item Při \textbf{zpětnovazebním učení} agent volí akce, pozoruje jejich následky a~učí se z~odměn.
+\end{itemize}
+
+\warningbox{Nízká chyba na trénovacích datech sama o~sobě nestačí. Smyslem modelu je pracovat s~novými daty. Pokud si model pouze zapamatuje zvláštnosti trénovací množiny, dochází k~přeučení.}

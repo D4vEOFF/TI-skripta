@@ -1,0 +1,10 @@
+\begin{tikzpicture}[
+    neuron/.style={circle, draw=darkblue, very thick, fill=darkblue!10, minimum size=11mm},
+    conn/.style={thick, draw=darkblue!70}
+]
+    \foreach \ang/\name/\lab in {90/v1/\(s_1\),18/v2/\(s_2\),-54/v3/\(s_3\),-126/v4/\(s_4\),162/v5/\(s_5\)}
+        \node[neuron] (\name) at (\ang:2.1cm) {\lab};
+    \foreach \a/\b in {v1/v2,v1/v3,v1/v4,v1/v5,v2/v3,v2/v4,v2/v5,v3/v4,v3/v5,v4/v5}
+        \draw[conn] (\a) -- (\b);
+    \node[fill=white, inner sep=2mm] at (0,0) {\(w_{ij}=w_{ji}\)};
+\end{tikzpicture}

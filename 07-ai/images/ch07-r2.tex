@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=7.2cm,height=5.5cm,
+        xmin=0,xmax=6,ymin=0,ymax=6,
+        axis lines=left,xtick=\empty,ytick=\empty,
+        title={vysoké \(R^2\)},
+        title style={font=\normalsize},
+        every node/.style={font=\normalsize}
+    ]
+        \addplot[red!75!black,very thick,domain=0.4:5.6]{0.8*x+0.5};
+        \addplot[only marks,mark=*,blue!75!black]
+        coordinates{(0.7,1.1)(1.4,1.5)(2.1,2.3)(2.8,2.6)(3.5,3.5)(4.2,3.8)(5,4.7)};
+    \end{axis}
+    \begin{axis}[
+        xshift=8.2cm,
+        width=7.2cm,height=5.5cm,
+        xmin=0,xmax=6,ymin=0,ymax=6,
+        axis lines=left,xtick=\empty,ytick=\empty,
+        title={nižší \(R^2\)},
+        title style={font=\normalsize},
+        every node/.style={font=\normalsize}
+    ]
+        \addplot[red!75!black,very thick,domain=0.4:5.6]{0.55*x+1.2};
+        \addplot[only marks,mark=*,orange!85!black]
+        coordinates{(0.7,0.7)(1.3,2.8)(2.1,1.3)(2.8,3.5)(3.4,2.1)(4.2,4.6)(5,3.2)};
+    \end{axis}
+\end{tikzpicture}

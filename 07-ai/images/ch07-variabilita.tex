@@ -1,0 +1,18 @@
+\begin{tikzpicture}[x=0.9cm,y=1cm,every node/.style={font=\normalsize}]
+    \draw[diredge] (0,1.4) -- (10.5,1.4);
+    \draw[diredge] (0,-0.3) -- (10.5,-0.3);
+    \node[left] at (0,1.4) {\(\mathbf{X}\)};
+    \node[left] at (0,-0.3) {\(\mathbf{Y}\)};
+    \foreach \x in {4.3,4.7,5,5.2,5.8}{
+        \fill[blue!75!black] (\x,1.4) circle (2.5pt);
+    }
+    \foreach \x in {1,3,5,7,9}{
+        \fill[orange!85!black] (\x,-0.3) circle (2.5pt);
+    }
+    \draw[red!75!black,very thick] (5,1.05) -- (5,1.75);
+    \draw[red!75!black,very thick] (5,-0.65) -- (5,0.05);
+    \node[right,red!75!black] at (5.1,1.75)
+        {\(\average{\mathbf{X}}=\average{\mathbf{Y}}\)};
+    \node[below] at (5,-0.75)
+        {\(\Var(\mathbf{X})<\Var(\mathbf{Y})\)};
+\end{tikzpicture}

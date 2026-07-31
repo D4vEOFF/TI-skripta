@@ -1,0 +1,41 @@
+\section{Min-max normalizace dat}\label{sec:ai-minmax}
+
+Standardizace popisuje hodnoty pomocí vzdálenosti od průměru. Jinou možností je převést nejmenší hodnotu na \(0\), největší na \(1\) a~ostatní mezi ně lineárně rozmístit.
+
+\begin{definition}\label{def:ai-minmax}
+    Nechť \(\mathbf{X}=(x_1,\ldots,x_n)\) a
+    \[
+        m=\min_{1\leqslant i\leqslant n}x_i,
+        \qquad
+        M=\max_{1\leqslant i\leqslant n}x_i.
+    \]
+    Je-li \(M>m\), definujeme \emph{min-max normalizované hodnoty}
+    \[
+        u_i=\frac{x_i-m}{M-m}
+    \]
+    a~normalizovaný soubor \(\mathbf{U}=(u_1,\ldots,u_n)\).
+\end{definition}
+
+Pro každé \(i\) platí \(0\leqslant u_i\leqslant 1\). Nejmenší původní hodnota se zobrazí na \(0\), největší na \(1\) a~pořadí hodnot se nezmění. Jde totiž o~rostoucí lineární transformaci.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-minmax.tex}
+    \caption{Min-max normalizace převádí rozsah dat na interval \(\langle0,1\rangle\).}
+    \label{fig:ai-minmax}
+\end{figure}
+
+Pro soubor teplot
+\[
+    \mathbf{T}=(18,20,20,21,26)
+\]
+je \(m=18\), \(M=26\), a~tedy
+\[
+    \mathbf{U}
+    =
+    (0;\ 0{,}25;\ 0{,}25;\ 0{,}375;\ 1).
+\]
+
+Standardizace i~min-max normalizace odstraňují fyzikální jednotku a~pomáhají porovnávat různé znaky. Liší se však významem výsledných hodnot. Standardizace zachovává informaci o~vzdálenosti od průměru ve směrodatných odchylkách a~není omezená na pevný interval. Min-max normalizace zaručí interval \(\langle0,1\rangle\), ale silně závisí na krajních hodnotách. Pro metody založené na vzdálenosti, například \(k\)-NN nebo \(k\)-means, jsou použitelné obě; vhodnější volba závisí na rozdělení dat a~na výskytu odlehlých hodnot.
+
+\notebox{Stejně jako u~standardizace určujeme \(m\) a~\(M\) pouze z~trénovacích dat. Nová hodnota může ležet mimo původní rozsah, a~její normalizovaná hodnota proto může být menší než \(0\) nebo větší než \(1\).}

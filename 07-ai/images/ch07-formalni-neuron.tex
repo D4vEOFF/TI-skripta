@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+    input/.style={circle, draw=darkblue, fill=darkblue!8, minimum size=9mm},
+    block/.style={circle, draw=darkblue, very thick, fill=darkblue!12, minimum size=18mm, align=center},
+    conn/.style={-Latex, thick, draw=darkblue}
+]
+    \node[input] (x1) at (0,1.8) {\(x_{i1}\)};
+    \node[input] (x2) at (0,0.6) {\(x_{i2}\)};
+    \node at (0,-0.3) {\(\vdots\)};
+    \node[input] (xp) at (0,-1.3) {\(x_{ip}\)};
+    \node[block] (sum) at (3.2,0.3) {\(\sum\)};
+    \node[block] (act) at (6.0,0.3) {\(f\)};
+
+    \draw[conn] (x1) -- node[above, sloped] {\(w_1\)} (sum);
+    \draw[conn] (x2) -- node[above, sloped] {\(w_2\)} (sum);
+    \draw[conn] (xp) -- node[below, sloped] {\(w_p\)} (sum);
+    \draw[conn] ([yshift=-18mm]sum.south) -- node[right] {\(\theta\)} (sum.south);
+    \draw[conn] (sum) -- node[above] {\(z_i\)} (act);
+    \draw[conn] (act.east) -- ++(15mm,0) node[right] {\(\hat y_i\)};
+\end{tikzpicture}
+

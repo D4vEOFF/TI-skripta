@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=12cm,height=6.2cm,
+        xmin=-4,xmax=6,ymin=0,ymax=9,
+        axis lines=left,xlabel={parametr},ylabel={\(L\)},
+        xtick=\empty,ytick=\empty,
+        label style={font=\normalsize},
+        every node/.style={font=\normalsize},
+        clip=false
+    ]
+        \addplot[blue!75!black,very thick,domain=-3.8:5.8,samples=100]
+            {0.3*(x-1)^2+0.5};
+        \foreach \x in {5,3.4,2.3,1.6,1.2}{
+            \pgfmathsetmacro{\y}{0.3*(\x-1)^2+0.5}
+            \addplot[only marks,mark=*,mark size=2.5pt,red!75!black]
+                coordinates{(\x,\y)};
+        }
+        \draw[diredge,red!75!black] (axis cs:5,5.3)--(axis cs:3.4,2.228);
+        \draw[diredge,red!75!black] (axis cs:3.4,2.228)--(axis cs:2.3,1.007);
+        \draw[diredge,red!75!black] (axis cs:2.3,1.007)--(axis cs:1.6,0.608);
+        \draw[diredge,red!75!black] (axis cs:1.6,0.608)--(axis cs:1.2,0.512);
+        \node[below] at (axis cs:1,0.45){minimum};
+    \end{axis}
+\end{tikzpicture}

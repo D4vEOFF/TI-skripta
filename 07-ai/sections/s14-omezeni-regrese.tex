@@ -1,0 +1,21 @@
+\section{Omezení lineární regrese}\label{sec:ai-omezeni-regrese}
+
+Lineární regrese je jednoduchá, názorná a~dobře interpretovatelná. Právě její jednoduchost je však zároveň omezením. Před použitím je vhodné prohlédnout bodový graf i~rezidua a~ověřit, zda lineární popis odpovídá povaze dat.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-regrese-omezeni.tex}
+    \caption{Tři typické problémy lineárního modelu.}
+    \label{fig:ai-regrese-omezeni}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Nelineární vztah.} Body mohou sledovat křivku, kterou žádná přímka nevystihne. Rezidua potom nevypadají náhodně, ale vytvářejí systematický obrazec.
+    \item \textbf{Odlehlé hodnoty.} Metoda nejmenších čtverců zvýrazňuje velká rezidua. Jediný vzdálený bod proto může znatelně změnit směrnici i~absolutní člen.
+    \item \textbf{Proměnlivá velikost chyby.} Rozptyl reziduí může s~rostoucím vstupem růst. Jediná hodnota \(\MSE\) pak zakrývá, že model je v~různých částech rozsahu různě přesný.
+    \item \textbf{Závislá pozorování.} Hodnoty měřené v~čase nebo opakovaně u~stejného objektu mohou být vzájemně závislé. Běžná interpretace výsledků lineární regrese s~tím nemusí počítat.
+    \item \textbf{Extrapolace.} Přímka je určena daty v~pozorovaném rozsahu. Daleko za tímto rozsahem se může skutečný vztah chovat zcela jinak.
+    \item \textbf{Korelace není kauzalita.} Regresní přímka popisuje statistický vztah, ale sama neprokazuje, že změna \(\mathbf{X}\) způsobuje změnu \(\mathbf{Y}\).
+\end{itemize}
+
+\importantbox{Model není správný jen proto, že jej lze vypočítat. Výsledek je nutné posuzovat společně s~grafem dat, rezidui, způsobem sběru dat a~otázkou, pro kterou má být použit.}

@@ -1,0 +1,14 @@
+\begin{tikzpicture}[every node/.style={font=\normalsize}]
+    \node[task,fill=green!12,minimum width=43mm,minimum height=16mm]
+        (tp) at (0,0) {\(\TP\)\\správně pozitivní};
+    \node[task,fill=red!10,minimum width=43mm,minimum height=16mm]
+        (fn) at (4.7,0) {\(\FN\)\\falešně negativní};
+    \node[task,fill=red!10,minimum width=43mm,minimum height=16mm]
+        (fp) at (0,-2) {\(\FP\)\\falešně pozitivní};
+    \node[task,fill=green!12,minimum width=43mm,minimum height=16mm]
+        (tn) at (4.7,-2) {\(\TN\)\\správně negativní};
+    \node[above=7mm of tp] {předpověď \(1\)};
+    \node[above=7mm of fn] {předpověď \(0\)};
+    \node[left=5mm of tp,align=right] {skutečnost\\\(1\)};
+    \node[left=5mm of fp,align=right] {skutečnost\\\(0\)};
+\end{tikzpicture}

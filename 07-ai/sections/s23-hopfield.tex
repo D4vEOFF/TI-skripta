@@ -1,0 +1,141 @@
+\clearpage
+\section{Hopfieldův model}\label{sec:ai-hopfield}
+
+Dopředná síť neobsahuje orientovaný cyklus: informace postupuje od vstupu k~výstupu a~výpočet skončí. \emph{Rekurentní} síť naopak dovoluje zpětné spoje. Její nový stav proto závisí na stavu předchozím a~síť může uchovávat informaci v~čase.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-dopredna-rekurentni.tex}
+    \caption{Rozdíl mezi dopřednou a~rekurentní sítí.}
+    \label{fig:ai-dopredna-rekurentni}
+\end{figure}
+
+\subsection{Definice a~dynamika}
+
+\begin{definition}\label{def:ai-hopfield}
+    \emph{Hopfieldova síť} s~\(n\) neurony je dvojice
+    \[
+        \mathcal H_n=(N,w),
+    \]
+    kde \(N=\set{1,\ldots,n}\) je množina neuronů a
+    \[
+        w\colon N\times N\to\R
+    \]
+    je symetrická váhová funkce splňující
+    \[
+        w(i,j)=w(j,i),
+        \qquad
+        w(i,i)=0.
+    \]
+\end{definition}
+
+Váhu \(w(i,j)\) budeme krátce zapisovat \(w_{ij}\). Každému neuronu \(i\) navíc přiřadíme práh \(\theta_i\in\R\). Stav sítě v~čase \(t\) je vektor
+\[
+    \mathbf{s}^{(t)}
+    =
+    \left(
+        s_1^{(t)},\ldots,s_n^{(t)}
+    \right)
+    \in\set{-1,1}^{n}.
+\]
+Síť je plně propojená: každý neuron přijímá stav všech ostatních neuronů, vynásobí je vahami a~vytvoří lokální pole
+\[
+    h_i^{(t)}
+    =
+    \sum_{j=1}^{n}w_{ij}s_j^{(t)}+\theta_i.
+\]
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-hopfield-sit.tex}
+    \caption{Hopfieldova síť má symetrické spoje a~stav uložený v~neuronech.}
+    \label{fig:ai-hopfield-sit}
+\end{figure}
+
+Při \emph{asynchronní aktualizaci} vybereme jediný neuron \(i\) a~nastavíme
+\[
+    s_i^{(t+1)}
+    =
+    \begin{cases}
+        1, & h_i^{(t)}>0,\\
+        -1, & h_i^{(t)}<0,\\
+        s_i^{(t)}, & h_i^{(t)}=0.
+    \end{cases}
+\]
+Ostatní složky stavu zůstanou nezměněné. Neurony můžeme procházet v~pevném nebo náhodném pořadí. Při synchronní aktualizaci bychom měnili všechny neurony najednou; ta však může mezi několika stavy kmitat.
+
+\subsection{Asociativní paměť}
+
+Hopfieldova síť slouží jako \emph{asociativní paměť}. Neuchovává záznam pod samostatnou adresou. Zapamatovaný vzor je stabilní stav sítě a~je možné jej vybavit i~z~neúplné nebo mírně poškozené podoby. Opakované aktualizace postupně opravují jednotlivé složky, dokud síť nedospěje ke stabilnímu stavu.
+
+\begin{figure}[ht]
+    \centering
+    \input{07-ai/images/ch07-hopfield-vybaveni.tex}
+    \caption{Vybavení vzoru z~jeho poškozené podoby.}
+    \label{fig:ai-hopfield-vybaveni}
+\end{figure}
+
+Abychom odlišili počet neuronů od počtu ukládaných vzorů, zavedeme nové označení \(m\) pro počet vzorů. Nechť
+\[
+    \mathbf{x}_1,\ldots,\mathbf{x}_m
+    \in\set{-1,1}^{n}
+\]
+jsou vzory určené k~uložení. Jednoduché Hebbovo pravidlo nastaví pro \(i\neq j\)
+\[
+    w_{ij}
+    =
+    \frac1n
+    \sum_{r=1}^{m}x_{ri}x_{rj},
+    \qquad
+    w_{ii}=0,
+\]
+kde \(x_{ri}\) je \(i\)-tá složka vzoru \(\mathbf{x}_r\). Shodují-li se dvě složky ve většině vzorů, vznikne mezi nimi kladná váha; bývají-li opačné, váha je záporná.
+
+\subsection{Energetická funkce}
+
+Stavu \(\mathbf{s}\in\set{-1,1}^{n}\) přiřadíme energii
+\[
+    E(\mathbf{s})
+    =
+    -\frac12
+    \sum_{i=1}^{n}\sum_{j=1}^{n}
+    w_{ij}s_is_j
+    -
+    \sum_{i=1}^{n}\theta_i s_i.
+\]
+Změní-li se asynchronně pouze neuron \(i\) ze stavu \(s_i\) do stavu \(s_i'\), symetrie vah dává
+\[
+    E(\mathbf{s}')
+    -
+    E(\mathbf{s})
+    =
+    -(s_i'-s_i)
+    \left(
+        \sum_{j=1}^{n}w_{ij}s_j+\theta_i
+    \right)
+    =
+    -(s_i'-s_i)h_i.
+\]
+Když se neuron podle uvedeného pravidla skutečně změní, mají \(s_i'-s_i\) a~\(h_i\) stejné znaménko. Proto
+\[
+    E(\mathbf{s}')-E(\mathbf{s})<0.
+\]
+Při každé změně tedy energie přísně klesne. Síť má jen \(2^n\) stavů, a~proto nemůže měnit stav donekonečna. Po konečném počtu změn dospěje k~lokálnímu minimu energie, tedy ke stabilnímu stavu.
+
+\begin{center}
+    \centering
+    \input{07-ai/images/ch07-hopfield-energie.tex}
+    \captionof{figure}{Aktualizace snižují energii, dokud síť nedospěje ke stabilnímu stavu.}
+    \label{fig:ai-hopfield-energie}
+\end{center}
+
+\subsection{Implementace a~omezení}
+
+Program~\ref{lst:ai-hopfield} vytvoří váhy Hebbovým pravidlem a~poškozený vstup aktualizuje asynchronně. Nulové lokální pole ponechá původní stav neuronu, což odpovídá pravidlu použitému v~důkazu poklesu energie.
+
+\lstinputlisting[
+    caption={Hopfieldova asociativní paměť.},
+    label={lst:ai-hopfield}
+]{07-ai/code/hopfield.py}
+
+Kapacita Hopfieldovy sítě je omezená. Při příliš velkém počtu uložených nebo silně podobných vzorů se jejich příspěvky ve vahách ruší. Síť potom může skončit ve špatném uloženém vzoru nebo v~nežádoucím stabilním stavu, který nebyl součástí trénovacích dat. Model je proto užitečný hlavně jako názorný příklad rekurentní sítě, asociativní paměti a~učení bez učitele.
