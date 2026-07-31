@@ -1,5 +1,15 @@
 \input{assets/packages.tex}
 
+% Mezery v obsahu odpovídají sazbě projektu AM-skripta. Balíček
+% tocloft ponechává mezi kapitolami větší mezeru, zatímco položky
+% sekcí a podsekcí sází kompaktně pod sebe.
+\usepackage{tocloft}
+\ifcsname cftbeforechapskip\endcsname
+    \setlength{\cftbeforechapskip}{1em plus 1pt}
+\fi
+\setlength{\cftbeforesecskip}{0pt plus 0.2pt}
+\setlength{\cftbeforesubsecskip}{0pt plus 0.2pt}
+
 % Indentation
 \newcommand{\hmargin}{18mm}
 \newcommand{\vmargin}{25mm}
