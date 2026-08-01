@@ -42,8 +42,23 @@ def compile_tex_file(file_path):
             '-halt-on-error',
             file_path,
         ]
-        # Three passes reliably settle the table of contents and cross-references.
-        for _ in range(3):
+        # První průchod vytvoří pomocné soubory a případný požadavek na
+        # bibliografii. BibTeX spouštíme jen u dokumentů, které ji skutečně
+        # používají; samostatné kapitoly proto zůstávají beze změny.
+        subprocess.run(command, check=True)
+        aux_path = os.path.splitext(file_path)[0] + '.aux'
+        if os.path.exists(aux_path):
+            with open(aux_path, 'r', encoding='utf-8', errors='ignore') as aux_file:
+                uses_bibtex = r'\bibdata' in aux_file.read()
+            if uses_bibtex:
+                subprocess.run(
+                    ['bibtex', os.path.splitext(os.path.basename(file_path))[0]],
+                    cwd=os.path.dirname(file_path) or None,
+                    check=True,
+                )
+
+        # Další dva průchody ustálí bibliografii, obsah a křížové odkazy.
+        for _ in range(2):
             subprocess.run(command, check=True)
         print(f"Compiled {file_path} successfully.")
     except subprocess.CalledProcessError as e:
