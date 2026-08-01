@@ -15,12 +15,12 @@
         {\includegraphics[height=1.25cm]{06-kryptografie/images/man-icon.pdf}};
     \node[below=1mm of bob] {Bob};
 
-    \node[seed] (sa) at (-4.6,1.85) {tajný seed \(s\)};
-    \node[seed] (sb) at (4.6,1.85) {tajný seed \(s\)};
-    \node[box] (ga) at (-1.7,1.85) {\(G(s)\)};
-    \node[box] (gb) at (1.7,1.85) {\(G(s)\)};
-    \node[box] (enc) at (-1.7,-.25) {\(c=m\oplus G(s)\)};
-    \node[box] (dec) at (1.7,-.25) {\(m=c\oplus G(s)\)};
+    \node[seed] (sa) at (-5.2,1.85) {tajný seed \(s\)};
+    \node[seed] (sb) at (5.2,1.85) {tajný seed \(s\)};
+    \node[box] (ga) at (-1.8,1.85) {\(G(s)\)};
+    \node[box] (gb) at (1.8,1.85) {\(G(s)\)};
+    \node[box] (enc) at (-1.8,-.25) {\(c=m\oplus G(s)\)};
+    \node[box] (dec) at (1.8,-.25) {\(m=c\oplus G(s)\)};
 
     \draw[flow] (sa) -- (ga);
     \draw[flow] (sb) -- (gb);

@@ -68,7 +68,7 @@ Protože jsou všechny hladiny kromě poslední plné a~poslední se zaplňuje z
 
 V~programovacích jazycích s~indexací pole od nuly se vzorce posunou: děti prvku $i$ leží na pozicích $2i+1$ a~$2i+2$,~rodič na $\lfloor(i-1)/2\rfloor$. Jde o~stejnou datovou strukturu; před implementací je pouze nutné zvolit jednu konvenci a~důsledně ji dodržet.
 
-Podívejme se postupně na jednotlivé operace a~jejich realizaci. S~dovolením si zde nyní odpustíme zápis pomocí pseudokódu a~pro jednoduchost si dané operace pouze slovně vysvětlíme. Pro následné odvození časové složitosti nám to bude stačit.
+Podívejme se postupně na jednotlivé operace a~jejich realizaci. Slovní popis vždy doplníme pseudokódem. V~něm budeme haldu zapisovat jako pole $H[1],\dots,H[n]$ indexované od jedničky; proměnná $n$ označuje jeho aktuální délku.
 
 \subsection{Vkládání nového vrcholu}
 
@@ -90,6 +90,18 @@ Postup můžeme zapsat zkráceně ve třech bodech takto:
     \item pokud je klíč rodiče větší než $x$,~prohodíme vrcholy (resp. jejich klíče)\footnote{Vrchol v~podstatě takto "probublá" do správné pozice ve stromě (příp. až do pozice kořene).}.
     \item Opakujeme druhý krok.
 \end{itemize}
+
+Samotné probublávání nového klíče směrem ke kořeni oddělíme do pomocné operace \textsc{BubbleUp}. Díky tomu ji později použijeme beze změny také při snížení existujícího klíče.
+\begin{algorithm}
+    \caption{\textsc{bubble-up}}
+    \label{alg:heap-bubble-up}
+    \KwIn{Minimová halda $H[1],\dots,H[n]$ a~index $i\in\set{1,\dots,n}$}
+    \While{$i>1$ \textup{a} $H[\lfloor i/2\rfloor]>H[i]$}{
+        $r\gets\lfloor i/2\rfloor$\tcp*{index rodiče}
+        Prohoď $H[i]$ a~$H[r]$\;
+        $i\gets r$\;
+    }
+\end{algorithm}
 
 \subsection{Odstranění minima}
 
@@ -124,14 +136,96 @@ V~bodech můžeme zapsat celou operaci následovně:
 \end{itemize}
 Operace,~při nichž vrchol během vkládání \uv{probublává} nahoru nebo během odebírání minima dolů,~se někdy nazývají \textsc{BubbleUp} a~\textsc{BubbleDown}. Ještě se nám budou hodit u~operací \textsc{Increase} a~\textsc{Decrease}.
 
+Při probublávání dolů musíme v~každém kroku vybrat menšího ze synů. Prohození s~větším synem by nemuselo obnovit haldovou podmínku vůči tomu menšímu. Pokud pravý syn neexistuje, porovnáváme pouze s~levým.
+\begin{algorithm}
+    \caption{\textsc{bubble-down}}
+    \label{alg:heap-bubble-down}
+    \KwIn{Minimová halda $H[1],\dots,H[n]$ a~index $i\in\set{1,\dots,n}$}
+    \While{$2i\leqslant n$}{
+        $s\gets 2i$\tcp*{zatím levý syn}
+        \If{$2i+1\leqslant n$ \textup{a} $H[2i+1]<H[s]$}{
+            $s\gets 2i+1$\tcp*{pravý syn je menší}
+        }
+        \If{$H[i]\leqslant H[s]$}{
+            \Return\;
+        }
+        Prohoď $H[i]$ a~$H[s]$\;
+        $i\gets s$\;
+    }
+\end{algorithm}
+
+Pomocí této operace už lze \textsc{ExtractMin} zapsat velmi stručně. Zvlášť ošetřujeme jednoprvkovou haldu: po odebrání posledního prvku již není co probublávat.
+\begin{algorithm}
+    \caption{\textsc{extract-min}}
+    \label{alg:heap-extract-min}
+    \KwIn{Neprázdná minimová halda $H[1],\dots,H[n]$}
+    $m\gets H[1]$\;
+    $H[1]\gets H[n]$\;
+    Odstraň poslední prvek pole $H$\;
+    $n\gets n-1$\;
+    \If{$n>0$}{
+        Zavolej \textsc{bubble-down}$(H,1)$\;
+    }
+    \Return{$m$}\;
+    \KwOut{Odebraný minimální klíč $m$}
+\end{algorithm}
+
 \subsection{Zvýšení a~snížení hodnoty klíče ve vrcholu}
 
 Poslední dvojicí operací,~která se nám bude hodit,~je zvýšení (\textsc{Increase}) a~snížení (\textsc{Decrease}) klíče ve vybraném vrcholu. Předpokládáme přitom,~že umíme daný vrchol v~haldě přímo najít. Pokud v~haldě uchováváme složitější objekty,~můžeme si například vést pomocný slovník,~který každému objektu přiřadí jeho současnou pozici v~haldě. Při každém prohození pak aktualizujeme i~slovník. Ten spotřebuje navíc $\bigO(n)$ paměti.
 
 Realizace samotných operací je již jednoduchá. Pokud provedeme \textsc{Increase} klíče v~určitém vrcholu,~může se halda pokazit pouze směrem dolů. Provedeme tedy \textsc{BubbleDown},~stejně jako při odebírání kořene.
 
+\begin{figure}[ht]
+    \centering
+    \input{01-grafalgo/images/ch01_increase.tex}
+    \caption{Operace \textsc{Increase}: zvýšený klíč se pomocí \textsc{BubbleDown} přesune dolů.}
+    \label{fig:halda-increase}
+\end{figure}
+
 Operaci \textsc{Decrease} provedeme zcela stejně,~akorát nyní se halda bude kazit "směrem nahoru",~takže provedeme \textsc{BubbleUp},~jako při vkládání nového vrcholu (\textsc{Insert}).
+
+\begin{figure}[ht]
+    \centering
+    \input{01-grafalgo/images/ch01_decrease.tex}
+    \caption{Operace \textsc{Decrease}: snížený klíč se pomocí \textsc{BubbleUp} přesune nahoru.}
+    \label{fig:halda-decrease}
+\end{figure}
+
+Pseudokód obou operací zároveň kontroluje, že nový klíč skutečně odpovídá názvu operace. Kdybychom například v~operaci \textsc{Increase} předali menší hodnotu, bylo by potřeba opravovat haldu opačným směrem.
+\begin{algorithm}
+    \caption{\textsc{increase}}
+    \label{alg:heap-increase}
+    \KwIn{Minimová halda $H[1],\dots,H[n]$, index $i$ a~nový klíč $x$}
+    \If{$x<H[i]$}{
+        Ohlas chybu\;
+    }
+    $H[i]\gets x$\;
+    Zavolej \textsc{bubble-down}$(H,i)$\;
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{\textsc{decrease}}
+    \label{alg:heap-decrease}
+    \KwIn{Minimová halda $H[1],\dots,H[n]$, index $i$ a~nový klíč $x$}
+    \If{$x>H[i]$}{
+        Ohlas chybu\;
+    }
+    $H[i]\gets x$\;
+    Zavolej \textsc{bubble-up}$(H,i)$\;
+\end{algorithm}
 \notebox{V~případě \emph{maximové binární haldy} by operace vypadaly zcela stejně,~akorát při operaci \textsc{Increase} budeme opravovat haldu směrem nahoru a~u~\textsc{Decrease} směrem dolů.}
+
+\subsection{Implementace v~Pythonu}
+
+Program~\ref{lst:min-heap-python} ukládá minimovou haldu v~seznamu indexovaném od nuly. Proto používá vztahy $2i+1$ a~$2i+2$ pro syny a~$\lfloor(i-1)/2\rfloor$ pro rodiče. Metody \texttt{bubble\_up} a~\texttt{bubble\_down} přesně odpovídají pomocným operacím z~pseudokódu; liší se pouze posunutými indexy.
+
+Konstruktor vytváří haldu opakovaným vkládáním, což je didakticky přímočaré, i~když pro velké pole existuje rychlejší hromadná konstrukce. Metody \texttt{increase} a~\texttt{decrease} očekávají index prvku. V~praktickém programu bychom při ukládání složitějších objektů přidali pomocný slovník objekt--index a~aktualizovali jej při každém prohození.
+
+\lstinputlisting[
+    caption={Minimová binární halda a~její základní operace v~Pythonu.},
+    label={lst:min-heap-python}
+]{01-grafalgo/code/min_heap.py}
 
 \subsection{Časové složitosti operací}
 

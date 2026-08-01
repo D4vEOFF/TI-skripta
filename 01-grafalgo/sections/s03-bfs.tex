@@ -36,6 +36,17 @@ Na počátku začneme s~jedním otevřeným vrcholem,~a~to $v_0$ (zde začínám
     \KwOut{Seznam vzdáleností $D$}
 \end{algorithm}
 
+\subsection{Implementace v~Pythonu}
+
+Program~\ref{lst:bfs-python} reprezentuje graf slovníkem, jehož klíče jsou vrcholy a~hodnoty jsou seznamy jejich sousedů. Frontu vytváří pomocí třídy \texttt{deque}: operace \texttt{popleft()} odebere nejdéle čekající vrchol, a~proto jsou vrcholy zpracovány ve stejném pořadí, v~jakém byly objeveny. Hodnota \texttt{None} v~poli vzdáleností zde současně zastupuje stav \emph{nenalezený}.
+
+Vedle vzdálenosti si implementace ukládá také předchůdce každého objeveného vrcholu. Z~těchto údajů lze zpětně sestavit nejkratší cestu: začneme v~cílovém vrcholu a~opakovaně přecházíme k~jeho předchůdci, dokud nedojdeme do počátečního vrcholu. Vrcholy, které z~počátku dosažitelné nejsou, si ponechají vzdálenost \texttt{None} a~předchůdce \texttt{None}.
+
+\lstinputlisting[
+    caption={Prohledávání grafu do šířky v~Pythonu.},
+    label={lst:bfs-python}
+]{01-grafalgo/code/bfs.py}
+
 BFS rozděluje vrcholy do vrstev podle toho,~v~jaké vzdálenosti od počátečního vrcholu se nachází (viz obrázek \ref{fig:bfs_vrstvy}). Nejdříve jsou prozkoumány vrcholy ve vzdálenosti 0 (tj. pouze $v_0$),~poté ve vzdálenostech 1,~2,~\dots Z~toho vyplývá,~že kdykoliv při otevírání libovolného vrcholu $v$ nastavujeme hodnotu $D(v)$,~bude tato hodnota vždy odpovídat délce nejkratší cesty z~$v_0$ do $v$. Tato hodnota bude však nastavena pouze u~těch vrcholů,~které jsou z~$v_0$ dosažitelné (ostatní vrcholy zůstanou ve stavu nenalezený).
 \begin{figure}[ht]
     \centering

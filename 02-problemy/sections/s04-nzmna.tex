@@ -70,27 +70,84 @@ K~převodu \ensuremath{\NZMNA} na \ensuremath{\THREESAT} přidáme jen krátký 
     \label{fig:prevod_nzmna_3sat}
 \end{figure}
 
-\subsection{Aplikace nezávislé množiny -- barvení intervalového grafu}\label{subsec:int_graf}
+\subsection{Aplikace nezávislé množiny -- intervalové grafy}\label{subsec:int_graf}
 
-Nyní se podíváme na jednu z~aplikací nezávislé množiny v~praktických problémech.
+Nyní se podíváme na praktickou situaci, v~níž vrcholy grafu představují činnosti probíhající v~určitých časových intervalech. Může jít o~vyučovací hodiny, schůzky jedné osoby, rezervace zařízení nebo úlohy přidělované procesoru. Dvě činnosti jsou v~konfliktu právě tehdy, když se jejich intervaly překrývají.
 
-Představme si,~že máme $n$ vyučovacích hodin ve škole,~které chceme rozvrhnout do co nejmenšího počtu učeben tak,~aby se žádné dvě z~nich nepřekrývaly. Každá vyučovací hodina má čas začátku a~čas svého konce. Matematicky toto můžeme reprezentovat pomocí intervalu $(a,b)$,~kde $a$ je čas začátku a~$b$ je čas konce. Jednotlivé hodiny tedy můžeme reprezentovat pomocí intervalů $(a_1,b_1),(a_2,b_2),(a_3,b_3),\dots,(a_n,b_n)$. V~tomto případě záměrně volíme otevřené intervaly. Později uvidíme,~proč se nám toto hodí.
+Činnost $j$ budeme popisovat otevřeným intervalem $I_j=(a_j,b_j)$, kde $a_j<b_j$. Otevřené intervaly se hodí proto, že dvě činnosti mohou bez konfliktu těsně navazovat: pro $I=(a,b)$ a~$J=(b,c)$ platí $I\cap J=\emptyset$. Všechny činnosti tvoří systém $\mathcal I=\set{I_1,\dots,I_n}$.
 
-Dané hodiny tedy chceme rozdělit do co nejmenšího počtu učeben. Každou z~učeben si můžeme označit nějakou barvou. Nyní sestrojíme tzv. \textbf{intervalový graf}. Jeho vrcholy představují dané vyučovací hodiny,~resp. příslušné intervaly,~přičemž mezi dvojicí vrcholů vede hrana,~právě když dané intervaly mají neprázdný průnik,~tj. obecně $(a_i,b_i)\cap(a_j,b_j)\neq\emptyset$ (to znamená,~že se hodiny svým časem kryjí). Zde si všimněme,~proč se nám hodí pracovat s~otevřenými intervaly. Pokud by dvojice hodin navazovala těsně po sobě ve stejné učebně,~např. $(7,9)$ a~$(9,10)$,~pak bychom takovou situaci také mohli shledat přípustnou. Pokud bychom však používali uzavřené intervaly,~pak by průnik vycházel neprázdný. Např. viz obrázek \ref{fig:int_graf}.
+\begin{definition}[Intervalový graf]\label{def:intervalovy-graf}
+    Nechť $\mathcal I=\set{I_1,\dots,I_n}$ je systém otevřených intervalů. \emph{Intervalový graf} systému $\mathcal I$ je graf $G_{\mathcal I}=(V,E)$, kde $V=\set{v_1,\dots,v_n}$ a~pro každá různá $i,j$ platí
+    \[
+        v_iv_j\in E
+        \quad\Longleftrightarrow\quad
+        I_i\cap I_j\neq\emptyset.
+    \]
+    Vrchol $v_i$ tedy zastupuje interval $I_i$ a~hrana vyjadřuje časový konflikt.
+\end{definition}
+
+Ne každý graf je intervalový. Definice vyžaduje, aby existoval systém intervalů, jehož průniky vytvoří přesně zadané hrany. Intervalové grafy proto tvoří pouze zvláštní podtřídu všech grafů. Právě jejich dodatečná geometrická struktura umožní řešit některé obecně těžké úlohy rychleji.
 \begin{figure}[ht]
     \centering
     \input{02-problemy/images/ch02_int_graf.tex}
     \caption{Příklad intervalového grafu pro intervaly $(2,7),(6,8),(7,10),(1,3),(3,7)$.}
     \label{fig:int_graf}
 \end{figure}
-Nyní každý vrchol obarvíme barvou nějaké učebny. Přitom dvojice vyučovacích hodin nesmí být rozvržena do stejné učebny,~pokud se časově kryjí. To znamená,~že sousední vrcholy musí mít vždy různé barvy (viz obrázek \ref{fig:int_graf2}).
+\subsubsection{Barvení intervalového grafu}
+
+Představme si, že chceme všechny vyučovací hodiny rozdělit do co nejmenšího počtu učeben. Každé učebně přiřadíme jednu barvu a~vrchol obarvíme barvou učebny, v~níž se má odpovídající hodina konat. Dvě časově se překrývající hodiny nesmějí být ve stejné učebně, a~proto musí mít sousední vrcholy různé barvy (viz obrázek \ref{fig:int_graf2}).
 \begin{figure}[ht]
     \centering
     \input{02-problemy/images/ch02_int_graf2.tex}
     \caption{Obarvení intervalového grafu pro intervaly $(2,7),(6,8),(7,10),(1,3),(3,7)$.}
     \label{fig:int_graf2}
 \end{figure}
-Zde si všimněte,~že libovolná skupina vrcholů obarvená stejnou barvou tvoří nezávislou množinu.
+Vrcholy stejné barvy tvoří nezávislou množinu, protože mezi nimi nevede žádná hrana. Barvení tak rozděluje celý systém aktivit na několik navzájem nekolidujících skupin. Barvení obecného grafu je algoritmicky těžké, ale u~intervalového grafu lze nejmenší počet barev určit polynomiálním hladovým algoritmem: intervaly zpracováváme podle času začátku a~vždy použijeme nejdříve uvolněnou učebnu; není-li žádná volná, otevřeme novou.
 
-V~praxi je efektivní rozvrhování běžnou záležitostí,~například při přidělování úloh procesorům.
-\notebox{Barvení obecného grafu je algoritmicky těžké,~ale intervalové grafy mají zvláštní strukturu. Minimální počet učeben lze určit polynomiálním hladovým algoritmem: hodiny zpracujeme podle času začátku a~použijeme nejdříve uvolněnou dostupnou učebnu; není-li žádná volná,~otevřeme novou. Tento příklad tedy ukazuje,~že omezená varianta obecně těžkého problému může být naopak dobře řešitelná.}
+\subsubsection{Výběr nekolidujících aktivit}
+
+Odlišnou úlohu dostaneme, jestliže máme k~dispozici pouze jednu učebnu či jiné sdílené zařízení a~chceme vybrat co nejvíce činností, které se navzájem nepřekrývají. V~intervalovém grafu hledáme co největší množinu vrcholů, mezi nimiž není hrana, tedy největší nezávislou množinu. Rozhodovací variantu budeme nazývat \emph{rozvrhování}.
+
+\problem{Rozvrhování (\ensuremath{\ROZVRH})}{Systém otevřených intervalů $\mathcal I=\set{I_1,\dots,I_n}$ a~číslo $k\in\N$.}{$1$, pokud existuje podsystém $\mathcal J\subseteq\mathcal I$ takový, že $\abs{\mathcal J}\geqslant k$ a~pro každé dva různé intervaly $I,J\in\mathcal J$ platí $I\cap J=\emptyset$; jinak $0$.}
+
+Sestrojíme-li pro vstup $\mathcal I$ intervalový graf $G_{\mathcal I}$, potom jsou vzájemně disjunktní intervaly právě vrcholy nezávislé množiny. Platí tedy
+\[
+    \ROZVRH(\mathcal I,k)=\NZMNA(G_{\mathcal I},k).
+\]
+Sestrojení grafu je polynomiální: stačí pro každou dvojici intervalů otestovat průnik, tedy provést nejvýše $\binom n2$ testů.
+
+Obrázek~\ref{fig:vstupy-rozvrh-nzmna} zdůrazňuje, že vstupy obou problémů nejsou stejné. Každý systém intervalů určuje intervalový graf, ale obecný vstup problému \ensuremath{\NZMNA} nemusí být intervalovým grafem. Rozvrhováním proto umíme řešit nezávislou množinu pouze na této speciální třídě grafů.
+\begin{figure}[ht]
+    \centering
+    \input{02-problemy/images/ch02_vstupy_rozvrh_nzmna.tex}
+    \caption{Vztah mezi vstupy problémů Rozvrhování a~NzMna.}
+    \label{fig:vstupy-rozvrh-nzmna}
+\end{figure}
+
+\subsubsection{Hladový algoritmus pro rozvrhování}
+
+Největší počet nekolidujících intervalů nalezneme hladově. Intervaly nejprve seřadíme podle koncových bodů $b_j$ vzestupně. Potom vždy vybereme první interval, který začíná nejdříve v~okamžiku skončení naposledy vybraného intervalu. Rozhodující jsou zde \emph{konce} intervalů, nikoli jejich začátky: interval končící nejdříve ponechá nejvíce prostoru pro další aktivity.
+
+\begin{algorithm}
+    \caption{\textsc{rozvrhování}}
+    \label{alg:rozvrhovani}
+    \KwIn{Systém intervalů $\mathcal I=\set{(a_1,b_1),\dots,(a_n,b_n)}$ a~$k\in\N$}
+    Seřaď intervaly vzestupně podle koncových bodů $b_j$\;
+    $c\gets 0$\tcp*{počet vybraných intervalů}
+    $\ell\gets-\infty$\tcp*{konec posledního vybraného intervalu}
+    \ForEach{\textup{interval $(a,b)$ v~seřazeném pořadí}}{
+        \If{$a\geqslant\ell$}{
+            $c\gets c+1$\;
+            $\ell\gets b$\;
+        }
+    }
+    \lIf{$c\geqslant k$}{\Return{$1$}}
+    \Return{$0$}\;
+    \KwOut{Odpověď na otázku, zda lze vybrat alespoň $k$ intervalů}
+\end{algorithm}
+
+Správnost lze vysvětlit výměnným argumentem. Nechť $I$ je interval s~nejmenším koncem a~$J$ je první interval v~nějakém optimálním řešení. Protože $b_I\leqslant b_J$, můžeme v~tomto řešení nahradit $J$ intervalem $I$ a~žádný z~později vybraných intervalů tím nezačne kolidovat. Existuje tedy optimální řešení začínající hladovou volbou. Po jejím provedení zůstává stejný problém na intervalech začínajících nejdříve v~bodě $b_I$, a~argument můžeme opakovat.
+
+Řazení trvá $\bigO(n\log n)$ a~následný průchod seznamem $\bigO(n)$. Celková časová složitost je proto $\bigO(n\log n)$, tedy polynomiální. Ačkoli je \ensuremath{\NZMNA} na obecných grafech algoritmicky těžký problém, na intervalových grafech jej tímto postupem rozhodneme efektivně.
+
+\notebox{Barvení intervalů a~výběr nekolidujících intervalů jsou dvě různé úlohy. První rozděluje všechny aktivity mezi co nejméně zdrojů; druhá vybírá co nejvíce aktivit pro jediný zdroj. Obě lze díky struktuře intervalů řešit polynomiálně.}

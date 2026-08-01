@@ -27,7 +27,7 @@
     }
 
     \node[fill=orange!55, draw, thick, minimum width=0.68cm, minimum height=0.60cm]
-        at (c6.center) {\textbf{X}};
+        (xmark) at (c6.center) {\textbf{X}};
 
     \draw[decorate, decoration={brace, amplitude=5pt}]
         (c4.north west) -- node[above=6pt, align=center] {\textbf{načtený blok}\\ (cache line)} (c7.north east);
@@ -50,6 +50,7 @@
         minimum height=0.85cm
     ] (spatial) at (3.3,-2.0) {přístup k~okolním adresám\\ \textit{prostorová lokalita}};
 
-    \draw[arrow, blue!70!black] (temporal.north) to[bend left=18] (c6.south);
+    \draw[arrow, blue!70!black] (temporal.north)
+        to[out=90,in=-90] (xmark.south);
     \draw[arrow, green!60!black] (spatial.north) to[bend right=15] (c7.south);
 \end{tikzpicture}

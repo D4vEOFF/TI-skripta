@@ -16,7 +16,7 @@
         block,
         fill=blue!12,
         minimum width=2.3cm
-    ] (cpu) at (-5.2,0) {\textbf{CPU}};
+    ] (cpu) at (-5.8,0) {\textbf{CPU}};
     \node[
         block,
         fill=orange!18,
@@ -26,7 +26,7 @@
         block,
         fill=green!14,
         minimum width=2.5cm
-    ] (ram) at (5.2,0) {\textbf{RAM}};
+    ] (ram) at (5.8,0) {\textbf{RAM}};
 
     \draw[arrow] (cpu.east) -- node[above] {požadavek na data} (cache.west);
     \draw[arrow] (cache.east) -- node[above] {data nejsou v~cache} (ram.west);

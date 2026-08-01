@@ -1,7 +1,7 @@
 \begin{tikzpicture}[every node/.style={font=\normalsize}]
     \node[task,fill=blue!10,minimum width=25mm] (data) at (0,0) {data};
-    \node[task,fill=orange!15,minimum width=28mm] (model) at (4,0) {model};
-    \node[task,fill=green!12,minimum width=32mm] (out) at (8,0)
+    \node[task,fill=orange!15,minimum width=28mm] (model) at (4.8,0) {model};
+    \node[task,fill=green!12,minimum width=32mm] (out) at (9.6,0)
         {předpověď\\nebo rozhodnutí};
     \draw[diredge] (data) -- node[above]{vstup} (model);
     \draw[diredge] (model) -- node[above]{výstup} (out);

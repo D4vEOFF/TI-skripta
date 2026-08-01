@@ -1,22 +1,22 @@
 \begin{tikzpicture}
-    \node[task,fill=blue!8,minimum width=44mm,minimum height=34mm] (automat) at (-3.7,0) {};
+    \node[task,fill=blue!8,minimum width=44mm,minimum height=34mm] (automat) at (-4.2,0) {};
     \node[above=1mm of automat.north] {\textbf{DFA}};
 
-    \initialstate{q0}{(-5.1,-0.15)}{$q_0$}{(-6.0,-0.15)}{180}
-    \state{q1}{(-3.7,-0.15)}{$q_1$}
-    \acceptingstate{q2}{(-2.3,-0.15)}{$q_2$}
+    \initialstate{q0}{(-5.6,-0.15)}{$q_0$}{(-6.5,-0.15)}{180}
+    \state{q1}{(-4.2,-0.15)}{$q_1$}
+    \acceptingstate{q2}{(-2.8,-0.15)}{$q_2$}
     \transitionarrow[loop above]{q0}{above,fill=blue!8,inner sep=1pt}{$a$}{q0}
     \transitionarrow{q0}{above,fill=blue!8,inner sep=1pt}{$b$}{q1}
     \transitionarrow[loop above]{q1}{above,fill=blue!8,inner sep=1pt}{$b$}{q1}
     \transitionarrow{q1}{above,fill=blue!8,inner sep=1pt}{$a$}{q2}
 
-    \node[task,fill=green!8,minimum width=68mm,minimum height=34mm] (gramatika) at (3.25,0) {};
+    \node[task,fill=green!8,minimum width=68mm,minimum height=34mm] (gramatika) at (3.9,0) {};
     \node[above=1mm of gramatika.north] {\textbf{regulární gramatika}};
     \node[align=left,font=\small] at (gramatika.center) {%
         $\displaystyle V=\set{q_0,q_1,q_2},\quad T=\set{a,b},\quad S=q_0,$\\[1mm]
         $\displaystyle q_0\to aq_0\mid bq_1,$\\
         $\displaystyle q_1\to bq_1\mid aq_2,\qquad q_2\to\lambda.$};
 
-    \draw[diredge,<->] (automat.east) -- node[above,align=center,font=\small]
+    \draw[diredge,<->] (automat.east) -- node[above,align=center,font=\normalsize]
         {převod podle\\důkazu věty} (gramatika.west);
 \end{tikzpicture}

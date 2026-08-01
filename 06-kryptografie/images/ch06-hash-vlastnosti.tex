@@ -9,11 +9,11 @@
     hard/.style={-{Latex}, dashed, draw=red!75!black, line width=.9pt}
 ]
     \node[font=\bfseries] at (-3.7,2.35) {nalezení vzoru};
-    \node[box] (h) at (-5.7,.8) {daný otisk\\\(h\)};
-    \node[inner sep=0pt] (a1) at (-3.7,.8)
+    \node[box] (h) at (-5.9,.8) {daný otisk\\\(h\)};
+    \node[inner sep=0pt] (a1) at (-3.55,.8)
         {\includegraphics[height=1.1cm]{06-kryptografie/images/hacker-icon.pdf}};
-    \node[box] (xp) at (-1.5,.8) {hledané\\\(x'\)};
-    \node[function] (H1) at (-5.7,-1.2) {\(\mathcal{H}_n\)};
+    \node[box] (xp) at (-1.15,.8) {hledané\\\(x'\)};
+    \node[function] (H1) at (-5.9,-1.35) {\(\mathcal{H}_n\)};
     \draw[hard] (h) -- (a1);
     \draw[hard] (a1) -- (xp);
     \draw[flow] (xp.south) to[out=-90,in=0] (H1.east);
@@ -22,20 +22,20 @@
     \draw[draw=black!35] (0,-2.15) -- (0,2.55);
 
     \node[font=\bfseries] at (3.7,2.35) {nalezení kolize};
-    \node[inner sep=0pt] (a2) at (1.15,.5)
+    \node[inner sep=0pt] (a2) at (1.05,.5)
         {\includegraphics[height=1.1cm]{06-kryptografie/images/hacker-icon.pdf}};
-    \node[box] (x) at (3,.95) {\(x\)};
-    \node[box] (y) at (3,-.55) {\(y\neq x\)};
-    \node[function] (Hx) at (4.9,.95) {\(\mathcal{H}_n\)};
-    \node[function] (Hy) at (4.9,-.55) {\(\mathcal{H}_n\)};
-    \node[box] (outx) at (6.8,.95) {\(h\)};
-    \node[box] (outy) at (6.8,-.55) {\(h\)};
+    \node[box] (x) at (3.0,.95) {\(x\)};
+    \node[box] (y) at (3.0,-.55) {\(y\neq x\)};
+    \node[function] (Hx) at (5.15,.95) {\(\mathcal{H}_n\)};
+    \node[function] (Hy) at (5.15,-.55) {\(\mathcal{H}_n\)};
+    \node[box] (outx) at (7.25,.95) {\(h\)};
+    \node[box] (outy) at (7.25,-.55) {\(h\)};
     \draw[hard] (a2) -- (x);
     \draw[hard] (a2) -- (y);
     \draw[flow] (x) -- (Hx);
     \draw[flow] (y) -- (Hy);
     \draw[flow] (Hx) -- (outx);
     \draw[flow] (Hy) -- (outy);
-    \node[text=red!75!black] at (4.9,-1.7)
+    \node[text=red!75!black] at (5.15,-1.8)
         {\(\mathcal{H}_n(x)=\mathcal{H}_n(y)\)};
 \end{tikzpicture}

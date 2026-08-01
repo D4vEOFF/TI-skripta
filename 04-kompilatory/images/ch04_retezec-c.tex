@@ -18,7 +18,7 @@
     \draw[diredge] (pre)--(i);
     \draw[diredge] (i)--(comp);
     \draw[diredge] (comp)--(s);
-    \draw[diredge] (s.south)--++(0,-0.45)-|(asm.east);
+    \draw[diredge] (s.south) -- ++(0,-0.55) |- (asm.east);
     \draw[diredge] (asm)--(o);
     \draw[diredge] (o)--(link);
     \draw[diredge] (link)--(exe);

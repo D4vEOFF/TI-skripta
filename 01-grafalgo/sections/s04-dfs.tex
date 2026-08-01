@@ -21,6 +21,17 @@ Na podobném přístupu jako BFS je založeno tzv. \emph{prohledávání do hlou
     }
 \end{algorithm}
 
+\subsection{Implementace v~Pythonu}
+
+Program~\ref{lst:dfs-python} zachovává rekurzivní podobu pseudokódu. Vnořená funkce \texttt{visit} odpovídá funkci \textsc{DFS2}: otevře zadaný vrchol, rekurzivně navštíví všechny jeho dosud nenalezené sousedy a~nakonec jej uzavře. Seznam \texttt{order} proto zaznamenává pořadí prvního otevření vrcholů, nikoli pořadí jejich uzavření.
+
+Implementace navíc ukládá časy otevření a~uzavření a~předchůdce v~DFS stromu. Proměnná \texttt{time} je společná všem rekurzivním voláním, a~proto je ve funkci \texttt{visit} označena klíčovým slovem \texttt{nonlocal}. Program zpracuje pouze komponentu obsahující počáteční vrchol. Chceme-li vytvořit DFS les celého nesouvislého grafu, po návratu z~\texttt{visit(start)} zavoláme stejnou funkci také pro každý vrchol, který zůstal nenalezený.
+
+\lstinputlisting[
+    caption={Rekurzivní prohledávání grafu do hloubky v~Pythonu.},
+    label={lst:dfs-python}
+]{01-grafalgo/code/dfs.py}
+
 \subsection{Časy otevření a~uzavření vrcholů}
 
 Průběh DFS lze zachytit dvěma časovými údaji. Při prvním otevření vrcholu $v$ si uložíme čas $in(v)$ a~po zpracování všech jeho sousedů čas $out(v)$. Počítadlo zvýšíme při každé z~těchto událostí,~takže pro každý navštívený vrchol platí $in(v)<out(v)$.

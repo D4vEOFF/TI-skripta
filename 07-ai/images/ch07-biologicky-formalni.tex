@@ -1,21 +1,20 @@
 \begin{tikzpicture}[
-    neuron/.style={circle, draw=darkblue, very thick, fill=darkblue!10, minimum size=14mm},
-    box/.style={draw=darkblue, rounded corners, fill=darkblue!8, minimum width=23mm, minimum height=11mm, align=center},
-    conn/.style={-Latex, very thick, draw=darkblue}
+    box/.style={draw=darkblue, rounded corners, fill=darkblue!8,
+        minimum width=22mm, minimum height=11mm, align=center},
+    conn/.style={-Latex, very thick, draw=darkblue},
+    every node/.style={font=\normalsize}
 ]
-    \node[neuron] (body) at (0,0) {tělo};
-    \foreach \ang in {120,150,180,210,240}
-        \draw[very thick, darkblue] (body) -- ++(\ang:13mm) -- ++(\ang+15:6mm);
-    \draw[conn] (body) -- node[above] {axon} ++(2.3,0);
-    \node[above=7mm of body] {biologický neuron};
+    \node[inner sep=0pt] (bio) at (-3.7,0)
+        {\includegraphics[width=7.2cm]{07-ai/images/ch07-biologicky-neuron.png}};
+    \node[above=4mm of bio] {biologický neuron};
 
-    \node[box] (sum) at (5.2,0) {vážený\\součet};
-    \node[box, right=15mm of sum] (act) {aktivační\\funkce \(f\)};
-    \draw[conn] ([xshift=-14mm]sum.west) -- node[above] {vstupy} (sum.west);
+    \node[box] (sum) at (2.2,0) {vážený\\součet};
+    \node[box] (act) at (5.7,0) {aktivační\\funkce \(f\)};
+    \draw[conn] ([xshift=-13mm]sum.west) -- node[above] {vstupy} (sum.west);
     \draw[conn] (sum) -- (act);
-    \draw[conn] (act.east) -- ++(14mm,0) node[right] {výstup};
-    \node[above=7mm of $(sum)!0.5!(act)$] {formální neuron};
+    \draw[conn] (act.east) -- ++(13mm,0) node[right] {výstup};
+    \node[above=10mm of $(sum)!0.5!(act)$] {formální neuron};
 
-    \draw[conn, dashed] (2.2,-1.4) -- node[below] {zjednodušení} (4.5,-1.4);
+    \draw[conn,dashed,lightred] (-.25,-1.35) --
+        node[below,text=lightred] {zjednodušení} (1.05,-1.35);
 \end{tikzpicture}
-

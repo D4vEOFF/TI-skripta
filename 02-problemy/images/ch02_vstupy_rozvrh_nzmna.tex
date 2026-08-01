@@ -1,0 +1,23 @@
+\begin{tikzpicture}[x=0.72cm,y=0.72cm,every node/.style={font=\normalsize}]
+    \fill[gray!18] (0,0) ellipse (2.35 and 3.55);
+    \draw[thick] (0,0) ellipse (2.35 and 3.55);
+    \node[above=2mm,darkred,font=\bfseries] at (0,3.55)
+        {vstupy pro \(\ROZVRH\)};
+    \node[align=center] at (0,0) {dvojice\\\((\mathcal I,k)\)};
+
+    \fill[gray!18] (10,0) ellipse (2.75 and 4.05);
+    \draw[thick] (10,0) ellipse (2.75 and 4.05);
+    \node[above=2mm,darkred,font=\bfseries] at (10,4.05)
+        {vstupy pro \(\NZMNA\)};
+    \node[align=center] at (10,2.45) {dvojice\\\((G,k)\)};
+
+    \fill[darkred!18] (10,-0.95) ellipse (1.75 and 2.35);
+    \draw[darkred,thick] (10,-0.95) ellipse (1.75 and 2.35);
+    \node[darkred,align=center] at (10,-0.95)
+        {intervalové\\grafy\\\((G_{\mathcal I},k)\)};
+
+    \draw[diredge,lightred,line width=1.1pt]
+        (2.25,1.15) to[bend left=10]
+        node[above,align=center,text=lightred] {sestrojení\\intervalového grafu}
+        (8.55,0.25);
+\end{tikzpicture}
