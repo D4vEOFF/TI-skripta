@@ -12,7 +12,22 @@ Stromy tvoří speciální oblast teorie grafů. V~informatice jde o~jeden z~nej
 
 Je dobré si uvědomit,~že mezi každou dvojicí vrcholů ve stromě vede \textbf{právě jedna} cesta. Zároveň z~definice stromu plyne,~že odebráním libovolné hrany se nutně poruší souvislost: přestane existovat cesta mezi koncovými vrcholy odebrané hrany.
 
-\begin{figure}[h]
+Tyto dvě vlastnosti nejsou jen důsledky definice,~ale patří mezi několik rovnocenných způsobů,~jak strom poznat. V~praxi si proto můžeme vybrat tu charakterizaci,~která se pro daný důkaz nebo algoritmus nejlépe hodí.
+
+\begin{theorem}[Ekvivalentní charakterizace stromu]\label{thm:charakterizace_stromu}
+    Pro neorientovaný graf $T=(V,E)$ jsou následující tvrzení ekvivalentní:
+    \begin{enumerate}[label=(\roman*)]
+        \item $T$ je strom;
+        \item mezi každými dvěma vrcholy vede právě jedna cesta;
+        \item $T$ je souvislý a~odebráním libovolné hrany se stane nesouvislým;
+        \item $T$ neobsahuje kružnici a~přidáním libovolné chybějící hrany vznikne právě jedna kružnice;
+        \item $T$ je souvislý a~platí $|E|=|V|-1$.
+    \end{enumerate}
+\end{theorem}
+
+Například poslední bod dovoluje rychlou kontrolu počtu hran,~ale sám o~sobě nestačí: graf s~$|V|-1$ hranami ještě nemusí být stromem,~pokud není souvislý. Podobně graf bez kružnic může být lesem; teprve souvislost z~něj udělá strom.
+
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{6cm}
         \centering
@@ -42,7 +57,7 @@ Poslední příklad \ref{subfig:strom_priklad3} sice není z~definice strom,~av�
     Graf $G=(V,E)$ je les,~pokud každá jeho komponenta souvislosti je strom.
 \end{definition}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_les_priklad.tex}
     \caption{Příklad lesa.}
@@ -61,7 +76,7 @@ Ekvivalentně můžeme les definovat jako \emph{disjunktní sjednocení stromů}
 
 Jeden z~vrcholů stromu $T$ je označen jako \emph{kořen}. Typicky jej zakreslujeme nahoru nad všechny ostatní vrcholy a~syny každého vrcholu umisťujeme vždy níže oba na stejnou úroveň (viz obrázek \ref{fig:binarni_strom_priklad}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_binarni_strom_priklad.tex}
     \caption{Příklad binárního stromu.}

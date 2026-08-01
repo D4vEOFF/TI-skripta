@@ -49,6 +49,13 @@ Jejich vzájemná vzdálenost je
 \]
 Body ležící na hranicích okraje nazýváme \emph{podpůrné vektory}. Právě ony polohu optimální hranice přímo určují. Posun bodu ležícího daleko od okraje ji obvykle nezmění, zatímco posun podpůrného vektoru ano.
 
+Šířku okraje nemůžeme zvětšovat libovolným přenásobením parametrů, protože současně požadujeme, aby trénovací objekty ležely na správné straně hraničních nadrovin. Označíme-li třídy hodnotami \(\tilde y_i=2y_i-1\in\set{-1,1}\), tvrdý okraj splňuje podmínky
+\[
+    \tilde y_i g(\mathbf{x}_i)\geqslant1
+    \qquad\text{pro všechna }i.
+\]
+Maximalizace šířky \(2/\norm{\mathbf{w}}\) je za těchto podmínek ekvivalentní minimalizaci \(\frac12\norm{\mathbf{w}}^2\).
+
 \subsection{Neoddělitelná data a~měkký okraj}
 
 Reálná data často nelze bez chyby oddělit jedinou nadrovinou. SVM proto může použít \emph{měkký okraj}: připustí některé body uvnitř okraje nebo dokonce na chybné straně hranice. Nastavení modelu pak představuje kompromis mezi dvěma cíli:
@@ -58,7 +65,22 @@ Reálná data často nelze bez chyby oddělit jedinou nadrovinou. SVM proto mů�
 \end{itemize}
 Parametr \(C>0\) určuje cenu porušení. Velké \(C\) chyby silně trestá a~obvykle vede k~užšímu okraji. Menší \(C\) dovolí více porušení, ale může vytvořit stabilnější širší hranici. Hodnotu \(C\) volíme pomocí validačních dat.
 
+Míru porušení pro objekt \(i\) lze vyjádřit \emph{pantovou ztrátou} (anglicky \emph{hinge loss})
+\[
+    \ell_i
+    =
+    \max\set{0,1-\tilde y_i g(\mathbf{x}_i)}.
+\]
+Je-li objekt správně za okrajem, platí \(\ell_i=0\). Bod uvnitř okraje má kladnou ztrátu, a~bod na chybné straně rozhodovací hranice ztrátu větší než \(1\). Trénování měkkého okraje lze proto zapsat jako minimalizaci
+\[
+    \frac12\norm{\mathbf{w}}^2
+    +
+    C\sum_{i=1}^{n}\ell_i.
+\]
+
 Lineární hranice nemusí stačit ani po povolení chyb. Jednou možností je převést objekty do prostoru s~dalšími znaky, v~němž je lze oddělit nadrovinou. Jádrový trik (anglicky \emph{kernel trick}) umožňuje některé takové výpočty provést bez explicitního vytváření všech nových souřadnic. Výsledná hranice v~původním prostoru pak může být nelineární.
+
+Jádro musí vhodným způsobem vyjadřovat podobnost dvojice objektů. Volba lineárního jádra ponechá původní nadrovinu, polynomiální nebo gaussovské jádro umožní zakřivené hranice. Složitější hranice však nemusí lépe zobecňovat, a~proto typ jádra i~jeho parametry volíme podle validačních dat.
 
 \subsection{Vlastnosti a~použití}
 
@@ -66,4 +88,50 @@ Mezi výhody SVM patří jasná geometrická interpretace, možnost nelineární
 
 Nevýhodou je citlivost na měřítko dat a~na volbu \(C\) a~jádra. U~velkých datových souborů může být trénování náročné a~výstup modelu nemá bez další úpravy přímou pravděpodobnostní interpretaci jako výstup logistické regrese. Typicky se SVM používá pro klasifikaci textu, obrazových znaků nebo biologických dat, zejména není-li počet trénovacích objektů extrémně velký.
 
+Podpůrné vektory zároveň poskytují užitečnou kontrolu modelu. Pokud se jejich malá změna výrazně projeví na rozhodovací hranici, může být model citlivý na šum nebo odlehlá pozorování. Velký počet podpůrných vektorů zase naznačuje, že třídy nejsou zvolenými znaky dobře oddělené.
+
 \warningbox{Stejně jako u~\(k\)-NN je před trénováním SVM obvykle nutné standardizovat nebo normalizovat vstupní znaky. Jinak geometrický okraj odráží především rozdílné jednotky a~měřítko.}
+
+\begin{remark}
+    Základy metody podpůrných vektorů vznikaly v~pracích Vladimira Vapnika a~Alexeje Červoněnkise už v~60.~letech 20.~století. Dnes běžnou variantu s~měkkým okrajem popsali Corinna Cortesová a~Vladimir Vapnik roku 1995.
+\end{remark}
+
+\subsection{Pseudokód a~implementace}
+
+Pro názornou implementaci použijeme lineární SVM a~stochastický podgradientní sestup. Místo parametru \(C\) budeme regulaci zapisovat pomocí nového parametru \(\lambda>0\) v~ekvivalentně škálovaném cíli
+\[
+    \frac{\lambda}{2}\norm{\mathbf{w}}^2
+    +
+    \frac1n\sum_{i=1}^{n}
+    \max\set{0,1-\tilde y_i g(\mathbf{x}_i)}.
+\]
+Větší \(\lambda\) silněji zmenšuje váhy a~upřednostňuje širší okraj; jeho role je tedy opačná než role \(C\).
+
+V~každém kroku nejprve váhy mírně zmenšíme kvůli členu \(\frac{\lambda}{2}\norm{\mathbf{w}}^2\). Pokud vybraný objekt porušuje okraj, přidáme navíc opravu ve směru \(\tilde y_i\mathbf{x}_i\) a~upravíme práh. Jde o~zjednodušený výukový postup; plnohodnotné knihovny používají rychlejší optimalizační metody a~pečlivější volbu rychlosti učení.
+
+\begin{algorithm}
+    \caption{\textsc{svm-sgd}}
+    \label{alg:ai-svm}
+    \KwIn{Trénovací množina \(D\), rychlost učení \(\eta>0\), regulace \(\lambda>0\) a~počet epoch \(T\)}
+    \(\mathbf{w}\gets\mathbf{0}\), \(\theta\gets0\)\\
+    \For{\(e\gets1,2,\ldots,T\)}{
+        \ForEach{\textup{objekt \((\mathbf{x}_i,y_i)\in D\)}}{
+            \(\tilde y_i\gets2y_i-1\)\\
+            \(\mathbf{w}\gets(1-\eta\lambda)\mathbf{w}\)\\
+            \If{\(\tilde y_i(\sum_{j=1}^{p}w_jx_{ij}+\theta)<1\)}{
+                \(\mathbf{w}\gets\mathbf{w}+\eta\tilde y_i\mathbf{x}_i\)\\
+                \(\theta\gets\theta+\eta\tilde y_i\)
+            }
+        }
+    }
+    \KwOut{Klasifikátor \(h(\mathbf{x})=1\), pokud \(\sum_{j=1}^{p}w_jx_j+\theta\geqslant0\), jinak \(0\)}
+\end{algorithm}
+
+Program~\ref{lst:ai-svm} odpovídá tomuto pseudokódu. Metoda \texttt{decision\_function} vrací podepsané skóre: jeho znaménko určuje třídu a~jeho absolutní hodnota vyjadřuje vzdálenost od hranice pouze po vydělení normou vah. Metoda \texttt{predict} proto ke klasifikaci používá jen znaménko.
+
+\lstinputlisting[
+    caption={Lineární SVM trénované stochastickým podgradientním sestupem.},
+    label={lst:ai-svm}
+]{07-ai/code/svm.py}
+
+Příklad obsahuje dvě lineárně oddělitelné skupiny bodů. Po natrénování program vypíše parametry hranice a~třídy několika nových objektů. Před použitím na reálných datech bychom vstupní znaky standardizovali a~hodnoty \(\lambda\), \(\eta\) i~počet epoch zvolili podle validační množiny.

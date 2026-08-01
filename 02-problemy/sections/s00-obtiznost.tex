@@ -1,0 +1,69 @@
+\section{Rozhodovací problémy a~jejich obtížnost}\label{sec:rozhodovaci-obtiznost}
+
+Výpočetní problém určuje, jaký výstup má být vytvořen pro každý přípustný vstup. Například problém nejkratší cesty může požadovat její délku nebo přímo posloupnost vrcholů. Abychom mohli problémy jednotně porovnávat, budeme často pracovat s~jejich \emph{rozhodovacími variantami}, jejichž výstupem je pouze odpověď ano, nebo ne.
+
+Optimalizační otázku \uv{Jak dlouhá je nejkratší cesta z~\(s\) do \(t\)?} lze nahradit rozhodovací otázkou \uv{Existuje cesta z~\(s\) do \(t\) délky nejvýše \(k\)?}. Když umíme vypočítat optimum, umíme samozřejmě odpovědět i~na rozhodovací otázku. V~mnoha úlohách platí také opačný vztah: vhodně zvolenými opakovanými dotazy lze z~rozhodovacího algoritmu získat optimální hodnotu nebo samotné řešení.
+
+Velikostí vstupu rozumíme délku jeho konečného zápisu. Číslo \(N\) zadané dvojkově má délku přibližně \(\log_2N\), nikoli \(N\). Při hodnocení složitosti proto musíme vždy vědět, co přesně tvoří vstup a~jak je zakódován; samotná číselná hodnota parametru nemusí odpovídat délce dat, která algoritmus skutečně čte.
+
+\subsection{Efektivní řešitelnost}
+
+Za efektivně řešitelné obvykle považujeme problémy, pro něž existuje algoritmus s~polynomiální časovou složitostí \(\bigO(n^c)\), kde \(c\) je pevná konstanta a~\(n\) délka vstupu. Polynomy jsou uzavřené na součet, součin i~skládání, takže konečný řetězec polynomiálních kroků zůstává polynomiální. Tato vlastnost bude později zásadní při převádění jednoho problému na druhý.
+
+Polynomiální čas není zárukou praktické rychlosti. Algoritmus s~časem \(n^{100}\) bude obvykle nepoužitelný, zatímco exponenciální postup může být pro malé vstupy dostačující. Hranice je především teoretická: je stabilní vůči běžným změnám výpočetního modelu a~dobře odděluje úlohy, jejichž nároky se při zvětšování vstupu typicky chovají zásadně odlišně.
+
+Je také třeba rozlišovat tři situace. Pro některý problém známe polynomiální algoritmus; pro jiný jej pouze neznáme, ale nelze vyloučit jeho budoucí objev; u~dalšího umíme dokázat, že žádný algoritmus rozhodující všechny vstupy vůbec neexistuje. Poslední případ není jen otázkou nedostatečného výkonu počítače, ale principiální nerozhodnutelnosti.
+
+\subsection{Exponenciální výstup: Hanojské věže}
+
+V~Hanojských věžích přesouváme \(n\) disků mezi třemi kolíky. V~jednom tahu lze přemístit pouze horní disk a~větší disk nikdy nesmí ležet na menším. Chceme přesunout celou věž ze zdrojového kolíku na cílový.
+
+Největší disk lze přesunout teprve poté, co jsme všech \(n-1\) menších disků odložili na pomocný kolík. Po přesunutí největšího disku musíme tutéž věž \(n-1\) disků přemístit ještě jednou na cílový kolík. Pro nejmenší počet tahů proto platí rekurence
+\[
+    T(0)=0,
+    \qquad
+    T(n)=2T(n-1)+1.
+\]
+Indukcí dostaneme \(T(n)=2^n-1\). Exponenciální doba zde nevzniká neobratností algoritmu: každý korektní postup musí největší disk přesunout a~před i~po tomto tahu vykonat nejméně \(T(n-1)\) tahů.
+
+\begin{algorithm}
+    \caption{\textsc{hanoi}}
+    \label{alg:hanoi}
+    \KwIn{Počet disků \(n\), zdrojový kolík \(A\), pomocný kolík \(B\) a~cílový kolík \(C\)}
+    \If{\(n>0\)}{
+        zavolej \(\textup{hanoi}(n-1,A,C,B)\)\\
+        přesuň nejvyšší disk z~\(A\) na \(C\)\\
+        zavolej \(\textup{hanoi}(n-1,B,A,C)\)
+    }
+\end{algorithm}
+
+Tento příklad zároveň upozorňuje na rozdíl mezi rozhodováním a~vypisováním řešení. Úplný seznam tahů má sám délku \(2^n-1\), takže jej žádný algoritmus nemůže vypsat v~polynomiálním čase. Rozhodovací varianta typu \uv{Lze úlohu vyřešit nejvýše \(k\) tahy?} je naproti tomu snadná, protože stačí porovnat \(k\) s~hodnotou \(2^n-1\).
+
+\subsection{Nerozhodnutelnost: problém zastavení}
+
+Ještě silnější překážku představuje problém zastavení. Ptáme se, zda se zadaný program při zadaném vstupu někdy ukončí. Pro konkrétní program lze někdy odpovědět rozborem jeho kódu nebo prostým spuštěním, pokud se opravdu zastaví. Hledáme však jediný algoritmus, který by správně odpověděl pro všechny programy a~vstupy.
+
+\problem{Problém zastavení (\HALT)}{Kód programu \(P\) a~jeho vstup \(x\).}{1, pokud se výpočet \(P(x)\) po konečném počtu kroků zastaví, jinak 0.}
+
+\begin{theorem}\label{thm:halt-nerozhodnutelny}
+    Problém zastavení je nerozhodnutelný.
+\end{theorem}
+
+\begin{proof}
+    Předpokládejme pro spor, že existuje program \(R(P,x)\), který se vždy zastaví a~správně rozhodne, zda se program \(P\) na vstupu \(x\) zastaví. Sestrojíme program \(D(P)\), který zavolá \(R(P,P)\). Pokud \(R\) odpoví, že se \(P(P)\) zastaví, program \(D\) vstoupí do nekonečné smyčky; pokud \(R\) odpoví, že se \(P(P)\) nezastaví, program \(D\) se ihned ukončí.
+
+    Spusťme nyní \(D\) na jeho vlastním kódu. Jestliže \(R(D,D)=1\), má se \(D(D)\) zastavit, ale podle své definice začne nekonečně cyklit. Jestliže \(R(D,D)=0\), nemá se \(D(D)\) zastavit, ale program se podle své definice ihned ukončí. Obě možné odpovědi vedou ke sporu, a~program \(R\) proto nemůže existovat.
+\end{proof}
+
+\begin{figure}[ht]
+    \centering
+    \input{02-problemy/images/ch02-halt.tex}
+    \caption{Diagonální konstrukce obrací předpokládanou odpověď rozhodovacího programu.}
+    \label{fig:halt-diagonalizace}
+\end{figure}
+
+Nerozhodnutelnost neznamená, že nedokážeme zjistit zastavení žádného programu. Znamená, že neexistuje univerzální algoritmus, který by vždy skončil a~správně rozhodl každou možnou dvojici programu a~vstupu. Některé omezené třídy programů rozhodovat lze, ale obecný problém překračuje možnosti algoritmického výpočtu.
+
+\begin{remark}
+    Alan Turing dokázal nerozhodnutelnost problému zastavení roku 1936 pomocí abstraktního stroje, který dnes nese jeho jméno. Ve stejné době dospěl k~ekvivalentnímu vymezení algoritmické vypočitatelnosti také Alonzo Church prostřednictvím \(\lambda\)-kalkulu.
+\end{remark}

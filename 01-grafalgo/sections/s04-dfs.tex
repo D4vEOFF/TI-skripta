@@ -21,6 +21,20 @@ Na podobném přístupu jako BFS je založeno tzv. \emph{prohledávání do hlou
     }
 \end{algorithm}
 
+\subsection{Časy otevření a~uzavření vrcholů}
+
+Průběh DFS lze zachytit dvěma časovými údaji. Při prvním otevření vrcholu $v$ si uložíme čas $in(v)$ a~po zpracování všech jeho sousedů čas $out(v)$. Počítadlo zvýšíme při každé z~těchto událostí,~takže pro každý navštívený vrchol platí $in(v)<out(v)$.
+
+Časové intervaly dvou vrcholů se buď nepřekrývají,~nebo je jeden celý uvnitř druhého. Jestliže DFS otevře $w$ během zpracování $v$,~musí nejprve dokončit celé rekurzivní volání pro $w$ a~teprve poté může uzavřít $v$. Dostáváme tedy
+\[in(v)<in(w)<out(w)<out(v).\]
+Tato vlastnost umožňuje z~časů poznat vztah předka a~potomka v~DFS stromu,~aniž bychom museli znovu procházet graf.
+
+Hrany,~po nichž DFS poprvé otevřelo nový vrchol,~tvoří \emph{DFS strom}; v~nesouvislém grafu dostaneme DFS les. Strom popisuje strukturu rekurzivních volání a~používá se například při hledání komponent souvislosti,~mostů a~artikulací. Most je hrana,~jejímž odebráním se zvýší počet komponent grafu; časové údaje DFS dovolují rozhodnout,~zda se podstrom umí vrátit zpět k~některému předkovi jinou hranou.
+
+\begin{remark}
+    Myšlenka systematického procházení do hloubky je starší než elektronické počítače a~objevuje se už při řešení bludišť. Formální algoritmické použití DFS se rozšířilo zejména v~60.~letech 20.~století; Robert Tarjan na něm později založil několik lineárních algoritmů pro strukturu grafů.
+\end{remark}
+
 \begin{theorem}[Složitost DFS]\label{thm:dfs_slozitost}
     Algoritmus DFS doběhne v~čase $\bigO(n+m)$ a~spotřebuje paměť $\bigO(n+m)$.
 \end{theorem}

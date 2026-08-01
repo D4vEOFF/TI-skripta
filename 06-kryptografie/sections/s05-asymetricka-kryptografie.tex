@@ -40,4 +40,12 @@ U~jednorázové šifry jsme dokázali, že šifrový text neposkytuje žádnou i
 
 Bezpečnost proto formulujeme vůči algoritmům s~omezenou dobou výpočtu. Pravděpodobnost úspěchu každého pravděpodobnostního polynomiálního útoku má být zanedbatelná. Tato myšlenka se naplno projeví v~\smartref[sekci~][]{\showrefs}{sec:krypto-prg-owf}{sekci o~pseudonáhodných generátorech a~jednosměrných funkcích}.
 
+Omezení na polynomiální čas není tvrzením,~že každý polynomiální útok je v~praxi rychlý. Jde o~asymptotický model,~který odděluje škálovatelné postupy od úplného zkoušení exponenciálně mnoha možností. Skutečná volba délky klíče musí navíc zohlednit konstanty,~dostupný hardware i~předpokládanou dobu ochrany.
+
+Bezpečnost je proto vždy vztažena k~parametru $n$ a~ke konkrétnímu experimentu. Musíme přesně říci,~jaká data útočník dostane,~co smí požadovat a~co se považuje za úspěch. Teprve potom lze porovnat jeho pravděpodobnost úspěchu se zanedbatelnou funkcí a~vyhnout se nejasnému tvrzení,~že je systém jen \uv{dostatečně těžké} prolomit.
+
+\begin{remark}
+    Veřejnou kryptografii představili Whitfield Diffie a~Martin Hellman v~roce 1976; na příbuzné myšlence nezávisle pracoval Ralph Merkle. O~rok později Ronald Rivest,~Adi Shamir a~Leonard Adleman zveřejnili systém RSA,~který ukázal konkrétní použití dvojice veřejného a~soukromého klíče.
+\end{remark}
+
 \notebox{Jednoduchý zápis $c=\mathbf{E}(m,k_V)$ nezobrazuje všechny praktické podrobnosti. Bezpečné asymetrické šifrování obvykle používá také náhodnost a~předepsané kódování zprávy, aby stejné zprávy nevytvářely pokaždé stejný šifrový text.}

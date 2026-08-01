@@ -71,3 +71,7 @@ První dva jazyky budou regulární a~později pro ně sestrojíme automaty. Tř
 V~minulé kapitole jsme vstupy rozhodovacích problémů kódovali pomocí nul a~jedniček. Rozhodovací problém tak můžeme ztotožnit s~jazykem všech zakódovaných vstupů,~pro které je odpověď kladná. Například
 \[\SAT=\set{\langle\varphi\rangle:\text{$\varphi$ je splnitelná formule v~CNF}},\]
 kde $\langle\varphi\rangle\in\set{0,1}^*$ značí binární kód formule $\varphi$. Tento pohled nám později umožňuje studovat výpočetní problémy pomocí strojů,~které přijímají jazyky.
+
+Jazyk obsahuje pouze kladné instance. Řetězec kódující nesplnitelnou formuli do jazyka $\SAT$ nepatří; stejně tak do něj nezařazujeme řetězce,~které vůbec nejsou platným kódem formule. Algoritmus rozhodující jazyk musí pro každý vstup skončit a~správně určit,~zda do jazyka patří.
+
+Konkrétní způsob kódování může změnit délku vstupu o~konstantní nebo polynomiální faktor,~nemá však měnit samotnou odpověď problému. Díky tomu můžeme oddělit matematický objekt od jeho zápisu a~porovnávat výpočetní modely jednotným jazykovým pohledem: automat či stroj jazyk buď přijímá,~nebo odmítá.

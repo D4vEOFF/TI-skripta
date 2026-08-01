@@ -1,0 +1,17 @@
+\begin{tikzpicture}[node distance=8mm and 15mm]
+    \node[task,fill=blue!10] (assume) {předpokládaný\\rozhodovač \(R(P,P)\)};
+    \node[task,fill=orange!15,below left=of assume] (yes) {odpověď \(1\)};
+    \node[task,fill=orange!15,below right=of assume] (no) {odpověď \(0\)};
+    \node[task,fill=red!12,below=of yes] (loop) {\(D(P)\) cyklí};
+    \node[task,fill=green!12,below=of no] (halt) {\(D(P)\) se zastaví};
+
+    \draw[diredge] (assume) -- (yes);
+    \draw[diredge] (assume) -- (no);
+    \draw[diredge] (yes) -- (loop);
+    \draw[diredge] (no) -- (halt);
+
+    \node[task,fill=gray!12,below=13mm of $(loop)!0.5!(halt)$] (self)
+        {pro \(P=D\) je každá odpověď v~rozporu se skutečným chováním};
+    \draw[diredge] (loop) -- (self);
+    \draw[diredge] (halt) -- (self);
+\end{tikzpicture}

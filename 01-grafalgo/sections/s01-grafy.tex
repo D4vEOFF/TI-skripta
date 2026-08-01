@@ -10,7 +10,7 @@ Grafy jsou základním stavebním kamenem mnoha úloh v~informatice. Zachycují 
     \end{itemize}
 \end{definition}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{6.5cm}
         \centering
@@ -27,12 +27,51 @@ Grafy jsou základním stavebním kamenem mnoha úloh v~informatice. Zachycují 
     \end{subfigure}
 \end{figure}
 
+\subsection{Incidence, dosažitelnost a~vzdálenost}
+
+Je-li \(e\in E\) hrana a~\(v\in V\) jeden z~jejích koncových vrcholů, říkáme, že \(e\) je s~vrcholem \(v\) \emph{incidentní}. V~neorientovaném grafu jsou dva vrcholy sousední, vede-li mezi nimi hrana. V~orientovaném grafu rozlišujeme směr: hrana \((u,v)\) vychází z~\(u\) a~vstupuje do \(v\).
+
+Vrchol \(v\) je \emph{dosažitelný} z~vrcholu \(u\), jestliže existuje cesta z~\(u\) do \(v\). Délkou cesty v~neohodnoceném grafu rozumíme počet jejích hran. Vzdálenost
+\[
+    d(u,v)
+\]
+je délka nejkratší cesty z~\(u\) do \(v\); pokud taková cesta neexistuje, klademe \(d(u,v)=\infty\). V~neorientovaném grafu platí \(d(u,v)=d(v,u)\), zatímco v~orientovaném grafu se obě hodnoty mohou lišit a~jedna z~nich může být nekonečná.
+
+Pojmy dosažitelnosti a~vzdálenosti připravují dvě různé otázky. Prohledávání grafu může pouze zjistit, které vrcholy jsou ze startu dosažitelné, nebo může navíc hledat nejkratší cesty. BFS zvládne obě úlohy v~neohodnoceném grafu; u~ohodnocených hran budeme později potřebovat Dijkstrův algoritmus.
+
+\subsection{Stupeň vrcholu a~princip sudosti}
+
+V~neorientovaném grafu definujeme \emph{stupeň vrcholu} \(v\) jako počet hran incidentních s~\(v\) a~značíme jej \(\deg(v)\). U~orientovaného grafu budeme v~souladu s~prezentacemi značit vstupní stupeň \(\deg^+(v)\), výstupní stupeň \(\deg^-(v)\) a~celkový stupeň
+\[
+    \deg(v)=\deg^+(v)+\deg^-(v).
+\]
+Vstupní stupeň počítá hrany končící ve \(v\), výstupní stupeň hrany, které z~\(v\) vycházejí.
+
+\begin{proposition}[Princip sudosti]\label{prop:princip-sudosti}
+    Pro každý konečný neorientovaný graf \(G=(V,E)\) platí
+    \[
+        \sum_{v\in V}\deg(v)=2\sizeof{E}.
+    \]
+\end{proposition}
+
+\begin{proof}
+    Při sčítání stupňů započítáme každou hranu právě dvakrát, jednou u~každého jejího koncového vrcholu. Celkový součet je proto dvojnásobkem počtu hran.
+\end{proof}
+
+Z~principu sudosti plyne, že počet vrcholů lichého stupně je sudý. Součet všech stupňů je totiž sudý a~součet lichého počtu lichých čísel by byl lichý. Tato jednoduchá podmínka bývá užitečná při kontrole, zda zadaná posloupnost stupňů vůbec může pocházet z~nějakého grafu.
+
+\begin{remark}
+    Za počátek teorie grafů se obvykle považuje Eulerovo řešení úlohy o~sedmi mostech města Královec z~roku 1736. Euler nahradil části města vrcholy a~mosty hranami a~ukázal, že existence požadované procházky závisí pouze na stupních vrcholů, nikoli na přesném tvaru mapy.
+\end{remark}
+
+\subsection{Reprezentace grafu}
+
 Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při programování jsou různé způsoby různě efektivní a~je dobré si mezi nimi umět vybrat. Pracujme tedy s~grafem $G=(V,E)$,~přičemž vrcholy si pro jednoduchost označíme přirozenými čísly $1,2,\dots,n$,~tzn. $V=\set{1,2,\dots,n}$.
 \begin{itemize}
     \item \textbf{Matice sousednosti.} První způsob,~jak graf reprezentovat,~je pomocí matice. V~tomto případě graf $G$ popisuje matice $n\times n$,~kde na pozici $ij$ je $1$,~pokud z~vrcholu $i$ do vrcholu $j$ vede hrana,~jinak $0$.
     \begin{example}[Prásátkový graf]
         Orientovaný graf $G$ (viz obrázek \ref{fig:graf_prasatko}) a~jeho matice sousednosti $\mathbf{A}$.
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \input{01-grafalgo/images/ch01_graf_prasatko.tex}
             \caption{Prasátkový graf.}
@@ -54,7 +93,7 @@ Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při prog
     \item \textbf{Matice incidence.} Řádky jsou indexovány vrcholy a~sloupce jednotlivými hranami. Na místě $ij$ je $1$,~pokud hrana vede \emph{do} vrcholu $i$,~nebo $-1$,~pokud z~něj vychází,~jinak $0$. Pro neorientované grafy píšeme vždy $1$,~pokud daná hrana vede \emph{do/z} vrcholu.
     \begin{example}[Úplný graf $K_4$]
         Graf $G$ má $4$ vrcholy a~celkem $6$ hran (viz obrázek \ref{fig:graf_k4}); jeho matici incidence označíme $\mathbf{I}$. Řádky představují (shora dolů) vrcholy $0,1,2,3$ a~sloupce (zleva doprava) jednotlivé hrany $e_1,\dots,e_6$.
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \input{01-grafalgo/images/ch01_graf_k4.tex}
             \caption{Úplný graf $K_4$.}
@@ -70,7 +109,7 @@ Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při prog
     \item \textbf{Seznam sousedů.} Jedná se pravděpodobně o~nejpoužívanější variantu reprezentace grafů. Pro každý vrchol $v\in V$ si jednoduše pamatujeme seznam $S[v]$ všech vrcholů,~do kterých přímo vede hrana z~vrcholu $v$.\footnote{Název \emph{seznam} zde odkazuje na použitou datovou strukturu. Z~matematického pohledu popisuje $S[v]$ množinu sousedů.}
     \begin{example}
         Graf $G$ s~vrcholy $1,\dots,4$ a~jejich seznamy sousedů $S$ (viz obrázek \ref{fig:graf_seznam_sousedu}).
-        \begin{figure}[h]
+        \begin{figure}[ht]
             \centering
             \begin{subfigure}{6cm}
                 \centering
@@ -91,9 +130,22 @@ Podstatnou otázkou u~grafů jsou způsoby jejich reprezentace,~neboť při prog
     \end{example}
 \end{itemize}
 
-Tím jsme si ukázali základní možnosti reprezentace grafů,~avšak zatím jsme si je mezi sebou nijak neporovnali. Pojďme se tedy podívat na paměťové nároky daných variant. Označme si počet vrcholů grafu $\abs{V}=n$ a~celkový počet hran $\abs{E}=m$.
-\begin{itemize}
-    \item \textit{Matice sousednosti} spotřebuje paměť $\bigO(n^2)$,~neboť potřebujeme uložit matici velikosti $n\times n$. Je tak vhodná především pro husté grafy,~tedy grafy s~velkým počtem hran.
-    \item \textit{Matice incidence} využije $\bigO(nm)$ paměťových buněk. Tento způsob reprezentace je vhodný především pro matematickou práci s~grafy,~avšak při programování se moc nevyužívá,~neboť obsahuje spoustu nadbytečných informací.
-    \item \textit{Reprezentace pomocí seznamů sousedů} je obecně hodně využívaná. Spotřebuje $\bigO(n+m)$ paměti.\footnote{U~orientovaného grafu uložíme každou hranu jednou,~u~neorientovaného dvakrát,~jednou u~každého koncového vrcholu. Konstantní násobek však v~$\mathcal{O}$-notaci nehraje roli. Blíže se na tento argument podíváme v~odvození časové složitosti algoritmu BFS\smartref[,~viz ]{\showrefs}{thm:bfs_slozitost}{}.} Je proto vhodná zejména pro řídké grafy,~které neobsahují příliš mnoho hran (např. stromy).
-\end{itemize}
+Rozdíly shrnuje tabulka~\ref{tab:reprezentace-grafu}. Uvedené časy předpokládají přímou maticovou reprezentaci a~obyčejný nesetříděný seznam sousedů. Jiná datová struktura může některou operaci urychlit za cenu větší paměti nebo složitější aktualizace.
+
+\begin{table}[ht]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{lccc}
+        \hline
+        Reprezentace & Paměť & Test hrany \((u,v)\) & Výpis sousedů \(u\) \\
+        \hline
+        matice sousednosti & \(\bigO(n^2)\) & \(\bigO(1)\) & \(\bigO(n)\) \\
+        matice incidence & \(\bigO(nm)\) & \(\bigO(m)\) & \(\bigO(nm)\) \\
+        seznamy sousedů & \(\bigO(n+m)\) & \(\bigO(\deg(u))\) & \(\bigO(\deg(u))\) \\
+        \hline
+    \end{tabular}
+    \caption{Základní porovnání reprezentací grafu.}
+    \label{tab:reprezentace-grafu}
+\end{table}
+
+Matice sousednosti je vhodná pro husté grafy a~časté dotazy na existenci konkrétní hrany. Seznamy sousedů jsou přirozenou volbou pro řídké grafy a~algoritmy, které postupně procházejí všechny hrany. Matice incidence se v~běžné implementaci algoritmů používá méně, ale je důležitá v~algebraickém popisu grafů a~síťových úlohách. U~neorientovaného grafu uloží seznamy sousedů každou hranu dvakrát, jednou u~každého koncového vrcholu; konstantní násobek však v~\(\mathcal O\)-notaci nehraje roli.

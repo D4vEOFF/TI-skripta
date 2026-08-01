@@ -6,7 +6,7 @@ Jako poslední si ukážeme ještě jeden typ problému,~který (jak uvidíme) p
 \end{definition}
 \begin{example}
     Příklady klik v~grafech $G_1$ a~$G_2$,~viz obrázky \ref{subfig:priklad_klika1} a~\ref{subfig:priklad_klika2}.
-    \begin{figure}[h]
+    \begin{figure}[ht]
         \centering
         \begin{subfigure}{7cm}
             \centering
@@ -35,13 +35,13 @@ Nyní si ukážeme,~že ve skutečnosti problém kliky je ekvivalentní s~probl�
 Co tato definice vlastně říká? Jednoduše to,~že doplněk grafu $G$ obsahuje právě ty hrany,~které v~původním grafu chybí. Podívejme se na příklady.
 \begin{example}
     Příklady doplňků grafů,~viz obrázky \ref{fig:doplnek_grafu1} a~\ref{fig:doplnek_grafu2}.
-    \begin{figure}[h]
+    \begin{figure}[ht]
         \centering
         \input{02-problemy/images/ch02_doplnek_grafu1.tex}
         \caption{Doplněk grafu na čtyřech vrcholech.}
         \label{fig:doplnek_grafu1}
     \end{figure}
-    \begin{figure}[h]
+    \begin{figure}[ht]
         \centering
         \input{02-problemy/images/ch02_doplnek_grafu2.tex}
         \caption{Doplněk prasátkového grafu.}
@@ -49,7 +49,7 @@ Co tato definice vlastně říká? Jednoduše to,~že doplněk grafu $G$ obsahuj
     \end{figure}
 \end{example}
 
-\subsection{Převod \ensuremath{\KLIKA} na \ensuremath{\NZMNA}}\label{subsec:prevod_klika_nzmna}
+\subsection{Převod kliky na nezávislou množinu}\label{subsec:prevod_klika_nzmna}
 
 Jako poslední se zamyslíme,~jaká je tedy souvislost mezi problémem nezávislé množiny a~kliky v~grafu. Předpokládejme,~že máme zadaný graf $G$ a~číslo $k\in\N$. Chceme sestrojit graf $G^\prime$ a~číslo $k^\prime$ takové,~že v~$G$ existuje klika velikosti alespoň $k$ právě tehdy,~když v~novém grafu $G^\prime$ existuje nezávislá množina velikosti alespoň $k^\prime$. To zařídíme velice jednoduše.
 

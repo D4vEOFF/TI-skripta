@@ -25,6 +25,10 @@ Zanedbatelná funkce tedy nakonec klesne pod $\frac{1}{n}$, pod $\frac{1}{n^2}$,
 
 Číslo $n$ zde hraje roli \emph{bezpečnostního parametru}. Jeho zvětšením prodlužujeme klíče a~zvyšujeme množství práce potřebné k~útoku. Tvrzení o~zanedbatelné pravděpodobnosti neznamená, že útok nemůže nikdy uspět; říká, že jeho šanci lze volbou dostatečně velkého parametru stlačit pod každou prakticky významnou inverzní polynomiální mez.
 
+Definice je asymptotická: o~chování několika prvních hodnot nic neříká,~protože pro každý exponent $k$ smíme zvolit vlastní mez $n_k$. To je důležité při důkazech,~ale v~praxi stále musíme určit konkrétní bezpečnostní parametr. Samotný důkaz zanedbatelnosti nezaručí,~že malá dnes používaná hodnota $n$ poskytuje dostatečnou rezervu.
+
+Součet konečně mnoha zanedbatelných funkcí je opět zanedbatelný. Totéž platí po vynásobení zanedbatelné funkce libovolným polynomem. Tyto vlastnosti dovolují skládat bezpečnostní argumenty. Provedeme-li polynomiální počet pokusů,~zůstane zanedbatelná i~šance,~že uspěje alespoň jeden z~nich.
+
 \subsection{Pseudonáhodný generátor}
 
 Deterministický program nedokáže vytvořit skutečnou náhodnost z~ničeho. Jakmile známe jeho vstup, je výstup pevně určen. Může však z~krátkého náhodného vstupu vytvořit delší řetězec, který žádný efektivní algoritmus neumí od skutečně náhodného řetězce rozlišit.
@@ -63,7 +67,7 @@ Podmínka neříká, že jsou obě rozdělení stejná. Výstupů $G$ může bý
 
 \tipbox{Pseudonáhodnost není vlastnost jediného konkrétního řetězce. Je to vlastnost způsobu generování a~říká, že celé rozdělení výstupů je pro efektivního pozorovatele nerozlišitelné od rovnoměrného rozdělení.}
 
-\subsection{Žádné pseudonáhodné generátory při \texorpdfstring{$\classP=\classNP$}{P = NP}}
+\subsection{Žádné pseudonáhodné generátory při P = NP}
 
 \begin{proposition}
     Jestliže $\classP=\classNP$, pak neexistuje žádný pseudonáhodný generátor.

@@ -1,4 +1,4 @@
-\section{Problém \ensuremath{\THREESAT}}\label{sec:3sat}
+\section{Problém 3-SAT}\label{sec:3sat}
 
 Zkusme nyní původní problém ještě omezit. Přidáme podmínku,~že každá klauzule může obsahovat nejvýše tři literály. Tím dostáváme variantu problému \ensuremath{\SAT} známou jako \emph{\ensuremath{\THREESAT}}. O~formuli,~která splňuje uvedenou podmínku,~budeme říkat,~že je v~3-CNF.
 
@@ -6,7 +6,7 @@ Zkusme nyní původní problém ještě omezit. Přidáme podmínku,~že každá
 
 Nabízí se otázka,~zda jsme si skutečně pomohli. Zdánlivě ano,~protože máme kratší klauzule. Překvapivě však \ensuremath{\THREESAT} zůstává stejně obtížný v~tom smyslu,~že \ensuremath{\SAT} lze na \ensuremath{\THREESAT} převést v~polynomiálním čase. Pro libovolnou instanci \ensuremath{\SAT} sestrojíme instanci \ensuremath{\THREESAT},~která je splnitelná právě tehdy,~když byla splnitelná původní formule.
 
-\subsection{Převod \ensuremath{\SAT} na \ensuremath{\THREESAT}}\label{subsec:prevod_sat_3sat}
+\subsection{Převod SAT na 3-SAT}\label{subsec:prevod_sat_3sat}
 
 Popíšeme si nyní obecný způsob,~jak převést libovolnou formuli v~CNF (instance problému \ensuremath{\SAT}) na formuli v~3-CNF (instance problému \ensuremath{\THREESAT}). Předpokládejme,~že máme zadanou nějakou formuli $\varphi$ v~CNF a~chceme pro ni sestrojit formuli $\psi$ v~3-CNF,~takovou,~aby byla splnitelná právě tehdy,~když je splnitelná i~původní formule $\varphi$. Pro formuli $\varphi$ mohou nastat 2~případy:
 \begin{enumerate}
@@ -104,7 +104,7 @@ Co tato definice říká? Pokud platí $A\rightarrow B$,~pak odpověď na vstup 
 
 Zároveň $A\rightarrow B$ znamená,~že problém $B$ je alespoň tak těžký jako problém $A$.\footnote{Mnemotechnická pomůcka: "Obtížnost teče ve směru šipky."}
 \warningbox{Ze směru převodu plyne následující podmíněné tvrzení: pokud $A\rightarrow B$ a~problém $B$ lze řešit polynomiálně,~pak lze polynomiálně řešit i~$A$. Obrácený závěr obecně neplatí. Pokud by navíc bylo dokázáno,~že $A$ polynomiálně řešit nelze,~pak by z~$A\rightarrow B$ plynulo,~že polynomiálně nelze řešit ani $B$. U~\ensuremath{\SAT} však takový dolní odhad zatím dokázán není.}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{02-problemy/images/ch02_pol_prevod.tex}
     \caption{Schéma polynomiálního převodu.}

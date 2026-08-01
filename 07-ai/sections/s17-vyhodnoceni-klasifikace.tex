@@ -96,4 +96,8 @@ Správnost může být zavádějící u~nevyvážených tříd. Jestliže je mez
 
 Snížení rozhodovacího prahu obvykle zvýší počet pozitivních předpovědí. Tím může růst pokrytí, ale zároveň přibývají falešně pozitivní výsledky a~klesá přesnost. Vhodný práh proto volíme podle důsledků obou typů chyb a~podle výsledků na validačních datech.
 
+V~lékařském předběžném vyšetření může být závažnější přehlédnout nemocného člověka než poslat zdravého na další kontrolu; dává proto smysl upřednostnit vysoké pokrytí. U~automatického blokování účtů může být naopak falešně pozitivní rozhodnutí velmi nákladné, a~proto požadujeme vysokou přesnost. Jediná metrika bez kontextu tyto rozdíly nezachytí.
+
+Změnou prahu získáme celou rodinu klasifikátorů ze stejného skórovacího modelu. Při jejich porovnávání sledujeme, jak se současně mění podíl správně pozitivních a~falešně pozitivních odpovědí. Tím lze hodnotit kvalitu samotného pořadí objektů podle skóre odděleně od volby jednoho konkrétního prahu.
+
 \warningbox{Metriky uváděné po dokončení vývoje modelu počítáme na testovacích datech, která nebyla použita ani k~trénování, ani k~volbě prahu či jiných nastavení. Jinak získáme příliš optimistický odhad kvality.}

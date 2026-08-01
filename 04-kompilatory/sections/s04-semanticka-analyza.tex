@@ -10,6 +10,10 @@ Překladač si pro každý deklarovaný identifikátor uchovává informace v~\e
 
 Při čtení deklarace překladač přidá nový záznam. Při každém použití identifikátoru hledá odpovídající záznam v~aktuální a~okolních oblastech platnosti. Díky tomu odhalí použití nedeklarované proměnné i~nepovolenou opakovanou deklaraci.
 
+Oblasti platnosti se přirozeně chovají jako zásobník tabulek. Při vstupu do bloku přidáme novou tabulku a~při odchodu ji odstraníme; hledání jména začíná v~nejvnitřnějším bloku a~pokračuje směrem ven. Stejné jméno tak může v~různých blocích označovat různé proměnné,~aniž by překladač jejich záznamy zaměnil.
+
+Tabulka symbolů není jen seznam pro hlášení chyb. Pozdější fáze v~ní mohou nalézt adresu proměnné,~pořadí parametru nebo odkaz na deklaraci funkce. Dobře zvolená struktura tabulky proto propojuje sémantickou analýzu s~generováním cílového kódu.
+
 \subsection{Typová kontrola}
 
 Typová kontrola přiřazuje typy listům stromu a~postupuje směrem ke kořeni. Je-li například \texttt{steps} číslo a~\texttt{speed} číslo,~výsledek jejich násobení je opět číslo. Součet s~číselnou proměnnou \texttt{position} proto může být přiřazen do další číselné proměnné.

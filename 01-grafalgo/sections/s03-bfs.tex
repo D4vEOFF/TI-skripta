@@ -37,7 +37,7 @@ Na počátku začneme s~jedním otevřeným vrcholem,~a~to $v_0$ (zde začínám
 \end{algorithm}
 
 BFS rozděluje vrcholy do vrstev podle toho,~v~jaké vzdálenosti od počátečního vrcholu se nachází (viz obrázek \ref{fig:bfs_vrstvy}). Nejdříve jsou prozkoumány vrcholy ve vzdálenosti 0 (tj. pouze $v_0$),~poté ve vzdálenostech 1,~2,~\dots Z~toho vyplývá,~že kdykoliv při otevírání libovolného vrcholu $v$ nastavujeme hodnotu $D(v)$,~bude tato hodnota vždy odpovídat délce nejkratší cesty z~$v_0$ do $v$. Tato hodnota bude však nastavena pouze u~těch vrcholů,~které jsou z~$v_0$ dosažitelné (ostatní vrcholy zůstanou ve stavu nenalezený).
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_bfs_vrstvy.tex}
     \caption{Vrcholy rozdělené do vrstev podle průběhu BFS.}
@@ -65,7 +65,7 @@ Zbývá prozkoumat časovou a~paměťovou složitost BFS. Označme si počet vrc
     Nyní k~prostorové složitosti algoritmu. Na reprezentaci grafu (např. pomocí seznamu sousedů) spotřebujeme paměť $\bigO(n+m)$ ($n$ vrcholů,~$m$ hran)\footnote{Resp. každá hrana je v~neorientovaných grafech započítána dvakrát,~protože každý vrchol obsahuje v~seznamu svých sousedů vždy "protější" vrchol (stejný argument jako u~odvozování časové složitosti BFS).}. Dále si uchováváme vrcholy ve frontě,~v~níž může být v~jednu chvíli maximálně $n$ vrcholů,~tj. $\bigO(n)$,~a~k~tomu máme seznamy $stav$ a~$D$,~oba s~$n$ položkami. Celkově spotřebujeme paměti
     \[\bigO(n+m)+\bigO(n)+\bigO(n)+\bigO(n)=\bigO(n+m).\]
 \end{proof}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_zapocitavani_hran.tex}
     \caption{Znázornění situace v~důkazu části \ref{bfs_slozitost_neor_graf} věty \ref{thm:bfs_slozitost}.}

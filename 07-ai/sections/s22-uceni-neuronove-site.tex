@@ -57,6 +57,26 @@ Při rychlosti učení \(\eta>0\) následně pro každou váhu provedeme aktuali
 \]
 a~obdobně upravíme prahy. Jeden úplný průchod trénovacími daty nazýváme \emph{epocha}. V~praxi data často rozdělíme na malé dávky a~parametry aktualizujeme po každé dávce.
 
+Při výpočtu gradientů je důležité použít aktivace z~téhož dopředného průchodu. Kdybychom některou váhu změnili dříve, než dopočítáme gradienty ostatních vah, další derivace by již odpovídaly jiné síti. Proto nejprve získáme všechny potřebné gradienty a~teprve potom provedeme aktualizaci parametrů.
+
+\begin{algorithm}
+    \caption{\textsc{backpropagation}}
+    \label{alg:ai-backpropagation}
+    \KwIn{Trénovací množina \(D\), síť s~vahami a~prahy, rychlost učení \(\eta>0\) a~počet epoch \(T\)}
+    \For{\(e\gets1,2,\ldots,T\)}{
+        \ForEach{\textup{objekt \((\mathbf{x},y)\in D\)}}{
+            proveď dopředný průchod a~ulož aktivace všech vrstev\\
+            vypočítej ztrátu \(E=\ell(y,\hat y)\)\\
+            od výstupní vrstvy ke vstupní vypočítej derivace \(\frac{\partial E}{\partial w}\) a~\(\frac{\partial E}{\partial\theta}\)\\
+            \ForEach{\textup{váha \(w\) a~odpovídající práh \(\theta\)}}{
+                \(\displaystyle w\gets w-\eta\frac{\partial E}{\partial w}\)\\
+                \(\displaystyle\theta\gets\theta-\eta\frac{\partial E}{\partial\theta}\)
+            }
+        }
+    }
+    \KwOut{Natrénované váhy a~prahy sítě}
+\end{algorithm}
+
 \subsection{Trénování a~zobecnění}
 
 Malá trénovací ztráta sama o~sobě nestačí. Síť se může naučit zvláštnosti konkrétních trénovacích dat a~na nových objektech selhat. Tomuto jevu říkáme přeučení. Průběh proto sledujeme na validačních datech, která se nepoužívají k~přímé aktualizaci vah.
@@ -70,10 +90,16 @@ Malá trénovací ztráta sama o~sobě nestačí. Síť se může naučit zvlá�
 
 Přeučení omezujeme například menší sítí, větším množstvím trénovacích dat, penalizací příliš velkých vah nebo předčasným zastavením ve chvíli, kdy se validační ztráta přestane zlepšovat. Testovací data použijeme až na konci pro nezávislý odhad chování hotového modelu.
 
+Opačným problémem je \emph{nedoučení}: příliš malá síť, nevhodná rychlost učení nebo nedostatečný počet epoch nedokážou zachytit ani vztah přítomný v~trénovacích datech. Trénovací i~validační ztráta pak zůstávají vysoké. Je proto užitečné sledovat obě křivky současně, nikoli pouze jednu konečnou hodnotu.
+
+Data se před učením obvykle promíchají a~rozdělí do dávek. Promíchání omezuje vliv pořadí objektů a~dávky představují kompromis mezi přesným, ale drahým gradientem celého souboru a~rychlými, avšak kolísavými aktualizacemi po jednotlivých objektech.
+
 \newpage
 \subsection{Jednoduchá implementace}
 
 Program~\ref{lst:ai-neural-network} implementuje síť se dvěma vstupy, jednou skrytou vrstvou a~jedním sigmoidálním výstupem. Dopředný průchod si ukládá aktivace potřebné pro výpočet gradientů. Metoda \texttt{fit} potom provede zpětné šíření a~gradientní sestup. Příklad učí logickou funkci XOR, kterou jediný perceptron kvůli nelineární oddělitelnosti nezvládne.
+
+Váhy jsou na začátku zvoleny jako malá náhodná čísla. Kdyby všechny neurony jedné vrstvy začínaly se stejnými vahami, dostávaly by stejné gradienty a~učily by se stále totéž. Náhodná inicializace tuto symetrii poruší a~umožní jednotlivým neuronům zachytit různé vlastnosti vstupu.
 
 \lstinputlisting[
     caption={Dopředný průchod a~zpětné šíření v~malé neuronové síti.},
@@ -81,3 +107,5 @@ Program~\ref{lst:ai-neural-network} implementuje síť se dvěma vstupy, jednou 
 ]{07-ai/code/neural_network.py}
 
 \warningbox{Ukázka vysvětluje princip, není však náhradou knihoven určených pro velké sítě. Ty používají maticové výpočty, automatické derivování, specializovaný hardware a~další metody stabilizace učení.}
+
+Po spuštění se pravděpodobnosti pro vstupy XOR přiblíží požadovaným hodnotám \(0,1,1,0\). Kvůli náhodné inicializaci nemusí být každý běh číselně totožný, ale při vhodné rychlosti učení a~počtu epoch by měl vést ke stejné klasifikaci.

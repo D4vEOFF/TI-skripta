@@ -178,6 +178,20 @@ a~regresní přímku ve tvaru
 \]
 Znaménko směrnice je tedy stejné jako znaménko korelace.
 
+Uvedené vztahy poskytují přímo algoritmus pro trénování jednoduché lineární regrese. Není třeba zkoušet různé přímky ani opakovaně upravovat parametry: stačí jedním průchodem dat spočítat potřebné součty, z~nich průměry, rozptyl a~kovarianci a~nakonec koeficienty \(a,b\).
+
+\begin{algorithm}
+    \caption{\textsc{linear-regression}}
+    \label{alg:ai-linear-regression}
+    \KwIn{Statistické soubory \(\mathbf{X}=(x_1,\ldots,x_n)\) a~\(\mathbf{Y}=(y_1,\ldots,y_n)\) s~\(\Var(\mathbf{X})>0\)}
+    \(\displaystyle\average{\mathbf{X}}\gets\frac1n\sum_{i=1}^{n}x_i\), \(\displaystyle\average{\mathbf{Y}}\gets\frac1n\sum_{i=1}^{n}y_i\)\\
+    \(\displaystyle\Var(\mathbf{X})\gets\frac1n\sum_{i=1}^{n}(x_i-\average{\mathbf{X}})^2\)\\
+    \(\displaystyle\Cov(\mathbf{X},\mathbf{Y})\gets\frac1n\sum_{i=1}^{n}(x_i-\average{\mathbf{X}})(y_i-\average{\mathbf{Y}})\)\\
+    \(\displaystyle a\gets\frac{\Cov(\mathbf{X},\mathbf{Y})}{\Var(\mathbf{X})}\)\\
+    \(b\gets\average{\mathbf{Y}}-a\average{\mathbf{X}}\)\\
+    \KwOut{Regresní přímka \(f(x)=ax+b\)}
+\end{algorithm}
+
 \subsection{Minimální MSE regresní přímky}
 
 \begin{proposition}\label{prop:ai-regrese-min-mse}
@@ -265,7 +279,11 @@ Znaménko směrnice je tedy stejné jako znaménko korelace.
 Program~\ref{lst:ai-linear-regression} nejprve spočítá průměry, rozptyl a~kovarianci a~potom přímo použije vzorce z~
 \smartref[tvrzení~][]{\showrefs}{prop:ai-regresni-primka}{tvrzení o~regresní přímce}.
 
+Metoda \texttt{fit} kontroluje také předpoklad \(\Var(\mathbf{X})>0\). Kdyby byly všechny vstupy stejné, data by ležela na jediné svislé přímce a~směrnici funkce \(y=ax+b\) by z~nich nebylo možné jednoznačně určit. Metoda proto místo dělení nulou oznámí chybu.
+
 \lstinputlisting[
     caption={Jednoduchá lineární regrese metodou nejmenších čtverců.},
     label={lst:ai-linear-regression}
 ]{07-ai/code/linear_regression.py}
+
+Trénování vyžaduje pouze konečný počet průchodů seznamy \texttt{x} a~\texttt{y}, takže má časovou složitost \(\bigO(n)\) a~kromě vstupních dat spotřebuje konstantní pomocnou paměť. Po natrénování je jedna předpověď jen výpočtem \(ax+b\), tedy operací v~konstantním čase.

@@ -6,6 +6,18 @@ Při učení bez učitele známe pouze vstupní objekty
 \]
 ale nemáme k~nim připojený výstupní soubor \(\mathbf{Y}\). Cílem proto není napodobit známé správné odpovědi, nýbrž objevit užitečnou strukturu dat. Může jít o~shluky podobných objektů, odlehlá pozorování, menší počet skrytých znaků nebo často se opakující vztahy.
 
+Na rozdíl od učení s~učitelem zde neexistuje jediná předem známá správná odpověď, s~níž bychom mohli výsledek jednoduše porovnat. Dvě různá rozdělení mohou být smysluplná pro dva různé účely: zákazníky lze například seskupovat podle nákupního chování, podle věku nebo podle místa bydliště. Před interpretací výsledku proto musíme rozumět použitým znakům a~otázce, kterou datům klademe.
+
+\begin{symboldef}
+    Pro vektor \(\mathbf{u}=(u_1,\ldots,u_p)\in\R^p\) budeme symbolem
+    \[
+        \norm{\mathbf{u}}
+        =
+        \sqrt{\sum_{r=1}^{p}u_r^2}
+    \]
+    označovat jeho \emph{eukleidovskou normu}, tedy jeho délku. Vzdálenost vektorů \(\mathbf{u}\) a~\(\mathbf{v}\) je potom \(\norm{\mathbf{u}-\mathbf{v}}\). Dvojité svislé čáry tedy v~této kapitole vždy vyjadřují délku vektoru, nikoli absolutní hodnotu čísla.
+\end{symboldef}
+
 \subsection{Shlukování a~algoritmus \(k\)-means}
 
 Shlukování rozděluje objekty do skupin tak, aby si objekty uvnitř stejného shluku byly podobné a~objekty z~různých shluků odlišné. Podobnost obvykle vyjadřujeme vzdáleností. Výsledek proto vždy závisí na zvoleném popisu objektů, jejich měřítku a~konkrétní vzdálenosti.
@@ -18,11 +30,44 @@ a~jejich středy
 \[
     \boldsymbol{\mu}_1,\ldots,\boldsymbol{\mu}_k.
 \]
+Přiřazení objektu \(\mathbf{x}_i\) budeme značit \(c(i)\in\set{1,\ldots,k}\). Shluk číslo \(j\) je tedy množina
+\[
+    C_j
+    =
+    \set{\mathbf{x}_i:c(i)=j}.
+\]
+Je-li \(C_j\neq\emptyset\), jeho střed definujeme po složkách jako aritmetický průměr všech vektorů ve shluku:
+\[
+    \boldsymbol{\mu}_j
+    =
+    \frac{1}{\sizeof{C_j}}
+    \sum_{\mathbf{x}_i\in C_j}\mathbf{x}_i.
+\]
+Například první souřadnice \(\boldsymbol{\mu}_j\) je průměrem prvních souřadnic objektů z~\(C_j\). Pokud během výpočtu některý shluk zůstane prázdný, průměr není definován; jednoduchá implementace proto ponechá jeho dosavadní střed, případně lze zvolit nový střed z~dat.
+
 Pro eukleidovskou vzdálenost probíhá opakování dvou kroků:
 \begin{enumerate}
     \item každý objekt přiřadíme k~nejbližšímu středu;
     \item každý střed nahradíme aritmetickým průměrem objektů přiřazeného shluku.
 \end{enumerate}
+
+\begin{algorithm}
+    \caption{\textsc{k-means}}
+    \label{alg:ai-kmeans}
+    \KwIn{Objekty \(\mathbf{x}_1,\ldots,\mathbf{x}_n\in\R^p\), počet shluků \(k\) a~počáteční středy \(\boldsymbol{\mu}_1,\ldots,\boldsymbol{\mu}_k\)}
+    \While{\textup{některé přiřazení nebo střed se změní}}{
+        \ForEach{\textup{objekt \(\mathbf{x}_i\)}}{
+            \(c(i)\gets\argmin_{j\in\set{1,\ldots,k}}\norm{\mathbf{x}_i-\boldsymbol{\mu}_j}\)
+        }
+        \For{\(j\gets1,2,\ldots,k\)}{
+            \(C_j\gets\set{\mathbf{x}_i:c(i)=j}\)\\
+            \If{\(C_j\neq\emptyset\)}{
+                \(\displaystyle\boldsymbol{\mu}_j\gets\frac{1}{\sizeof{C_j}}\sum_{\mathbf{x}_i\in C_j}\mathbf{x}_i\)
+            }
+        }
+    }
+    \KwOut{Shluky \(C_1,\ldots,C_k\) a~jejich středy \(\boldsymbol{\mu}_1,\ldots,\boldsymbol{\mu}_k\)}
+\end{algorithm}
 
 \begin{figure}[ht]
     \centering
@@ -31,7 +76,7 @@ Pro eukleidovskou vzdálenost probíhá opakování dvou kroků:
     \label{fig:ai-kmeans}
 \end{figure}
 
-Přiřazení objektu \(\mathbf{x}_i\) budeme značit \(c(i)\in\set{1,\ldots,k}\). Algoritmus se snaží zmenšovat součet čtvercových vzdáleností
+Algoritmus se snaží zmenšovat součet čtvercových vzdáleností
 \[
     J
     =
@@ -45,9 +90,15 @@ Přiřazovací krok zase pro pevné středy volí pro každý objekt nejmenší 
 
 \warningbox{Výsledné rozdělení nemusí být nejlepší ze všech možností. Závisí na počátečních středech, předem zvoleném počtu \(k\) a~na měřítku znaků. Algoritmus je vhodný hlavně pro přibližně kulové a~podobně velké shluky.}
 
+\begin{remark}
+    Název \(k\)-means zavedl James MacQueen roku 1967. Velmi podobný iterační postup popsal Stuart Lloyd už roku 1957 pro kvantování signálu; jeho práce však vyšla tiskem až roku 1982. Proto se algoritmus někdy označuje také jako Lloydův algoritmus.
+\end{remark}
+
 \subsection{Jednoduchá implementace}
 
 Program~\ref{lst:ai-kmeans} zachycuje přímo oba kroky algoritmu. Pro jednoduchost pracuje s~dvourozměrnými body, výpočet vzdálenosti je však možné stejným způsobem rozšířit na libovolné \(p\).
+
+Počáteční středy zde tvoří prvních \(k\) bodů. Taková volba je snadno čitelná, ale v~praxi může vést k~nevhodnému lokálnímu minimu. Běžnou alternativou je několik náhodných spuštění nebo inicializace \(k\)-means++, která vybírá nové středy s~ohledem na jejich vzdálenost od středů již zvolených.
 
 \lstinputlisting[
     caption={Jednoduchá implementace algoritmu \(k\)-means.},
@@ -55,3 +106,5 @@ Program~\ref{lst:ai-kmeans} zachycuje přímo oba kroky algoritmu. Pro jednoduch
 ]{07-ai/code/kmeans.py}
 
 Funkce \texttt{assign} vyhledá nejbližší střed, zatímco \texttt{update} z~přiřazených bodů vytvoří nové průměry. Iterace skončí, jakmile se středy nezmění více než o~zadanou toleranci.
+
+Výstupem nejsou názvy tříd, ale pouze čísla shluků. Číslo samotné nemá věcný význam: při jiném spuštění si mohou dva shluky svá čísla prohodit, aniž by se změnilo jejich rozdělení. Význam skupin proto vždy určujeme až následnou interpretací jejich středů a~typických objektů.

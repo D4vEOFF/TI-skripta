@@ -47,10 +47,33 @@ Algoritmus Q-learning uchovává pro každou přípustnou dvojici \((s,a)\) hodn
 \]
 kde \(\alpha\in(0,1]\) je rychlost učení. Výraz v~hranaté závorce porovnává dosavadní odhad s~novou informací: okamžitou odměnou a~odhadovanou hodnotou nejlepšího pokračování.
 
+Aktualizace nemění celou tabulku, ale pouze položku odpovídající právě provedené akci. Je-li nově pozorovaný výsledek lepší než dosavadní odhad, hodnota \(Q(s_t,a_t)\) vzroste; je-li horší, klesne. Parametr \(\alpha\) určuje, jak silně jediná zkušenost přepíše dřívější poznatky, zatímco \(\gamma\) určuje, jak velkou část hodnoty připisujeme budoucím odměnám.
+
 Po učení získáme politiku
 \[
     \pi(s)=\argmax_{a\in\mathcal{A}(s)}Q(s,a).
 \]
+
+Během trénování však nemůžeme vždy volit pouze akci s~nejvyšší známou hodnotou. Počáteční odhady mohou být nepřesné a~agent by některé akce vůbec nevyzkoušel. Jednoduchou strategií je \(\varepsilon\)-hladová volba: s~pravděpodobností \(1-\varepsilon\) použijeme dosud nejlepší akci a~s~pravděpodobností \(\varepsilon\) vybereme náhodnou přípustnou akci.
+
+\begin{algorithm}
+    \caption{\textsc{q-learning}}
+    \label{alg:ai-qlearning}
+    \KwIn{Množiny stavů a~akcí, rychlost učení \(\alpha\), diskont \(\gamma\), pravděpodobnost průzkumu \(\varepsilon\) a~počet epizod \(T\)}
+    \ForEach{\textup{přípustná dvojice \((s,a)\)}}{
+        \(Q(s,a)\gets0\)
+    }
+    \For{\(e\gets1,2,\ldots,T\)}{
+        \(s\gets\) počáteční stav\\
+        \While{\textup{stav \(s\) není koncový}}{
+            s~pravděpodobností \(\varepsilon\) zvol náhodnou akci \(a\in\mathcal{A}(s)\), jinak \(a\gets\argmax_b Q(s,b)\)\\
+            proveď \(a\) a~pozoruj odměnu \(r\) a~nový stav \(s'\)\\
+            \(\displaystyle Q(s,a)\gets Q(s,a)+\alpha\bigl[r+\gamma\max_b Q(s',b)-Q(s,a)\bigr]\)\\
+            \(s\gets s'\)
+        }
+    }
+    \KwOut{Politika \(\pi(s)=\argmax_{a\in\mathcal{A}(s)}Q(s,a)\)}
+\end{algorithm}
 
 \begin{figure}[ht]
     \centering
@@ -61,9 +84,13 @@ Po učení získáme politiku
 
 Program~\ref{lst:ai-qlearning} implementuje Q-learning v~malém mřížkovém světě. Agent dostává za běžný krok odměnu \(-1\), za dosažení cíle \(10\) a~za vstup do pasti \(-10\). S~pravděpodobností \(\varepsilon\) zvolí náhodnou akci, a~tím prostředí prozkoumává.
 
+Jedna cesta od počátečního do koncového stavu tvoří \emph{epizodu}. Záporná odměna za každý běžný krok vede agenta k~tomu, aby nehledal pouze bezpečnou, ale také krátkou cestu. Kdyby běžný krok neměl žádnou cenu, všechny bezpečné cesty do cíle by mohly mít stejný celkový zisk bez ohledu na svou délku.
+
 \lstinputlisting[
     caption={Q-learning v~jednoduchém mřížkovém světě.},
     label={lst:ai-qlearning}
 ]{07-ai/code/q_learning.py}
 
 \notebox{Q-learning nepotřebuje předem znát pravidla přechodu prostředí. Hodnoty \(Q\) upravuje pouze podle skutečně získaných zkušeností. Pro velké nebo spojité množiny stavů však tabulka nestačí a~hodnotu \(Q(s,a)\) je nutné aproximovat modelem.}
+
+Po skončení učení už průzkum nepotřebujeme a~pro každý stav volíme akci s~nejvyšší hodnotou \(Q\). Naučená tabulka však platí pouze pro prostředí a~odměny, na nichž vznikla. Změní-li se například poloha překážky nebo cena kroku, musí agent své odhady znovu upravit.

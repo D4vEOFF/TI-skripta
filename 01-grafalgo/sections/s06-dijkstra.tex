@@ -2,7 +2,7 @@
 
 Již jsme si ukázali,~že v~\emph{neohodnoceném grafu} $G=(V,E)$ umíme relativně jednoduše najít délku nejkratší cesty z~výchozího vrcholu $v_0\in V$ do ostatních vrcholů. Hrany však nemusí mít stejnou cenu. Města mohou například představovat vrcholy a~silnice mezi nimi hrany,~jejichž váhou bude délka nebo doba průjezdu.
 \importantbox{Zde již nestačí počítat počet hran. Na obrázku \ref{fig:ohod_graf} je cesta $(v_0,v_1,v_2)$ levnější než přímá cesta $(v_0,v_2)$,~přestože obsahuje více hran.}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_ohod_graf.tex}
     \caption{Příklad ohodnoceného grafu.}
@@ -15,7 +15,7 @@ Jedním z~nejznámějších algoritmů pro tuto úlohu je \emph{Dijkstrův algor
 Ohodnocený graf budeme v~souladu s~prezentacemi zapisovat jako $G=(V,E,w)$,~kde $\mapping{w}{E}{\R}$ je váhová funkce. Je-li hrana určena koncovými vrcholy $u,v$,~píšeme pro stručnost $w(u,v)$.
 
 Zaměřme se na grafy,~jejichž váhy hran jsou nezáporné. Dijkstrův algoritmus pro graf se zápornou hranou obecně nefunguje,~a~to ani tehdy,~když graf neobsahuje záporný cyklus. Pokud navíc na cestě k~cíli leží dosažitelný cyklus se zápornou celkovou vahou,~nejkratší cesta konečné délky vůbec neexistuje. Na obrázku \ref{fig:zapor_ohod_graf} lze cyklus $(a,b,a)$ projít libovolněkrát a~každým průchodem cenu cesty snížit o~$1$. Infimum cen cest z~$s$ do $t$ je proto $-\infty$.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_zapor_ohod_graf.tex}
     \caption{Graf,~kde mezi $v_0$ a~$v_4$ neexistuje (konečná) nejkratší cesta.}
@@ -49,7 +49,7 @@ Podobným grafům se tak chceme vyhnout,~neboť by naše úvahy pak již nemusel
     \KwOut{Seznam vzdáleností $D$}
 
 \end{algorithm}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_dijkstra_kratsi_cesta.tex}
     \caption{Znázornění situace v~průběhu Dijkstrova algoritmu.}
@@ -63,7 +63,7 @@ Nejprve je dobré si uvědomit,~proč algoritmus funguje. Hodnota $D(v)$ je vžd
 Nejkratší vzdálenost mezi vrcholy $u$ a~$v$ označme $d(u,v)$. Důkaz vedeme indukcí podle pořadí uzavíraných vrcholů. Předpokládejme pro spor,~že $v$ je první uzavíraný vrchol,~pro který $D(v)>d(v_0,v)$. Vezměme jednu nejkratší cestu z~$v_0$ do $v$. Na této cestě musí existovat první dosud neuzavřený vrchol $x$; jeho předchůdce $y$ už uzavřený je. Podle indukčního předpokladu platilo při uzavření $y$ rovnost $D(y)=d(v_0,y)$. Algoritmus tehdy zkontroloval hranu $(y,x)$,~a~proto nastavil
 \[D(x)\leqslant d(v_0,y)+w(y,x)=d(v_0,x)\leqslant d(v_0,v)<D(v).\]
 Využili jsme zde nezápornost hran: vzdálenost podél nejkratší cesty se směrem k~vrcholu $v$ nemůže zmenšovat. Vrchol $x$ je tedy otevřený a~má menší hodnotu $D$ než $v$. Algoritmus by proto vybral $x$,~nikoli $v$,~což je spor.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_dijkstra_vyber_vrcholu.tex}
     \caption{Situace při výběru vrcholu $v$,~kdy $D(v)$ neodpovídá délce nejkratší cesty.}

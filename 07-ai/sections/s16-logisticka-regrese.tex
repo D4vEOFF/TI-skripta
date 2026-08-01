@@ -171,11 +171,33 @@ Při rychlosti učení \(\eta>0\) opakujeme aktualizace
 
 Příliš malá \(\eta\) vede k~pomalému postupu. Příliš velká hodnota může minimum přeskakovat nebo výpočet rozkmitat. Zastavujeme například po pevném počtu iterací nebo ve chvíli, kdy se ztráta a~parametry mění už jen nepatrně.
 
+Jedna iterace využije všechny trénovací objekty k~výpočtu průměrného gradientu. Takové variantě říkáme \emph{dávkový gradientní sestup}. U~velkých souborů lze gradient odhadovat z~menších náhodných dávek; aktualizace jsou potom levnější, ale jejich směr více kolísá.
+
+\begin{algorithm}
+    \caption{\textsc{logistic-regression}}
+    \label{alg:ai-logistic-regression}
+    \KwIn{Soubory \(\mathbf{X}=(x_1,\ldots,x_n)\), \(\mathbf{Y}=(y_1,\ldots,y_n)\), rychlost učení \(\eta>0\) a~počet iterací \(T\)}
+    \(a\gets0\), \(b\gets0\)\\
+    \For{\(r\gets1,2,\ldots,T\)}{
+        \For{\(i\gets1,2,\ldots,n\)}{
+            \(\displaystyle\hat p_i\gets\frac{1}{1+e^{-(ax_i+b)}}\)
+        }
+        \(\displaystyle g_a\gets\frac1n\sum_{i=1}^{n}(\hat p_i-y_i)x_i\)\\
+        \(\displaystyle g_b\gets\frac1n\sum_{i=1}^{n}(\hat p_i-y_i)\)\\
+        \(a\gets a-\eta g_a\), \(b\gets b-\eta g_b\)
+    }
+    \KwOut{Parametry \(a,b\) a~skóre \(\hat p(x)=\sigma(ax+b)\)}
+\end{algorithm}
+
 \subsection{Implementace v~Pythonu}
 
 Program~\ref{lst:ai-logistic-regression} používá přesně uvedené dva gradienty. Metoda \texttt{fit} opakovaně vypočítá všechny hodnoty \(\hat p_i\) a~upraví parametry \(a,b\); metoda \texttt{predict} převede výstupy na třídy pomocí zvoleného prahu.
+
+Funkce \texttt{sigmoid} je zapsána ve dvou algebraicky ekvivalentních větvích. Pro záporné \(z\) používá výraz s~\(e^z\), aby při velmi záporném vstupu nemusela počítat obrovskou hodnotu \(e^{-z}\). Jde o~technickou úpravu numerické stability, nikoli o~změnu matematického modelu.
 
 \lstinputlisting[
     caption={Logistická regrese pro jeden vstupní statistický znak.},
     label={lst:ai-logistic-regression}
 ]{07-ai/code/logistic_regression.py}
+
+Ukázka používá jeden vstupní znak, aby byl vztah mezi parametry a~rozhodovací hranicí dobře vidět. Pro více znaků nahradíme \(ax+b\) výrazem \(\sum_{j=1}^{p}w_jx_j+\theta\) a~pro každou váhu \(w_j\) počítáme vlastní složku gradientu; princip pseudokódu zůstává stejný.

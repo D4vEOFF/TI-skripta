@@ -71,9 +71,27 @@ Pro \(q=1\) jde o~manhattanskou vzdálenost, pro \(q=2\) o~eukleidovskou. Smysl 
 
 \importantbox{Před použitím \(k\)-NN je obvykle nutné standardizovat nebo normalizovat jednotlivé vstupní znaky. Jinak může znak s~větším číselným měřítkem zcela ovládnout výpočet vzdálenosti.}
 
+Při použití klasifikátoru se tedy nejprve všechny vzdálenosti vypočítají, potom se indexy seřadí a~nakonec se sečtou hlasy prvních \(k\) objektů. Pseudokód výslovně uvádí i~jednoznačné pravidlo pro shodu hlasů; bez něj by algoritmus nebyl úplně určen.
+
+\begin{algorithm}
+    \caption{\textsc{k-nn}}
+    \label{alg:ai-knn}
+    \KwIn{Trénovací množina \(D=\set{(\mathbf{x}_1,y_1),\ldots,(\mathbf{x}_n,y_n)}\), nový objekt \(\mathbf{x}\), počet sousedů \(k\) a~vzdálenost \(d\)}
+    \For{\(i\gets1,2,\ldots,n\)}{
+        \(r_i\gets d(\mathbf{x},\mathbf{x}_i)\)\\
+    }
+    seřaď indexy \(\pi(1),\ldots,\pi(n)\) tak, aby \(r_{\pi(1)}\leqslant\cdots\leqslant r_{\pi(n)}\)\\
+    \ForEach{\textup{třída \(c\in\mathcal{Y}\)}}{
+        \(\displaystyle H(c)\gets\sizeof{\set{j\in\set{1,\ldots,k}:y_{\pi(j)}=c}}\)\\
+    }
+    \KwOut{Třída s~nejvyšší hodnotou \(H(c)\); při shodě předem určená menší třída}
+\end{algorithm}
+
 \subsection{Implementace v~Pythonu}
 
 Program~\ref{lst:ai-knn} uchovává trénovací objekty a~jejich třídy. Při predikci spočítá všechny vzdálenosti, vybere \(k\) nejmenších a~vrátí nejčastější třídu. V~případě shody rozhodne menší hodnota třídy, aby byl výsledek jednoznačný.
+
+Funkce \texttt{dist} z~modulu \texttt{math} počítá eukleidovskou vzdálenost vektorů libovolné stejné délky. Třída \texttt{Counter} potom vytváří tabulku počtů hlasů. Samotné volání \texttt{fit} data pouze uloží, protože \(k\)-NN během trénovací fáze žádné parametry nehledá.
 
 \lstinputlisting[
     caption={Klasifikátor \(k\)-NN s~eukleidovskou vzdáleností.},
@@ -81,3 +99,5 @@ Program~\ref{lst:ai-knn} uchovává trénovací objekty a~jejich třídy. Při p
 ]{07-ai/code/knn.py}
 
 Trénování je téměř okamžité, ale klasifikace nového objektu vyžaduje porovnání s~celou trénovací množinou. Metoda proto přesouvá většinu výpočetní práce do okamžiku použití modelu.
+
+Naivní predikce spočítá \(n\) vzdáleností a~seřadí je, takže pro jeden objekt potřebuje čas \(\bigO(np+n\log n)\). Pro velká data lze hledání urychlit prostorovými datovými strukturami nebo přibližným vyhledáváním sousedů, jejich účinnost však závisí na počtu znaků a~geometrii dat.

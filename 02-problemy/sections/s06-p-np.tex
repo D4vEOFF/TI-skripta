@@ -1,4 +1,4 @@
-\section{Třídy problémů \ensuremath{\classP} a~\ensuremath{\classNP}}\label{sec:p_np}
+\section{Třídy problémů P a~NP}\label{sec:p_np}
 
 V~této sekci se nyní ohledneme trochu zpět a~podíváme se na celou problematiku z~více abstraktního hlediska. Naším cílem je představit si dvojici základních tříd problémů a~vysvětlit si jejich podstatu v~současném světě informatiky. Jako první se trochu blíže podíváme na problémy,~které jsme si již představili.
 
@@ -30,7 +30,7 @@ Vraťme se tedy zpět k~rozhodovacím variantám,~které jsme již probírali. Z
     \item \textit{\ensuremath{\NZMNA} $\rightarrow$ \ensuremath{\KLIKA}.} Stejné jako u~předchozího převodu.
 \end{itemize}
 Můžeme si všimnout,~že všechny převody jsou polynomiální,~tedy jak jsme uváděli v~úvodu kapitoly,~můžeme je považovat za \uv{rychlé},~viz obrázek \ref{fig:problemy_souvislost}. Co však dodnes neumíme,~je kterýkoliv z~těchto problémů v~polynomiálním čase řešit. Uvedené převody nám je ale dávají hezky do souvislosti. Pokud bychom uměli řešit kterýkoliv z~nich rychle,~pak bychom uměli rychle řešit všechny. Libovolný jiný bychom totiž převedli na ten,~který rychle řešit umíme.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{02-problemy/images/ch02_problemy_souvislost.tex}
     \caption{Shrnutí převodů mezi jednotlivými problémy.}
@@ -119,7 +119,7 @@ Může se na první pohled zdát,~že třídy \ensuremath{\classP} a~\ensuremath
     Platí $\ensuremath{\classP}\subseteq\ensuremath{\classNP}$.
 \end{theorem}
 Věta \ref{thm:vztah_p_np} říká,~že třída \ensuremath{\classP} leží uvnitř třídy \ensuremath{\classNP},~viz obrázek \ref{fig:vztah_p_np}. Pokud totiž dokážeme nějaký problém $A\in\ensuremath{\classP}$ řešit v~polynomiálním čase (tedy bez nápovědy),~tím spíš jej dokážeme řešit rychle s~nápovědou (např. algoritmus může nápovědu ignorovat a~určit řešení přímo z~původního vstupu).
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{02-problemy/images/ch02_vztah_p_np.tex}
     \caption{Schematická ilustrace vztahu $\ensuremath{\classP}\subseteq\ensuremath{\classNP}$; zda je inkluze ostrá,~nevíme.}
@@ -136,10 +136,13 @@ Druhá podmínka v~definici \ref{def:np_uplny_problem} se možná zdá hodně si
 \begin{theorem}\label{thm:cook}
     Problém \ensuremath{\SAT} je \ensuremath{\classNP}-úplný.
 \end{theorem}
+\begin{remark}
+    Výsledek se označuje jako Cookova--Levinova věta. Stephen Cook jej zveřejnil roku 1971 a~Leonid Levin dospěl nezávisle k~odpovídajícímu výsledku v~Sovětském svazu. Richard Karp následně roku 1972 ukázal polynomiálními převody \ensuremath{\classNP}-úplnost dalších 21 kombinatorických problémů a~zavedl tak dnes běžný způsob rozšiřování této třídy.
+\end{remark}
 Důkaz toho tvrzení si zde ukazovat nebudeme,~neboť je zcela nadrámec tohoto výkladu. Tento výsledek má v~této teorii velice silný důsledek. Pokud by se ukázalo,~že nějaký \ensuremath{\classNP}-úplný problém $A$ leží ve třídě \ensuremath{\classP},~tak by z~toho již plynulo,~že $\ensuremath{\classP}=\ensuremath{\classNP}$. Každý problém z~\ensuremath{\classNP} bychom mohli jednoduše polynomiálně převést na $A$ a~ten pak vyřešit opět polynomiálně. Toto je přesně důvod,~proč problém \ensuremath{\SAT} hraje v~současné informatice takovou důležitou roli,~neboť se historicky ukázalo,~že pomocí něj lze řešit kterýkoliv jiný problém\footnote{Proto se někdy též říká,~že \ensuremath{\classNP}-úplné problémy tvoří v~jistém smyslu ty ``nejtěžší'' v~\ensuremath{\classNP},~neboť pokud umíme řešit nějaký z~nich,~pak umíme vyřešit všechny.} v~\ensuremath{\classNP}.
 
 \ensuremath{\classNP}-úplných problémů existuje více. Třída takových problémů se označuje jako \ensuremath{\classNPC} (z~anglického \emph{\ensuremath{\classNP}-Complete}) a~platí $\ensuremath{\classNPC}\subseteq\ensuremath{\classNP}$,~viz obrázek \ref{fig:vztah_p_np_npc}. Pokud je \ensuremath{\classNP}-úplný problém $A$ polynomiálně převoditelný na problém $B$,~pak je $B$ \ensuremath{\classNP}-těžký; aby byl také \ensuremath{\classNP}-úplný,~musíme navíc ověřit $B\in\ensuremath{\classNP}$. Převody z~této kapitoly společně se snadným ověřením certifikátů ukazují,~že \emph{\ensuremath{\SAT},~\ensuremath{\THREESAT},~\ensuremath{\NZMNA} a~\ensuremath{\KLIKA}} jsou \ensuremath{\classNP}-úplné.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{02-problemy/images/ch02_vztah_p_np_npc.tex}
     \caption{Obvyklé schematické znázornění vztahu \ensuremath{\classP},~\ensuremath{\classNP} a~\ensuremath{\classNPC} za předpokladu $\ensuremath{\classP}\neq\ensuremath{\classNP}$.}
@@ -152,12 +155,12 @@ Jak už jsme si ale uvedli,~to zda platí $\ensuremath{\classP}=\ensuremath{\cla
     \item $\ensuremath{\classP}\neq\ensuremath{\classNP}$. Žádný \ensuremath{\classNP}-úplný problém by neležel v~\ensuremath{\classP},~takže by pro \ensuremath{\SAT},~\ensuremath{\NZMNA} ani \ensuremath{\KLIKA} neexistoval polynomiální algoritmus. Ani tato nerovnost sama o~sobě však nestačí k~existenci bezpečné kryptografie; ta vyžaduje silnější předpoklady o~obtížnosti konkrétních problémů.
 \end{itemize}
 
-\subsection{Další \ensuremath{\classNP}-úplné problémy}\label{subsec:dalsi_npc}
+\subsection{Další NP-úplné problémy}\label{subsec:dalsi_npc}
 
 K~závěru této kapitoly si ještě uvedeme nějaké další \ensuremath{\classNP}-úplné problémy a~k~nim i~nějaké příklady jejich aplikací (resp. výskytů). \ensuremath{\classNP}-úplnost si zde však již dokazovat pro žádný z~nich nebudeme. Pro žádný z~těchto problémů není známý polynomiální algoritmus.
 \begin{enumerate}[label=(\roman*)]
     \item \textit{Hamiltonovská kružnice.} Máme zadaný graf $G=(V,E)$. Zajímá nás,~zda v~něm existuje kružnice,~která projde každý vrchol právě jednou. Viz obrázky \ref{subfig:hamilton1} a~\ref{subfig:hamilton2}.
-    \begin{figure}[h]
+    \begin{figure}[ht]
         \centering
         \begin{subfigure}{7cm}
             \centering
@@ -176,7 +179,7 @@ K~závěru této kapitoly si ještě uvedeme nějaké další \ensuremath{\class
     Příbuzný \emph{problém obchodního cestujícího} navíc pracuje s~cenami hran a~hledá co nejlevnější okružní trasu. Právě tato optimalizační varianta se objevuje v~logistice.
     \item \textit{Součet podmnožiny.} Máme zadaný seznam přirozených čísel $M$ a~číslo $S\in\N$. Existuje výběr prvků seznamu,~jehož součet je roven $S$?
     Např. pro množinu $M=\set{1,3,10,11,20}$ (ne)existují součty uvedené v~tabulce \ref{tab:soucty}.
-    \begin{table}[h]
+    \begin{table}[ht]
         \centering
         \begin{tabular}{|l|c|c|c|c|}
         \hline
@@ -188,7 +191,7 @@ K~závěru této kapitoly si ještě uvedeme nějaké další \ensuremath{\class
     \end{table}
     Rychlé řešení součtu podmnožiny by pomohlo např. s~optimalizací plánování nákladů rozpočtem (např. ve firmě). Dále se též používá u~tzv. \emph{jednosměrných funkcí} v~kryptografii.
     \item \textit{Barvení grafu.} Chceme zjistit,~zda pro zadaný graf je možné jeho vrcholy obarvit $k$ barvami (formálně přidělíme každému vrcholu číslo od $1$ do $k$) tak,~aby vrcholy stejné barvy nebyly nikdy spojeny hranou? Pro příklady viz obrázky \ref{subfig:barveni_grafu1} a~\ref{subfig:barveni_grafu2}.
-    \begin{figure}[h]
+    \begin{figure}[ht]
         \centering
         \begin{subfigure}{7cm}
             \centering

@@ -64,6 +64,8 @@ Při \emph{asynchronní aktualizaci} vybereme jediný neuron \(i\) a~nastavíme
 \]
 Ostatní složky stavu zůstanou nezměněné. Neurony můžeme procházet v~pevném nebo náhodném pořadí. Při synchronní aktualizaci bychom měnili všechny neurony najednou; ta však může mezi několika stavy kmitat.
 
+Asynchronní pravidlo používá vždy nejnovější dostupný stav: po změně jednoho neuronu už následující neuron pracuje s~touto novou hodnotou. Pořadí aktualizací může ovlivnit, do kterého stabilního stavu síť dospěje, ale při symetrických vahách neporuší vlastnost poklesu energie dokázanou níže.
+
 \subsection{Asociativní paměť}
 
 Hopfieldova síť slouží jako \emph{asociativní paměť}. Neuchovává záznam pod samostatnou adresou. Zapamatovaný vzor je stabilní stav sítě a~je možné jej vybavit i~z~neúplné nebo mírně poškozené podoby. Opakované aktualizace postupně opravují jednotlivé složky, dokud síť nedospěje ke stabilnímu stavu.
@@ -90,6 +92,8 @@ jsou vzory určené k~uložení. Jednoduché Hebbovo pravidlo nastaví pro \(i\n
     w_{ii}=0,
 \]
 kde \(x_{ri}\) je \(i\)-tá složka vzoru \(\mathbf{x}_r\). Shodují-li se dvě složky ve většině vzorů, vznikne mezi nimi kladná váha; bývají-li opačné, váha je záporná.
+
+Učení zde tedy neprobíhá opakovaným gradientním sestupem. Váhy vzniknou přímo jedním součtem přes ukládané vzory a~potom se při vybavování již nemění. Opakovaně se mění pouze stav neuronů, dokud síť nenalezne stabilní konfiguraci.
 
 \subsection{Energetická funkce}
 
@@ -122,6 +126,8 @@ Když se neuron podle uvedeného pravidla skutečně změní, mají \(s_i'-s_i\)
 \]
 Při každé změně tedy energie přísně klesne. Síť má jen \(2^n\) stavů, a~proto nemůže měnit stav donekonečna. Po konečném počtu změn dospěje k~lokálnímu minimu energie, tedy ke stabilnímu stavu.
 
+Tento důkaz se opírá o~tři podstatné předpoklady: váhy jsou symetrické, na diagonále platí \(w_{ii}=0\) a~v~jednom kroku se mění pouze jeden neuron. U~synchronní aktualizace se mohou změny různých neuronů navzájem ovlivnit a~síť může přecházet mezi dvěma stavy, takže stejný argument nelze bez úpravy použít.
+
 \begin{center}
     \centering
     \input{07-ai/images/ch07-hopfield-energie.tex}
@@ -133,9 +139,43 @@ Při každé změně tedy energie přísně klesne. Síť má jen \(2^n\) stavů
 
 Program~\ref{lst:ai-hopfield} vytvoří váhy Hebbovým pravidlem a~poškozený vstup aktualizuje asynchronně. Nulové lokální pole ponechá původní stav neuronu, což odpovídá pravidlu použitému v~důkazu poklesu energie.
 
+Pseudokód odděluje dvě fáze. Procedura učení nejprve ze vzorů vytvoří symetrickou matici vah. Procedura vybavení potom přijme počáteční stav a~provádí celé průchody neurony tak dlouho, dokud se v~jednom průchodu žádný stav nezmění nebo dokud nedosáhne bezpečnostního limitu.
+
+\begin{algorithm}
+    \caption{\textsc{hopfield-recall}}
+    \label{alg:ai-hopfield}
+    \KwIn{Vzory \(\mathbf{x}_1,\ldots,\mathbf{x}_m\in\set{-1,1}^n\), prahy \(\theta_i\), počáteční stav \(\mathbf{s}\) a~nejvyšší počet průchodů \(T\)}
+    \For{\(i\gets1,2,\ldots,n\)}{
+        \For{\(j\gets1,2,\ldots,n\)}{
+            \If{\(i=j\)}{\(w_{ij}\gets0\)}
+            \If{\(i\neq j\)}{\(\displaystyle w_{ij}\gets\frac1n\sum_{q=1}^{m}x_{qi}x_{qj}\)}
+        }
+    }
+    \For{\(r\gets1,2,\ldots,T\)}{
+        \(zmena\gets0\)\\
+        \For{\(i\gets1,2,\ldots,n\)}{
+            \(\displaystyle h_i\gets\sum_{j=1}^{n}w_{ij}s_j+\theta_i\)\\
+            \If{\(h_i>0\)}{\(s_i'\gets1\)}
+            \If{\(h_i<0\)}{\(s_i'\gets-1\)}
+            \If{\(h_i=0\)}{\(s_i'\gets s_i\)}
+            \If{\(s_i'\neq s_i\)}{
+                \(s_i\gets s_i'\), \(zmena\gets1\)
+            }
+        }
+        \lIf{\(zmena=0\)}{\Return{\(\mathbf{s}\)}}
+    }
+    \KwOut{Poslední stav \(\mathbf{s}\)}
+\end{algorithm}
+
 \lstinputlisting[
     caption={Hopfieldova asociativní paměť.},
     label={lst:ai-hopfield}
 ]{07-ai/code/hopfield.py}
 
 Kapacita Hopfieldovy sítě je omezená. Při příliš velkém počtu uložených nebo silně podobných vzorů se jejich příspěvky ve vahách ruší. Síť potom může skončit ve špatném uloženém vzoru nebo v~nežádoucím stabilním stavu, který nebyl součástí trénovacích dat. Model je proto užitečný hlavně jako názorný příklad rekurentní sítě, asociativní paměti a~učení bez učitele.
+
+Kód záměrně používá malé binární vzory, aby bylo možné sledovat každý krok. U~obrázků bychom pixely nejprve převedli na hodnoty \(-1\) a~\(1\), obraz zploštili do vektoru a~po vybavení jej opět složili do původního tvaru. Princip vah i~aktualizací by zůstal beze změny.
+
+\begin{remark}
+    John Hopfield publikoval známý model asociativní paměti roku 1982. Jeho práce propojila dřívější myšlenky rekurentních sítí s~energetickou funkcí známou ze statistické fyziky a~výrazně přispěla k~obnovenému zájmu o~neuronové sítě.
+\end{remark}

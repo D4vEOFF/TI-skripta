@@ -12,7 +12,7 @@ Nejdříve si zopakujeme logické operace a~spojky. Mezi ně řadíme $\neg,~\la
     \item \textbf{Implikace $a\implies b$.} \emph{Je-li předpoklad $a$ splněn,~je splněn i~závěr $b$. Tj. implikace je nepravdivá,~pokud platí $a$ a~neplatí $b$.}
     \item \textbf{Ekvivalence $a\iff b$.} \emph{$a$ platí právě tehdy,~když platí $b$. Tj. ekvivalence je pravdivá,~jsou-li hodnoty operandů $a,b$ současně 0~nebo 1.}
 \end{itemize}
-\begin{table}[h]\label{table:logicke_operace}
+\begin{table}[ht]\label{table:logicke_operace}
     \centering
     \begin{tabular}{|c|c|c|c|c|c|c|}
     \hline
@@ -72,7 +72,7 @@ Máme obecnou formuli $\varphi$ s~proměnnými $x_1,x_2,\dots,x_n$,~pro kterou b
 Podívejme se na úvod na příklad \ref{ex:prevod_cnf_1} níže.
 \begin{example}\label{ex:prevod_cnf_1}
     Máme formuli $\psi(x,y,z)=(x\implies y)\implies z$,~pro kterou chceme najít ekvivalentní formuli $\psi^\prime$ v~CNF. Nejprve si tedy sestavíme tabulku pravdivostních hodnot.
-    \begin{table}[h]
+    \begin{table}[ht]
         \centering
         \begin{tabular}{|c|c|c|c|c|}
         \hline
@@ -106,7 +106,7 @@ Podívejme se na úvod na příklad \ref{ex:prevod_cnf_1} níže.
 Nabízí se otázka: \emph{\uv{Proč tento postup funguje?}} Pokud formule v~CNF není při určitém ohodnocení pravdivá,~alespoň jedna její klauzule není pravdivá. Klauzule obsahující všechny proměnné je nepravdivá právě při jediném ohodnocení: všechny její literály musí být nepravdivé. Pro každé ohodnocení,~při němž je původní formule nepravdivá,~tedy sestrojíme klauzuli,~která zakáže právě toto ohodnocení.
 \begin{example}
     \(\chi(x_1,x_2,x_3,x_4)=(x_1\iff x_2)\lor \neg(x_3\iff x_4)\).
-    \begin{table}[h]
+    \begin{table}[ht]
         \centering
         \begin{tabular}{|c|c|c|c|c|c|c|}
         \hline

@@ -23,7 +23,7 @@ Uveďme na úvod motivační příklad. Mějme seznam čísel,~z~něhož chceme 
     \end{enumerate}
 \end{definition}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{6cm}
         \centering
@@ -60,12 +60,20 @@ Je však více operací,~které bychom rádi s~haldou prováděli. Vypišme si v
     \item \textsc{Decrease}($v$) -- \emph{snížení} hodnoty klíče ve zvoleném vrcholu $v$.
 \end{itemize}
 
+\subsection{Halda uložená v~poli}
+
+Úplný tvar binární haldy dovoluje vynechat ukazatele mezi vrcholy a~uložit klíče přímo do pole. Vrcholy očíslujeme po hladinách zleva doprava,~počínaje kořenem s~indexem $1$. Je-li vrchol na pozici $i$,~pak jeho levý syn má index $2i$,~pravý syn $2i+1$ a~rodič (pro $i>1$) index $\lfloor i/2\rfloor$.
+
+Protože jsou všechny hladiny kromě poslední plné a~poslední se zaplňuje zleva,~nevznikají v~poli žádná prázdná místa. První volná pozice je vždy konec pole,~takže vložení nového klíče i~odebrání posledního vrcholu jsou jednoduché. Samotné obnovení haldového uspořádání pak probíhá prohazováním prvků na uvedených indexech.
+
+V~programovacích jazycích s~indexací pole od nuly se vzorce posunou: děti prvku $i$ leží na pozicích $2i+1$ a~$2i+2$,~rodič na $\lfloor(i-1)/2\rfloor$. Jde o~stejnou datovou strukturu; před implementací je pouze nutné zvolit jednu konvenci a~důsledně ji dodržet.
+
 Podívejme se postupně na jednotlivé operace a~jejich realizaci. S~dovolením si zde nyní odpustíme zápis pomocí pseudokódu a~pro jednoduchost si dané operace pouze slovně vysvětlíme. Pro následné odvození časové složitosti nám to bude stačit.
 
 \subsection{Vkládání nového vrcholu}
 
 Při vkládání nového vrcholu (\textsc{Insert}) nejdříve potřebujeme rozhodnout,~kam jej umístíme. S~tím nám pomůže podmínka \ref{binhalda_podminka_1}: nový vrchol vložíme na první volné místo v~pořadí zleva doprava. Pokud je dosavadní poslední hladina plná,~založíme novou hladinu a~vrchol umístíme zcela vlevo. Tím zachováme tvar haldy,~ale nemusí být splněna podmínka \ref{binhalda_podminka_2}. Klíč nového vrcholu může být menší než klíč jeho rodiče. Haldu opravíme postupným prohazováním klíče s~rodičem,~dokud nebude podmínka splněna (viz obrázek \ref{fig:vkladani_vrcholu_halda}).
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{7cm}
         \input{01-grafalgo/images/ch01_vkladani_1.tex}
@@ -88,7 +96,7 @@ Postup můžeme zapsat zkráceně ve třech bodech takto:
 Získání minimálního klíče v~haldě je triviální: přečteme klíč v~kořeni a~jsme hotovi. Pokud však chceme minimum operací \textsc{ExtractMin} také odstranit,~je to o~něco složitější. Kořen nemůžeme jen smazat,~jeho pozici musí zastoupit jiný vrchol. Abychom neporušili tvar haldy,~přesuneme do kořene \emph{poslední vrchol v~pořadí zleva doprava},~tedy nejpravější obsazený vrchol poslední hladiny,~a~jeho původní pozici odstraníme.
 
 Nyní však (stejně jako u~vkládání vrcholu) nastává problém s~druhou podmínkou,~neboť touto operací jsme ji mohli porušit. Provedeme obdobný proces,~jako při vkládání vrcholu do haldy,~ale vrchol nyní bude "probublávat" směrem dolů. Podíváme se na syny daného vrcholu a~pokud klíč některého z~nich je menší než klíč nového kořene,~pak jej s~ním prohodíme (v~případě,~že klíče obou synů jsou menší,~než klíč kořene,~prohodíme s~menším z~nich).
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \begin{subfigure}{5cm}
         \input{01-grafalgo/images/ch01_odebirani_1.tex}
@@ -132,7 +140,7 @@ Pojďme si nyní rozebrat časové složitosti zmíněných operací \textsc{Ins
 Víme tak,~že při opravování haldy se vrchol může posunout \emph{maximálně o~počet hladin},~který má daná halda. Časová složitost daných operací bude tak závislá na jejich počtu. Tím jsme se dostali o~trochu blíže řešení,~ale rádi bychom věděli,~jak se bude době trvání daných operací měnit v~závislosti na \emph{počtu vrcholů v~haldě},~nikoliv počtu hladin. Mezi těmito proměnnými však existuje hezká závislost.
 
 Dejme tomu,~že naše halda má $n$ vrcholů v~celkově $h$ hladinách. Halda s~jednou plnou hladinou má jeden vrchol,~se dvěma plnými hladinami tři vrcholy,~se třemi sedm vrcholů atd. (viz tabulka \ref{tab:halda_vrcholy_hladiny}).
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{|l|c|c|c|c|c|c|}
         \hline
@@ -142,7 +150,7 @@ Dejme tomu,~že naše halda má $n$ vrcholů v~celkově $h$ hladinách. Halda s~
     \caption{Vztah mezi počtem hladin $h$ a~počtem vrcholů $n$ v~plně obsazené haldě.}
     \label{tab:halda_vrcholy_hladiny}
 \end{table}
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_halda_hladiny.tex}
     \caption{Plná binární halda s~obecně $h$ hladinami.}
@@ -160,7 +168,7 @@ Z~levé nerovnosti dostáváme $h\leqslant\log_2 n+1$,~tedy počet hladin je $\b
     Operace \textsc{Insert},~\textsc{ExtractMin},~\textsc{Increase} a~\textsc{Decrease} proto mají logaritmickou časovou složitost.
 \end{proof}
 Zkusme si na závěr udělat menší porovnání oproti poli,~se kterým jsme začínali (viz tabulka \ref{tab:halda_pole_operace}).
-\begin{table}[h]
+\begin{table}[ht]
     \centering
     \begin{tabular}{l|ccccc}
                   & \textsc{Insert} & \textsc{Min} & \textsc{ExtractMin} & \textsc{Increase} & \textsc{Decrease} \\\hline

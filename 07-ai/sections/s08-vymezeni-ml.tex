@@ -44,4 +44,8 @@ Testovací data nesmějí ovlivnit trénování ani ladění. Opakované rozhodo
     \item Při \textbf{zpětnovazebním učení} agent volí akce, pozoruje jejich následky a~učí se z~odměn.
 \end{itemize}
 
+Toto členění neurčuje konkrétní typ matematického modelu. Neuronovou síť lze například trénovat s~učitelem pro klasifikaci, bez učitele pro hledání reprezentace i~zpětnovazebně jako součást agenta. Rozhodující je druh dostupné zkušenosti a~způsob, jakým model dostává informaci o~úspěchu.
+
+V~praxi se jednotlivé druhy mohou kombinovat. Model lze nejprve naučit bez učitele na velkém množství neoznačených dat a~potom jej doladit s~učitelem na menší označené množině. Agent ve zpětnovazebním učení může zase používat model natrénovaný s~učitelem k~rozpoznávání stavu prostředí.
+
 \warningbox{Nízká chyba na trénovacích datech sama o~sobě nestačí. Smyslem modelu je pracovat s~novými daty. Pokud si model pouze zapamatuje zvláštnosti trénovací množiny, dochází k~přeučení.}

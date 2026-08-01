@@ -23,12 +23,16 @@ Za běhu se však opakuje práce,~kterou by klasický překladač mohl provést 
 
 Náš překladač vytváří bajtkód. Program \ref{lst:vm} jej vykonává pomocí zásobníku a~slovníku proměnných. Jde tedy o~malý \emph{virtuální stroj}: instrukce nejsou instrukcemi skutečného procesoru,~ale mají přesně definovaný účinek v~našem programu.
 
+Virtuální stroj odděluje zdrojový jazyk od skutečného procesoru. Překladač stačí přizpůsobit jedné sadě virtuálních instrukcí a~pro každou podporovanou platformu vytvořit jejich interpret. Tentýž bajtkód pak lze spustit na různém hardwaru,~pokud na něm existuje odpovídající běhové prostředí.
+
 \lstinputlisting[
     caption={Interpret zásobníkového bajtkódu.},
     label={lst:vm}
 ]{04-kompilatory/code/mini_compiler/virtual_machine.py}
 
 U~binární operace leží na vrcholu zásobníku pravý operand a~pod ním levý. Virtuální stroj je odebere,~spočítá výsledek a~ten opět vloží na zásobník. Instrukce \texttt{HALT} ukončí interpretační smyčku.
+
+Zásobníkové instrukce nemusejí přímo uvádět registry operandů,~a~proto mají jednoduchý formát. Cenou je větší počet operací se zásobníkem. Jiné virtuální stroje mohou být registrové; volba reprezentace ovlivňuje velikost bajtkódu,~rychlost interpretace i~složitost generátoru.
 
 \subsection{JIT kompilace}
 
@@ -47,6 +51,8 @@ Tento přístup kombinuje přenositelnost mezikódu s~rychlejším vykonávání
 
 Program \ref{lst:main_compiler} spojuje všechny vytvořené části. Zdrojový text projde lexerem,~parserem,~sémantickou kontrolou,~výpočtem konstant a~generátorem bajtkódu. Nakonec jej vykoná virtuální stroj.
 
+Každá fáze přijímá výsledek předchozí fáze a~vrací jednoznačně určenou reprezentaci. Pokud nastane chyba,~má být oznámena tam,~kde ji lze nejlépe vysvětlit: neplatný znak v~lexeru,~chybějící část příkazu v~parseru a~neznámé jméno při sémantické kontrole. Tím se chyba nepropaguje do generátoru kódu jako obtížně srozumitelný problém.
+
 \lstinputlisting[
     caption={Sestavení a~spuštění celého malého překladače.},
     label={lst:main_compiler}
@@ -57,5 +63,7 @@ Pro přiložený vstup optimalizátor nahradí výraz $2+3\cdot4$ číslem $14$.
 14.0
 4.0
 \end{verbatim}
+
+Ukázku lze použít i~jako test celého překladového řetězce. Změníme-li vstup,~můžeme porovnat očekávaný výstup s~výsledkem virtuálního stroje; samostatnými testy navíc ověříme tokeny,~strom a~bajtkód. Takové rozdělení testů pomáhá určit,~ve které fázi případná chyba vznikla.
 
 \tipbox{Ukázkový překladač je malý,~ale hranice mezi částmi odpovídají skutečným systémům: lexer neřeší gramatiku,~parser neřeší deklarace,~sémantická analýza nemění význam programu a~generátor kódu už dostává ověřenou reprezentaci. Právě toto rozdělení umožňuje každou část samostatně testovat a~později nahradit propracovanější variantou.}

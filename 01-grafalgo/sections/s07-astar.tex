@@ -1,9 +1,9 @@
-\section{Algoritmus \Astar}\label{sec:astar}
+\section{Algoritmus A*}\label{sec:astar}
 
 Nyní se omezíme na případy,~kdy hledáme cestu pouze do konkrétního cílového vrcholu $g\in V$\footnote{Písmeno $g$ od anglického \emph{goal}.}. Stále pracujeme s~grafy,~jejichž hrany mají nezáporné ohodnocení. Dijkstrův algoritmus by samozřejmě fungoval i~zde: skončili bychom ve chvíli,~kdy cílový vrchol vybereme jako minimum. Nabízí se však otázka,~zda nemůžeme znalost cíle nějak využít. Pokud bychom například hledali nejkratší cestu v~mřížce s~překážkami,~dávalo by smysl upřednostňovat políčka,~která vypadají být cíli blíž.
 
 Mějme bludiště,~v~němž se hráč může pohybovat o~jedno pole vodorovně nebo svisle; na některá pole vstoupit nesmí. Cíl se nachází vpravo dole. Situaci na obrázku \ref{fig:mrizka} můžeme znázornit grafem,~v~němž každá přípustná dvojice sousedních polí tvoří hranu s~vahou $1$.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_mrizka.tex}
     \caption{Mřížka a~optimální směr pohybu hráče.}
@@ -12,7 +12,7 @@ Mějme bludiště,~v~němž se hráč může pohybovat o~jedno pole vodorovně n
 Pokud bychom použili BFS nebo Dijkstrův algoritmus,~prozkoumávali bychom okolí startu rovnoměrně do všech směrů. Algoritmus \Astar,~který roku 1968 popsali Peter Hart,~Nils Nilsson a~Bertram Raphael,~se snaží hledání směrovat k~cíli.
 
 Myšlenka je stále podobná,~avšak vrcholy budeme vybírat podle hodnoty $D(v)+\psi(v)$ místo samotného $D(v)$. Zobrazení $\mapping{\psi}{V}{\R_0^{+}}$ se nazývá \emph{heuristická funkce} nebo zkráceně \emph{heuristika} a~odhaduje zbývající vzdálenost z~vrcholu $v$ do cíle (viz obrázek \ref{fig:astar_heuristika}).
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_astar_heuristika.tex}
     \caption{Znázornění heuristické funkce $\psi$.}
@@ -55,12 +55,12 @@ Oproti Dijkstrovu algoritmu tedy nenastává mnoho změn,~jen si navíc uchováv
     \KwOut{Vzdálenost $v_0$ od $g$}
 \end{algorithm}
 
-\subsection{Správnost algoritmu \Astar}
+\subsection{Správnost algoritmu A*}
 
 Podobně jako u~Dijkstrova algoritmu platí,~že při výběru vrcholu $v$ odpovídá $D(v)$ délce nejkratší cesty z~$v_0$ do $v$. Důkaz provedeme indukcí podle pořadí uzavíraných vrcholů.
 
 Předpokládejme pro spor,~že vybíráme první vrchol $v$,~pro který je $D(v)>d(v_0,v)$. Na jedné nejkratší cestě do $v$ vezměme první dosud neuzavřený vrchol $x$ a~jeho již uzavřeného předchůdce $y$. Podle indukčního předpokladu bylo $D(y)=d(v_0,y)$,~takže po zpracování hrany $(y,x)$ platí $D(x)=d(v_0,x)$.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_astar_kratsi_cesta.tex}
     \caption{Situace při výběru vrcholu $v$ při heuristice $\psi$,~kdy $D(v)$ neodpovídá délce nejkratší cesty.}
@@ -95,7 +95,7 @@ Zbývá zodpovědět otázku,~jakou heuristiku použít. Odpověď záleží na 
 Jednou možností je tzv. \emph{eukleidovská vzdálenost}. Ta je pro libovolnou dvojici bodů v~rovině $X=(x_1,y_1)$ a~$Y=(x_2,y_2)$ definována jako
 \[\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}.\]
 Známe-li souřadnice cílového políčka,~můžeme eukleidovskou vzdálenost použít jako heuristiku $\psi_E$. Překážky ignorujeme,~takže dostaneme dolní odhad skutečné délky cesty. Situaci lze sledovat na obrázku \ref{fig:astar_bludiste_euclid}.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_astar_mrizka_euclid.tex}
     \caption{Příklad bludiště s~eukleidovskou heuristikou.}
@@ -103,7 +103,7 @@ Známe-li souřadnice cílového políčka,~můžeme eukleidovskou vzdálenost p
 \end{figure}
 Protože se v~našem bludišti nelze pohybovat po diagonálách,~ještě přirozenější volbou je \emph{manhattanská vzdálenost} $\psi_M$ definovaná vztahem
 \[\abs{x_1-x_2}+\abs{y_1-y_2}.\]
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \input{01-grafalgo/images/ch01_astar_mrizka_manhattan.tex}
     \caption{Příklad bludiště s~manhattanskou heuristikou.}
